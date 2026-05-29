@@ -36,7 +36,10 @@ export default async function handler(req, res) {
 
   let creditDeducted = false;
   try { creditDeducted = await deductCreditsREST(uid, ITERATE_CREDIT_COST, 'imageCredits'); }
-  catch (err) { return res.status(500).json({ error: 'Credit system error. Please try again.' }); }
+  catch (err) {
+    console.error('[ITERATE CREDITS ERROR]', err);
+    return res.status(500).json({ error: `Credit system error. Please try again. Details: ${err.message}` });
+  }
   if (!creditDeducted) return res.status(402).json({ error: 'INSUFFICIENT_CREDITS: Upgrade your plan to continue.' });
 
   // ── SSE setup ────────────────────────────────────────────────────────────────

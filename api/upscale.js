@@ -62,7 +62,10 @@ export default async function handler(req, res) {
 
   let credited = false;
   try { credited = await deductCreditsREST(uid, modelConfig.credits, 'imageCredits'); }
-  catch { return res.status(500).json({ error: 'Credit system error.' }); }
+  catch (err) {
+    console.error('[UPSCALE CREDITS ERROR]', err);
+    return res.status(500).json({ error: `Credit system error. Details: ${err.message}` });
+  }
   if (!credited) {
     return res.status(402).json({
       error: `INSUFFICIENT_CREDITS: Need ${modelConfig.credits} credits for ${modelConfig.label}.`
