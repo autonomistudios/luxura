@@ -833,13 +833,16 @@ Rules: ONLY correct slots that actually violate an invariant above. Do not rewri
 
     // ── Firestore: write generation history record ─────────────────────────
     console.log(`[FORGE] v10.0 — Modular | Mission: ${missionType} | UID: ${forgeUid} | Anchor: ${anchor} | Strategy: ${config?.strategy} | Skin: ${lockedSkinTone} | Batch: ${entropy} | FASHN: ${fashnVTOImage ? 'LOCKED' : 'none'}`);
-    await genRef.set({
-      id: genId, status: 'processing', missionType, anchors,
+    setFirestoreREST(`users/${forgeUid}/generations`, genId, {
+      id: genId,
+      status: 'processing',
+      missionType,
+      anchors: anchors.join(','),
       strategy: config?.strategy || 'change',
       creditsUsed: fashnVTOImage ? FORGE_CREDIT_COST_VTO : FORGE_CREDIT_COST,
-      startedAt: admin.firestore.FieldValue.serverTimestamp(),
+      startedAt: new Date().toISOString(),
       imagesDelivered: 0,
-    }).catch(() => {});
+    }).catch((e) => console.error('[FORGE] Firestore write failed:', e.message));
 
     // ── SSE helper ─────────────────────────────────────────────────────────
     const streamSlot = (slotIndex, image) => {
