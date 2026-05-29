@@ -41,6 +41,6 @@ export default async function handler(req, res) {
     return res.json({ imageCredits, videoCredits, tier });
   } catch (err) {
     console.error('[Credits] Firestore REST read error:', err?.message);
-    return res.status(500).json({ error: 'Failed to read credit balance.' });
+    return res.status(500).json({ error: `Failed to read credit balance. Details: ${err?.message}` });
   }
 }
