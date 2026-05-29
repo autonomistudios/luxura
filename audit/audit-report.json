@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-04-17T09:09:13.971Z",
-  "mode": "LIVE+STATIC",
-  "elapsed": "1.6",
+  "timestamp": "2026-05-29T17:53:42.794Z",
+  "mode": "STATIC",
+  "elapsed": "1.1",
   "summary": {
-    "pass": 546,
+    "pass": 531,
     "fail": 0,
     "warn": 4,
-    "total": 546
+    "total": 531
   },
   "suites": [
     {
@@ -23,7 +23,7 @@
       "fail": 0,
       "warn": 0,
       "total": 13,
-      "elapsed": "4"
+      "elapsed": "2"
     },
     {
       "name": "VTO_BACKGROUND_REPLACE",
@@ -31,7 +31,7 @@
       "fail": 0,
       "warn": 0,
       "total": 15,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "VTO_EDITORIAL Builder",
@@ -71,14 +71,14 @@
       "fail": 0,
       "warn": 0,
       "total": 62,
-      "elapsed": "1"
+      "elapsed": "2"
     },
     {
       "name": "Failure Classifier",
-      "pass": 20,
+      "pass": 22,
       "fail": 0,
       "warn": 0,
-      "total": 20,
+      "total": 22,
       "elapsed": "1"
     },
     {
@@ -87,7 +87,7 @@
       "fail": 0,
       "warn": 0,
       "total": 5,
-      "elapsed": "0"
+      "elapsed": "1"
     },
     {
       "name": "Mutation Retry Injection",
@@ -167,7 +167,7 @@
       "fail": 0,
       "warn": 0,
       "total": 97,
-      "elapsed": "2"
+      "elapsed": "11"
     },
     {
       "name": "Background Resolution",
@@ -175,7 +175,7 @@
       "fail": 0,
       "warn": 0,
       "total": 10,
-      "elapsed": "0"
+      "elapsed": "2"
     },
     {
       "name": "Pass 2 Retry Logic",
@@ -183,7 +183,7 @@
       "fail": 0,
       "warn": 0,
       "total": 4,
-      "elapsed": "0"
+      "elapsed": "1"
     },
     {
       "name": "Self-Heal Guardian",
@@ -191,7 +191,7 @@
       "fail": 0,
       "warn": 0,
       "total": 6,
-      "elapsed": "0"
+      "elapsed": "1"
     },
     {
       "name": "Rate Limiter Logic",
@@ -223,7 +223,7 @@
       "fail": 0,
       "warn": 1,
       "total": 8,
-      "elapsed": "325"
+      "elapsed": "1064"
     },
     {
       "name": "Privilege Escalation",
@@ -234,36 +234,12 @@
       "elapsed": "0"
     },
     {
-      "name": "Auth Bypass (LIVE)",
-      "pass": 8,
-      "fail": 0,
-      "warn": 0,
-      "total": 8,
-      "elapsed": "772"
-    },
-    {
-      "name": "Input Injection (LIVE)",
-      "pass": 6,
-      "fail": 0,
-      "warn": 0,
-      "total": 6,
-      "elapsed": "314"
-    },
-    {
-      "name": "Payload Abuse (LIVE)",
-      "pass": 3,
-      "fail": 0,
-      "warn": 0,
-      "total": 3,
-      "elapsed": "183"
-    },
-    {
       "name": "Director Brief Count",
       "pass": 2,
       "fail": 0,
       "warn": 0,
       "total": 2,
-      "elapsed": "3"
+      "elapsed": "1"
     },
     {
       "name": "Fashn.ai Category Bug",
@@ -271,7 +247,7 @@
       "fail": 0,
       "warn": 0,
       "total": 3,
-      "elapsed": "3"
+      "elapsed": "1"
     },
     {
       "name": "VTO Temperature Range",
@@ -287,7 +263,7 @@
       "fail": 0,
       "warn": 0,
       "total": 2,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "Gender Edge Cases",
@@ -303,7 +279,7 @@
       "fail": 0,
       "warn": 0,
       "total": 2,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "Timeout Budget",
@@ -311,7 +287,7 @@
       "fail": 0,
       "warn": 0,
       "total": 5,
-      "elapsed": "4"
+      "elapsed": "2"
     },
     {
       "name": "Prompt Lock Order",
@@ -319,7 +295,7 @@
       "fail": 0,
       "warn": 0,
       "total": 3,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Dead Code Audit",
@@ -484,7 +460,7 @@
     },
     {
       "pass": true,
-      "label": "Temp varies across 6 slots: [0.180, 0.205, 0.230, 0.255, 0.280, 0.305]"
+      "label": "Temp varies across 6 slots: [0.180, 0.210, 0.240, 0.270, 0.300, 0.330]"
     },
     {
       "pass": true,
@@ -588,7 +564,7 @@
     },
     {
       "pass": true,
-      "label": "Garment DNA included in TWO_IMAGE prompt"
+      "label": "Garment visual-copy lock included in TWO_IMAGE prompt"
     },
     {
       "pass": true,
@@ -961,6 +937,14 @@
     {
       "pass": true,
       "label": "FAILURE_MUTATIONS.SAFETY.suffix is non-empty string"
+    },
+    {
+      "pass": true,
+      "label": "FAILURE_MUTATIONS.GARMENT_DRIFT.tempDelta is a number"
+    },
+    {
+      "pass": true,
+      "label": "FAILURE_MUTATIONS.GARMENT_DRIFT.suffix is non-empty string"
     },
     {
       "pass": true,
@@ -2363,74 +2347,6 @@
     },
     {
       "pass": true,
-      "label": "No auth header → 401"
-    },
-    {
-      "pass": true,
-      "label": "No auth header → UNAUTHORIZED error message"
-    },
-    {
-      "pass": true,
-      "label": "Empty Bearer token → 401"
-    },
-    {
-      "pass": true,
-      "label": "Malformed JWT → 401"
-    },
-    {
-      "pass": true,
-      "label": "Well-formed but fake JWT → 401"
-    },
-    {
-      "pass": true,
-      "label": "GET /api/forge → 405 Method Not Allowed"
-    },
-    {
-      "pass": true,
-      "label": "Credits endpoint with no auth → 4xx"
-    },
-    {
-      "pass": true,
-      "label": "vault-delete with no auth → 4xx"
-    },
-    {
-      "pass": true,
-      "label": "XSS in userPrompt: still requires auth (not bypassed by injection)"
-    },
-    {
-      "pass": true,
-      "label": "SQL injection string in userPrompt: no server crash"
-    },
-    {
-      "pass": true,
-      "label": "Prototype pollution attempt: still requires auth"
-    },
-    {
-      "pass": true,
-      "label": "Anchor type coercion: no server crash, proper 4xx"
-    },
-    {
-      "pass": true,
-      "label": "Empty body: no server crash"
-    },
-    {
-      "pass": true,
-      "label": "Null config: no server crash"
-    },
-    {
-      "pass": true,
-      "label": "Oversized userPrompt (50KB): server handles gracefully (no 500)"
-    },
-    {
-      "pass": true,
-      "label": "Oversized anchor array (1000 entries): no 500 crash"
-    },
-    {
-      "pass": true,
-      "label": "additionalModelImages bomb (100 images): no 500 crash"
-    },
-    {
-      "pass": true,
       "label": "REGRESSION: Array.from({ length: 1 }) NOT present (bug fixed)"
     },
     {
@@ -2455,11 +2371,11 @@
     },
     {
       "pass": true,
-      "label": "VTO_BG_REPLACE temp: all slots ≤ 0.40. Max = 0.305"
+      "label": "VTO_BG_REPLACE temp: all slots ≤ 0.40. Max = 0.330"
     },
     {
       "pass": true,
-      "label": "VTO_BG_REPLACE temp: varied across slots (not identical). Values: 0.180, 0.205, 0.230, 0.255, 0.280, 0.305"
+      "label": "VTO_BG_REPLACE temp: varied across slots (not identical). Values: 0.180, 0.210, 0.240, 0.270, 0.300, 0.330"
     },
     {
       "pass": true,

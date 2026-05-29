@@ -15,7 +15,7 @@
  *   ✦ genderLabel binaries
  */
 
-import { MODES, classify, build } from '../../api/prompt-architect.js';
+import { MODES, classify, build } from '../../lib/forge/agents/agent03-prompt-architect.js';
 import { calculateSlotTemperature } from '../../lib/forge/utils/temperature.js';
 import { classifyFailure, FAILURE_MUTATIONS } from '../../lib/forge/utils/failure-classifier.js';
 
@@ -375,8 +375,8 @@ export function runTwoImageTests() {
   results.push(assert(spec.parts.length >= 3, `Parts: ${spec.parts.length} (text + model image + garment image)`));
   results.push(assert(spec.parts[0].text, 'Parts: text FIRST in TWO_IMAGE (K6: face-free garment order)'));
 
-  // Garment DNA should appear in prompt
-  results.push(assert(spec.prompt.includes('3D rose') || spec.prompt.includes('rose appliqués') || spec.prompt.includes('GARMENT DNA'), 'Garment DNA included in TWO_IMAGE prompt'));
+  // Garment visual-copy instructions should appear in prompt
+  results.push(assert(spec.prompt.includes('GARMENT LOCK') || spec.prompt.includes('Image 2'), 'Garment visual-copy lock included in TWO_IMAGE prompt'));
 
   // userDirection test
   const specDir = build({ ...ctx, userDirection: 'High altitude snow peak, dramatic wind' });

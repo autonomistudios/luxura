@@ -358,7 +358,7 @@ export async function runVTORoutingTests() {
   results.push(assert(routeVTO(null, null)            === 'NULL_BOTH_EXHAUSTED', 'VTO routing: no keys → null (inpaint/two-image fallback)'));
 
   // When VTO returns null → prompt architect routes to INPAINTING or TWO_IMAGE
-  const { classify, MODES } = await import('../../api/prompt-architect.js').catch(() => ({ classify: null, MODES: {} }));
+  const { classify, MODES } = await import('../../lib/forge/agents/agent03-prompt-architect.js').catch(() => ({ classify: null, MODES: {} }));
   if (!classify) { results.push({ pass: null, label: 'VTO routing: could not import prompt-architect (check module path)' }); return results; }
   results.push(assert(
     classify({ isAiGenerated: false, isKeepGarment: true, fashnVTOImage: null, clothingMaskedModel: { data: 'x' } }) === MODES.INPAINTING,

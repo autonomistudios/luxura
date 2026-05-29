@@ -8,7 +8,7 @@
  * go wrong, not just the happy path.
  */
 
-import { MODES, classify, build } from '../../api/prompt-architect.js';
+import { MODES, classify, build } from '../../lib/forge/agents/agent03-prompt-architect.js';
 import { classifyFailure } from '../../lib/forge/utils/failure-classifier.js';
 import { OUTFIT_SUBSUMES, BEAUTY_PRECISION_ANCHORS } from '../../lib/forge/constants.js';
 
