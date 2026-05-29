@@ -1,0 +1,47 @@
+{
+  "name": "luxaurastudio",
+  "framework": "vite",
+  "installCommand": "npm install --include=dev",
+  "buildCommand": "npm install --include=dev && npm run build",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self' https: data: 'unsafe-inline' 'unsafe-eval'; img-src 'self' data: https: blob:; connect-src 'self' https: wss:; frame-ancestors 'none';"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=31536000; includeSubDomains; preload"
+        }
+      ]
+    }
+  ],
+  "functions": {
+    "api/forge.js":             { "maxDuration": 300 },
+    "api/forge-iterate.js":     { "maxDuration": 180 },
+    "api/upscale.js":           { "maxDuration": 120 },
+    "api/vault-deploy.js":      { "maxDuration": 60  },
+    "api/vault-delete.js":      { "maxDuration": 30  },
+    "api/paypal-webhook.js":    { "maxDuration": 30  },
+    "api/credits.js":           { "maxDuration": 10  },
+    "api/generate-prop-cover.js": { "maxDuration": 30 },
+    "api/aura-profile.js":        { "maxDuration": 15 }
+  }
+}

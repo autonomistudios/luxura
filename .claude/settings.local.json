@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(vercel login:*)",
+      "Bash(taskkill /F /IM vercel.cmd /T)",
+      "Read(//c/Users/daytr/OneDrive/Desktop/AG_Ultimate_Template/**)",
+      "Bash(find /c/Users/daytr/OneDrive/Desktop/AG_Ultimate_Template/LuxAura Creation Studio 2 -maxdepth 1 -name firebase* -o -name .firebaserc -o -name *.json -type f)",
+      "Bash(find C:UsersdaytrOneDriveDesktopAG_Ultimate_TemplateQUANTUM_ACADEMY/src -name *.tsx -o -name *.ts)",
+      "Bash(npx vercel:*)",
+      "Bash(node scripts/setup-paypal-plans.js)",
+      "Bash(node \"c:/Users/daytr/OneDrive/Desktop/AG_Ultimate_Template/LuxAura Creation Studio 2/patch.cjs\")",
+      "Bash(node -e ' *)",
+      "mcp__stitch__list_screens",
+      "mcp__stitch__edit_screens",
+      "Bash(curl -s \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzA4N2Q5YWQxMzM2ZTQ4ZGRiYzliYTQ2OWRjYTA0NzlkEgsSBxCnoOGg3gQYAZIBJAoKcHJvamVjdF9pZBIWQhQxODA2MTEyMjIxMzM5MDgyNzk0OA&filename=&opi=96797242\")",
+      "WebFetch(domain:contribution.usercontent.google.com)",
+      "Bash(curl -L -A \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/124.0.0.0 Safari/537.36\" \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzA4N2Q5YWQxMzM2ZTQ4ZGRiYzliYTQ2OWRjYTA0NzlkEgsSBxCnoOGg3gQYAZIBJAoKcHJvamVjdF9pZBIWQhQxODA2MTEyMjIxMzM5MDgyNzk0OA&filename=&opi=96797242\")",
+      "Bash(curl -L -k -A \"Mozilla/5.0 \\(Windows NT 10.0; Win64; x64\\) AppleWebKit/537.36 \\(KHTML, like Gecko\\) Chrome/124.0.0.0 Safari/537.36\" \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ8Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpbCiVodG1sXzA4N2Q5YWQxMzM2ZTQ4ZGRiYzliYTQ2OWRjYTA0NzlkEgsSBxCnoOGg3gQYAZIBJAoKcHJvamVjdF9pZBIWQhQxODA2MTEyMjIxMzM5MDgyNzk0OA&filename=&opi=96797242\")"
+    ]
+  }
+}

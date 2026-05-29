@@ -1,0 +1,22 @@
+{
+  "project": "LuxAura Creation Studio 2",
+  "architect": "Antigravity",
+  "dna_fidelity_threshold": 1.0,
+  "critic_rules": [
+    {
+      "id": "SKIN_THICKNESS",
+      "threshold": 0.8,
+      "description": "If skin looks 'smooth' or 'glossy' without specular specular scattering, REJECT."
+    },
+    {
+      "id": "VISUAL_EXCELLENCE",
+      "threshold": 0.95,
+      "description": "Wowed at first glance, premium designs, no placeholders."
+    }
+  ],
+  "agents": {
+    "skill_creator": "agent/skills/skill_creator/",
+    "ui_designer": "agent/skills/ui_designer/",
+    "troubleshooter": "agent/skills/troubleshooter/"
+  }
+}

@@ -1,0 +1,381 @@
+/* Cormorant Garant loaded via index.html preconnect for faster paint */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Stitch Director Console — minimal-select chevron */
+.minimal-select {
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%236E6A60' stroke-width='0.5'/%3E%3C/svg%3E");
+  background-position: right 0 center;
+  background-repeat: no-repeat;
+  padding-right: 1.5rem;
+}
+
+:root {
+  --primary-gold: #D4AF37;
+  --mercury: #E5E5E5;
+  --border-color: #E5E0D8;
+  --obsidian: #0B0B0B;
+  --bg-obsidian: #FAF9F6;
+  --bg-anthracite: #F2EFE9;
+  --text-primary: #1C1C1C;
+  --text-secondary: #6E6A60;
+  --accent-color: #D4AF37;
+  --accent-glow: transparent;
+  --ui-bg: #F2EFE9;
+
+  /* Editorial Spacing */
+  --gutter: clamp(4rem, 10vw, 12rem);
+  --header-height: 100px;
+  --footer-ledger-height: 60px;
+
+  /* Typography */
+  --font-heading: 'Cormorant Garamond', serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', 'Courier', monospace;
+
+  --transition-sovereign: 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg-obsidian);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  cursor: none; /* custom cursor takes over */
+}
+
+/* Reset those Purple Links */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-heading);
+}
+
+.luxury-text {
+  font-family: var(--font-heading);
+  font-style: italic;
+}
+
+.luxury-script {
+  font-family: var(--font-heading);
+  font-style: italic;
+  letter-spacing: -0.02em;
+  font-weight: 300;
+}
+
+[data-theme='noir'] {
+  --accent-color: #E5E5E5;
+  --accent-glow: rgba(229, 229, 229, 0.3);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-obsidian);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
+}
+
+/* 💠 Sovereign Atelier Typography & Utilities */
+.text-accent { 
+  color: var(--accent-color); 
+  transition: color var(--transition-sovereign);
+}
+.border-accent { 
+  border-color: var(--accent-color); 
+  transition: border-color var(--transition-sovereign);
+}
+.bg-accent { 
+  background-color: var(--accent-color); 
+  transition: background-color var(--transition-sovereign);
+}
+.shadow-accent { 
+  box-shadow: 0 0 50px var(--accent-glow); 
+  transition: box-shadow var(--transition-sovereign);
+}
+
+.vertical-text {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+/* 💠 Dynamic Editorial Grid */
+.asymmetric-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 2rem;
+  padding: var(--gutter);
+}
+
+/* 💠 High-End Glass UI -> Soft Brutalism */
+.glass-panel {
+  background: var(--bg-anthracite);
+  border: 1px solid var(--border-color);
+  border-radius: 2px;
+  transition: var(--transition-sovereign);
+}
+
+.glass-panel:hover {
+  border-color: rgba(212, 175, 55, 0.4);
+  box-shadow: none;
+}
+
+/* Gold-accented glass — for active/selected panels */
+.glass-gold {
+  background: #F8F5F0;
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: 2px;
+  box-shadow: none;
+  transition: var(--transition-sovereign);
+}
+
+/* Elevated active state — stronger glow for primary selection */
+.glass-active {
+  background: #F8F5F0;
+  border: 1px solid var(--accent-color);
+  border-radius: 2px;
+  box-shadow: none;
+  transition: var(--transition-sovereign);
+}
+
+/* 💠 Atmospheric Transitions */
+.blur-in {
+  filter: blur(20px);
+  opacity: 0;
+  animation: blurIn 1.5s forwards cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes blurIn {
+  to { filter: blur(0); opacity: 1; }
+}
+
+/* 🧬 MANTIS DNA SCAN */
+.dna-scanline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--accent-color);
+  box-shadow: 0 0 20px var(--accent-color);
+  z-index: 50;
+  pointer-events: none;
+  animation: scan 4s linear infinite;
+}
+
+@keyframes scan {
+  from { top: -5%; }
+  to { top: 105%; }
+}
+
+/* Layout System */
+.app-viewport {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  z-index: 10;
+}
+
+.main-reveal {
+  padding-top: var(--header-height);
+  padding-bottom: var(--footer-ledger-height);
+}
+
+/* 🏛️ The Sovereign Header Redesign */
+.sovereign-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--header-height);
+  z-index: 1000;
+  padding: 0 var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-color);
+  background: rgba(250, 249, 246, 0.85);
+  backdrop-filter: blur(20px);
+}
+
+/* 💰 The Sovereign Ledger Footer */
+.sovereign-ledger {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: var(--footer-ledger-height);
+  z-index: 1000;
+  padding: 0 var(--gutter);
+  background: var(--bg-obsidian);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+/* 💠 High-Ticket CTA */
+.btn-sovereign {
+  background: var(--accent-color);
+  color: #1C1C1C;
+  padding: 1.25rem 2.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border: 1px solid var(--accent-color);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: var(--transition-sovereign);
+  box-shadow: none;
+}
+
+.btn-sovereign:hover {
+  background: var(--bg-obsidian);
+  color: var(--accent-color);
+  border-color: var(--accent-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 24px rgba(212, 175, 55, 0.12);
+}
+
+/* 🕰️ Kinetic Typography */
+.glint-text { 
+  background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+  background-size: 200% auto;
+  transition: color 1s ease;
+  background-clip: text;
+  -webkit-background-clip: text;
+}
+
+/* Hide legacy sidebar elements from old UI */
+.sidebar { display: none !important; }
+.nav-item { display: none !important; }
+
+/* 💠 Sovereign Studio v2.2 Visual Systems */
+
+.scanline-overlay {
+  background: linear-gradient(to bottom, transparent 50%, rgba(255, 255, 255, 0.05) 50%);
+  background-size: 100% 4px;
+  pointer-events: none;
+}
+
+.glitch-rejection {
+  animation: glitch 0.2s infinite ease-in-out alternate;
+}
+
+@keyframes glitch {
+  0% { transform: translate(0) scale(1); opacity: 0.8; }
+  100% { transform: translate(-2px, 1px) scale(1.1); opacity: 1; text-shadow: 2px 0 #ff0000, -2px 0 #00ffff; }
+}
+
+.noir-gradient {
+  background: linear-gradient(135deg, #E5E4E2 0%, var(--accent-color) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.liquid-mercury {
+  background: linear-gradient(90deg, #E5E5E5, #FFFFFF, #A0A0A0, #E5E5E5);
+  background-size: 200% 100%;
+}
+
+@keyframes mercurySlide {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+.breathing-glow {
+  animation: breath 4s ease-in-out infinite;
+}
+
+@keyframes breath {
+  0%, 100% { color: var(--text-primary); text-shadow: none; }
+  50% { color: var(--accent-color); text-shadow: 0 0 12px rgba(212,175,55,0.25); }
+}
+
+.animate-slow-rotate {
+  animation: slow-rotate 20s linear infinite;
+}
+
+.animate-reverse-rotate {
+  animation: reverse-rotate 15s linear infinite;
+}
+
+@keyframes slow-rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes reverse-rotate {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+/* src/index.css - Mobile Refinement */
+@media (max-width: 768px) {
+  /* Prevent blue "tap highlight" on buttons */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Make the Sovereign Dock feel floating */
+  .mobile-dock {
+    backdrop-filter: blur(20px) saturate(180%);
+    background: rgba(250, 249, 246, 0.92);
+    border: 0.5px solid rgba(212, 175, 55, 0.3);
+  }
+
+  /* Ensure the "Glint" shimmer is larger for thumb-taps */
+  .shimmer-active {
+    background-size: 300% 300%;
+  }
+}
+
+/* 🎞 Editorial Marquee */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* Fix for Safari "Ghost" Scrolling */
+body {
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* 🧊 The Sovereign Scrollbar */
+::-webkit-scrollbar { width: 3px; height: 3px; }
+::-webkit-scrollbar-track { background: var(--bg-obsidian); }
+::-webkit-scrollbar-thumb {
+  background: rgba(212, 175, 55, 0.35);
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 175, 55, 0.7);
+}

@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(find 'C:\\\\Users\\\\daytr\\\\OneDrive\\\\Desktop\\\\AG_Ultimate_Template\\\\AUTONOMI STUDIOS LANDING PAGE/src' -name *.tsx -o -name *.ts)",
+      "WebFetch(domain:developers.googleblog.com)",
+      "Bash(node --check api/forge.js)",
+      "Bash(node \"c:/Users/daytr/OneDrive/Desktop/AG_Ultimate_Template/LuxAura Creation Studio 2/patch.js\")",
+      "Bash(node audit/index.js)"
+    ]
+  }
+}

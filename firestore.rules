@@ -1,0 +1,88 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helper functions ──────────────────────────────────────────────────────
+
+    // Caller is authenticated
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Caller owns the user document
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    // Caller is the platform admin
+    function isAdmin() {
+      return isSignedIn() &&
+        request.auth.token.email == 'autonomistudiosllc@gmail.com';
+    }
+
+    // Write fields are only those whitelisted — prevents clients injecting arbitrary data
+    function onlyFields(allowed) {
+      return request.resource.data.keys().hasOnly(allowed);
+    }
+
+    // ── users/{uid} ───────────────────────────────────────────────────────────
+    match /users/{uid} {
+
+      // User reads their own doc; admin reads any
+      allow read: if isOwner(uid) || isAdmin();
+
+      // User creates their own doc on first login (profile provisioning)
+      allow create: if isOwner(uid) && onlyFields([
+        'uid', 'email', 'displayName', 'photoURL',
+        'tier', 'imageCredits', 'videoCredits',
+        'subscriptionId', 'subscriptionStatus', 'createdAt'
+      ]);
+
+      // User may update display name / photo only — all credit/tier mutations
+      // go through Firebase Admin SDK (paypal-webhook, forge) on the server.
+      allow update: if isOwner(uid) && onlyFields(['displayName', 'photoURL']);
+
+      // No client-side deletes
+      allow delete: if false;
+
+      // ── users/{uid}/vault/{itemId} ────────────────────────────────────────
+      match /vault/{itemId} {
+        allow read,
+              create,
+              delete: if isOwner(uid);
+
+        // Allow update only on the fields the client actually touches
+        allow update: if isOwner(uid) && onlyFields([
+          'id', 'image', 'name', 'date', 'createdAt',
+          'category', 'anchors', 'strategy',
+          'skinTone', 'lighting', 'camera', 'bg', 'prompt'
+        ]);
+      }
+
+      // ── users/{uid}/generations/{genId} ──────────────────────────────────
+      // Written server-side (Firebase Admin) — client can read for history UI.
+      match /generations/{genId} {
+        allow read:   if isOwner(uid) || isAdmin();
+        allow write:  if false; // Server-side only (Admin SDK in forge.js)
+      }
+    }
+
+    // ── Admin: read all users for the Studio Intelligence dashboard ───────────
+    // Scoped to collection-group read; no write access.
+    match /users/{uid} {
+      allow read: if isAdmin();
+    }
+
+    // ── prop-covers — public read, server-write only ──────────────────────────
+    match /prop-covers/{propId} {
+      allow read: if true;      // gallery is publicly browsable
+      allow write: if false;    // only Admin SDK (generate-prop-cover endpoint)
+    }
+
+    // Deny everything else by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

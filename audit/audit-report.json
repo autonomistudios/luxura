@@ -1,0 +1,2562 @@
+{
+  "timestamp": "2026-04-17T09:09:13.971Z",
+  "mode": "LIVE+STATIC",
+  "elapsed": "1.6",
+  "summary": {
+    "pass": 546,
+    "fail": 0,
+    "warn": 4,
+    "total": 546
+  },
+  "suites": [
+    {
+      "name": "Mode Classifier",
+      "pass": 7,
+      "fail": 0,
+      "warn": 0,
+      "total": 7,
+      "elapsed": "1"
+    },
+    {
+      "name": "PHOTO_EDIT Builder",
+      "pass": 13,
+      "fail": 0,
+      "warn": 0,
+      "total": 13,
+      "elapsed": "4"
+    },
+    {
+      "name": "VTO_BACKGROUND_REPLACE",
+      "pass": 15,
+      "fail": 0,
+      "warn": 0,
+      "total": 15,
+      "elapsed": "2"
+    },
+    {
+      "name": "VTO_EDITORIAL Builder",
+      "pass": 2,
+      "fail": 0,
+      "warn": 0,
+      "total": 2,
+      "elapsed": "0"
+    },
+    {
+      "name": "INPAINTING Builder",
+      "pass": 11,
+      "fail": 0,
+      "warn": 0,
+      "total": 11,
+      "elapsed": "1"
+    },
+    {
+      "name": "TWO_IMAGE Builder",
+      "pass": 12,
+      "fail": 0,
+      "warn": 0,
+      "total": 12,
+      "elapsed": "1"
+    },
+    {
+      "name": "AI_GENERATE Builder",
+      "pass": 14,
+      "fail": 0,
+      "warn": 0,
+      "total": 14,
+      "elapsed": "1"
+    },
+    {
+      "name": "Temperature Calculator",
+      "pass": 62,
+      "fail": 0,
+      "warn": 0,
+      "total": 62,
+      "elapsed": "1"
+    },
+    {
+      "name": "Failure Classifier",
+      "pass": 20,
+      "fail": 0,
+      "warn": 0,
+      "total": 20,
+      "elapsed": "1"
+    },
+    {
+      "name": "Pre-Flight Validator",
+      "pass": 5,
+      "fail": 0,
+      "warn": 0,
+      "total": 5,
+      "elapsed": "0"
+    },
+    {
+      "name": "Mutation Retry Injection",
+      "pass": 3,
+      "fail": 0,
+      "warn": 0,
+      "total": 3,
+      "elapsed": "0"
+    },
+    {
+      "name": "Anchor Coverage (all types)",
+      "pass": 54,
+      "fail": 0,
+      "warn": 0,
+      "total": 54,
+      "elapsed": "2"
+    },
+    {
+      "name": "Anchor Deduplication",
+      "pass": 13,
+      "fail": 0,
+      "warn": 0,
+      "total": 13,
+      "elapsed": "1"
+    },
+    {
+      "name": "Garment Mode Detection",
+      "pass": 4,
+      "fail": 0,
+      "warn": 0,
+      "total": 4,
+      "elapsed": "0"
+    },
+    {
+      "name": "Mission Type (Agent 00)",
+      "pass": 8,
+      "fail": 0,
+      "warn": 0,
+      "total": 8,
+      "elapsed": "0"
+    },
+    {
+      "name": "Slot Permutation System",
+      "pass": 19,
+      "fail": 0,
+      "warn": 0,
+      "total": 19,
+      "elapsed": "1"
+    },
+    {
+      "name": "DNA Prompt Coverage",
+      "pass": 61,
+      "fail": 0,
+      "warn": 0,
+      "total": 61,
+      "elapsed": "1"
+    },
+    {
+      "name": "Consistency Audit Parser",
+      "pass": 6,
+      "fail": 0,
+      "warn": 0,
+      "total": 6,
+      "elapsed": "1"
+    },
+    {
+      "name": "VTO Pipeline Routing",
+      "pass": 6,
+      "fail": 0,
+      "warn": 0,
+      "total": 6,
+      "elapsed": "1"
+    },
+    {
+      "name": "Photography Config",
+      "pass": 97,
+      "fail": 0,
+      "warn": 0,
+      "total": 97,
+      "elapsed": "2"
+    },
+    {
+      "name": "Background Resolution",
+      "pass": 10,
+      "fail": 0,
+      "warn": 0,
+      "total": 10,
+      "elapsed": "0"
+    },
+    {
+      "name": "Pass 2 Retry Logic",
+      "pass": 4,
+      "fail": 0,
+      "warn": 0,
+      "total": 4,
+      "elapsed": "0"
+    },
+    {
+      "name": "Self-Heal Guardian",
+      "pass": 6,
+      "fail": 0,
+      "warn": 0,
+      "total": 6,
+      "elapsed": "0"
+    },
+    {
+      "name": "Rate Limiter Logic",
+      "pass": 10,
+      "fail": 0,
+      "warn": 0,
+      "total": 10,
+      "elapsed": "1"
+    },
+    {
+      "name": "Credit System Logic",
+      "pass": 12,
+      "fail": 0,
+      "warn": 1,
+      "total": 12,
+      "elapsed": "0"
+    },
+    {
+      "name": "Firestore Rules Review",
+      "pass": 13,
+      "fail": 0,
+      "warn": 0,
+      "total": 13,
+      "elapsed": "3"
+    },
+    {
+      "name": "SSE Headers",
+      "pass": 8,
+      "fail": 0,
+      "warn": 1,
+      "total": 8,
+      "elapsed": "325"
+    },
+    {
+      "name": "Privilege Escalation",
+      "pass": 3,
+      "fail": 0,
+      "warn": 1,
+      "total": 3,
+      "elapsed": "0"
+    },
+    {
+      "name": "Auth Bypass (LIVE)",
+      "pass": 8,
+      "fail": 0,
+      "warn": 0,
+      "total": 8,
+      "elapsed": "772"
+    },
+    {
+      "name": "Input Injection (LIVE)",
+      "pass": 6,
+      "fail": 0,
+      "warn": 0,
+      "total": 6,
+      "elapsed": "314"
+    },
+    {
+      "name": "Payload Abuse (LIVE)",
+      "pass": 3,
+      "fail": 0,
+      "warn": 0,
+      "total": 3,
+      "elapsed": "183"
+    },
+    {
+      "name": "Director Brief Count",
+      "pass": 2,
+      "fail": 0,
+      "warn": 0,
+      "total": 2,
+      "elapsed": "3"
+    },
+    {
+      "name": "Fashn.ai Category Bug",
+      "pass": 3,
+      "fail": 0,
+      "warn": 0,
+      "total": 3,
+      "elapsed": "3"
+    },
+    {
+      "name": "VTO Temperature Range",
+      "pass": 3,
+      "fail": 0,
+      "warn": 0,
+      "total": 3,
+      "elapsed": "1"
+    },
+    {
+      "name": "Missing Image Error",
+      "pass": 2,
+      "fail": 0,
+      "warn": 0,
+      "total": 2,
+      "elapsed": "2"
+    },
+    {
+      "name": "Gender Edge Cases",
+      "pass": 8,
+      "fail": 0,
+      "warn": 0,
+      "total": 8,
+      "elapsed": "1"
+    },
+    {
+      "name": "Heartbeat Exit Paths",
+      "pass": 2,
+      "fail": 0,
+      "warn": 0,
+      "total": 2,
+      "elapsed": "2"
+    },
+    {
+      "name": "Timeout Budget",
+      "pass": 5,
+      "fail": 0,
+      "warn": 0,
+      "total": 5,
+      "elapsed": "4"
+    },
+    {
+      "name": "Prompt Lock Order",
+      "pass": 3,
+      "fail": 0,
+      "warn": 0,
+      "total": 3,
+      "elapsed": "1"
+    },
+    {
+      "name": "Dead Code Audit",
+      "pass": 3,
+      "fail": 0,
+      "warn": 1,
+      "total": 3,
+      "elapsed": "0"
+    }
+  ],
+  "failures": [],
+  "notices": [
+    {
+      "pass": null,
+      "label": "AUDIT NOTE: Firestore transaction used for deduction → race condition protected (requires live Firestore test to verify)",
+      "detail": "deductForgeCredits uses db.runTransaction() — correct"
+    },
+    {
+      "pass": null,
+      "label": "CORS policy: verify forge endpoint does NOT return Access-Control-Allow-Origin: * (private API with auth)",
+      "detail": "Manual verification needed against live headers"
+    },
+    {
+      "pass": null,
+      "label": "VERIFY: Firestore rules must NOT include email in client-writable update fields",
+      "detail": "Cross-reference runFirestoreRulesReview — if email is writable, attacker can self-escalate to admin"
+    },
+    {
+      "pass": null,
+      "label": "ARCHITECTURAL NOTE: VTO_EDITORIAL is a DEAD CODE PATH — buildVTOEditorialPrompt() and its two-image parts builder are never called by classify()",
+      "detail": "Intentional design: VTO_BACKGROUND_REPLACE replaced VTO_EDITORIAL as the primary path. VTO_EDITORIAL code is kept for reference but could be removed."
+    }
+  ],
+  "allResults": [
+    {
+      "pass": true,
+      "label": "Classifier: keep identity + no garment → PHOTO_EDIT"
+    },
+    {
+      "pass": true,
+      "label": "Classifier: keep + VTO present → VTO_BACKGROUND_REPLACE"
+    },
+    {
+      "pass": true,
+      "label": "Classifier: AI + VTO present → VTO_BACKGROUND_REPLACE (AI garment showcase)"
+    },
+    {
+      "pass": true,
+      "label": "Classifier: keep garment + masked model → INPAINTING"
+    },
+    {
+      "pass": true,
+      "label": "Classifier: keep garment + no VTO + no mask → TWO_IMAGE"
+    },
+    {
+      "pass": true,
+      "label": "Classifier: AI + no garment → AI_GENERATE"
+    },
+    {
+      "pass": true,
+      "label": "Classifier priority: VTO_BACKGROUND_REPLACE beats INPAINTING when both present"
+    },
+    {
+      "pass": true,
+      "label": "Mode = PHOTO_EDIT"
+    },
+    {
+      "pass": true,
+      "label": "K2: PHOTO EDIT framing present"
+    },
+    {
+      "pass": true,
+      "label": "K2: BACKGROUND REPLACEMENT framing present"
+    },
+    {
+      "pass": true,
+      "label": "K2: No generation framing in keep mode"
+    },
+    {
+      "pass": true,
+      "label": "K1: safetySettings OMITTED in keep mode"
+    },
+    {
+      "pass": true,
+      "label": "Anatomy: 2 arms lock present"
+    },
+    {
+      "pass": true,
+      "label": "Anatomy: 5 fingers lock present"
+    },
+    {
+      "pass": true,
+      "label": "Full body: no-crop lock present"
+    },
+    {
+      "pass": true,
+      "label": "Parts: includes model image"
+    },
+    {
+      "pass": true,
+      "label": "Temp: 0.07 in range 0.05–0.20"
+    },
+    {
+      "pass": true,
+      "label": "Gender lock present"
+    },
+    {
+      "pass": true,
+      "label": "Client direction injected into PHOTO_EDIT prompt"
+    },
+    {
+      "pass": true,
+      "label": "Male gender: no \"real woman\" in male prompt"
+    },
+    {
+      "pass": true,
+      "label": "Mode = VTO_BACKGROUND_REPLACE"
+    },
+    {
+      "pass": true,
+      "label": "ABSOLUTE FREEZE block present"
+    },
+    {
+      "pass": true,
+      "label": "Garment pixel-lock language present"
+    },
+    {
+      "pass": true,
+      "label": "Statement embellishments locked"
+    },
+    {
+      "pass": true,
+      "label": "Anatomy: 2 arms lock"
+    },
+    {
+      "pass": true,
+      "label": "Anatomy: 5 fingers lock"
+    },
+    {
+      "pass": true,
+      "label": "Full body visible lock"
+    },
+    {
+      "pass": true,
+      "label": "10-point self-audit present"
+    },
+    {
+      "pass": true,
+      "label": "K1: safetySettings OMITTED"
+    },
+    {
+      "pass": true,
+      "label": "Temp: 0.18 in range 0.15–0.35"
+    },
+    {
+      "pass": true,
+      "label": "Parts: exactly VTO image + text (no extra images)"
+    },
+    {
+      "pass": true,
+      "label": "Brief injected as scene direction"
+    },
+    {
+      "pass": true,
+      "label": "Temp varies across 6 slots: [0.180, 0.205, 0.230, 0.255, 0.280, 0.305]"
+    },
+    {
+      "pass": true,
+      "label": "CLIENT DIRECTION block present when userDirection set"
+    },
+    {
+      "pass": true,
+      "label": "Client direction content present in prompt"
+    },
+    {
+      "pass": true,
+      "label": "Architectural: VTO present → always VTO_BACKGROUND_REPLACE (VTO_EDITORIAL unreachable via build())"
+    },
+    {
+      "pass": true,
+      "label": "VTO_EDITORIAL parts builder: 5 parts (garment label + garment + VTO label + VTO + prompt)"
+    },
+    {
+      "pass": true,
+      "label": "Mode = INPAINTING"
+    },
+    {
+      "pass": true,
+      "label": "Grey zone inpainting framing"
+    },
+    {
+      "pass": true,
+      "label": "Face lock present"
+    },
+    {
+      "pass": true,
+      "label": "Skin lock present"
+    },
+    {
+      "pass": true,
+      "label": "Anatomy: 2 arms lock"
+    },
+    {
+      "pass": true,
+      "label": "Full body: no-crop lock"
+    },
+    {
+      "pass": true,
+      "label": "Dynamic gender lock present"
+    },
+    {
+      "pass": true,
+      "label": "K1: safetySettings OMITTED"
+    },
+    {
+      "pass": true,
+      "label": "Temp: 0.05 ≤ 0.15 (inpainting determinism)"
+    },
+    {
+      "pass": true,
+      "label": "Parts: masked model image first"
+    },
+    {
+      "pass": true,
+      "label": "Male gender dynamic lock works in INPAINTING"
+    },
+    {
+      "pass": true,
+      "label": "Mode = TWO_IMAGE"
+    },
+    {
+      "pass": true,
+      "label": "Identity locks block present"
+    },
+    {
+      "pass": true,
+      "label": "Garment lock block present"
+    },
+    {
+      "pass": true,
+      "label": "Statement embellishments in garment lock"
+    },
+    {
+      "pass": true,
+      "label": "Anatomy: 2 arms lock"
+    },
+    {
+      "pass": true,
+      "label": "Full body: no-crop lock"
+    },
+    {
+      "pass": true,
+      "label": "Dynamic gender lock"
+    },
+    {
+      "pass": true,
+      "label": "K1: safetySettings OMITTED"
+    },
+    {
+      "pass": true,
+      "label": "Parts: 3 (text + model image + garment image)"
+    },
+    {
+      "pass": true,
+      "label": "Parts: text FIRST in TWO_IMAGE (K6: face-free garment order)"
+    },
+    {
+      "pass": true,
+      "label": "Garment DNA included in TWO_IMAGE prompt"
+    },
+    {
+      "pass": true,
+      "label": "Client direction present in TWO_IMAGE"
+    },
+    {
+      "pass": true,
+      "label": "Mode = AI_GENERATE"
+    },
+    {
+      "pass": true,
+      "label": "Mannequin separation block present"
+    },
+    {
+      "pass": true,
+      "label": "Mannequin separation language present"
+    },
+    {
+      "pass": true,
+      "label": "Mandatory overrides block present"
+    },
+    {
+      "pass": true,
+      "label": "Anatomy lock present"
+    },
+    {
+      "pass": true,
+      "label": "Finger count lock present"
+    },
+    {
+      "pass": true,
+      "label": "Full body / framing lock present"
+    },
+    {
+      "pass": true,
+      "label": "AI mode: safetySettings APPLIED (K1 — no real identity)"
+    },
+    {
+      "pass": true,
+      "label": "Temp: 0.87 in AI range 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI+clothing: garment lock language active"
+    },
+    {
+      "pass": true,
+      "label": "AI+clothing: statement elements in garment lock"
+    },
+    {
+      "pass": true,
+      "label": "AI_GENERATE with anchorRef: image part included"
+    },
+    {
+      "pass": true,
+      "label": "AI_GENERATE without anchorRef: text-only parts"
+    },
+    {
+      "pass": true,
+      "label": "Male AI_GENERATE: no female pronouns in mandatory overrides"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[HAIR][slot0] = 0.870 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[HAIR][slot1] = 0.870 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[HAIR][slot2] = 0.870 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[HAIR][slot3] = 0.920 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[HAIR][slot4] = 0.920 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[HAIR][slot5] = 0.920 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[MAKEUP][slot0] = 0.870 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[MAKEUP][slot1] = 0.870 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[MAKEUP][slot2] = 0.870 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[MAKEUP][slot3] = 0.920 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[MAKEUP][slot4] = 0.920 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[MAKEUP][slot5] = 0.920 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[FULL_OUTFIT][slot0] = 1.000 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[FULL_OUTFIT][slot1] = 1.000 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[FULL_OUTFIT][slot2] = 1.000 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[FULL_OUTFIT][slot3] = 1.050 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[FULL_OUTFIT][slot4] = 1.050 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[FULL_OUTFIT][slot5] = 1.050 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[NAILS][slot0] = 0.870 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[NAILS][slot1] = 0.870 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[NAILS][slot2] = 0.870 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[NAILS][slot3] = 0.920 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[NAILS][slot4] = 0.920 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[NAILS][slot5] = 0.920 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[EARRINGS][slot0] = 0.950 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[EARRINGS][slot1] = 0.950 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[EARRINGS][slot2] = 0.950 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[EARRINGS][slot3] = 1.000 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[EARRINGS][slot4] = 1.000 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[EARRINGS][slot5] = 1.000 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[SHIRT][slot0] = 1.000 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[SHIRT][slot1] = 1.000 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[SHIRT][slot2] = 1.000 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[SHIRT][slot3] = 1.050 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[SHIRT][slot4] = 1.050 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[SHIRT][slot5] = 1.050 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[DRESS][slot0] = 1.000 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[DRESS][slot1] = 1.000 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[DRESS][slot2] = 1.000 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[DRESS][slot3] = 1.050 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[DRESS][slot4] = 1.050 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "AI temp[DRESS][slot5] = 1.050 in 0.72–1.25"
+    },
+    {
+      "pass": true,
+      "label": "Keep temp[HAIR][slot0] = 0.604 in 0.40–0.72"
+    },
+    {
+      "pass": true,
+      "label": "Keep temp[HAIR][slot1] = 0.612 in 0.40–0.72"
+    },
+    {
+      "pass": true,
+      "label": "Keep temp[HAIR][slot2] = 0.620 in 0.40–0.72"
+    },
+    {
+      "pass": true,
+      "label": "Keep temp[HAIR][slot3] = 0.628 in 0.40–0.72"
+    },
+    {
+      "pass": true,
+      "label": "Keep temp[HAIR][slot4] = 0.636 in 0.40–0.72"
+    },
+    {
+      "pass": true,
+      "label": "Keep temp[HAIR][slot5] = 0.604 in 0.40–0.72"
+    },
+    {
+      "pass": true,
+      "label": "Keep temp[FULL_OUTFIT][slot0] = 0.534 in 0.40–0.72"
+    },
+    {
+      "pass": true,
+      "label": "Keep temp[FULL_OUTFIT][slot1] = 0.542 in 0.40–0.72"
+    },
+    {
+      "pass": true,
+      "label": "Keep temp[FULL_OUTFIT][slot2] = 0.550 in 0.40–0.72"
+    },
+    {
+      "pass": true,
+      "label": "Keep temp[FULL_OUTFIT][slot3] = 0.558 in 0.40–0.72"
+    },
+    {
+      "pass": true,
+      "label": "Keep temp[FULL_OUTFIT][slot4] = 0.566 in 0.40–0.72"
+    },
+    {
+      "pass": true,
+      "label": "Keep temp[FULL_OUTFIT][slot5] = 0.534 in 0.40–0.72"
+    },
+    {
+      "pass": true,
+      "label": "Keep temp[SHIRT][slot0] = 0.604 in 0.40–0.72"
+    },
+    {
+      "pass": true,
+      "label": "Keep temp[SHIRT][slot1] = 0.612 in 0.40–0.72"
+    },
+    {
+      "pass": true,
+      "label": "Keep temp[SHIRT][slot2] = 0.620 in 0.40–0.72"
+    },
+    {
+      "pass": true,
+      "label": "Keep temp[SHIRT][slot3] = 0.628 in 0.40–0.72"
+    },
+    {
+      "pass": true,
+      "label": "Keep temp[SHIRT][slot4] = 0.636 in 0.40–0.72"
+    },
+    {
+      "pass": true,
+      "label": "Keep temp[SHIRT][slot5] = 0.604 in 0.40–0.72"
+    },
+    {
+      "pass": true,
+      "label": "Beauty anchor HAIR (0.870) < standard FULL_OUTFIT (1.000)"
+    },
+    {
+      "pass": true,
+      "label": "FULL_OUTFIT keep (0.534) ≤ HAIR keep (0.604)"
+    },
+    {
+      "pass": true,
+      "label": "classifyFailure(\"429 Too Many Requests\") → RATE_LIMITED"
+    },
+    {
+      "pass": true,
+      "label": "classifyFailure(\"RESOURCE_EXHAUSTED quota exceeded\") → RATE_LIMITED"
+    },
+    {
+      "pass": true,
+      "label": "classifyFailure(\"IMAGE_MISSING: no image in response\") → IMAGE_MISSING"
+    },
+    {
+      "pass": true,
+      "label": "classifyFailure(\"SLOT_3_TIMEOUT exceeded 55000ms\") → TIMEOUT"
+    },
+    {
+      "pass": true,
+      "label": "classifyFailure(\"SAFETY BLOCK triggered\") → SAFETY"
+    },
+    {
+      "pass": true,
+      "label": "classifyFailure(\"HARM_CATEGORY blocked\") → SAFETY"
+    },
+    {
+      "pass": true,
+      "label": "classifyFailure(\"DEADLINE_EXCEEDED\") → TIMEOUT"
+    },
+    {
+      "pass": true,
+      "label": "classifyFailure(\"some unknown error occurred\") → DEFAULT"
+    },
+    {
+      "pass": true,
+      "label": "classifyFailure(\"\") → DEFAULT"
+    },
+    {
+      "pass": true,
+      "label": "classifyFailure(\"null\") → DEFAULT"
+    },
+    {
+      "pass": true,
+      "label": "FAILURE_MUTATIONS.IMAGE_MISSING.tempDelta is a number"
+    },
+    {
+      "pass": true,
+      "label": "FAILURE_MUTATIONS.IMAGE_MISSING.suffix is non-empty string"
+    },
+    {
+      "pass": true,
+      "label": "FAILURE_MUTATIONS.TIMEOUT.tempDelta is a number"
+    },
+    {
+      "pass": true,
+      "label": "FAILURE_MUTATIONS.TIMEOUT.suffix is non-empty string"
+    },
+    {
+      "pass": true,
+      "label": "FAILURE_MUTATIONS.SAFETY.tempDelta is a number"
+    },
+    {
+      "pass": true,
+      "label": "FAILURE_MUTATIONS.SAFETY.suffix is non-empty string"
+    },
+    {
+      "pass": true,
+      "label": "FAILURE_MUTATIONS.DEFAULT.tempDelta is a number"
+    },
+    {
+      "pass": true,
+      "label": "FAILURE_MUTATIONS.DEFAULT.suffix is non-empty string"
+    },
+    {
+      "pass": true,
+      "label": "FAILURE_MUTATIONS.RATE_LIMITED.tempDelta is a number"
+    },
+    {
+      "pass": true,
+      "label": "FAILURE_MUTATIONS.RATE_LIMITED.suffix is non-empty string"
+    },
+    {
+      "pass": true,
+      "label": "Valid PHOTO_EDIT build: zero error warnings"
+    },
+    {
+      "pass": true,
+      "label": "AI mode: no K1_VIOLATION (safety settings applied correctly)"
+    },
+    {
+      "pass": true,
+      "label": "K1: No K1_VIOLATION for keep mode (architect controls safety settings)"
+    },
+    {
+      "pass": true,
+      "label": "VTO_BACKGROUND_REPLACE: no error warnings"
+    },
+    {
+      "pass": true,
+      "label": "INPAINTING: no error warnings"
+    },
+    {
+      "pass": true,
+      "label": "Mutation suffix injected into prompt"
+    },
+    {
+      "pass": true,
+      "label": "Mutation tempDelta applied: base=0.07 → final=0.17"
+    },
+    {
+      "pass": true,
+      "label": "TIMEOUT mutation: temp reduced from base (base=0.87, final=0.69)"
+    },
+    {
+      "pass": true,
+      "label": "Anchor SHIRT: routes to AI_GENERATE"
+    },
+    {
+      "pass": true,
+      "label": "Anchor SHIRT: temp ≥ 0.72 (AI creativity floor)"
+    },
+    {
+      "pass": true,
+      "label": "Anchor SHIRT: anatomy lock present"
+    },
+    {
+      "pass": true,
+      "label": "Anchor PANTS: routes to AI_GENERATE"
+    },
+    {
+      "pass": true,
+      "label": "Anchor PANTS: temp ≥ 0.72 (AI creativity floor)"
+    },
+    {
+      "pass": true,
+      "label": "Anchor PANTS: anatomy lock present"
+    },
+    {
+      "pass": true,
+      "label": "Anchor SHORTS: routes to AI_GENERATE"
+    },
+    {
+      "pass": true,
+      "label": "Anchor SHORTS: temp ≥ 0.72 (AI creativity floor)"
+    },
+    {
+      "pass": true,
+      "label": "Anchor SHORTS: anatomy lock present"
+    },
+    {
+      "pass": true,
+      "label": "Anchor SWIMWEAR: routes to AI_GENERATE"
+    },
+    {
+      "pass": true,
+      "label": "Anchor SWIMWEAR: temp ≥ 0.72 (AI creativity floor)"
+    },
+    {
+      "pass": true,
+      "label": "Anchor SWIMWEAR: anatomy lock present"
+    },
+    {
+      "pass": true,
+      "label": "Anchor FULL_OUTFIT: routes to AI_GENERATE"
+    },
+    {
+      "pass": true,
+      "label": "Anchor FULL_OUTFIT: temp ≥ 0.72 (AI creativity floor)"
+    },
+    {
+      "pass": true,
+      "label": "Anchor FULL_OUTFIT: anatomy lock present"
+    },
+    {
+      "pass": true,
+      "label": "Anchor DRESS: routes to AI_GENERATE"
+    },
+    {
+      "pass": true,
+      "label": "Anchor DRESS: temp ≥ 0.72 (AI creativity floor)"
+    },
+    {
+      "pass": true,
+      "label": "Anchor DRESS: anatomy lock present"
+    },
+    {
+      "pass": true,
+      "label": "Anchor HAT: routes to AI_GENERATE"
+    },
+    {
+      "pass": true,
+      "label": "Anchor HAT: temp ≥ 0.72 (AI creativity floor)"
+    },
+    {
+      "pass": true,
+      "label": "Anchor HAT: anatomy lock present"
+    },
+    {
+      "pass": true,
+      "label": "Anchor HAIR: routes to AI_GENERATE"
+    },
+    {
+      "pass": true,
+      "label": "Anchor HAIR: temp ≥ 0.72 (AI creativity floor)"
+    },
+    {
+      "pass": true,
+      "label": "Anchor HAIR: anatomy lock present"
+    },
+    {
+      "pass": true,
+      "label": "Anchor BARBER: routes to AI_GENERATE"
+    },
+    {
+      "pass": true,
+      "label": "Anchor BARBER: temp ≥ 0.72 (AI creativity floor)"
+    },
+    {
+      "pass": true,
+      "label": "Anchor BARBER: anatomy lock present"
+    },
+    {
+      "pass": true,
+      "label": "Anchor MAKEUP: routes to AI_GENERATE"
+    },
+    {
+      "pass": true,
+      "label": "Anchor MAKEUP: temp ≥ 0.72 (AI creativity floor)"
+    },
+    {
+      "pass": true,
+      "label": "Anchor MAKEUP: anatomy lock present"
+    },
+    {
+      "pass": true,
+      "label": "Anchor NAILS: routes to AI_GENERATE"
+    },
+    {
+      "pass": true,
+      "label": "Anchor NAILS: temp ≥ 0.72 (AI creativity floor)"
+    },
+    {
+      "pass": true,
+      "label": "Anchor NAILS: anatomy lock present"
+    },
+    {
+      "pass": true,
+      "label": "Anchor EARRINGS: routes to AI_GENERATE"
+    },
+    {
+      "pass": true,
+      "label": "Anchor EARRINGS: temp ≥ 0.72 (AI creativity floor)"
+    },
+    {
+      "pass": true,
+      "label": "Anchor EARRINGS: anatomy lock present"
+    },
+    {
+      "pass": true,
+      "label": "Anchor NECKLACE: routes to AI_GENERATE"
+    },
+    {
+      "pass": true,
+      "label": "Anchor NECKLACE: temp ≥ 0.72 (AI creativity floor)"
+    },
+    {
+      "pass": true,
+      "label": "Anchor NECKLACE: anatomy lock present"
+    },
+    {
+      "pass": true,
+      "label": "Anchor RING: routes to AI_GENERATE"
+    },
+    {
+      "pass": true,
+      "label": "Anchor RING: temp ≥ 0.72 (AI creativity floor)"
+    },
+    {
+      "pass": true,
+      "label": "Anchor RING: anatomy lock present"
+    },
+    {
+      "pass": true,
+      "label": "Anchor BRACELET: routes to AI_GENERATE"
+    },
+    {
+      "pass": true,
+      "label": "Anchor BRACELET: temp ≥ 0.72 (AI creativity floor)"
+    },
+    {
+      "pass": true,
+      "label": "Anchor BRACELET: anatomy lock present"
+    },
+    {
+      "pass": true,
+      "label": "Anchor WATCH: routes to AI_GENERATE"
+    },
+    {
+      "pass": true,
+      "label": "Anchor WATCH: temp ≥ 0.72 (AI creativity floor)"
+    },
+    {
+      "pass": true,
+      "label": "Anchor WATCH: anatomy lock present"
+    },
+    {
+      "pass": true,
+      "label": "Anchor BELT: routes to AI_GENERATE"
+    },
+    {
+      "pass": true,
+      "label": "Anchor BELT: temp ≥ 0.72 (AI creativity floor)"
+    },
+    {
+      "pass": true,
+      "label": "Anchor BELT: anatomy lock present"
+    },
+    {
+      "pass": true,
+      "label": "Anchor SHOES: routes to AI_GENERATE"
+    },
+    {
+      "pass": true,
+      "label": "Anchor SHOES: temp ≥ 0.72 (AI creativity floor)"
+    },
+    {
+      "pass": true,
+      "label": "Anchor SHOES: anatomy lock present"
+    },
+    {
+      "pass": true,
+      "label": "Dedup: FULL_OUTFIT + SHIRT + PANTS → only FULL_OUTFIT"
+    },
+    {
+      "pass": true,
+      "label": "Dedup: FULL_OUTFIT + HAT → HAT removed (in OUTFIT_SUBSUMES)"
+    },
+    {
+      "pass": true,
+      "label": "Dedup: no FULL_OUTFIT → all 3 anchors preserved (got 3)"
+    },
+    {
+      "pass": true,
+      "label": "Dedup: string input normalised to array"
+    },
+    {
+      "pass": true,
+      "label": "Dedup: case normalisation (lowercase inputs → uppercase)"
+    },
+    {
+      "pass": true,
+      "label": "Dedup: case-normalised SHIRT removed by FULL_OUTFIT dedup"
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_SUBSUMES includes SHIRT"
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_SUBSUMES includes PANTS"
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_SUBSUMES includes SHORTS"
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_SUBSUMES includes SWIMWEAR"
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_SUBSUMES includes SHOES"
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_SUBSUMES includes BELT"
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_SUBSUMES includes HAT"
+    },
+    {
+      "pass": true,
+      "label": "Garment mode: strategy=keep + garmentImage → isKeepGarment=true, isAiGenerated=false"
+    },
+    {
+      "pass": true,
+      "label": "Garment mode: strategy=change + garmentImage → isGarmentMode=true, isKeepGarment=false, isAiGenerated=true"
+    },
+    {
+      "pass": true,
+      "label": "No garment: isGarmentMode=false, isKeepGarment=false, isAiGenerated=false (keep strategy)"
+    },
+    {
+      "pass": true,
+      "label": "AUDIT NOTE: When garmentImage is present, forge.js overrides anchors → [\"FULL_OUTFIT\"] regardless of user selection"
+    },
+    {
+      "pass": true,
+      "label": "Mission: keep+garment → KEEP_GARMENT_TRANSFER"
+    },
+    {
+      "pass": true,
+      "label": "Mission: no AI, no garment → KEEP_ANCHOR_EDIT"
+    },
+    {
+      "pass": true,
+      "label": "Mission: AI+garment → AI_GARMENT_ANCHOR"
+    },
+    {
+      "pass": true,
+      "label": "Mission: AI+HAIR → AI_BEAUTY_ANCHOR"
+    },
+    {
+      "pass": true,
+      "label": "Mission: AI+MAKEUP → AI_BEAUTY_ANCHOR"
+    },
+    {
+      "pass": true,
+      "label": "Mission: AI+EARRINGS → AI_ACCESSORY_ANCHOR"
+    },
+    {
+      "pass": true,
+      "label": "Mission: AI+WATCH → AI_ACCESSORY_ANCHOR"
+    },
+    {
+      "pass": true,
+      "label": "Mission: AI+SHIRT (not in beauty/accessory) → AI_STANDARD"
+    },
+    {
+      "pass": true,
+      "label": "Slot permutation: ethnicities has exactly 6 elements"
+    },
+    {
+      "pass": true,
+      "label": "Slot permutation: faces has exactly 6 elements"
+    },
+    {
+      "pass": true,
+      "label": "Slot permutation: poses has exactly 6 elements"
+    },
+    {
+      "pass": true,
+      "label": "Slot permutation: outfits has exactly 6 elements"
+    },
+    {
+      "pass": true,
+      "label": "Slot permutation: eyes has exactly 6 elements"
+    },
+    {
+      "pass": true,
+      "label": "Slot permutation: framings has exactly 6 elements"
+    },
+    {
+      "pass": true,
+      "label": "Slot permutation: ages has exactly 6 elements"
+    },
+    {
+      "pass": true,
+      "label": "Slot permutation: bodyTypes has exactly 6 elements"
+    },
+    {
+      "pass": true,
+      "label": "Slot permutation: ethnicities — no null/empty values"
+    },
+    {
+      "pass": true,
+      "label": "Slot permutation: faces — no null/empty values"
+    },
+    {
+      "pass": true,
+      "label": "Slot permutation: poses — no null/empty values"
+    },
+    {
+      "pass": true,
+      "label": "Slot permutation: outfits — no null/empty values"
+    },
+    {
+      "pass": true,
+      "label": "Slot permutation: eyes — no null/empty values"
+    },
+    {
+      "pass": true,
+      "label": "Slot permutation: framings — no null/empty values"
+    },
+    {
+      "pass": true,
+      "label": "Slot permutation: ages — no null/empty values"
+    },
+    {
+      "pass": true,
+      "label": "Slot permutation: bodyTypes — no null/empty values"
+    },
+    {
+      "pass": true,
+      "label": "Slot ethnicities: 6/6 unique (shuffle working)"
+    },
+    {
+      "pass": true,
+      "label": "CLOTHING_FRAMINGS: 6 values available"
+    },
+    {
+      "pass": true,
+      "label": "Slot RNG: same entropy → same permutation (deterministic)"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt exists for anchor: HAIR"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt exists for anchor: BARBER"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt exists for anchor: MAKEUP"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt exists for anchor: NAILS"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt exists for anchor: FULL_OUTFIT"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt exists for anchor: DRESS"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt exists for anchor: SHIRT"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt exists for anchor: PANTS"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt exists for anchor: SHORTS"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt exists for anchor: SWIMWEAR"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt exists for anchor: HAT"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt exists for anchor: SHOES"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt exists for anchor: EARRINGS"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt exists for anchor: NECKLACE"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt exists for anchor: RING"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt exists for anchor: BRACELET"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt exists for anchor: WATCH"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt exists for anchor: BELT"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt for FULL_OUTFIT: statement embellishments step present"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt for DRESS: statement embellishments step present"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt for SHIRT: statement embellishments step present"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt for PANTS: statement embellishments step present"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt for SHORTS: statement embellishments step present"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt for SWIMWEAR: statement embellishments step present"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt for HAT: statement embellishments step present"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt for HAIR: substantive (718 chars ≥ 100)"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt for BARBER: substantive (556 chars ≥ 100)"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt for MAKEUP: substantive (848 chars ≥ 100)"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt for NAILS: substantive (633 chars ≥ 100)"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt for FULL_OUTFIT: substantive (1889 chars ≥ 100)"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt for DRESS: substantive (1767 chars ≥ 100)"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt for SHIRT: substantive (1478 chars ≥ 100)"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt for PANTS: substantive (1059 chars ≥ 100)"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt for SHORTS: substantive (872 chars ≥ 100)"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt for SWIMWEAR: substantive (1187 chars ≥ 100)"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt for HAT: substantive (936 chars ≥ 100)"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt for SHOES: substantive (748 chars ≥ 100)"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt for EARRINGS: substantive (724 chars ≥ 100)"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt for NECKLACE: substantive (704 chars ≥ 100)"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt for RING: substantive (668 chars ≥ 100)"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt for BRACELET: substantive (573 chars ≥ 100)"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt for WATCH: substantive (797 chars ≥ 100)"
+    },
+    {
+      "pass": true,
+      "label": "DNA prompt for BELT: substantive (710 chars ≥ 100)"
+    },
+    {
+      "pass": true,
+      "label": "ANCHOR_LABELS: HAIR has human label"
+    },
+    {
+      "pass": true,
+      "label": "ANCHOR_LABELS: BARBER has human label"
+    },
+    {
+      "pass": true,
+      "label": "ANCHOR_LABELS: MAKEUP has human label"
+    },
+    {
+      "pass": true,
+      "label": "ANCHOR_LABELS: NAILS has human label"
+    },
+    {
+      "pass": true,
+      "label": "ANCHOR_LABELS: FULL_OUTFIT has human label"
+    },
+    {
+      "pass": true,
+      "label": "ANCHOR_LABELS: DRESS has human label"
+    },
+    {
+      "pass": true,
+      "label": "ANCHOR_LABELS: SHIRT has human label"
+    },
+    {
+      "pass": true,
+      "label": "ANCHOR_LABELS: PANTS has human label"
+    },
+    {
+      "pass": true,
+      "label": "ANCHOR_LABELS: SHORTS has human label"
+    },
+    {
+      "pass": true,
+      "label": "ANCHOR_LABELS: SWIMWEAR has human label"
+    },
+    {
+      "pass": true,
+      "label": "ANCHOR_LABELS: HAT has human label"
+    },
+    {
+      "pass": true,
+      "label": "ANCHOR_LABELS: SHOES has human label"
+    },
+    {
+      "pass": true,
+      "label": "ANCHOR_LABELS: EARRINGS has human label"
+    },
+    {
+      "pass": true,
+      "label": "ANCHOR_LABELS: NECKLACE has human label"
+    },
+    {
+      "pass": true,
+      "label": "ANCHOR_LABELS: RING has human label"
+    },
+    {
+      "pass": true,
+      "label": "ANCHOR_LABELS: BRACELET has human label"
+    },
+    {
+      "pass": true,
+      "label": "ANCHOR_LABELS: WATCH has human label"
+    },
+    {
+      "pass": true,
+      "label": "ANCHOR_LABELS: BELT has human label"
+    },
+    {
+      "pass": true,
+      "label": "Consistency parser: all PASS → 0 corrections"
+    },
+    {
+      "pass": true,
+      "label": "Consistency parser: 1 CORRECTED → 1 correction (got 1)"
+    },
+    {
+      "pass": true,
+      "label": "Consistency parser: SLOT 2 → slotNum 1 (0-indexed) (got 1)"
+    },
+    {
+      "pass": true,
+      "label": "Consistency parser: short correction (<80 chars) rejected"
+    },
+    {
+      "pass": true,
+      "label": "Consistency parser: SLOT 7 (out of range) ignored"
+    },
+    {
+      "pass": true,
+      "label": "Consistency parser: 6 CORRECTED → 6 corrections"
+    },
+    {
+      "pass": true,
+      "label": "VTO routing: VERTEX_PROJECT set → Vertex primary"
+    },
+    {
+      "pass": true,
+      "label": "VTO routing: no Vertex → Fashn.ai fallback"
+    },
+    {
+      "pass": true,
+      "label": "VTO routing: no keys → null (inpaint/two-image fallback)"
+    },
+    {
+      "pass": true,
+      "label": "VTO null + masked model → INPAINTING fallback"
+    },
+    {
+      "pass": true,
+      "label": "VTO null + no mask → TWO_IMAGE fallback"
+    },
+    {
+      "pass": true,
+      "label": "AUDIT NOTE: forge.js line 172 — garmentImage forces anchors = [\"FULL_OUTFIT\"] (any user-selected anchor overridden)"
+    },
+    {
+      "pass": true,
+      "label": "Photography directions: 9 available (≥9 for full-spread)"
+    },
+    {
+      "pass": true,
+      "label": "Direction[0] \"High Fashion Editorial\": has id"
+    },
+    {
+      "pass": true,
+      "label": "Direction[0] \"High Fashion Editorial\": has name"
+    },
+    {
+      "pass": true,
+      "label": "Direction[0] \"High Fashion Editorial\": has publication"
+    },
+    {
+      "pass": true,
+      "label": "Direction[0] \"High Fashion Editorial\": has aesthetic"
+    },
+    {
+      "pass": true,
+      "label": "Direction[0] \"High Fashion Editorial\": has lighting"
+    },
+    {
+      "pass": true,
+      "label": "Direction[0] \"High Fashion Editorial\": has color_grade"
+    },
+    {
+      "pass": true,
+      "label": "Direction[0] \"High Fashion Editorial\": has composition"
+    },
+    {
+      "pass": true,
+      "label": "Direction[0] \"High Fashion Editorial\": has camera_note"
+    },
+    {
+      "pass": true,
+      "label": "Direction[0] \"High Fashion Editorial\": has post"
+    },
+    {
+      "pass": true,
+      "label": "Direction[0] \"High Fashion Editorial\": has posing"
+    },
+    {
+      "pass": true,
+      "label": "Direction[1] \"Luxury Brand Campaign\": has id"
+    },
+    {
+      "pass": true,
+      "label": "Direction[1] \"Luxury Brand Campaign\": has name"
+    },
+    {
+      "pass": true,
+      "label": "Direction[1] \"Luxury Brand Campaign\": has publication"
+    },
+    {
+      "pass": true,
+      "label": "Direction[1] \"Luxury Brand Campaign\": has aesthetic"
+    },
+    {
+      "pass": true,
+      "label": "Direction[1] \"Luxury Brand Campaign\": has lighting"
+    },
+    {
+      "pass": true,
+      "label": "Direction[1] \"Luxury Brand Campaign\": has color_grade"
+    },
+    {
+      "pass": true,
+      "label": "Direction[1] \"Luxury Brand Campaign\": has composition"
+    },
+    {
+      "pass": true,
+      "label": "Direction[1] \"Luxury Brand Campaign\": has camera_note"
+    },
+    {
+      "pass": true,
+      "label": "Direction[1] \"Luxury Brand Campaign\": has post"
+    },
+    {
+      "pass": true,
+      "label": "Direction[1] \"Luxury Brand Campaign\": has posing"
+    },
+    {
+      "pass": true,
+      "label": "Direction[2] \"Street Fashion\": has id"
+    },
+    {
+      "pass": true,
+      "label": "Direction[2] \"Street Fashion\": has name"
+    },
+    {
+      "pass": true,
+      "label": "Direction[2] \"Street Fashion\": has publication"
+    },
+    {
+      "pass": true,
+      "label": "Direction[2] \"Street Fashion\": has aesthetic"
+    },
+    {
+      "pass": true,
+      "label": "Direction[2] \"Street Fashion\": has lighting"
+    },
+    {
+      "pass": true,
+      "label": "Direction[2] \"Street Fashion\": has color_grade"
+    },
+    {
+      "pass": true,
+      "label": "Direction[2] \"Street Fashion\": has composition"
+    },
+    {
+      "pass": true,
+      "label": "Direction[2] \"Street Fashion\": has camera_note"
+    },
+    {
+      "pass": true,
+      "label": "Direction[2] \"Street Fashion\": has post"
+    },
+    {
+      "pass": true,
+      "label": "Direction[2] \"Street Fashion\": has posing"
+    },
+    {
+      "pass": true,
+      "label": "Direction[3] \"Avant Garde Couture\": has id"
+    },
+    {
+      "pass": true,
+      "label": "Direction[3] \"Avant Garde Couture\": has name"
+    },
+    {
+      "pass": true,
+      "label": "Direction[3] \"Avant Garde Couture\": has publication"
+    },
+    {
+      "pass": true,
+      "label": "Direction[3] \"Avant Garde Couture\": has aesthetic"
+    },
+    {
+      "pass": true,
+      "label": "Direction[3] \"Avant Garde Couture\": has lighting"
+    },
+    {
+      "pass": true,
+      "label": "Direction[3] \"Avant Garde Couture\": has color_grade"
+    },
+    {
+      "pass": true,
+      "label": "Direction[3] \"Avant Garde Couture\": has composition"
+    },
+    {
+      "pass": true,
+      "label": "Direction[3] \"Avant Garde Couture\": has camera_note"
+    },
+    {
+      "pass": true,
+      "label": "Direction[3] \"Avant Garde Couture\": has post"
+    },
+    {
+      "pass": true,
+      "label": "Direction[3] \"Avant Garde Couture\": has posing"
+    },
+    {
+      "pass": true,
+      "label": "Direction[4] \"Vogue Beauty Editorial\": has id"
+    },
+    {
+      "pass": true,
+      "label": "Direction[4] \"Vogue Beauty Editorial\": has name"
+    },
+    {
+      "pass": true,
+      "label": "Direction[4] \"Vogue Beauty Editorial\": has publication"
+    },
+    {
+      "pass": true,
+      "label": "Direction[4] \"Vogue Beauty Editorial\": has aesthetic"
+    },
+    {
+      "pass": true,
+      "label": "Direction[4] \"Vogue Beauty Editorial\": has lighting"
+    },
+    {
+      "pass": true,
+      "label": "Direction[4] \"Vogue Beauty Editorial\": has color_grade"
+    },
+    {
+      "pass": true,
+      "label": "Direction[4] \"Vogue Beauty Editorial\": has composition"
+    },
+    {
+      "pass": true,
+      "label": "Direction[4] \"Vogue Beauty Editorial\": has camera_note"
+    },
+    {
+      "pass": true,
+      "label": "Direction[4] \"Vogue Beauty Editorial\": has post"
+    },
+    {
+      "pass": true,
+      "label": "Direction[4] \"Vogue Beauty Editorial\": has posing"
+    },
+    {
+      "pass": true,
+      "label": "Direction[5] \"Lifestyle Editorial\": has id"
+    },
+    {
+      "pass": true,
+      "label": "Direction[5] \"Lifestyle Editorial\": has name"
+    },
+    {
+      "pass": true,
+      "label": "Direction[5] \"Lifestyle Editorial\": has publication"
+    },
+    {
+      "pass": true,
+      "label": "Direction[5] \"Lifestyle Editorial\": has aesthetic"
+    },
+    {
+      "pass": true,
+      "label": "Direction[5] \"Lifestyle Editorial\": has lighting"
+    },
+    {
+      "pass": true,
+      "label": "Direction[5] \"Lifestyle Editorial\": has color_grade"
+    },
+    {
+      "pass": true,
+      "label": "Direction[5] \"Lifestyle Editorial\": has composition"
+    },
+    {
+      "pass": true,
+      "label": "Direction[5] \"Lifestyle Editorial\": has camera_note"
+    },
+    {
+      "pass": true,
+      "label": "Direction[5] \"Lifestyle Editorial\": has post"
+    },
+    {
+      "pass": true,
+      "label": "Direction[5] \"Lifestyle Editorial\": has posing"
+    },
+    {
+      "pass": true,
+      "label": "Direction[6] \"Fine Art Portrait\": has id"
+    },
+    {
+      "pass": true,
+      "label": "Direction[6] \"Fine Art Portrait\": has name"
+    },
+    {
+      "pass": true,
+      "label": "Direction[6] \"Fine Art Portrait\": has publication"
+    },
+    {
+      "pass": true,
+      "label": "Direction[6] \"Fine Art Portrait\": has aesthetic"
+    },
+    {
+      "pass": true,
+      "label": "Direction[6] \"Fine Art Portrait\": has lighting"
+    },
+    {
+      "pass": true,
+      "label": "Direction[6] \"Fine Art Portrait\": has color_grade"
+    },
+    {
+      "pass": true,
+      "label": "Direction[6] \"Fine Art Portrait\": has composition"
+    },
+    {
+      "pass": true,
+      "label": "Direction[6] \"Fine Art Portrait\": has camera_note"
+    },
+    {
+      "pass": true,
+      "label": "Direction[6] \"Fine Art Portrait\": has post"
+    },
+    {
+      "pass": true,
+      "label": "Direction[6] \"Fine Art Portrait\": has posing"
+    },
+    {
+      "pass": true,
+      "label": "Direction[7] \"Fashion Magazine Spread\": has id"
+    },
+    {
+      "pass": true,
+      "label": "Direction[7] \"Fashion Magazine Spread\": has name"
+    },
+    {
+      "pass": true,
+      "label": "Direction[7] \"Fashion Magazine Spread\": has publication"
+    },
+    {
+      "pass": true,
+      "label": "Direction[7] \"Fashion Magazine Spread\": has aesthetic"
+    },
+    {
+      "pass": true,
+      "label": "Direction[7] \"Fashion Magazine Spread\": has lighting"
+    },
+    {
+      "pass": true,
+      "label": "Direction[7] \"Fashion Magazine Spread\": has color_grade"
+    },
+    {
+      "pass": true,
+      "label": "Direction[7] \"Fashion Magazine Spread\": has composition"
+    },
+    {
+      "pass": true,
+      "label": "Direction[7] \"Fashion Magazine Spread\": has camera_note"
+    },
+    {
+      "pass": true,
+      "label": "Direction[7] \"Fashion Magazine Spread\": has post"
+    },
+    {
+      "pass": true,
+      "label": "Direction[7] \"Fashion Magazine Spread\": has posing"
+    },
+    {
+      "pass": true,
+      "label": "Direction[8] \"Luxury E-Commerce Catalog\": has id"
+    },
+    {
+      "pass": true,
+      "label": "Direction[8] \"Luxury E-Commerce Catalog\": has name"
+    },
+    {
+      "pass": true,
+      "label": "Direction[8] \"Luxury E-Commerce Catalog\": has publication"
+    },
+    {
+      "pass": true,
+      "label": "Direction[8] \"Luxury E-Commerce Catalog\": has aesthetic"
+    },
+    {
+      "pass": true,
+      "label": "Direction[8] \"Luxury E-Commerce Catalog\": has lighting"
+    },
+    {
+      "pass": true,
+      "label": "Direction[8] \"Luxury E-Commerce Catalog\": has color_grade"
+    },
+    {
+      "pass": true,
+      "label": "Direction[8] \"Luxury E-Commerce Catalog\": has composition"
+    },
+    {
+      "pass": true,
+      "label": "Direction[8] \"Luxury E-Commerce Catalog\": has camera_note"
+    },
+    {
+      "pass": true,
+      "label": "Direction[8] \"Luxury E-Commerce Catalog\": has post"
+    },
+    {
+      "pass": true,
+      "label": "Direction[8] \"Luxury E-Commerce Catalog\": has posing"
+    },
+    {
+      "pass": true,
+      "label": "Photography direction IDs: all unique (9/9)"
+    },
+    {
+      "pass": true,
+      "label": "SKIN_TONE_MAP: 7 tones defined (≥5)"
+    },
+    {
+      "pass": true,
+      "label": "SKIN_TONE_MAP: all 7 tones have descriptive string values"
+    },
+    {
+      "pass": true,
+      "label": "SKIN_TONE_MAP: expected tone keys present (sample check)"
+    },
+    {
+      "pass": true,
+      "label": "LIGHTING_MAP: 6 presets"
+    },
+    {
+      "pass": true,
+      "label": "CAMERA_MAP: 6 presets"
+    },
+    {
+      "pass": true,
+      "label": "BG: studio-grey resolves correctly"
+    },
+    {
+      "pass": true,
+      "label": "BG: pitch-black resolves correctly"
+    },
+    {
+      "pass": true,
+      "label": "BG: editorial-white resolves correctly"
+    },
+    {
+      "pass": true,
+      "label": "BG: custom-bg uses userPromptText"
+    },
+    {
+      "pass": true,
+      "label": "BG: custom-bg with no userPromptText → fallback grey"
+    },
+    {
+      "pass": true,
+      "label": "BG: unknown key → fallback grey"
+    },
+    {
+      "pass": true,
+      "label": "isCustomEnv: locationPreset set → true"
+    },
+    {
+      "pass": true,
+      "label": "isCustomEnv: custom-bg + userPrompt → true"
+    },
+    {
+      "pass": true,
+      "label": "isCustomEnv: custom-bg + empty prompt → false"
+    },
+    {
+      "pass": true,
+      "label": "isCustomEnv: standard bg + text → false"
+    },
+    {
+      "pass": true,
+      "label": "Pass 2: 429 error detected as rate limit → 12s delay"
+    },
+    {
+      "pass": true,
+      "label": "Pass 2: IMAGE_MISSING not rate-limited → 2s delay"
+    },
+    {
+      "pass": true,
+      "label": "All 6 slots failed: masterGrid.length === 0 → error SSE event sent"
+    },
+    {
+      "pass": true,
+      "label": "Partial failure: 4/6 images returned (not blocked by failures)"
+    },
+    {
+      "pass": true,
+      "label": "Self-heal: brief missing direction gets injected"
+    },
+    {
+      "pass": true,
+      "label": "Self-heal: brief already containing direction not re-injected"
+    },
+    {
+      "pass": true,
+      "label": "Self-heal: second missing brief also gets injected"
+    },
+    {
+      "pass": true,
+      "label": "Self-heal: keyword check uses first 5 words, length >3 filter"
+    },
+    {
+      "pass": true,
+      "label": "Self-heal: short direction word — still injects (empty keyword list → all briefs healed)"
+    },
+    {
+      "pass": true,
+      "label": "Self-heal: isAiGenerated=false → no injection"
+    },
+    {
+      "pass": true,
+      "label": "Rate limit: request 1/5 passes"
+    },
+    {
+      "pass": true,
+      "label": "Rate limit: request 2/5 passes"
+    },
+    {
+      "pass": true,
+      "label": "Rate limit: request 3/5 passes"
+    },
+    {
+      "pass": true,
+      "label": "Rate limit: request 4/5 passes"
+    },
+    {
+      "pass": true,
+      "label": "Rate limit: request 5/5 passes"
+    },
+    {
+      "pass": true,
+      "label": "Rate limit: 6th request in window is blocked"
+    },
+    {
+      "pass": true,
+      "label": "Rate limit: 7th request in window is blocked"
+    },
+    {
+      "pass": true,
+      "label": "Rate limit: different UID has independent window"
+    },
+    {
+      "pass": true,
+      "label": "Rate limit: expired timestamps purged from window"
+    },
+    {
+      "pass": true,
+      "label": "Rate limit: cold-start resets acknowledged (in-memory, by design — abuse deterrence not billing)"
+    },
+    {
+      "pass": true,
+      "label": "Credit deduction: 100 credits → success"
+    },
+    {
+      "pass": true,
+      "label": "Credit deduction: balance correctly reduced to 94 (got 94)"
+    },
+    {
+      "pass": true,
+      "label": "Credit deduction: exactly 6 credits → success"
+    },
+    {
+      "pass": true,
+      "label": "Credit deduction: balance at 0 after exact deduction (got 0)"
+    },
+    {
+      "pass": true,
+      "label": "Credit deduction: 5 credits (< 6) → rejected"
+    },
+    {
+      "pass": true,
+      "label": "Credit deduction: balance unchanged after rejection"
+    },
+    {
+      "pass": true,
+      "label": "Credit deduction: 0 credits → rejected"
+    },
+    {
+      "pass": true,
+      "label": "Credit deduction: missing imageCredits field → rejected (defaults to 0)"
+    },
+    {
+      "pass": true,
+      "label": "Admin email: deduction bypassed (always returns true)"
+    },
+    {
+      "pass": true,
+      "label": "Admin email: credit balance unchanged"
+    },
+    {
+      "pass": true,
+      "label": "Admin email case sensitivity: uppercase variant correctly blocked"
+    },
+    {
+      "pass": true,
+      "label": "Credit deduction: negative imageCredits → rejected (< FORGE_CREDIT_COST)"
+    },
+    {
+      "pass": null,
+      "label": "AUDIT NOTE: Firestore transaction used for deduction → race condition protected (requires live Firestore test to verify)",
+      "detail": "deductForgeCredits uses db.runTransaction() — correct"
+    },
+    {
+      "pass": true,
+      "label": "generations collection: client write = false (server-only writes)"
+    },
+    {
+      "pass": true,
+      "label": "users collection: no client-side deletes"
+    },
+    {
+      "pass": true,
+      "label": "User update: only displayName/photoURL allowed (credit/tier locked)"
+    },
+    {
+      "pass": true,
+      "label": "Credit fields NOT in client-writable user update fields"
+    },
+    {
+      "pass": true,
+      "label": "Default deny: catch-all rule blocks everything else"
+    },
+    {
+      "pass": true,
+      "label": "Auth check: isSignedIn() requires authentication"
+    },
+    {
+      "pass": true,
+      "label": "Ownership check: isOwner() uses auth.uid"
+    },
+    {
+      "pass": true,
+      "label": "Admin check: uses token email (not client-provided data)"
+    },
+    {
+      "pass": true,
+      "label": "CRITICAL: imageCredits NOT in client-writable update fields"
+    },
+    {
+      "pass": true,
+      "label": "CRITICAL: tier NOT in client-writable update fields"
+    },
+    {
+      "pass": true,
+      "label": "CRITICAL: subscriptionId NOT in client-writable update fields"
+    },
+    {
+      "pass": true,
+      "label": "Vault sub-collection rules present"
+    },
+    {
+      "pass": true,
+      "label": "Vault: ownership check on all vault operations"
+    },
+    {
+      "pass": true,
+      "label": "Unauth forge response: 401 status"
+    },
+    {
+      "pass": null,
+      "label": "CORS policy: verify forge endpoint does NOT return Access-Control-Allow-Origin: * (private API with auth)",
+      "detail": "Manual verification needed against live headers"
+    },
+    {
+      "pass": true,
+      "label": "SSE heartbeat: comment event format present"
+    },
+    {
+      "pass": true,
+      "label": "SSE heartbeat: setInterval present"
+    },
+    {
+      "pass": true,
+      "label": "SSE heartbeat: cleared on exit"
+    },
+    {
+      "pass": true,
+      "label": "SSE heartbeat: cleared at ≥3 exit points (found 3)"
+    },
+    {
+      "pass": true,
+      "label": "SSE: Content-Type text/event-stream set"
+    },
+    {
+      "pass": true,
+      "label": "SSE: flushHeaders() called before streaming begins"
+    },
+    {
+      "pass": true,
+      "label": "SSE: X-Accel-Buffering disabled (prevents nginx/proxy buffering)"
+    },
+    {
+      "pass": true,
+      "label": "Admin email: stored in Firestore data, not JWT (correct pattern)"
+    },
+    {
+      "pass": null,
+      "label": "VERIFY: Firestore rules must NOT include email in client-writable update fields",
+      "detail": "Cross-reference runFirestoreRulesReview — if email is writable, attacker can self-escalate to admin"
+    },
+    {
+      "pass": true,
+      "label": "FORGE_CREDIT_COST = 6 (expected)"
+    },
+    {
+      "pass": true,
+      "label": "Credit cost: same for keep and AI strategies (6 credits each)"
+    },
+    {
+      "pass": true,
+      "label": "No auth header → 401"
+    },
+    {
+      "pass": true,
+      "label": "No auth header → UNAUTHORIZED error message"
+    },
+    {
+      "pass": true,
+      "label": "Empty Bearer token → 401"
+    },
+    {
+      "pass": true,
+      "label": "Malformed JWT → 401"
+    },
+    {
+      "pass": true,
+      "label": "Well-formed but fake JWT → 401"
+    },
+    {
+      "pass": true,
+      "label": "GET /api/forge → 405 Method Not Allowed"
+    },
+    {
+      "pass": true,
+      "label": "Credits endpoint with no auth → 4xx"
+    },
+    {
+      "pass": true,
+      "label": "vault-delete with no auth → 4xx"
+    },
+    {
+      "pass": true,
+      "label": "XSS in userPrompt: still requires auth (not bypassed by injection)"
+    },
+    {
+      "pass": true,
+      "label": "SQL injection string in userPrompt: no server crash"
+    },
+    {
+      "pass": true,
+      "label": "Prototype pollution attempt: still requires auth"
+    },
+    {
+      "pass": true,
+      "label": "Anchor type coercion: no server crash, proper 4xx"
+    },
+    {
+      "pass": true,
+      "label": "Empty body: no server crash"
+    },
+    {
+      "pass": true,
+      "label": "Null config: no server crash"
+    },
+    {
+      "pass": true,
+      "label": "Oversized userPrompt (50KB): server handles gracefully (no 500)"
+    },
+    {
+      "pass": true,
+      "label": "Oversized anchor array (1000 entries): no 500 crash"
+    },
+    {
+      "pass": true,
+      "label": "additionalModelImages bomb (100 images): no 500 crash"
+    },
+    {
+      "pass": true,
+      "label": "REGRESSION: Array.from({ length: 1 }) NOT present (bug fixed)"
+    },
+    {
+      "pass": true,
+      "label": "Director: Array.from({ length: 6 }) generates 6 briefs"
+    },
+    {
+      "pass": true,
+      "label": "REGRESSION: inputs.category NOT set in Fashn.ai payload (400 error fixed)"
+    },
+    {
+      "pass": true,
+      "label": "Fashn: category resolved for logging but not sent"
+    },
+    {
+      "pass": true,
+      "label": "Fashn: category NOT in inputs object (verified within {} block)"
+    },
+    {
+      "pass": true,
+      "label": "VTO_BG_REPLACE temp: all slots ≥ 0.15 (was 0.07 bug). Min = 0.180"
+    },
+    {
+      "pass": true,
+      "label": "VTO_BG_REPLACE temp: all slots ≤ 0.40. Max = 0.305"
+    },
+    {
+      "pass": true,
+      "label": "VTO_BG_REPLACE temp: varied across slots (not identical). Values: 0.180, 0.205, 0.230, 0.255, 0.280, 0.305"
+    },
+    {
+      "pass": true,
+      "label": "forge.js: DNA_IMAGE_MISSING error thrown when sourceImage absent"
+    },
+    {
+      "pass": true,
+      "label": "forge.js: throws before entering try block"
+    },
+    {
+      "pass": true,
+      "label": "Gender: \"male\" → \"male\""
+    },
+    {
+      "pass": true,
+      "label": "Gender: \"female\" → \"female\""
+    },
+    {
+      "pass": true,
+      "label": "Gender: \"MALE\" (uppercase) → \"male\""
+    },
+    {
+      "pass": true,
+      "label": "Gender: \"Female\" (mixed case) → \"female\""
+    },
+    {
+      "pass": true,
+      "label": "Gender: null → defaults to \"female\""
+    },
+    {
+      "pass": true,
+      "label": "Gender: empty string → defaults to \"female\""
+    },
+    {
+      "pass": true,
+      "label": "Gender: unsupported value → defaults to \"female\" (binary system)"
+    },
+    {
+      "pass": true,
+      "label": "Male prompt: no female pronouns (she/her/woman/feminine) in generated prompt"
+    },
+    {
+      "pass": true,
+      "label": "Heartbeat: clearInterval called at ≥3 exit points (found 3)"
+    },
+    {
+      "pass": true,
+      "label": "Heartbeat: setInterval called AFTER flushHeaders (correct order)"
+    },
+    {
+      "pass": true,
+      "label": "Slot timeout: 55s per slot (55000ms)"
+    },
+    {
+      "pass": true,
+      "label": "Timeout budget: 3 concurrent slots × 55s × 2 passes = 330s worst case. OK within 300s Vercel limit (shared execution time, not sequential)"
+    },
+    {
+      "pass": true,
+      "label": "Agent 01b: 25s timeout"
+    },
+    {
+      "pass": true,
+      "label": "Agents 01c/01d/01e: 30s timeout"
+    },
+    {
+      "pass": true,
+      "label": "vercel.json: forge maxDuration = 300s"
+    },
+    {
+      "pass": true,
+      "label": "VTO_BG_REPLACE: ABSOLUTE FREEZE appears before SCENE DIRECTION (garment lock is highest priority)"
+    },
+    {
+      "pass": true,
+      "label": "CLIENT DIRECTION appears before SELF-AUDIT (last scene instruction before audit)"
+    },
+    {
+      "pass": true,
+      "label": "CLIENT DIRECTION appears AFTER garment freeze (scene, not garment)"
+    },
+    {
+      "pass": true,
+      "label": "Classifier: no path reaches VTO_EDITORIAL when fashnVTOImage present (mode=VTO_BACKGROUND_REPLACE)"
+    },
+    {
+      "pass": true,
+      "label": "Classifier: no path reaches VTO_EDITORIAL when fashnVTOImage present (mode=VTO_BACKGROUND_REPLACE)"
+    },
+    {
+      "pass": true,
+      "label": "Classifier: no path reaches VTO_EDITORIAL when fashnVTOImage present (mode=VTO_BACKGROUND_REPLACE)"
+    },
+    {
+      "pass": null,
+      "label": "ARCHITECTURAL NOTE: VTO_EDITORIAL is a DEAD CODE PATH — buildVTOEditorialPrompt() and its two-image parts builder are never called by classify()",
+      "detail": "Intentional design: VTO_BACKGROUND_REPLACE replaced VTO_EDITORIAL as the primary path. VTO_EDITORIAL code is kept for reference but could be removed."
+    }
+  ]
+}

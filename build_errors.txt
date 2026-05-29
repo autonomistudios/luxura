@@ -1,0 +1,33 @@
+src/components/AtelierGrid.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/components/EditorialGrid.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/components/MasterApprovalSeal.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/components/MasterApprovalSeal.tsx(3,10): error TS6133: 'ShieldCheck' is declared but its value is never read.
+src/components/MasterExportModal.tsx(14,29): error TS6133: 'type' is declared but its value is never read.
+src/components/SovereignDashboard.tsx(1,8): error TS6133: 'React' is declared but its value is never read.
+src/components/SovereignHeader.tsx(1,23): error TS6133: 'Terminal' is declared but its value is never read.
+src/components/SovereignHeader.tsx(2,1): error TS6133: 'Link' is declared but its value is never read.
+src/components/SovereignNavigation.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/pages/DeveloperPortal.tsx(3,20): error TS6133: 'Cpu' is declared but its value is never read.
+src/pages/DeveloperPortal.tsx(3,48): error TS6133: 'Wifi' is declared but its value is never read.
+src/pages/Profile.tsx(1,1): error TS6133: 'React' is declared but its value is never read.
+src/pages/Vault.tsx(1,8): error TS6133: 'React' is declared but its value is never read.
+src/pages/Vault.tsx(4,1): error TS6192: All imports in import declaration are unused.
+src/pages/Workflow.tsx(9,10): error TS6133: 'UserCheck' is declared but its value is never read.
+src/pages/Workflow.tsx(9,21): error TS6133: 'UserPlus' is declared but its value is never read.
+src/pages/Workflow.tsx(9,40): error TS6133: 'ImageIcon' is declared but its value is never read.
+src/pages/Workflow.tsx(9,75): error TS6133: 'CheckCircle' is declared but its value is never read.
+src/pages/Workflow.tsx(9,88): error TS6133: 'Loader2' is declared but its value is never read.
+src/pages/Workflow.tsx(11,1): error TS6133: 'SovereignForge' is declared but its value is never read.
+src/pages/Workflow.tsx(33,22): error TS6133: 'setSkinTone' is declared but its value is never read.
+src/pages/Workflow.tsx(34,22): error TS6133: 'setLighting' is declared but its value is never read.
+src/pages/Workflow.tsx(35,20): error TS6133: 'setCamera' is declared but its value is never read.
+src/pages/Workflow.tsx(36,16): error TS6133: 'setBg' is declared but its value is never read.
+src/pages/Workflow.tsx(37,20): error TS6133: 'setPrompt' is declared but its value is never read.
+src/pages/Workflow.tsx(41,12): error TS6133: 'agentReports' is declared but its value is never read.
+src/pages/Workflow.tsx(46,12): error TS6133: 'auditStatus' is declared but its value is never read.
+src/pages/Workflow.tsx(47,12): error TS6133: 'auditNotes' is declared but its value is never read.
+src/pages/Workflow.tsx(48,12): error TS6133: 'isRefining' is declared but its value is never read.
+src/pages/Workflow.tsx(72,13): error TS2322: Type 'string' is not assignable to type '"keep" | "change"'.
+src/pages/Workflow.tsx(130,11): error TS6133: 'stepLabels' is declared but its value is never read.
+src/pages/Workflow.tsx(224,49): error TS2322: Type 'string | null' is not assignable to type 'string'.
+  Type 'null' is not assignable to type 'string'.
