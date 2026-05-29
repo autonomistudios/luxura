@@ -60,6 +60,13 @@ service cloud.firestore {
         ]);
       }
 
+      // ── users/{uid}/videoVault/{itemId} ───────────────────────────────────
+      match /videoVault/{itemId} {
+        allow read,
+              create,
+              delete: if isOwner(uid);
+      }
+
       // ── users/{uid}/generations/{genId} ──────────────────────────────────
       // Written server-side (Firebase Admin) — client can read for history UI.
       match /generations/{genId} {

@@ -1,7 +1,7 @@
 {
-  "timestamp": "2026-05-29T17:53:42.794Z",
+  "timestamp": "2026-05-29T17:57:39.223Z",
   "mode": "STATIC",
-  "elapsed": "1.1",
+  "elapsed": "0.4",
   "summary": {
     "pass": 531,
     "fail": 0,
@@ -15,7 +15,7 @@
       "fail": 0,
       "warn": 0,
       "total": 7,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "PHOTO_EDIT Builder",
@@ -23,7 +23,7 @@
       "fail": 0,
       "warn": 0,
       "total": 13,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "VTO_BACKGROUND_REPLACE",
@@ -47,7 +47,7 @@
       "fail": 0,
       "warn": 0,
       "total": 11,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "TWO_IMAGE Builder",
@@ -55,7 +55,7 @@
       "fail": 0,
       "warn": 0,
       "total": 12,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "AI_GENERATE Builder",
@@ -71,7 +71,7 @@
       "fail": 0,
       "warn": 0,
       "total": 62,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "Failure Classifier",
@@ -79,7 +79,7 @@
       "fail": 0,
       "warn": 0,
       "total": 22,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Pre-Flight Validator",
@@ -87,7 +87,7 @@
       "fail": 0,
       "warn": 0,
       "total": 5,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Mutation Retry Injection",
@@ -103,7 +103,7 @@
       "fail": 0,
       "warn": 0,
       "total": 54,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "Anchor Deduplication",
@@ -111,7 +111,7 @@
       "fail": 0,
       "warn": 0,
       "total": 13,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Garment Mode Detection",
@@ -167,7 +167,7 @@
       "fail": 0,
       "warn": 0,
       "total": 97,
-      "elapsed": "11"
+      "elapsed": "2"
     },
     {
       "name": "Background Resolution",
@@ -175,7 +175,7 @@
       "fail": 0,
       "warn": 0,
       "total": 10,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "Pass 2 Retry Logic",
@@ -191,7 +191,7 @@
       "fail": 0,
       "warn": 0,
       "total": 6,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Rate Limiter Logic",
@@ -199,7 +199,7 @@
       "fail": 0,
       "warn": 0,
       "total": 10,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Credit System Logic",
@@ -223,7 +223,7 @@
       "fail": 0,
       "warn": 1,
       "total": 8,
-      "elapsed": "1064"
+      "elapsed": "381"
     },
     {
       "name": "Privilege Escalation",
@@ -255,7 +255,7 @@
       "fail": 0,
       "warn": 0,
       "total": 3,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Missing Image Error",
@@ -271,7 +271,7 @@
       "fail": 0,
       "warn": 0,
       "total": 8,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Heartbeat Exit Paths",
@@ -279,7 +279,7 @@
       "fail": 0,
       "warn": 0,
       "total": 2,
-      "elapsed": "1"
+      "elapsed": "2"
     },
     {
       "name": "Timeout Budget",
