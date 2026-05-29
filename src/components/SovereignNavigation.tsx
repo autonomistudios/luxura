@@ -58,7 +58,7 @@ const SovereignNavigation = () => {
               )}
             </Link>
           ))}
-          {user?.email === 'autonomistudiosllc@gmail.com' && (
+          {isAdmin && (
             <Link
               to="/admin"
               className={`text-[11px] font-mono uppercase tracking-[0.4em] transition-all duration-700 border-l border-[#1C1C1C]/10 pl-12 ${
@@ -154,7 +154,7 @@ const SovereignNavigation = () => {
               </Link>
             ))}
 
-            {user?.email === 'autonomistudiosllc@gmail.com' && (
+            {isAdmin && (
               <Link
                 to="/admin"
                 className={`text-xl font-mono uppercase tracking-[0.3em] border-l-2 border-[#D4AF37]/50 pl-4 mt-4 ${

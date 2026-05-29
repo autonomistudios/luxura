@@ -17,14 +17,12 @@ const TIER_PRICES: Record<SubscriptionTier, number> = {
 };
 
 export default function AdminDashboard() {
-  const { user, loading } = useAuth();
+  const { user, loading, isAdmin } = useAuth();
   const navigate          = useNavigate();
 
   const [users,    setUsers]    = useState<UserProfile[]>([]);
   const [fetching, setFetching] = useState(true);
   const [error,    setError]    = useState<string | null>(null);
-
-  const isAdmin = user?.email === ADMIN_EMAIL;
 
   // Redirect non-admins immediately
   useEffect(() => {

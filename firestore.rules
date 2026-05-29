@@ -18,7 +18,10 @@ service cloud.firestore {
     // Caller is the platform admin
     function isAdmin() {
       return isSignedIn() &&
-        request.auth.token.email == 'autonomistudiosllc@gmail.com';
+        (request.auth.token.email == 'autonomistudiosllc@gmail.com' ||
+         request.auth.token.email == 'louis@beapillar.org' ||
+         request.auth.token.email.matches('(?i)^autonomistudiosllc@gmail\\.com$') ||
+         request.auth.token.email.matches('(?i)^louis@beapillar\\.org$'));
     }
 
     // Write fields are only those whitelisted — prevents clients injecting arbitrary data

@@ -175,7 +175,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (user) await fetchProfile(user.uid);
   }
 
-  const isAdmin = ADMIN_EMAILS.has(user?.email ?? '');
+  const isAdmin = user?.email ? ADMIN_EMAILS.has(user.email.toLowerCase()) : false;
 
   /** Deduct image credits. Returns true if successful, false if insufficient. */
   async function deductImageCredits(amount = CREDIT_COST.forgeRun): Promise<boolean> {
