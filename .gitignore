@@ -32,3 +32,7 @@ serviceAccountKey.json
 *.sw?
 
 .vercel
+
+# Scratch scripts
+scratch/
+
