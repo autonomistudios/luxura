@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Zap, Menu, X } from 'lucide-react';
-import { useAuth, TIER_CONFIG } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext';
 
 const SovereignNavigation = () => {
   const location           = useLocation();
   const navigate           = useNavigate();
-  const { user, profile, logout, isAdmin } = useAuth();
+  const { user, brand, logout, isAdmin } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
 
   React.useEffect(() => {
@@ -23,7 +23,7 @@ const SovereignNavigation = () => {
   ];
 
   const isActive = (path: string) => location.pathname === path;
-  const tierCfg = profile ? TIER_CONFIG[profile.tier] : null;
+  const tierCfg = brand ? { label: brand.tier, color: '#B8952A' } : null;
 
   async function handleLogout() {
     await logout();

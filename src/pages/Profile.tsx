@@ -3,7 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { LogOut, Zap, Video, Crown, Plus, X, Sparkles, Brain, MessageSquare, Send } from 'lucide-react';
 import Layout from '../components/Layout';
-import { useAuth, TIER_CONFIG } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext';
+const TIER_CONFIG: Record<string, { label: string; color: string; price: number; imageCredits: number; videoCredits: number }> = {
+  free:      { label: 'Free',      color: 'white',   price: 0,   imageCredits: 0,    videoCredits: 0  },
+  aura:      { label: 'Aura',      color: '#D4AF37', price: 85,  imageCredits: 300,  videoCredits: 0  },
+  sovereign: { label: 'Sovereign', color: '#C0C0C0', price: 165, imageCredits: 750,  videoCredits: 5  },
+  luminary:  { label: 'Luminary',  color: '#E5D3FF', price: 299, imageCredits: 1500, videoCredits: 20 },
+};
 import { useSovereignStore } from '../store/useSovereignStore';
 
 // ── Types ─────────────────────────────────────────────────────────────────────

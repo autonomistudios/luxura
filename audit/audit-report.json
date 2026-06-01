@@ -1,21 +1,21 @@
 {
-  "timestamp": "2026-05-29T17:57:39.223Z",
+  "timestamp": "2026-05-31T03:24:03.419Z",
   "mode": "STATIC",
-  "elapsed": "0.4",
+  "elapsed": "2.2",
   "summary": {
-    "pass": 531,
-    "fail": 0,
+    "pass": 580,
+    "fail": 4,
     "warn": 4,
-    "total": 531
+    "total": 584
   },
   "suites": [
     {
       "name": "Mode Classifier",
-      "pass": 7,
-      "fail": 0,
+      "pass": 6,
+      "fail": 1,
       "warn": 0,
       "total": 7,
-      "elapsed": "0"
+      "elapsed": "8"
     },
     {
       "name": "PHOTO_EDIT Builder",
@@ -23,7 +23,7 @@
       "fail": 0,
       "warn": 0,
       "total": 13,
-      "elapsed": "1"
+      "elapsed": "8"
     },
     {
       "name": "VTO_BACKGROUND_REPLACE",
@@ -31,15 +31,15 @@
       "fail": 0,
       "warn": 0,
       "total": 15,
-      "elapsed": "1"
+      "elapsed": "4"
     },
     {
       "name": "VTO_EDITORIAL Builder",
-      "pass": 2,
-      "fail": 0,
+      "pass": 1,
+      "fail": 1,
       "warn": 0,
       "total": 2,
-      "elapsed": "0"
+      "elapsed": "1"
     },
     {
       "name": "INPAINTING Builder",
@@ -47,7 +47,7 @@
       "fail": 0,
       "warn": 0,
       "total": 11,
-      "elapsed": "0"
+      "elapsed": "4"
     },
     {
       "name": "TWO_IMAGE Builder",
@@ -55,7 +55,7 @@
       "fail": 0,
       "warn": 0,
       "total": 12,
-      "elapsed": "0"
+      "elapsed": "2"
     },
     {
       "name": "AI_GENERATE Builder",
@@ -63,7 +63,7 @@
       "fail": 0,
       "warn": 0,
       "total": 14,
-      "elapsed": "1"
+      "elapsed": "3"
     },
     {
       "name": "Temperature Calculator",
@@ -71,7 +71,7 @@
       "fail": 0,
       "warn": 0,
       "total": 62,
-      "elapsed": "1"
+      "elapsed": "3"
     },
     {
       "name": "Failure Classifier",
@@ -79,7 +79,7 @@
       "fail": 0,
       "warn": 0,
       "total": 22,
-      "elapsed": "0"
+      "elapsed": "2"
     },
     {
       "name": "Pre-Flight Validator",
@@ -87,7 +87,7 @@
       "fail": 0,
       "warn": 0,
       "total": 5,
-      "elapsed": "0"
+      "elapsed": "2"
     },
     {
       "name": "Mutation Retry Injection",
@@ -95,7 +95,7 @@
       "fail": 0,
       "warn": 0,
       "total": 3,
-      "elapsed": "0"
+      "elapsed": "1"
     },
     {
       "name": "Anchor Coverage (all types)",
@@ -103,7 +103,7 @@
       "fail": 0,
       "warn": 0,
       "total": 54,
-      "elapsed": "1"
+      "elapsed": "4"
     },
     {
       "name": "Anchor Deduplication",
@@ -111,7 +111,7 @@
       "fail": 0,
       "warn": 0,
       "total": 13,
-      "elapsed": "0"
+      "elapsed": "1"
     },
     {
       "name": "Garment Mode Detection",
@@ -135,7 +135,7 @@
       "fail": 0,
       "warn": 0,
       "total": 19,
-      "elapsed": "1"
+      "elapsed": "2"
     },
     {
       "name": "DNA Prompt Coverage",
@@ -143,7 +143,7 @@
       "fail": 0,
       "warn": 0,
       "total": 61,
-      "elapsed": "1"
+      "elapsed": "4"
     },
     {
       "name": "Consistency Audit Parser",
@@ -151,7 +151,7 @@
       "fail": 0,
       "warn": 0,
       "total": 6,
-      "elapsed": "1"
+      "elapsed": "4"
     },
     {
       "name": "VTO Pipeline Routing",
@@ -159,7 +159,7 @@
       "fail": 0,
       "warn": 0,
       "total": 6,
-      "elapsed": "1"
+      "elapsed": "2"
     },
     {
       "name": "Photography Config",
@@ -167,7 +167,7 @@
       "fail": 0,
       "warn": 0,
       "total": 97,
-      "elapsed": "2"
+      "elapsed": "3"
     },
     {
       "name": "Background Resolution",
@@ -175,7 +175,7 @@
       "fail": 0,
       "warn": 0,
       "total": 10,
-      "elapsed": "1"
+      "elapsed": "2"
     },
     {
       "name": "Pass 2 Retry Logic",
@@ -183,7 +183,7 @@
       "fail": 0,
       "warn": 0,
       "total": 4,
-      "elapsed": "1"
+      "elapsed": "2"
     },
     {
       "name": "Self-Heal Guardian",
@@ -191,7 +191,7 @@
       "fail": 0,
       "warn": 0,
       "total": 6,
-      "elapsed": "0"
+      "elapsed": "1"
     },
     {
       "name": "Rate Limiter Logic",
@@ -199,7 +199,7 @@
       "fail": 0,
       "warn": 0,
       "total": 10,
-      "elapsed": "0"
+      "elapsed": "1"
     },
     {
       "name": "Credit System Logic",
@@ -207,7 +207,7 @@
       "fail": 0,
       "warn": 1,
       "total": 12,
-      "elapsed": "0"
+      "elapsed": "1"
     },
     {
       "name": "Firestore Rules Review",
@@ -215,7 +215,7 @@
       "fail": 0,
       "warn": 0,
       "total": 13,
-      "elapsed": "3"
+      "elapsed": "10"
     },
     {
       "name": "SSE Headers",
@@ -223,7 +223,7 @@
       "fail": 0,
       "warn": 1,
       "total": 8,
-      "elapsed": "381"
+      "elapsed": "2055"
     },
     {
       "name": "Privilege Escalation",
@@ -231,7 +231,79 @@
       "fail": 0,
       "warn": 1,
       "total": 3,
-      "elapsed": "0"
+      "elapsed": "1"
+    },
+    {
+      "name": "Brand API Key Validation",
+      "pass": 0,
+      "fail": 0,
+      "warn": 0,
+      "total": 0,
+      "elapsed": "4"
+    },
+    {
+      "name": "Dual Auth Mode",
+      "pass": 0,
+      "fail": 0,
+      "warn": 0,
+      "total": 0,
+      "elapsed": "1"
+    },
+    {
+      "name": "Brand Schema",
+      "pass": 0,
+      "fail": 0,
+      "warn": 0,
+      "total": 0,
+      "elapsed": "1"
+    },
+    {
+      "name": "Quota Atomicity",
+      "pass": 0,
+      "fail": 0,
+      "warn": 0,
+      "total": 0,
+      "elapsed": "1"
+    },
+    {
+      "name": "Brand Member Isolation",
+      "pass": 0,
+      "fail": 0,
+      "warn": 0,
+      "total": 0,
+      "elapsed": "1"
+    },
+    {
+      "name": "SKU Enrollment Schema",
+      "pass": 0,
+      "fail": 0,
+      "warn": 0,
+      "total": 0,
+      "elapsed": "1"
+    },
+    {
+      "name": "SKU Recall Bypass",
+      "pass": 0,
+      "fail": 0,
+      "warn": 0,
+      "total": 0,
+      "elapsed": "1"
+    },
+    {
+      "name": "SKU API Endpoints",
+      "pass": 0,
+      "fail": 0,
+      "warn": 0,
+      "total": 0,
+      "elapsed": "1"
+    },
+    {
+      "name": "DNA Injection Integrity",
+      "pass": 0,
+      "fail": 0,
+      "warn": 0,
+      "total": 0,
+      "elapsed": "1"
     },
     {
       "name": "Director Brief Count",
@@ -239,7 +311,7 @@
       "fail": 0,
       "warn": 0,
       "total": 2,
-      "elapsed": "1"
+      "elapsed": "7"
     },
     {
       "name": "Fashn.ai Category Bug",
@@ -247,7 +319,7 @@
       "fail": 0,
       "warn": 0,
       "total": 3,
-      "elapsed": "1"
+      "elapsed": "4"
     },
     {
       "name": "VTO Temperature Range",
@@ -255,7 +327,7 @@
       "fail": 0,
       "warn": 0,
       "total": 3,
-      "elapsed": "0"
+      "elapsed": "4"
     },
     {
       "name": "Missing Image Error",
@@ -263,7 +335,7 @@
       "fail": 0,
       "warn": 0,
       "total": 2,
-      "elapsed": "1"
+      "elapsed": "3"
     },
     {
       "name": "Gender Edge Cases",
@@ -271,7 +343,7 @@
       "fail": 0,
       "warn": 0,
       "total": 8,
-      "elapsed": "0"
+      "elapsed": "2"
     },
     {
       "name": "Heartbeat Exit Paths",
@@ -279,7 +351,7 @@
       "fail": 0,
       "warn": 0,
       "total": 2,
-      "elapsed": "2"
+      "elapsed": "13"
     },
     {
       "name": "Timeout Budget",
@@ -287,7 +359,7 @@
       "fail": 0,
       "warn": 0,
       "total": 5,
-      "elapsed": "2"
+      "elapsed": "15"
     },
     {
       "name": "Prompt Lock Order",
@@ -295,18 +367,39 @@
       "fail": 0,
       "warn": 0,
       "total": 3,
-      "elapsed": "0"
+      "elapsed": "2"
     },
     {
       "name": "Dead Code Audit",
-      "pass": 3,
-      "fail": 0,
+      "pass": 1,
+      "fail": 2,
       "warn": 1,
       "total": 3,
-      "elapsed": "0"
+      "elapsed": "1"
     }
   ],
-  "failures": [],
+  "failures": [
+    {
+      "pass": false,
+      "label": "Classifier: AI + VTO present → VTO_BACKGROUND_REPLACE (AI garment showcase)",
+      "detail": ""
+    },
+    {
+      "pass": false,
+      "label": "Architectural: VTO present → always VTO_BACKGROUND_REPLACE (VTO_EDITORIAL unreachable via build())",
+      "detail": ""
+    },
+    {
+      "pass": false,
+      "label": "Classifier: no path reaches VTO_EDITORIAL when fashnVTOImage present (mode=VTO_EDITORIAL)",
+      "detail": ""
+    },
+    {
+      "pass": false,
+      "label": "Classifier: no path reaches VTO_EDITORIAL when fashnVTOImage present (mode=VTO_EDITORIAL)",
+      "detail": ""
+    }
+  ],
   "notices": [
     {
       "pass": null,
@@ -339,8 +432,9 @@
       "label": "Classifier: keep + VTO present → VTO_BACKGROUND_REPLACE"
     },
     {
-      "pass": true,
-      "label": "Classifier: AI + VTO present → VTO_BACKGROUND_REPLACE (AI garment showcase)"
+      "pass": false,
+      "label": "Classifier: AI + VTO present → VTO_BACKGROUND_REPLACE (AI garment showcase)",
+      "detail": ""
     },
     {
       "pass": true,
@@ -471,8 +565,9 @@
       "label": "Client direction content present in prompt"
     },
     {
-      "pass": true,
-      "label": "Architectural: VTO present → always VTO_BACKGROUND_REPLACE (VTO_EDITORIAL unreachable via build())"
+      "pass": false,
+      "label": "Architectural: VTO present → always VTO_BACKGROUND_REPLACE (VTO_EDITORIAL unreachable via build())",
+      "detail": ""
     },
     {
       "pass": true,
@@ -2347,6 +2442,271 @@
     },
     {
       "pass": true,
+      "label": "BRAND_API_KEY_VALIDATION: Valid lux_live_ prefix accepted",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "BRAND_API_KEY_VALIDATION: Valid lux_test_ prefix accepted",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "BRAND_API_KEY_VALIDATION: Invalid prefix rejected",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "BRAND_API_KEY_VALIDATION: SHA-256 hash is deterministic for same key",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "BRAND_API_KEY_VALIDATION: Different keys produce different hashes",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "BRAND_API_KEY_VALIDATION: API key prefix is first 12 characters",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "BRAND_API_KEY_VALIDATION: Generated key has 40 hex chars of entropy",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "DUAL_AUTH_MODE: Bearer token auth method identified correctly",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "DUAL_AUTH_MODE: API key auth method identified correctly",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "DUAL_AUTH_MODE: Missing auth returns 401 indicator",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "DUAL_AUTH_MODE: API key takes precedence when both present",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "BRAND_SCHEMA_VALIDATION: Required brand fields all present",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "BRAND_SCHEMA_VALIDATION: Quota structure has imagesPerMonth and apiCallsPerMonth",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "BRAND_SCHEMA_VALIDATION: Usage structure has correct fields",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "BRAND_SCHEMA_VALIDATION: BrandKit has all required keys",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "BRAND_SCHEMA_VALIDATION: Valid tier values enforced",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "BRAND_SCHEMA_VALIDATION: Valid status values enforced",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "QUOTA_ATOMICITY: Quota check: currentImages + cost vs maxImages comparison is correct",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "QUOTA_ATOMICITY: Quota check: over-limit returns false",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "QUOTA_ATOMICITY: Quota check: exact limit consumed returns false",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "QUOTA_ATOMICITY: VTO quota cost is 6x standard",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "QUOTA_ATOMICITY: Brand tier quotas are numerically ordered correctly",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "BRAND_MEMBER_ISOLATION: Brand member path correctly scoped under brandId",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "BRAND_MEMBER_ISOLATION: SKU path correctly scoped under brandId",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "BRAND_MEMBER_ISOLATION: brandId extracted correctly from Firestore document path",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "BRAND_MEMBER_ISOLATION: Role hierarchy ordering is correct",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "BRAND_MEMBER_ISOLATION: API key auth role is equivalent to editor",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "SKU_ENROLLMENT_SCHEMA: DNA object has anchorType as primary key",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "SKU_ENROLLMENT_SCHEMA: DNA object has identity key",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "SKU_ENROLLMENT_SCHEMA: DNA values are non-empty strings",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "SKU_ENROLLMENT_SCHEMA: Enrollment status transitions: pending → processing → ready",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "SKU_ENROLLMENT_SCHEMA: fidelityScore is 0-100 integer",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "SKU_ENROLLMENT_SCHEMA: Low fidelity warning triggers below 40",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "SKU_ENROLLMENT_SCHEMA: skuId format matches expected pattern",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "SKU_ENROLLMENT_SCHEMA: Anchor type maps correctly to DNA key",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "SKU_RECALL_BYPASS: skuId + brandId present → SKU recall path triggered",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "SKU_RECALL_BYPASS: skuId absent → standard Agent 01 path (no bypass)",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "SKU_RECALL_BYPASS: skuDnaInjected = true when recall succeeds → Agent 01 block skipped",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "SKU_RECALL_BYPASS: SKU recall failure → graceful fallback → skuDnaInjected stays false",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "SKU_RECALL_BYPASS: DNA Object.assign injects all keys into dnaMap",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "SKU_RECALL_BYPASS: Generation history routes to brands/{brandId}/campaigns when forgeBrandId set",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "SKU_RECALL_BYPASS: Generation history routes to users/{uid}/generations without forgeBrandId",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "SKU_API_ENDPOINTS: GET /skus returns only brand-scoped SKUs (path isolation)",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "SKU_API_ENDPOINTS: SKU list query respects limit parameter (max 100)",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "SKU_API_ENDPOINTS: DELETE requires admin or owner role (not editor/viewer)",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "SKU_API_ENDPOINTS: Archived SKU has enrollmentStatus = archived",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "SKU_API_ENDPOINTS: SKU enroll endpoint validates required anchorType field",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "SKU_API_ENDPOINTS: Fidelity score is stored on SKU document after enrollment",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "DNA_INJECTION_INTEGRITY: dnaMap keys match anchorType after SKU recall",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "DNA_INJECTION_INTEGRITY: modelIdentityDNA populated from dna.identity on recall",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "DNA_INJECTION_INTEGRITY: modelHairDNA populated from dna.hair on recall",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "DNA_INJECTION_INTEGRITY: anchorRefImage populated from referenceImageBase64 on recall",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "DNA_INJECTION_INTEGRITY: Missing referenceImageBase64 does not crash recall",
+      "detail": null
+    },
+    {
+      "pass": true,
       "label": "REGRESSION: Array.from({ length: 1 }) NOT present (bug fixed)"
     },
     {
@@ -2462,12 +2822,14 @@
       "label": "Classifier: no path reaches VTO_EDITORIAL when fashnVTOImage present (mode=VTO_BACKGROUND_REPLACE)"
     },
     {
-      "pass": true,
-      "label": "Classifier: no path reaches VTO_EDITORIAL when fashnVTOImage present (mode=VTO_BACKGROUND_REPLACE)"
+      "pass": false,
+      "label": "Classifier: no path reaches VTO_EDITORIAL when fashnVTOImage present (mode=VTO_EDITORIAL)",
+      "detail": ""
     },
     {
-      "pass": true,
-      "label": "Classifier: no path reaches VTO_EDITORIAL when fashnVTOImage present (mode=VTO_BACKGROUND_REPLACE)"
+      "pass": false,
+      "label": "Classifier: no path reaches VTO_EDITORIAL when fashnVTOImage present (mode=VTO_EDITORIAL)",
+      "detail": ""
     },
     {
       "pass": null,

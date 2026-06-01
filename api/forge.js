@@ -84,31 +84,62 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  // ── Auth gate ──────────────────────────────────────────────────────────────
+  // ── Auth gate — supports Firebase Bearer token OR brand API key ──────────
+  const apiKey     = req.headers['x-brand-api-key'];
   const authHeader = req.headers['authorization'] || '';
   const idToken    = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : null;
-  if (!idToken) return res.status(401).json({ error: 'UNAUTHORIZED: No token provided.' });
 
-  let forgeUid, forgeDisplayName;
-  try {
-    forgeUid = await verifyIdTokenREST(idToken);
-    const payloadBase64 = idToken.split('.')[1];
-    const decoded = JSON.parse(Buffer.from(payloadBase64, 'base64').toString('utf8'));
-    forgeDisplayName = decoded.name || decoded.email?.split('@')[0] || null;
-  } catch {
-    return res.status(401).json({ error: 'UNAUTHORIZED: Invalid or expired token.' });
-  }
+  if (!apiKey && !idToken) return res.status(401).json({ error: 'UNAUTHORIZED: No token provided.' });
 
-  if (!checkRateLimit(forgeUid)) {
-    return res.status(429).json({ error: 'RATE_LIMITED: Too many forge runs. Wait 60 seconds and try again.' });
-  }
+  let forgeUid, forgeDisplayName, forgeBrandId = null;
   let creditDeducted = false;
-  try { creditDeducted = await deductCreditsREST(forgeUid, FORGE_CREDIT_COST, 'imageCredits'); }
-  catch (err) {
-    console.error('[FORGE CREDITS ERROR]', err);
-    return res.status(500).json({ error: `Credit system error. Please try again. Details: ${err.message}` });
+
+  if (apiKey) {
+    // ── Brand API key path — quota replaces per-user credits ──────────────
+    try {
+      const { validateBrandApiKey } = await import('../lib/forge/services/brand-auth.js');
+      const { checkBrandQuota }     = await import('../lib/forge/services/brand-service.js');
+      const { BRAND_QUOTA_COST_STANDARD, BRAND_QUOTA_COST_VTO } = await import('../lib/forge/constants.js');
+
+      const brandDoc = await validateBrandApiKey(apiKey);
+      if (!brandDoc) return res.status(401).json({ error: 'UNAUTHORIZED: Invalid or revoked API key.' });
+
+      const { parseFirestoreFields } = await import('../lib/forge/services/gcp-raw.js');
+      const brand = parseFirestoreFields(brandDoc.fields || {});
+      forgeBrandId = brand.brandId;
+      forgeUid     = `api_${forgeBrandId}`;
+      forgeDisplayName = brand.name || 'Brand API';
+
+      const isVto  = req.body?.config?.garmentImage || req.body?.skuId;
+      const cost   = isVto ? BRAND_QUOTA_COST_VTO : BRAND_QUOTA_COST_STANDARD;
+      const quotaOk = await checkBrandQuota(forgeBrandId, cost);
+      if (!quotaOk) return res.status(402).json({ error: 'QUOTA_EXCEEDED: Monthly image quota reached.' });
+      creditDeducted = true;
+    } catch (err) {
+      console.error('[FORGE API KEY ERROR]', err);
+      return res.status(500).json({ error: `Auth error: ${err.message}` });
+    }
+  } else {
+    // ── Firebase token path — existing consumer/portal logic unchanged ─────
+    try {
+      forgeUid = await verifyIdTokenREST(idToken);
+      const payloadBase64 = idToken.split('.')[1];
+      const decoded = JSON.parse(Buffer.from(payloadBase64, 'base64').toString('utf8'));
+      forgeDisplayName = decoded.name || decoded.email?.split('@')[0] || null;
+    } catch {
+      return res.status(401).json({ error: 'UNAUTHORIZED: Invalid or expired token.' });
+    }
+
+    if (!checkRateLimit(forgeUid)) {
+      return res.status(429).json({ error: 'RATE_LIMITED: Too many forge runs. Wait 60 seconds and try again.' });
+    }
+    try { creditDeducted = await deductCreditsREST(forgeUid, FORGE_CREDIT_COST, 'imageCredits'); }
+    catch (err) {
+      console.error('[FORGE CREDITS ERROR]', err);
+      return res.status(500).json({ error: `Credit system error. Please try again. Details: ${err.message}` });
+    }
+    if (!creditDeducted) { return res.status(402).json({ error: 'INSUFFICIENT_CREDITS: Upgrade your plan to continue.' }); }
   }
-  if (!creditDeducted) { return res.status(402).json({ error: 'INSUFFICIENT_CREDITS: Upgrade your plan to continue.' }); }
 
   try {
     const { config }  = req.body;
@@ -203,8 +234,11 @@ export default async function handler(req, res) {
     console.log(`[FORGE] AGENT 00: MISSION_TYPE=${missionType} | IDENTITY=${isAiGeneratedEarly ? 'GENERATE' : 'CLONE'} | CAMERA_CONFLICTS=${cameraConflicts.length > 0 ? cameraConflicts.join(',') : 'none'}`);
 
     // ── SSE: flush headers immediately ────────────────────────────────────
-    const genId  = `${Date.now()}-${entropy}`;
-    setFirestoreREST(`users/${forgeUid}/generations`, genId, {
+    const genId   = `${Date.now()}-${entropy}`;
+    const genPath = forgeBrandId
+      ? `brands/${forgeBrandId}/campaigns`
+      : `users/${forgeUid}/generations`;
+    setFirestoreREST(genPath, genId, {
       status: 'started',
       startedAt: new Date().toISOString(),
     }).catch(() => {});
@@ -222,14 +256,49 @@ export default async function handler(req, res) {
     }, 15_000);
 
     // =========================================================
-    // AGENT 01: FORENSIC SCANNER — DNA EXTRACTION
-    // Runs in parallel for all anchors + identity + hair.
+    // SKU RECALL — bypass Agent 01 + 01b when frozen DNA exists
+    // Brand API path: req.body.skuId + req.body.brandId injected
+    // Consumer path: skuId absent → normal Agent 01 pipeline
     // =========================================================
     const dnaMap = {};
     let modelIdentityDNA = null;
     let modelHairDNA     = null;
+    let skuDnaInjected   = false;
 
-    try {
+    const skuId     = req.body?.skuId   || null;
+    const bodyBrand = req.body?.brandId || forgeBrandId || null;
+
+    if (skuId && bodyBrand) {
+      try {
+        const { loadSkuForForge } = await import('../lib/forge/services/sku-service.js');
+        const skuData = await loadSkuForForge(bodyBrand, skuId);
+
+        // Inject frozen DNA map — mirrors in-memory dnaMap structure exactly
+        Object.assign(dnaMap, skuData.dna || {});
+        if (skuData.dna?.identity)  modelIdentityDNA = skuData.dna.identity;
+        if (skuData.dna?.hair)      modelHairDNA     = skuData.dna.hair;
+
+        // Override anchor ref image with pre-rendered isolation from enrollment
+        if (skuData.referenceImageBase64) {
+          anchorRefImage     = { data: skuData.referenceImageBase64, mimeType: 'image/png' };
+          anchorRefAnchorType = skuData.anchorType;
+        }
+
+        skuDnaInjected = true;
+        console.log(`[FORGE] SKU RECALL: skuId=${skuId} | anchor=${skuData.anchorType} | fidelity=${skuData.fidelityScore} | Agent 01+01b BYPASSED`);
+      } catch (err) {
+        // Graceful degradation — if SKU load fails, full Agent 01 pipeline runs normally
+        console.warn(`[FORGE] SKU recall failed (${err.message}) — falling back to full Agent 01 pipeline`);
+      }
+    }
+
+    // =========================================================
+    // AGENT 01: FORENSIC SCANNER — DNA EXTRACTION
+    // Skipped when skuDnaInjected === true (SKU recall path)
+    // Runs in parallel for all anchors + identity + hair.
+    // =========================================================
+
+    if (!skuDnaInjected) try {
       console.log(`[FORGE] AGENT 01: Extracting DNA for anchors: ${anchors.join(', ')}...`);
       const textModel = genAI.getGenerativeModel({ model: TEXT_MODEL });
 

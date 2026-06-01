@@ -90,6 +90,64 @@ service cloud.firestore {
       allow write: if false;    // only Admin SDK (generate-prop-cover endpoint)
     }
 
+    // ── B2B Brand Workspaces ──────────────────────────────────────────────────
+    // All brand mutations go through server endpoints — client reads only.
+
+    function isBrandMember(brandId) {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/brands/$(brandId)/members/$(request.auth.uid));
+    }
+
+    match /brands/{brandId} {
+      allow read: if isAdmin() || isBrandMember(brandId);
+      allow write: if false; // server-side only
+
+      match /members/{uid} {
+        allow read: if isAdmin() || isBrandMember(brandId);
+        allow write: if false;
+      }
+
+      match /skus/{skuId} {
+        allow read: if isAdmin() || isBrandMember(brandId);
+        allow write: if false;
+      }
+
+      match /campaigns/{campaignId} {
+        allow read: if isAdmin() || isBrandMember(brandId);
+        allow write: if false;
+      }
+
+      match /vault/{assetId} {
+        allow read: if isAdmin() || isBrandMember(brandId);
+        allow write: if false;
+      }
+
+      match /sets/{setId} {
+        allow read: if isAdmin() || isBrandMember(brandId);
+        allow write: if false;
+      }
+
+      match /jobs/{jobId} {
+        allow read: if isAdmin() || isBrandMember(brandId);
+        allow write: if false;
+      }
+
+      match /webhookLogs/{logId} {
+        allow read: if isAdmin() || isBrandMember(brandId);
+        allow write: if false;
+      }
+
+      match /metrics/{date} {
+        allow read: if isAdmin() || isBrandMember(brandId);
+        allow write: if false;
+      }
+    }
+
+    // ── Brand member collection-group read for getUserBrands() ────────────────
+    match /{path=**}/members/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+    }
+
     // Deny everything else by default
     match /{document=**} {
       allow read, write: if false;

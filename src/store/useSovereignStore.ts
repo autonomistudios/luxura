@@ -1,108 +1,287 @@
 import { create } from 'zustand';
-import {
-  collection, getDocs,
-  query, orderBy,
-} from 'firebase/firestore';
-import { db } from '../lib/firebase';
-import { auth } from '../lib/firebase';
+import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import { db, auth } from '../lib/firebase';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 export interface VaultItem {
-  id:         string;
-  image:       string;        // Firebase Storage HTTPS URL
-  storagePath: string | null; // Exact GCS path — used by vault-delete for guaranteed cleanup
+  id:          string;
+  image:       string;
+  storagePath: string | null;
   name:        string;
-  date:       string;
-  createdAt:  number;   // Date.now() — used for ordering
-  category:   string;
-  anchors:    string[];
-  strategy:   'keep' | 'change';
-  skinTone:   string;
-  lighting:   string;
-  camera:     string;
-  bg:         string;
-  prompt:     string;
+  date:        string;
+  createdAt:   number;
+  category:    string;
+  anchors:     string[];
+  strategy:    'keep' | 'change';
+  skinTone:    string;
+  lighting:    string;
+  camera:      string;
+  bg:          string;
+  prompt:      string;
 }
 
 export interface VideoVaultItem {
   id:          string;
-  videoUrl:    string;        // Firebase Storage HTTPS URL (permanent)
+  videoUrl:    string;
   storagePath: string;
   title:       string;
   prompt:      string;
   aspectRatio: string;
   duration:    string;
-  model:       string;        // 'standard' | 'fast'
+  model:       string;
   createdAt:   number;
   date:        string;
   sizeBytes:   number;
 }
 
-interface SovereignStore {
-  vaultAssets:       VaultItem[];
-  vaultLoading:      boolean;
-  videoVaultAssets:  VideoVaultItem[];
-  videoVaultLoading: boolean;
-  currentGrid:  string[];
-  activeAsset:  number | null;
-  currentUid:   string | null;
+export interface SkuDocument {
+  skuId:            string;
+  brandId:          string;
+  name:             string;
+  skuCode:          string;
+  category:         string;
+  season:           string;
+  anchorType:       string;
+  sourceImages:     string[];
+  dna:              Record<string, string> | null;
+  referenceImage:   string | null;
+  enrollmentStatus: 'pending' | 'processing' | 'ready' | 'failed' | 'archived';
+  fidelityScore:    number | null;
+  createdAt:        string;
+  updatedAt:        string;
+}
 
-  deployToVault:       (item: VaultItem)          => Promise<void>;
-  removeFromVault:     (id: string)               => Promise<void>;
-  removeFromVideoVault:(id: string)               => void;
-  loadVideoVault:      (uid: string)              => Promise<void>;
-  resetWorkflow:       ()                         => void;
-  setCurrentGrid:      (grid: string[])           => void;
-  setGridSlot:         (slot: number, image: string) => void;
-  setActiveAsset:      (id: number | null)        => void;
-  setUid:              (uid: string | null)       => void;
+export interface CampaignDocument {
+  campaignId:      string;
+  name:            string;
+  status:          string;
+  skuId:           string;
+  creditsUsed:     number;
+  imagesDelivered: number;
+  createdAt:       string;
+  completedAt:     string | null;
+}
+
+// ─── Store interface ──────────────────────────────────────────────────────────
+
+interface SovereignStore {
+  // ── Auth ──────────────────────────────────────────────────────────────────
+  currentUid:     string | null;
+  currentBrandId: string | null;
+  setUid:         (uid: string | null) => void;
+  setBrandId:     (brandId: string | null) => void;
+
+  // ── Generation grid ───────────────────────────────────────────────────────
+  currentGrid:    string[];
+  activeAsset:    number | null;
+  setCurrentGrid: (grid: string[]) => void;
+  setGridSlot:    (slot: number, image: string) => void;
+  setActiveAsset: (id: number | null) => void;
+  resetWorkflow:  () => void;
+
+  // ── Active session ─────────────────────────────────────────────────────────
+  currentSkuId:       string | null;
+  activeCampaignId:   string | null;
+  setCurrentSkuId:    (id: string | null) => void;
+  setActiveCampaignId:(id: string | null) => void;
+
+  // ── SKU catalog ────────────────────────────────────────────────────────────
+  skus:            SkuDocument[];
+  skusLoading:     boolean;
+  loadSkus:        (brandId: string) => Promise<void>;
+  addSku:          (sku: SkuDocument) => void;
+  updateSkuStatus: (skuId: string, status: SkuDocument['enrollmentStatus'], updates?: Partial<SkuDocument>) => void;
+
+  // ── Campaign history ───────────────────────────────────────────────────────
+  campaigns:        CampaignDocument[];
+  campaignsLoading: boolean;
+  loadCampaigns:    (brandId: string) => Promise<void>;
+
+  // ── Brand asset vault (brand-scoped) ──────────────────────────────────────
+  vaultAssets:      VaultItem[];
+  vaultLoading:     boolean;
+  deployToVault:    (item: VaultItem) => Promise<void>;
+  removeFromVault:  (id: string) => Promise<void>;
+
+  // ── Video vault ────────────────────────────────────────────────────────────
+  videoVaultAssets:   VideoVaultItem[];
+  videoVaultLoading:  boolean;
+  loadVideoVault:     (uid: string) => Promise<void>;
+  removeFromVideoVault:(id: string) => void;
 }
 
 // ─── Firestore helpers ────────────────────────────────────────────────────────
 
-async function fetchVaultFromFirestore(uid: string): Promise<VaultItem[]> {
+async function fetchVaultFromFirestore(brandId: string): Promise<VaultItem[]> {
   try {
-    const q    = query(collection(db, 'users', uid, 'vault'), orderBy('createdAt', 'desc'));
+    const q    = query(collection(db, 'brands', brandId, 'vault'), orderBy('createdAt', 'desc'));
     const snap = await getDocs(q);
-    return snap.docs.map((d) => d.data() as VaultItem);
-  } catch {
-    return [];
-  }
+    return snap.docs.map(d => d.data() as VaultItem);
+  } catch { return []; }
+}
+
+async function fetchSkusFromFirestore(brandId: string): Promise<SkuDocument[]> {
+  try {
+    const q    = query(collection(db, 'brands', brandId, 'skus'), orderBy('createdAt', 'desc'));
+    const snap = await getDocs(q);
+    return snap.docs.map(d => d.data() as SkuDocument);
+  } catch { return []; }
+}
+
+async function fetchCampaignsFromFirestore(brandId: string): Promise<CampaignDocument[]> {
+  try {
+    const q    = query(collection(db, 'brands', brandId, 'campaigns'), orderBy('createdAt', 'desc'));
+    const snap = await getDocs(q);
+    return snap.docs.map(d => d.data() as CampaignDocument);
+  } catch { return []; }
 }
 
 async function fetchVideoVaultFromFirestore(uid: string): Promise<VideoVaultItem[]> {
   try {
     const q    = query(collection(db, 'users', uid, 'videoVault'), orderBy('createdAt', 'desc'));
     const snap = await getDocs(q);
-    return snap.docs.map((d) => d.data() as VideoVaultItem);
-  } catch {
-    return [];
-  }
+    return snap.docs.map(d => d.data() as VideoVaultItem);
+  } catch { return []; }
 }
 
 // ─── Store ────────────────────────────────────────────────────────────────────
 
-export const useSovereignStore = create<SovereignStore>((set) => ({
-  vaultAssets:       [],
-  vaultLoading:      false,
-  videoVaultAssets:  [],
-  videoVaultLoading: false,
+export const useSovereignStore = create<SovereignStore>((set, get) => ({
+  // Auth
+  currentUid:     null,
+  currentBrandId: null,
+
+  setUid: (uid) => {
+    set({ currentUid: uid });
+  },
+
+  setBrandId: (brandId) => {
+    set({
+      currentBrandId:  brandId,
+      vaultAssets:     [],
+      skus:            [],
+      campaigns:       [],
+      vaultLoading:    !!brandId,
+      skusLoading:     !!brandId,
+      campaignsLoading:!!brandId,
+    });
+    if (!brandId) return;
+
+    fetchVaultFromFirestore(brandId).then(items =>
+      set({ vaultAssets: items, vaultLoading: false })
+    );
+    fetchSkusFromFirestore(brandId).then(items =>
+      set({ skus: items, skusLoading: false })
+    );
+    fetchCampaignsFromFirestore(brandId).then(items =>
+      set({ campaigns: items, campaignsLoading: false })
+    );
+  },
+
+  // Generation grid
   currentGrid:  [],
   activeAsset:  null,
-  currentUid:   null,
 
-  // Called on auth change — reload both vaults from Firestore for this user
-  setUid: (uid) => {
-    set({ currentUid: uid, vaultAssets: [], vaultLoading: !!uid, videoVaultAssets: [], videoVaultLoading: !!uid });
-    if (!uid) return;
-    fetchVaultFromFirestore(uid).then((items) => {
-      set({ vaultAssets: items, vaultLoading: false });
-    });
-    fetchVideoVaultFromFirestore(uid).then((items) => {
-      set({ videoVaultAssets: items, videoVaultLoading: false });
-    });
+  setCurrentGrid: (grid) => set({ currentGrid: grid }),
+  setGridSlot: (slot, image) => set((state) => {
+    const next = state.currentGrid.length >= 6
+      ? [...state.currentGrid]
+      : Array.from({ length: 6 }, (_, i) => state.currentGrid[i] ?? '');
+    next[slot] = image;
+    return { currentGrid: next };
+  }),
+  setActiveAsset: (id)  => set({ activeAsset: id }),
+  resetWorkflow:  ()    => set({ currentGrid: [], activeAsset: null }),
+
+  // Active session
+  currentSkuId:     null,
+  activeCampaignId: null,
+  setCurrentSkuId:     (id) => set({ currentSkuId: id }),
+  setActiveCampaignId: (id) => set({ activeCampaignId: id }),
+
+  // SKU catalog
+  skus:        [],
+  skusLoading: false,
+
+  loadSkus: async (brandId) => {
+    set({ skusLoading: true });
+    const items = await fetchSkusFromFirestore(brandId);
+    set({ skus: items, skusLoading: false });
   },
+
+  addSku: (sku) => set(state => ({ skus: [sku, ...state.skus] })),
+
+  updateSkuStatus: (skuId, status, updates = {}) =>
+    set(state => ({
+      skus: state.skus.map(s =>
+        s.skuId === skuId ? { ...s, enrollmentStatus: status, ...updates } : s
+      ),
+    })),
+
+  // Campaign history
+  campaigns:        [],
+  campaignsLoading: false,
+
+  loadCampaigns: async (brandId) => {
+    set({ campaignsLoading: true });
+    const items = await fetchCampaignsFromFirestore(brandId);
+    set({ campaigns: items, campaignsLoading: false });
+  },
+
+  // Brand asset vault
+  vaultAssets:  [],
+  vaultLoading: false,
+
+  deployToVault: async (item) => {
+    const currentUser = auth.currentUser;
+    if (!currentUser) throw new Error('Not signed in.');
+    const idToken = await currentUser.getIdToken();
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 30_000);
+    let response: Response;
+    try {
+      response = await fetch('/api/vault-deploy', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${idToken}` },
+        body:    JSON.stringify({ item }),
+        signal:  controller.signal,
+      });
+    } catch (err: any) {
+      throw new Error(err?.name === 'AbortError' ? 'Vault save timed out.' : err?.message || 'Network error.');
+    } finally {
+      clearTimeout(timeout);
+    }
+
+    if (!response.ok) {
+      const e = await response.json().catch(() => null);
+      throw new Error(e?.error || `Server error: ${response.status}`);
+    }
+
+    const { item: finalItem } = await response.json();
+    set(state => ({ vaultAssets: [finalItem, ...state.vaultAssets] }));
+  },
+
+  removeFromVault: async (id) => {
+    const currentUser = auth.currentUser;
+    if (!currentUser) throw new Error('Not signed in.');
+    const idToken = await currentUser.getIdToken();
+    const res = await fetch('/api/vault-delete', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${idToken}` },
+      body:    JSON.stringify({ id }),
+    });
+    if (!res.ok) {
+      const e = await res.json().catch(() => null);
+      throw new Error(e?.error || `Delete failed: ${res.status}`);
+    }
+    set(state => ({ vaultAssets: state.vaultAssets.filter(v => v.id !== id) }));
+  },
+
+  // Video vault
+  videoVaultAssets:  [],
+  videoVaultLoading: false,
 
   loadVideoVault: async (uid) => {
     set({ videoVaultLoading: true });
@@ -110,98 +289,15 @@ export const useSovereignStore = create<SovereignStore>((set) => ({
     set({ videoVaultAssets: items, videoVaultLoading: false });
   },
 
-  deployToVault: async (item) => {
-    console.log(`[VAULT] Contacting /api/vault-deploy to securely save item ${item.id} without CORS/rules issues...`);
-    const currentUser = auth.currentUser;
-    if (!currentUser) throw new Error('Not signed in.');
-    const idToken = await currentUser.getIdToken();
-
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 30_000); // 30s hard cap
-    let response: Response;
-    try {
-      response = await fetch('/api/vault-deploy', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${idToken}`,
-        },
-        body: JSON.stringify({ item }),
-        signal: controller.signal,
-      });
-    } catch (err: any) {
-      throw new Error(err?.name === 'AbortError' ? 'Vault save timed out — check your connection and try again.' : err?.message || 'Network error saving to vault.');
-    } finally {
-      clearTimeout(timeout);
-    }
-
-    if (!response.ok) {
-      const err = await response.json().catch(() => null);
-      throw new Error(err?.error || `Server error: ${response.status}`);
-    }
-
-    const { item: finalItem } = await response.json();
-    console.log(`[VAULT] Deploy complete! URL: ${finalItem.image.substring(0, 60)}...`);
-
-    // Optimistic local update (newest first)
-    set((state) => ({ vaultAssets: [finalItem, ...state.vaultAssets] }));
-  },
-
-  removeFromVault: async (id) => {
-    const currentUser = auth.currentUser;
-    if (!currentUser) throw new Error('Not signed in.');
-    const idToken = await currentUser.getIdToken();
-
-    // Route through Admin SDK endpoint — guaranteed to delete Storage file + Firestore record
-    // regardless of client-side security rules. storagePath written by vault-deploy.js ensures
-    // the exact file is found regardless of extension (.png, .jpg, etc.)
-    const response = await fetch('/api/vault-delete', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${idToken}` },
-      body:    JSON.stringify({ id }),
-    });
-
-    if (!response.ok) {
-      const err = await response.json().catch(() => null);
-      throw new Error(err?.error || `Delete failed: ${response.status}`);
-    }
-
-    set((state) => ({ vaultAssets: state.vaultAssets.filter((v) => v.id !== id) }));
-  },
-
   removeFromVideoVault: async (id) => {
-    // Optimistic local removal
-    set((state) => ({ videoVaultAssets: state.videoVaultAssets.filter((v) => v.id !== id) }));
-
+    set(state => ({ videoVaultAssets: state.videoVaultAssets.filter(v => v.id !== id) }));
     const currentUser = auth.currentUser;
     if (!currentUser) return;
     const idToken = await currentUser.getIdToken();
-
-    // Call backend endpoint to delete from Storage + Firestore
-    try {
-      const response = await fetch('/api/vault-video-delete', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${idToken}` },
-        body:    JSON.stringify({ id }),
-      });
-
-      if (!response.ok) {
-        console.error('[VIDEO VAULT] Server deletion failed:', response.status);
-      }
-    } catch (err) {
-      console.error('[VIDEO VAULT] Error during deletion:', err);
-    }
+    fetch('/api/vault-video-delete', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${idToken}` },
+      body:    JSON.stringify({ id }),
+    }).catch(() => {});
   },
-
-  setCurrentGrid:  (grid) => set({ currentGrid: grid }),
-  setGridSlot:     (slot, image) => set((state) => {
-    const next = state.currentGrid.length >= 6
-      ? [...state.currentGrid]
-      : Array.from({ length: 6 }, (_, i) => state.currentGrid[i] ?? '');
-    next[slot] = image;
-    return { currentGrid: next };
-  }),
-  setActiveAsset:  (id)   => set({ activeAsset: id }),
-  resetWorkflow:   ()     => set({ currentGrid: [], activeAsset: null }),
 }));
-

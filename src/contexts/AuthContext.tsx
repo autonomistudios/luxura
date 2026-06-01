@@ -1,164 +1,118 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import type { User } from 'firebase/auth';
-import {
-  onAuthStateChanged,
-  signInWithPopup,
-  signOut,
-} from 'firebase/auth';
-import {
-  doc,
-  getDoc,
-  setDoc,
-  updateDoc,
-  increment,
-  serverTimestamp,
-} from 'firebase/firestore';
-import { auth, db, googleProvider } from '../lib/firebase';
+import { onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
+import { auth, googleProvider } from '../lib/firebase';
 import { useSovereignStore } from '../store/useSovereignStore';
 
 const ADMIN_EMAILS = new Set(['louis@beapillar.org', 'autonomistudiosllc@gmail.com']);
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-export type SubscriptionTier = 'free' | 'aura' | 'sovereign' | 'luminary';
+export type BrandRole = 'owner' | 'admin' | 'editor' | 'viewer';
 
-export interface UserProfile {
-  uid:                string;
-  email:              string;
-  displayName:        string;
-  photoURL:           string;
-  tier:               SubscriptionTier;
-  imageCredits:       number;
-  videoCredits:       number;
-  freeRunUsed:        boolean;
-  subscriptionId:     string | null;
-  subscriptionStatus: string | null;
-  createdAt?:         unknown;
+export interface BrandKit {
+  defaultSkinTones:  string[];
+  defaultLighting:   string;
+  defaultCamera:     string;
+  defaultColorGrade: string;
+  lockedParams:      string[];
 }
 
-export const TIER_CONFIG: Record<SubscriptionTier, {
-  label:        string;
-  price:        number;
-  imageCredits: number;
-  videoCredits: number;
-  color:        string;
-}> = {
-  free: {
-    label:        'Free',
-    price:        0,
-    imageCredits: 0,    // no free credits — subscription required
-    videoCredits: 0,
-    color:        'white',
-  },
-  aura: {
-    label:        'Aura',
-    price:        85,
-    imageCredits: 300,  // 100 standard runs OR 16 VTO wardrobe runs / month — 93%+ margin
-    videoCredits: 0,
-    color:        '#D4AF37',
-  },
-  sovereign: {
-    label:        'Sovereign',
-    price:        165,
-    imageCredits: 750,  // 250 standard runs OR 41 VTO wardrobe runs / month — 91%+ margin
-    videoCredits: 5,
-    color:        '#C0C0C0',
-  },
-  luminary: {
-    label:        'Luminary',
-    price:        299,
-    imageCredits: 1500, // 500 standard runs OR 83 VTO wardrobe runs / month — 90%+ margin
-    videoCredits: 20,
-    color:        '#E5D3FF',
-  },
-};
+export interface BrandUsage {
+  currentPeriodImages:   number;
+  currentPeriodApiCalls: number;
+  periodStart:           string;
+}
 
-// Credits consumed per operation
-// Standard editorial: 3 credits (~$0.03 API cost)
-// VTO wardrobe transfer: 18 credits (~$0.35 API cost — Vertex AI + Remove.bg + visual audit)
-// Pricing ratio reflects true pipeline cost differential. Maintains 90%+ margin at all tiers.
-export const CREDIT_COST = {
-  forgeRun:      3,   // standard editorial — 3 credits
-  forgeRunVTO:   18,  // VTO wardrobe transfer — 18 credits
-  videoGen:      10,  // 1 video = 10 video credits (future)
-};
+export interface BrandQuota {
+  imagesPerMonth:    number;
+  apiCallsPerMonth:  number;
+}
+
+export interface BrandBilling {
+  status:           string;
+  currentPeriodEnd: string | null;
+  trialEnd:         string | null;
+}
+
+export interface BrandProfile {
+  brandId:     string;
+  name:        string;
+  slug:        string;
+  tier:        'studio' | 'agency' | 'enterprise';
+  status:      string;
+  logoUrl:     string | null;
+  usage:       BrandUsage;
+  quota:       BrandQuota;
+  brandKit:    BrandKit;
+  billing:     BrandBilling;
+  apiKeyPrefix: string | null;
+  webhookUrl:  string | null;
+  role:        BrandRole;
+}
 
 // ─── Context ──────────────────────────────────────────────────────────────────
 
-interface AuthContextType {
-  user:                User | null;
-  profile:             UserProfile | null;
-  loading:             boolean;
-  isAdmin:             boolean;
-  signInWithGoogle:    () => Promise<void>;
-  logout:              () => Promise<void>;
-  refreshProfile:      () => Promise<void>;
-  deductImageCredits:  (amount?: number) => Promise<boolean>;
-  deductVideoCredits:  (amount?: number) => Promise<boolean>;
-  consumeFreeRun:      () => Promise<boolean>;
-  canForge:            () => boolean;
-  canGenerateVideo:    () => boolean;
-  freeRunAvailable:    () => boolean;
+interface BrandAuthContextType {
+  user:             User | null;
+  brand:            BrandProfile | null;
+  loading:          boolean;
+  isAdmin:          boolean;
+  hasBrand:         boolean;
+  signInWithGoogle: () => Promise<void>;
+  logout:           () => Promise<void>;
+  refreshBrand:     () => Promise<void>;
+  canForge:         () => boolean;
+  quotaRemaining:   () => number;
+  quotaPercent:     () => number;
 }
 
-const AuthContext = createContext<AuthContextType | null>(null);
+const AuthContext = createContext<BrandAuthContextType | null>(null);
 
 // ─── Provider ─────────────────────────────────────────────────────────────────
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user,    setUser]    = useState<User | null>(null);
-  const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [brand,   setBrand]   = useState<BrandProfile | null>(null);
   const [loading, setLoading] = useState(true);
-  const setStoreUid = useSovereignStore((s) => s.setUid);
 
-  async function fetchProfile(uid: string): Promise<UserProfile | null> {
-    const ref  = doc(db, 'users', uid);
-    const snap = await getDoc(ref);
-    if (snap.exists()) {
-      const data = snap.data() as UserProfile;
-      setProfile(data);
-      return data;
+  const setStoreUid     = useSovereignStore((s) => s.setUid);
+  const setStoreBrandId = useSovereignStore((s) => s.setBrandId);
+
+  async function fetchBrandContext(u: User): Promise<BrandProfile | null> {
+    try {
+      const idToken = await u.getIdToken();
+      const res = await fetch('/api/v1/brands/auth', {
+        headers: { Authorization: `Bearer ${idToken}` },
+      });
+      if (!res.ok) return null;
+      const data = await res.json();
+      return data.brand ? { ...data.brand, role: data.role } : null;
+    } catch (err) {
+      console.error('[Auth] Brand context fetch failed:', err);
+      return null;
     }
-    return null;
-  }
-
-  async function provisionNewUser(u: User): Promise<UserProfile> {
-    const newProfile: UserProfile = {
-      uid:                u.uid,
-      email:              u.email        || '',
-      displayName:        u.displayName  || 'Creator',
-      photoURL:           u.photoURL     || '',
-      tier:               'free',
-      imageCredits:       TIER_CONFIG.free.imageCredits,
-      videoCredits:       0,
-      freeRunUsed:        false,
-      subscriptionId:     null,
-      subscriptionStatus: null,
-    };
-    await setDoc(doc(db, 'users', u.uid), {
-      ...newProfile,
-      createdAt: serverTimestamp(),
-    });
-    setProfile(newProfile);
-    return newProfile;
   }
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (u) => {
       setUser(u);
       if (u) {
-        try {
-          const existing = await fetchProfile(u.uid);
-          if (!existing) await provisionNewUser(u);
-        } catch (err) {
-          console.error('[Auth] Profile load failed — check Firestore rules:', err);
-        }
         setStoreUid(u.uid);
+        const brandData = await fetchBrandContext(u);
+        if (brandData) {
+          setBrand(brandData);
+          setStoreBrandId(brandData.brandId);
+        } else {
+          setBrand(null);
+          setStoreBrandId(null);
+        }
       } else {
-        setProfile(null);
+        setBrand(null);
         setStoreUid(null);
+        setStoreBrandId(null);
       }
-      setLoading(false); // always runs, even if Firestore fails
+      setLoading(false);
     });
     return unsubscribe;
   }, []);
@@ -171,86 +125,50 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await signOut(auth);
   }
 
-  async function refreshProfile() {
-    if (user) await fetchProfile(user.uid);
+  async function refreshBrand() {
+    if (!user) return;
+    const brandData = await fetchBrandContext(user);
+    if (brandData) {
+      setBrand(brandData);
+      setStoreBrandId(brandData.brandId);
+    }
   }
 
-  const isAdmin = user?.email ? ADMIN_EMAILS.has(user.email.toLowerCase()) : false;
+  const isAdmin = user?.email
+    ? ADMIN_EMAILS.has(user.email.toLowerCase())
+    : false;
 
-  /** Deduct image credits. Returns true if successful, false if insufficient. */
-  async function deductImageCredits(amount = CREDIT_COST.forgeRun): Promise<boolean> {
-    if (isAdmin) return true; // unlimited for admin
-    if (!user || !profile) return false;
-    if (profile.imageCredits < amount) return false;
-
-    const ref = doc(db, 'users', user.uid);
-    await updateDoc(ref, { imageCredits: increment(-amount) });
-
-    // Optimistic local update
-    setProfile((prev) => prev ? { ...prev, imageCredits: prev.imageCredits - amount } : prev);
-    return true;
-  }
-
-  /** Deduct video credits. Returns true if successful, false if insufficient. */
-  async function deductVideoCredits(amount = 1): Promise<boolean> {
-    if (isAdmin) return true; // unlimited for admin
-    if (!user || !profile) return false;
-    if (profile.videoCredits < amount) return false;
-    const ref = doc(db, 'users', user.uid);
-    await updateDoc(ref, { videoCredits: increment(-amount) });
-    setProfile((prev) => prev ? { ...prev, videoCredits: prev.videoCredits - amount } : prev);
-    return true;
-  }
-
-  /** Returns true if the user still has their complimentary free run available. */
-  function freeRunAvailable(): boolean {
-    if (isAdmin) return false; // admins don't consume free runs
-    return !!profile && !profile.freeRunUsed && profile.tier === 'free';
-  }
-
-  /**
-   * Atomically marks the free run as consumed.
-   * Returns true on success, false if already used or not eligible.
-   */
-  async function consumeFreeRun(): Promise<boolean> {
-    if (isAdmin) return true;
-    if (!user || !profile) return false;
-    if (profile.freeRunUsed || profile.tier !== 'free') return false;
-    const ref = doc(db, 'users', user.uid);
-    await updateDoc(ref, { freeRunUsed: true });
-    setProfile((prev) => prev ? { ...prev, freeRunUsed: true } : prev);
-    return true;
-  }
-
-  /** Quick synchronous check — can this user start a forge run right now? */
   function canForge(): boolean {
     if (isAdmin) return true;
-    if (!profile) return false;
-    if (!profile.freeRunUsed && profile.tier === 'free') return true; // free taste-test
-    return profile.imageCredits >= CREDIT_COST.forgeRun;
+    if (!brand) return false;
+    const remaining = (brand.quota.imagesPerMonth - brand.usage.currentPeriodImages);
+    return remaining > 0;
   }
 
-  /** Quick synchronous check — can this user generate a video right now? */
-  function canGenerateVideo(): boolean {
-    if (isAdmin) return true; // unlimited for admin
-    return !!profile && profile.videoCredits >= 1;
+  function quotaRemaining(): number {
+    if (isAdmin) return Infinity;
+    if (!brand) return 0;
+    return Math.max(0, brand.quota.imagesPerMonth - brand.usage.currentPeriodImages);
+  }
+
+  function quotaPercent(): number {
+    if (!brand || brand.quota.imagesPerMonth === 0) return 0;
+    return Math.min(100, (brand.usage.currentPeriodImages / brand.quota.imagesPerMonth) * 100);
   }
 
   return (
     <AuthContext.Provider value={{
       user,
-      profile,
+      brand,
       loading,
       isAdmin,
+      hasBrand:       !!brand,
       signInWithGoogle,
       logout,
-      refreshProfile,
-      deductImageCredits,
-      deductVideoCredits,
-      consumeFreeRun,
+      refreshBrand,
       canForge,
-      canGenerateVideo,
-      freeRunAvailable,
+      quotaRemaining,
+      quotaPercent,
     }}>
       {children}
     </AuthContext.Provider>

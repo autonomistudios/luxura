@@ -5,16 +5,18 @@ import { useNavigate } from 'react-router-dom';
 import { Zap, Users, TrendingUp, BarChart2 } from 'lucide-react';
 import Layout from '../components/Layout';
 import { db } from '../lib/firebase';
-import { useAuth, TIER_CONFIG } from '../contexts/AuthContext';
-import type { UserProfile, SubscriptionTier } from '../contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext';
 
-const ADMIN_EMAIL  = 'autonomistudiosllc@gmail.com';
-const TIER_PRICES: Record<SubscriptionTier, number> = {
-  free:      0,
-  aura:      85,
-  sovereign: 165,
-  luminary:  299,
+const ADMIN_EMAIL = 'autonomistudiosllc@gmail.com';
+type SubscriptionTier = 'free' | 'aura' | 'sovereign' | 'luminary';
+interface UserProfile { uid: string; email: string; displayName: string; photoURL: string; tier: string; imageCredits: number; videoCredits: number; subscriptionStatus: string | null; createdAt?: unknown; }
+const TIER_CONFIG: Record<string, { label: string; color: string; price: number }> = {
+  free:      { label: 'Free',      color: 'white',   price: 0   },
+  aura:      { label: 'Aura',      color: '#D4AF37', price: 85  },
+  sovereign: { label: 'Sovereign', color: '#C0C0C0', price: 165 },
+  luminary:  { label: 'Luminary',  color: '#E5D3FF', price: 299 },
 };
+const TIER_PRICES: Record<string, number> = { free: 0, aura: 85, sovereign: 165, luminary: 299 };
 
 export default function AdminDashboard() {
   const { user, loading, isAdmin } = useAuth();

@@ -34,14 +34,42 @@
     }
   ],
   "functions": {
-    "api/forge.js":             { "maxDuration": 300 },
-    "api/forge-iterate.js":     { "maxDuration": 180 },
-    "api/upscale.js":           { "maxDuration": 120 },
-    "api/vault-deploy.js":      { "maxDuration": 60  },
-    "api/vault-delete.js":      { "maxDuration": 30  },
-    "api/paypal-webhook.js":    { "maxDuration": 30  },
-    "api/credits.js":           { "maxDuration": 10  },
-    "api/generate-prop-cover.js": { "maxDuration": 30 },
-    "api/aura-profile.js":        { "maxDuration": 15 }
-  }
+    "api/forge.js":               { "maxDuration": 300 },
+    "api/forge-iterate.js":       { "maxDuration": 180 },
+    "api/upscale.js":             { "maxDuration": 120 },
+    "api/vault-deploy.js":        { "maxDuration": 60  },
+    "api/vault-delete.js":        { "maxDuration": 30  },
+    "api/stripe-webhook.js":      { "maxDuration": 30  },
+    "api/generate-prop-cover.js": { "maxDuration": 30  },
+    "api/aura-profile.js":        { "maxDuration": 15  },
+    "api/brands/onboard.js":      { "maxDuration": 15  },
+    "api/v1/brands/auth.js":      { "maxDuration": 15  },
+    "api/v1/brands/logo.js":      { "maxDuration": 30  },
+    "api/v1/skus/enroll.js":      { "maxDuration": 120 },
+    "api/v1/skus/index.js":       { "maxDuration": 15  },
+    "api/v1/skus/[skuId].js":     { "maxDuration": 15  },
+    "api/v1/forge/generate.js":   { "maxDuration": 300 },
+    "api/v1/forge/batch.js":      { "maxDuration": 300 },
+    "api/v1/jobs/[jobId].js":     { "maxDuration": 15  },
+    "api/v1/sets/inject.js":      { "maxDuration": 120 },
+    "api/v1/sets/index.js":       { "maxDuration": 15  },
+    "api/v1/usage.js":            { "maxDuration": 10  },
+    "api/v1/team/index.js":       { "maxDuration": 15  },
+    "api/v1/team/[uid].js":       { "maxDuration": 15  },
+    "api/v1/api-key/issue.js":    { "maxDuration": 15  },
+    "api/v1/api-key/revoke.js":   { "maxDuration": 15  },
+    "api/v1/webhooks/register.js":{ "maxDuration": 15  },
+    "api/v1/webhooks/test.js":    { "maxDuration": 15  },
+    "api/v1/docs.js":             { "maxDuration": 5   },
+    "api/agents/campaign-agent.js":             { "maxDuration": 280 },
+    "api/agents/set-calibration-agent.js":      { "maxDuration": 120 },
+    "api/agents/quality-audit-agent.js":        { "maxDuration": 60  },
+    "api/agents/usage-reconciliation-agent.js": { "maxDuration": 60  },
+    "api/agents/consistency-guardian.js":       { "maxDuration": 120 }
+  },
+  "crons": [
+    { "path": "/api/agents/campaign-agent",             "schedule": "*/2 * * * *" },
+    { "path": "/api/agents/usage-reconciliation-agent", "schedule": "0 0 1 * *"   },
+    { "path": "/api/agents/consistency-guardian",       "schedule": "0 2 * * 1"   }
+  ]
 }

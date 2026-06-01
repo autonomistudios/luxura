@@ -75,6 +75,22 @@ import {
   runDeadCodeAudit,
 } from './tests/bugs.js';
 
+// ─── B2B Test Suites ──────────────────────────────────────────────────────────
+import {
+  runBrandApiKeyValidationTests,
+  runDualAuthTests,
+  runBrandSchemaTests,
+  runQuotaAtomicityTests,
+  runBrandMemberIsolationTests,
+} from './tests/brand-auth.js';
+
+import {
+  runSkuEnrollmentSchemaTests,
+  runSkuRecallTests,
+  runSkuApiTests,
+  runDnaInjectionTests,
+} from './tests/sku.js';
+
 // ─── CLI args ─────────────────────────────────────────────────────────────────
 const args = process.argv.slice(2);
 const LIVE_MODE     = args.includes('--live');
@@ -166,8 +182,25 @@ async function main() {
     console.log('\n  ⏭️  LIVE API tests skipped (run with --live to include)');
   }
 
-  // ── SECTION 4: BUG REGRESSIONS & EDGE CASES ───────────────────────────────
-  console.log('\n\n▓▓▓ SECTION 4: BUG REGRESSIONS & EDGE CASES ▓▓▓');
+  // ── SECTION 4: B2B BRAND PLATFORM ─────────────────────────────────────────
+  console.log('\n\n▓▓▓ SECTION 4: B2B BRAND PLATFORM ▓▓▓');
+
+  const b2bCollect = (suite, tests) => {
+    tests.forEach(t => allResults.push({ pass: t.passed, label: `${suite}: ${t.name}`, detail: t.error || null }));
+  };
+
+  await runSuite('Brand API Key Validation',  () => { runBrandApiKeyValidationTests(b2bCollect); return []; });
+  await runSuite('Dual Auth Mode',            () => { runDualAuthTests(b2bCollect); return []; });
+  await runSuite('Brand Schema',              () => { runBrandSchemaTests(b2bCollect); return []; });
+  await runSuite('Quota Atomicity',           () => { runQuotaAtomicityTests(b2bCollect); return []; });
+  await runSuite('Brand Member Isolation',    () => { runBrandMemberIsolationTests(b2bCollect); return []; });
+  await runSuite('SKU Enrollment Schema',     () => { runSkuEnrollmentSchemaTests(b2bCollect); return []; });
+  await runSuite('SKU Recall Bypass',         () => { runSkuRecallTests(b2bCollect); return []; });
+  await runSuite('SKU API Endpoints',         () => { runSkuApiTests(b2bCollect); return []; });
+  await runSuite('DNA Injection Integrity',   () => { runDnaInjectionTests(b2bCollect); return []; });
+
+  // ── SECTION 5: BUG REGRESSIONS & EDGE CASES ───────────────────────────────
+  console.log('\n\n▓▓▓ SECTION 5: BUG REGRESSIONS & EDGE CASES ▓▓▓');
   await runSuite('Director Brief Count',        runDirectorBriefCountTest);
   await runSuite('Fashn.ai Category Bug',       runFashnCategoryBugTest);
   await runSuite('VTO Temperature Range',       runVTOTemperatureTest);

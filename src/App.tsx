@@ -1,29 +1,48 @@
-import React, { useEffect, useState } from 'react';
+import React, { Suspense, lazy } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { AnimatePresence } from 'framer-motion';
 import { useAuth } from './contexts/AuthContext';
 import Landing from './pages/Landing';
-import Dashboard from './pages/Dashboard';
-import Workflow from './pages/Workflow';
-import DeveloperPortal from './pages/DeveloperPortal';
-import SovereignDashboard from './components/SovereignDashboard';
-import Vault from './pages/Vault';
-import Profile from './pages/Profile';
 import Login from './pages/Login';
-import Pricing from './pages/Pricing';
-import GarmentStudio from './pages/GarmentStudio';
-import VideoStudio from './pages/VideoStudio';
 import AdminDashboard from './pages/AdminDashboard';
 import LuxCursor from './components/LuxCursor';
 import CinematicIntro from './components/CinematicIntro';
-import AuraOnboarding from './components/AuraOnboarding';
 
-/** Auth gate — enabled by default. Set VITE_AUTH_REQUIRED=false to disable (local dev only). */
+// ── Lazy-loaded portal pages ───────────────────────────────────────────────────
+const BrandOnboarding      = lazy(() => import('./pages/BrandOnboarding'));
+const BrandPortalLayout    = lazy(() => import('./components/BrandPortalLayout'));
+const BrandPortalHome      = lazy(() => import('./pages/portal/BrandPortalHome'));
+const SKUCatalog           = lazy(() => import('./pages/portal/SKUCatalog'));
+const SKUEnrollmentFlow    = lazy(() => import('./pages/portal/SKUEnrollmentFlow'));
+const SKUDetail            = lazy(() => import('./pages/portal/SKUDetail'));
+const CampaignHistory      = lazy(() => import('./pages/portal/CampaignHistory'));
+const CampaignBuilder      = lazy(() => import('./pages/portal/CampaignBuilder'));
+const SetInjectionManager  = lazy(() => import('./pages/portal/SetInjectionManager'));
+const UsageDashboard       = lazy(() => import('./pages/portal/UsageDashboard'));
+const BrandSettings        = lazy(() => import('./pages/portal/BrandSettings'));
+const TeamManager          = lazy(() => import('./pages/portal/TeamManager'));
+const APIAccessPortal      = lazy(() => import('./pages/portal/APIAccessPortal'));
+
 const AUTH_REQUIRED = import.meta.env.VITE_AUTH_REQUIRED !== 'false';
 
+// ── Loading screen ─────────────────────────────────────────────────────────────
+function PortalSuspense({ children }: { children: React.ReactNode }) {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-[#050505] flex items-center justify-center">
+        <div className="text-[9px] font-mono uppercase tracking-[0.5em] text-white/20 animate-pulse">
+          Loading…
+        </div>
+      </div>
+    }>
+      {children}
+    </Suspense>
+  );
+}
+
+// ── Auth gate ─────────────────────────────────────────────────────────────────
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
-  const location          = useLocation();
+  const location = useLocation();
 
   if (!AUTH_REQUIRED) return <>{children}</>;
 
@@ -41,40 +60,31 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
-// ── Onboarding gate — checks Aura profile, shows modal on first login ─────────
-function OnboardingGate({ children }: { children: React.ReactNode }) {
-  const { user } = useAuth();
-  const [needsOnboarding, setNeedsOnboarding] = useState(false);
-  const [checked, setChecked]                 = useState(false);
+// ── Brand gate — redirects to /onboard if no brand workspace ──────────────────
+function BrandGate({ children }: { children: React.ReactNode }) {
+  const { hasBrand, loading } = useAuth();
+  const location = useLocation();
 
-  useEffect(() => {
-    if (!user || !AUTH_REQUIRED) { setChecked(true); return; }
-    let cancelled = false;
-    user.getIdToken().then(idToken =>
-      fetch('/api/aura-profile', { headers: { 'Authorization': `Bearer ${idToken}` } })
-    ).then(r => r.json()).then(({ profile }) => {
-      if (!cancelled) {
-        setNeedsOnboarding(!profile || !profile.onboarded);
-        setChecked(true);
-      }
-    }).catch(() => {
-      if (!cancelled) setChecked(true); // fail open — don't block on error
-    });
-    return () => { cancelled = true; };
-  }, [user]);
+  // Dev mode: auth not required → skip brand check entirely, always render portal
+  if (!AUTH_REQUIRED) return <>{children}</>;
 
-  if (!checked) return null; // brief — resolves in <1s normally
-
-  return (
-    <>
-      {children}
-      <AnimatePresence>
-        {needsOnboarding && (
-          <AuraOnboarding onComplete={() => setNeedsOnboarding(false)} />
-        )}
-      </AnimatePresence>
-    </>
+  // Grace period: onboarding just completed, give AuthContext time to re-hydrate
+  // before enforcing the brand check (prevents redirect loop on first navigation)
+  const [grace, setGrace] = React.useState(() =>
+    !!sessionStorage.getItem('lux_onboarding_complete')
   );
+
+  React.useEffect(() => {
+    if (!grace) return;
+    sessionStorage.removeItem('lux_onboarding_complete');
+    // Short timeout lets onAuthStateChanged re-run and brand context hydrate
+    const t = setTimeout(() => setGrace(false), 1500);
+    return () => clearTimeout(t);
+  }, []); // eslint-disable-line
+
+  if (loading || grace) return null;
+  if (!hasBrand) return <Navigate to="/onboard" state={{ from: location }} replace />;
+  return <>{children}</>;
 }
 
 function App() {
@@ -85,25 +95,54 @@ function App() {
     <>
       <LuxCursor />
       {!isLanding && <CinematicIntro />}
-      <Routes>
-        {/* Public routes */}
-        <Route path="/"        element={<Landing />} />
-        <Route path="/login"   element={<Login />} />
-        <Route path="/pricing" element={<Pricing />} />
+      <PortalSuspense>
+        <Routes>
+          {/* ── Public ──────────────────────────────────────────────────── */}
+          <Route path="/"      element={<Landing />} />
+          <Route path="/login" element={<Login />} />
 
-        {/* Protected routes — wrapped in OnboardingGate */}
-        <Route path="/dashboard" element={<ProtectedRoute><OnboardingGate><Dashboard /></OnboardingGate></ProtectedRoute>} />
-        <Route path="/studio"    element={<ProtectedRoute><OnboardingGate><SovereignDashboard /></OnboardingGate></ProtectedRoute>} />
-        <Route path="/vault"     element={<ProtectedRoute><Vault /></ProtectedRoute>} />
-        <Route path="/profile"   element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-        <Route path="/workflow/:categoryId" element={<ProtectedRoute><Workflow /></ProtectedRoute>} />
-        <Route path="/garment"   element={<ProtectedRoute><GarmentStudio /></ProtectedRoute>} />
-        <Route path="/video"     element={<ProtectedRoute><VideoStudio /></ProtectedRoute>} />
-        <Route path="/admin"     element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
-        <Route path="/developer" element={<ProtectedRoute><DeveloperPortal /></ProtectedRoute>} />
+          {/* ── Brand onboarding (auth required, no brand yet) ──────────── */}
+          <Route path="/onboard" element={
+            <ProtectedRoute><BrandOnboarding /></ProtectedRoute>
+          } />
 
-        <Route path="*" element={<Navigate to="/dashboard" replace />} />
-      </Routes>
+          {/* ── Brand portal (auth + brand required) ────────────────────── */}
+          <Route path="/portal" element={
+            <ProtectedRoute>
+              <BrandGate>
+                <BrandPortalLayout />
+              </BrandGate>
+            </ProtectedRoute>
+          }>
+            <Route index                  element={<BrandPortalHome />} />
+            <Route path="skus"            element={<SKUCatalog />} />
+            <Route path="skus/enroll"     element={<SKUEnrollmentFlow />} />
+            <Route path="skus/:skuId"     element={<SKUDetail />} />
+            <Route path="campaigns"       element={<CampaignHistory />} />
+            <Route path="campaigns/new"   element={<CampaignBuilder />} />
+            <Route path="sets"            element={<SetInjectionManager />} />
+            <Route path="analytics"       element={<UsageDashboard />} />
+            <Route path="settings"        element={<BrandSettings />} />
+            <Route path="team"            element={<TeamManager />} />
+            <Route path="api"             element={<APIAccessPortal />} />
+          </Route>
+
+          {/* ── Admin (auth required, email-gated in component) ─────────── */}
+          <Route path="/admin" element={
+            <ProtectedRoute><AdminDashboard /></ProtectedRoute>
+          } />
+
+          {/* ── Legacy consumer routes → portal redirect ────────────────── */}
+          <Route path="/dashboard" element={<Navigate to="/portal" replace />} />
+          <Route path="/studio"    element={<Navigate to="/portal/campaigns/new" replace />} />
+          <Route path="/vault"     element={<Navigate to="/portal" replace />} />
+          <Route path="/profile"   element={<Navigate to="/portal/settings" replace />} />
+          <Route path="/pricing"   element={<Navigate to="/portal" replace />} />
+
+          {/* ── Catch-all ───────────────────────────────────────────────── */}
+          <Route path="*" element={<Navigate to="/portal" replace />} />
+        </Routes>
+      </PortalSuspense>
     </>
   );
 }
