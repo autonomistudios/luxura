@@ -1,116 +1,90 @@
-# LuxAura Creation Studio 2
+# LuxAura B2B Operating System
 
-Sovereign AI fashion photography platform — 7-agent forge pipeline powered by Google Gemini.
+**Sovereign AI fashion photography platform — B2B enterprise edition.**
+7-agent forge pipeline · SKU DNA enrollment · Brand workspace management · Autonomous agents
 
 ---
 
 ## AI Model Registry
 
-**Last verified:** April 3, 2026 — Source: https://ai.google.dev/gemini-api/docs/models
+**Last verified: June 2026**
 
-This is the single source of truth for all AI models used in this project. When upgrading, update `api/forge.js` constants AND this file.
+Single source of truth. Update `lib/forge/constants.js` AND this file when upgrading.
 
-### Active Models in forge.js
+### Active Models
 
-| Constant | Current Model ID | Role | Status |
+| Constant | Model ID | Role | Status |
 |---|---|---|---|
-| `TEXT_MODEL` | `gemini-2.5-flash` | DNA extraction, director briefs, consistency audit, identity scan | Stable GA |
-| `PXL_MODEL` | `gemini-3.1-flash-image-preview` | Image generation (Agent 01b, Agent 03) | Preview |
+| `TEXT_MODEL` | `gemini-2.5-pro` | DNA extraction, director briefs, consistency audit | Stable GA |
+| `PXL_MODEL` | `gemini-3-pro-image-preview` | Image generation — Agent 01b + Agent 03 | Preview |
 
-### Full Gemini Model Registry (April 2026)
-
-#### Text / Multimodal Reasoning
-
+### Image Generation Models
 | Model ID | Tier | Notes |
 |---|---|---|
-| `gemini-2.5-pro` | Stable GA | Most capable. Best for complex reasoning, 1M context |
-| `gemini-2.5-flash` | Stable GA | Best price-performance. **Current TEXT_MODEL** |
-| `gemini-2.5-flash-lite` | Stable GA | Fastest/cheapest. Use for high-volume low-stakes calls |
-| `gemini-3.1-pro-preview` | Preview | Bleeding edge. Upgrade TEXT_MODEL here when GA |
-| `gemini-3-flash-preview` | Preview | Fast preview-tier. |
-| `gemini-flash-latest` | Alias | Always points to latest stable Flash |
-| `gemini-pro-latest` | Alias | Always points to latest stable Pro |
+| `gemini-3-pro-image-preview` | Preview | **Current PXL_MODEL** — best identity lock, 2K output |
+| `gemini-3.1-flash-image-preview` | Preview | Faster/cheaper fallback |
+| `imagen-4.0-generate-001` | Stable GA | Dedicated text-to-image, 2K |
+| `imagen-4.0-ultra-generate-001` | Stable GA | Highest quality for catalog shots |
 
-#### Image Generation
-
+### Text / Reasoning Models
 | Model ID | Tier | Notes |
 |---|---|---|
-| `gemini-3.1-flash-image-preview` | Preview | **Current PXL_MODEL** — Gemini native image gen + editing |
-| `gemini-3-pro-image-preview` | Preview | Highest quality image gen. Upgrade PXL_MODEL here |
-| `gemini-2.5-flash-image` | Stable GA | Stable fallback for image generation |
-| `imagen-4.0-generate-001` | Stable GA | Dedicated text-to-image. Up to 2K resolution |
-| `imagen-4.0-ultra-generate-001` | Stable GA | Highest quality Imagen. Best for product/catalog shots |
-| `imagen-4.0-fast-generate-001` | Stable GA | Fast Imagen. Use for previews/thumbnails |
-
-#### Video Generation
-
-| Model ID | Tier | Notes |
-|---|---|---|
-| `veo-3.1-generate-preview` | Preview | Best video quality. Cinematic + native audio. Paid tier required |
-| `veo-3.1-fast-generate-preview` | Preview | Faster/cheaper Veo 3.1 |
-| `veo-3.0-generate-001` | Stable GA | Stable video gen baseline |
-| `veo-3.0-fast-generate-001` | Stable GA | Fast stable video |
-| `veo-2.0-generate-001` | Stable GA | Legacy. Prefer veo-3.x |
-
-#### Embeddings
-
-| Model ID | Tier | Notes |
-|---|---|---|
-| `gemini-embedding-001` | Stable GA | Standard embeddings |
-
----
+| `gemini-2.5-pro` | Stable GA | **Current TEXT_MODEL** — 1M context, best reasoning |
+| `gemini-2.5-flash` | Stable GA | Price-performance alternative |
+| `gemini-3.1-pro-preview` | Preview | Next upgrade target for TEXT_MODEL |
 
 ### Deprecated — Do Not Use
-
-| Model ID | Status | Replace With |
-|---|---|---|
-| `gemini-2.0-flash` | Deprecated (404) | `gemini-2.5-flash` |
-| `gemini-2.0-flash-lite` | Deprecated | `gemini-2.5-flash-lite` or `gemini-2.5-flash` |
-| `gemini-3-pro-preview` | Shut down March 9, 2026 | `gemini-3.1-pro-preview` |
-
----
-
-### Upgrade Path
-
-When upgrading models, update **both** locations:
-
-1. `api/forge.js` — `TEXT_MODEL` and `PXL_MODEL` constants at the top of the file
-2. This README — Active Models table above
-
-**Next upgrade targets:**
-- `TEXT_MODEL`: `gemini-2.5-flash` → `gemini-3.1-pro-preview` (when stable/GA)
-- `PXL_MODEL`: `gemini-3.1-flash-image-preview` → `gemini-3-pro-image-preview` (when stable/GA)
+| Model ID | Reason |
+|---|---|
+| `gemini-3-pro-image` | Missing `-preview` suffix — invalid model ID |
+| `gemini-3-pro-preview` | Shut down March 9, 2026 |
+| `gemini-2.0-flash` | Deprecated — use gemini-2.5-flash |
 
 ---
 
 ## Architecture
 
+### Forge Pipeline (7 Agents)
+
 ```
-User Upload → PaperBananaProtocol → /api/forge SSE Stream → 6-image grid
-                                         │
-                    ┌────────────────────┼────────────────────┐
-                    │                    │                    │
-              Agent 00             Agent 01              Agent 01b
-          Intent Classifier      DNA Scanner          Anchor Visualizer
-          (TEXT_MODEL)           (TEXT_MODEL)          (PXL_MODEL)
-                    │
-              Agent 02 × 6
-          Creative Director
-          (TEXT_MODEL)
-                    │
-              Agent 02.5
-          Consistency Auditor
-          (TEXT_MODEL)
-                    │
-              Agent 03 × 6
-          Image Producer
-          (PXL_MODEL)
+Brand API Key / Firebase Auth
+        │
+   Agent 00  Intent Classifier       (TEXT_MODEL) — deterministic
+        │
+   Agent 01  DNA Scanner             (TEXT_MODEL) — SKIPPED if SKU recalled
+   Agent 01b Anchor Isolation        (PXL_MODEL)  — SKIPPED if SKU recalled
+   Agent 01f VTO Orchestration       (Vertex AI → FASHN.ai fallback)
+        │
+   Agent 02 ×6  Creative Director   (TEXT_MODEL) — 6 unique scene briefs
+   Agent 02.5   Consistency Auditor  (TEXT_MODEL) — cross-slot identity lock
+        │
+   Agent 03 ×6  Image Producer       (PXL_MODEL)  — SSE stream, 3-concurrent
 ```
+
+### Agentic Workers (Vercel Cron)
+
+| Agent | Schedule | Purpose |
+|---|---|---|
+| campaign-agent | */2 * * * * | Process queued batch jobs |
+| usage-reconciliation-agent | 0 0 1 * * | Reset monthly quotas |
+| consistency-guardian | 0 2 * * 1 | Detect SKU DNA drift |
+
+---
 
 ## Deployment
 
-- **Frontend:** Vercel (auto-deploy on push to `master`)
-- **Backend:** Vercel Serverless Functions (`/api/*`)
-- **Auth:** Firebase Auth + Firestore
-- **Storage:** Firebase Storage (vault assets)
-- **VTO:** FASHN.ai API
+- **Hosting:** Vercel (auto-deploy on push to `main`)
+- **Auth:** Firebase Auth — Google OAuth
+- **Database:** Firestore — multi-tenant `brands/{brandId}/...`
+- **Storage:** Firebase Storage
+- **Billing:** Stripe (Studio $499 · Agency $1,499 · Enterprise $4,999 /mo)
+
+## Brand Tiers
+
+| Tier | Price | Images/month | API Calls/month |
+|---|---|---|---|
+| Studio | $499/mo | 500 | 2,000 |
+| Agency | $1,499/mo | 2,000 | 10,000 |
+| Enterprise | $4,999/mo | 10,000 | 50,000 |
+
+See `.env.example` for all required environment variables.
