@@ -494,6 +494,19 @@ export function runOutfitPartsTests() {
   }));
   results.push(assert(single.parts.filter(p => p.inlineData).length === 1, 'Single SKU: exactly 1 image part (no multi-ref expansion)'));
 
+  // Custom background reference: single garment + environment image →
+  // 2 image parts (garment + environment) and an ENVIRONMENT REFERENCE label.
+  const withBg = build(baseCtx({
+    isAiGenerated: true, hasClothingAnchor: true, anchors: ['DRESS'],
+    dnaMap: { DRESS: 'Red silk gown.' },
+    anchorRefImage: refs[0],
+    backgroundRefImage: { data: DUMMY_B64, mimeType: DUMMY_MIME },
+    brief: 'Gown in a specific environment.',
+  }));
+  results.push(assert(withBg.parts.filter(p => p.inlineData).length === 2, 'Custom bg: garment + environment = 2 image parts'));
+  results.push(assert(withBg.parts.some(p => p.text && p.text.includes('ENVIRONMENT REFERENCE')), 'Custom bg: environment reference label present in parts'));
+  results.push(assert(withBg.prompt.includes('ENVIRONMENT REFERENCE'), 'Custom bg: prompt acknowledges environment reference image'));
+
   return results;
 }
 

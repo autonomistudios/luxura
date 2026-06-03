@@ -205,6 +205,27 @@ export default async function handler(req, res) {
       anchors = ['FULL_OUTFIT'];
     }
 
+    // ── Custom background / environment reference image ────────────────────
+    // Brand uploads a photo of a real environment (store, set, location) and the
+    // model is composited into a recreation of that scene. Face-free placement is
+    // not required — this image is used ONLY for the surroundings, never identity.
+    let backgroundRefImage = null;
+    const backgroundImageRaw = config?.backgroundImage;
+    if (backgroundImageRaw) {
+      let bgData = backgroundImageRaw;
+      let bgMime = 'image/jpeg';
+      if (backgroundImageRaw.includes(',')) {
+        const [header, data] = backgroundImageRaw.split(',');
+        bgData = data.trim().replace(/\s/g, '');
+        const m = header.match(/^data:(image\/\w+);/);
+        if (m) bgMime = m[1];
+      } else {
+        bgData = backgroundImageRaw.trim().replace(/\s/g, '');
+      }
+      backgroundRefImage = { data: bgData, mimeType: bgMime };
+      console.log(`[FORGE] CUSTOM BACKGROUND: environment reference image received (${(backgroundImageRaw.length / 1024 / 1024).toFixed(2)}MB)`);
+    }
+
     // ── Additional multi-angle reference images ────────────────────────────
     const additionalModelImages = (req.body?.additionalModelImages || [])
       .map(img => ((typeof img === 'string' ? img : '').split(',')[1] || img).trim().replace(/\s/g, ''))
@@ -468,7 +489,11 @@ Be exhaustive. Every observable detail must be captured.`;
       'Pitch-Black':     'pure black void background, high-contrast dark studio',
       'editorial-white': 'bright clean white seamless backdrop, high-key editorial',
       'Editorial-White': 'bright clean white seamless backdrop, high-key editorial',
-    }[lockedBgRaw] || (lockedBgRaw === 'custom-bg' && userPromptText ? `environmental setting: ${userPromptText}` : 'clean grey seamless studio backdrop');
+    }[lockedBgRaw] || (
+      backgroundRefImage
+        ? `the exact environment shown in the attached environment reference image${userPromptText ? ` (${userPromptText})` : ''}`
+        : (lockedBgRaw === 'custom-bg' && userPromptText ? `environmental setting: ${userPromptText}` : 'clean grey seamless studio backdrop')
+    );
     const lockedCamera       = CAMERA_FORMAT_MAP[config?.cameraFormat] || CAMERA_MAP[config?.camera] || CAMERA_MAP['Soft Background (85mm)'];
     const lockedColorGrade   = COLOR_GRADE_MAP[config?.colorGrade] || null;
     const modelArchetypeDesc = MODEL_ARCHETYPE_MAP[config?.modelArchetype] || MODEL_ARCHETYPE_MAP['High Fashion'];
@@ -869,7 +894,7 @@ Rules: ONLY correct slots that actually violate an invariant above. Do not rewri
       const bgLock = config?.locationPreset
         ? config.locationPreset
         : (lockedBgRaw === 'custom-bg' && userPromptText) ? userPromptText : lockedBgDesc;
-      const isCustomEnv = !!(config?.locationPreset) || (lockedBgRaw === 'custom-bg' && !!userPromptText);
+      const isCustomEnv = !!(config?.locationPreset) || !!backgroundRefImage || (lockedBgRaw === 'custom-bg' && !!userPromptText);
 
       const anchorRefLabel = anchorRefAnchorType ? (ANCHOR_LABELS[anchorRefAnchorType] || anchorRefAnchorType) : anchorDesc;
       // Multi-SKU outfit: enumerate every garment reference so the model knows each
@@ -891,6 +916,7 @@ Rules: ONLY correct slots that actually violate an invariant above. Do not rewri
         rawImageData, rawMimeType,
         garmentImageData, garmentMimeType,
         anchorRefImage, anchorRefAnchorType, anchorRefImages,
+        backgroundRefImage,
         cleanGarmentRender, garmentCleanRef,
         dnaMap, allDnaBlock: anchors.map(anc =>
           `${anc.toUpperCase()} — ${(ANCHOR_LABELS[anc] || anc).toUpperCase()}:\n${dnaMap[anc] || ''}`

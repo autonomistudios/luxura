@@ -10,11 +10,40 @@ import { useSovereignStore, type SkuDocument } from '../../store/useSovereignSto
 import { PHOTOGRAPHY_PRESETS } from '../../lib/photographyPresets';
 import { LOCATION_PRESETS } from '../../lib/locationPresets';
 import { ANCHOR_TYPES } from '../../lib/skuConstants';
-import { MapPin, ChevronRight, Plus, X, Shirt, Wand2 } from 'lucide-react';
+import { MapPin, ChevronRight, Plus, X, Shirt, Wand2, Upload } from 'lucide-react';
 
 const ANCHOR_LABEL: Record<string, string> = Object.fromEntries(
   ANCHOR_TYPES.map(a => [a.id, a.label]),
 );
+
+// Canvas-compress an uploaded environment photo (max 1600px, JPEG q0.85) so the
+// forge payload stays well under serverless body limits.
+function compressImage(file: File, maxDim = 1600, quality = 0.85): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > maxDim || height > maxDim) {
+          const scale = maxDim / Math.max(width, height);
+          width = Math.round(width * scale);
+          height = Math.round(height * scale);
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width; canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return reject(new Error('Canvas unsupported'));
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = reject;
+      img.src = reader.result as string;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
 
 // ─── Photography config (mirrors lib/forge/config/photography.js) ─────────────
 const LIGHTING_OPTIONS    = ['Clean & Even', 'Sunset Side Glow', 'Deep Shadow', 'Beauty Overhead', 'Moody Cinema', 'Soft Natural'];
@@ -409,6 +438,8 @@ export default function CampaignBuilder() {
   const [skinTone,          setSkinTone]          = useState('neutral');
   const [location,          setLocation]          = useState('');
   const [locationPickerOpen, setLocationPickerOpen] = useState(false);
+  const [customBg,          setCustomBg]          = useState<string | null>(null);
+  const customBgInputRef = useRef<HTMLInputElement | null>(null);
   const [selectedPreset,    setSelectedPreset]    = useState<string | null>(null);
   const [prompt,            setPrompt]            = useState('');
   const [outputMode,        setOutputMode]        = useState<'still' | 'video'>('still');
@@ -461,7 +492,10 @@ export default function CampaignBuilder() {
           camera,
           colorGrade,
           skinTone,
-          locationPreset: location || undefined,
+          // Custom uploaded environment takes precedence over a preset location.
+          locationPreset: customBg ? undefined : (location || undefined),
+          background:     customBg ? 'custom-bg' : undefined,
+          backgroundImage: customBg || undefined,
           userPrompt:    prompt || undefined,
           gender:        'female',
           sourceImage:   activeSku.referenceImage || '',
@@ -790,6 +824,45 @@ export default function CampaignBuilder() {
                 : <ChevronRight size={10} className="text-white/20" />
               }
             </button>
+
+            {/* Custom environment upload — overrides preset when set */}
+            <input
+              ref={customBgInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={async e => {
+                const file = e.target.files?.[0];
+                e.target.value = '';
+                if (!file) return;
+                try {
+                  const compressed = await compressImage(file);
+                  setCustomBg(compressed);
+                  setLocation('');           // mutually exclusive with a preset
+                } catch { /* ignore unreadable image */ }
+              }}
+            />
+            {customBg ? (
+              <div className="flex items-center gap-2.5 p-2 mt-2 rounded"
+                style={{ background: 'rgba(184,149,42,0.07)', border: '1px solid rgba(184,149,42,0.18)' }}>
+                <img src={customBg} className="w-10 h-8 object-cover rounded flex-shrink-0 border border-white/10" />
+                <div className="min-w-0 flex-1">
+                  <p className="text-[9px] font-mono text-white/70 truncate">Custom environment</p>
+                  <p className="text-[6px] font-mono text-[#B8952A]/60 tracking-[0.15em] uppercase mt-0.5">Scene recreated from upload</p>
+                </div>
+                <button onClick={() => setCustomBg(null)}
+                  className="text-white/20 hover:text-red-400/70 transition-colors p-1 flex-shrink-0">
+                  <X size={11} />
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => customBgInputRef.current?.click()}
+                className="w-full flex items-center justify-center gap-1.5 py-2 mt-2 rounded text-[9px] font-mono tracking-[0.2em] uppercase text-white/40 hover:text-white/70 transition-all"
+                style={{ background: 'rgba(255,255,255,0.02)', border: '1px dashed rgba(255,255,255,0.12)' }}>
+                <Upload size={10} /> Upload Custom Environment
+              </button>
+            )}
 
             {/* Inline location browser */}
             <AnimatePresence>

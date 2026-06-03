@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-06-03T14:54:59.819Z",
+  "timestamp": "2026-06-03T15:04:54.579Z",
   "mode": "STATIC",
-  "elapsed": "2.1",
+  "elapsed": "1.6",
   "summary": {
-    "pass": 615,
+    "pass": 618,
     "fail": 0,
     "warn": 3,
-    "total": 615
+    "total": 618
   },
   "suites": [
     {
@@ -23,7 +23,7 @@
       "fail": 0,
       "warn": 0,
       "total": 13,
-      "elapsed": "9"
+      "elapsed": "3"
     },
     {
       "name": "VTO_BACKGROUND_REPLACE",
@@ -67,10 +67,10 @@
     },
     {
       "name": "Outfit Combination Parts",
-      "pass": 7,
+      "pass": 10,
       "fail": 0,
       "warn": 0,
-      "total": 7,
+      "total": 10,
       "elapsed": "1"
     },
     {
@@ -95,7 +95,7 @@
       "fail": 0,
       "warn": 0,
       "total": 5,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "Mutation Retry Injection",
@@ -103,7 +103,7 @@
       "fail": 0,
       "warn": 0,
       "total": 3,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Anchor Coverage (all types)",
@@ -111,7 +111,7 @@
       "fail": 0,
       "warn": 0,
       "total": 54,
-      "elapsed": "2"
+      "elapsed": "4"
     },
     {
       "name": "Anchor Deduplication",
@@ -143,7 +143,7 @@
       "fail": 0,
       "warn": 0,
       "total": 19,
-      "elapsed": "12"
+      "elapsed": "1"
     },
     {
       "name": "DNA Prompt Coverage",
@@ -151,7 +151,7 @@
       "fail": 0,
       "warn": 0,
       "total": 61,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "Consistency Audit Parser",
@@ -159,7 +159,7 @@
       "fail": 0,
       "warn": 0,
       "total": 6,
-      "elapsed": "3"
+      "elapsed": "1"
     },
     {
       "name": "VTO Pipeline Routing",
@@ -191,7 +191,7 @@
       "fail": 0,
       "warn": 0,
       "total": 4,
-      "elapsed": "3"
+      "elapsed": "1"
     },
     {
       "name": "Self-Heal Guardian",
@@ -215,7 +215,7 @@
       "fail": 0,
       "warn": 1,
       "total": 12,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "Firestore Rules Review",
@@ -223,7 +223,7 @@
       "fail": 0,
       "warn": 0,
       "total": 16,
-      "elapsed": "12"
+      "elapsed": "5"
     },
     {
       "name": "SSE Headers",
@@ -231,7 +231,7 @@
       "fail": 0,
       "warn": 1,
       "total": 8,
-      "elapsed": "1977"
+      "elapsed": "1537"
     },
     {
       "name": "Privilege Escalation",
@@ -287,7 +287,7 @@
       "fail": 0,
       "warn": 0,
       "total": 0,
-      "elapsed": "0"
+      "elapsed": "1"
     },
     {
       "name": "SKU Recall Bypass",
@@ -319,7 +319,7 @@
       "fail": 0,
       "warn": 0,
       "total": 0,
-      "elapsed": "1"
+      "elapsed": "2"
     },
     {
       "name": "Director Brief Count",
@@ -327,7 +327,7 @@
       "fail": 0,
       "warn": 0,
       "total": 2,
-      "elapsed": "2"
+      "elapsed": "3"
     },
     {
       "name": "Fashn.ai Category Bug",
@@ -335,7 +335,7 @@
       "fail": 0,
       "warn": 0,
       "total": 3,
-      "elapsed": "1"
+      "elapsed": "2"
     },
     {
       "name": "VTO Temperature Range",
@@ -399,7 +399,7 @@
       "fail": 0,
       "warn": 0,
       "total": 8,
-      "elapsed": "6"
+      "elapsed": "3"
     }
   ],
   "failures": [],
@@ -744,6 +744,18 @@
     {
       "pass": true,
       "label": "Single SKU: exactly 1 image part (no multi-ref expansion)"
+    },
+    {
+      "pass": true,
+      "label": "Custom bg: garment + environment = 2 image parts"
+    },
+    {
+      "pass": true,
+      "label": "Custom bg: environment reference label present in parts"
+    },
+    {
+      "pass": true,
+      "label": "Custom bg: prompt acknowledges environment reference image"
     },
     {
       "pass": true,
