@@ -35,12 +35,21 @@ service cloud.firestore {
       // User reads their own doc; admin reads any
       allow read: if isOwner(uid) || isAdmin();
 
-      // User creates their own doc on first login (profile provisioning)
+      // User creates their own doc on first login (free-tier provisioning only).
+      // Sensitive fields are PINNED to free-tier defaults — real credits and paid tiers
+      // are granted server-side via the Admin SDK (Stripe/PayPal webhooks), which bypasses
+      // these rules. Prevents a client from self-granting credits or a paid tier at creation.
+      // (.get(field, default) lets a legit create omit the field, but forbids any non-default value.)
       allow create: if isOwner(uid) && onlyFields([
         'uid', 'email', 'displayName', 'photoURL',
         'tier', 'imageCredits', 'videoCredits',
         'subscriptionId', 'subscriptionStatus', 'createdAt'
-      ]);
+      ])
+        && request.resource.data.get('tier', 'free') == 'free'
+        && request.resource.data.get('imageCredits', 0) == 0
+        && request.resource.data.get('videoCredits', 0) == 0
+        && request.resource.data.get('subscriptionStatus', null) == null
+        && request.resource.data.get('subscriptionId', null) == null;
 
       // User may update display name / photo only — all credit/tier mutations
       // go through Firebase Admin SDK (paypal-webhook, forge) on the server.

@@ -1,21 +1,21 @@
 {
-  "timestamp": "2026-05-31T03:24:03.419Z",
+  "timestamp": "2026-06-03T11:58:58.611Z",
   "mode": "STATIC",
-  "elapsed": "2.2",
+  "elapsed": "0.4",
   "summary": {
-    "pass": 580,
-    "fail": 4,
-    "warn": 4,
-    "total": 584
+    "pass": 588,
+    "fail": 0,
+    "warn": 3,
+    "total": 588
   },
   "suites": [
     {
       "name": "Mode Classifier",
-      "pass": 6,
-      "fail": 1,
+      "pass": 7,
+      "fail": 0,
       "warn": 0,
       "total": 7,
-      "elapsed": "8"
+      "elapsed": "1"
     },
     {
       "name": "PHOTO_EDIT Builder",
@@ -23,7 +23,7 @@
       "fail": 0,
       "warn": 0,
       "total": 13,
-      "elapsed": "8"
+      "elapsed": "3"
     },
     {
       "name": "VTO_BACKGROUND_REPLACE",
@@ -31,12 +31,12 @@
       "fail": 0,
       "warn": 0,
       "total": 15,
-      "elapsed": "4"
+      "elapsed": "2"
     },
     {
       "name": "VTO_EDITORIAL Builder",
-      "pass": 1,
-      "fail": 1,
+      "pass": 2,
+      "fail": 0,
       "warn": 0,
       "total": 2,
       "elapsed": "1"
@@ -47,7 +47,7 @@
       "fail": 0,
       "warn": 0,
       "total": 11,
-      "elapsed": "4"
+      "elapsed": "1"
     },
     {
       "name": "TWO_IMAGE Builder",
@@ -55,7 +55,7 @@
       "fail": 0,
       "warn": 0,
       "total": 12,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "AI_GENERATE Builder",
@@ -63,7 +63,7 @@
       "fail": 0,
       "warn": 0,
       "total": 14,
-      "elapsed": "3"
+      "elapsed": "1"
     },
     {
       "name": "Temperature Calculator",
@@ -71,7 +71,7 @@
       "fail": 0,
       "warn": 0,
       "total": 62,
-      "elapsed": "3"
+      "elapsed": "2"
     },
     {
       "name": "Failure Classifier",
@@ -79,7 +79,7 @@
       "fail": 0,
       "warn": 0,
       "total": 22,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "Pre-Flight Validator",
@@ -87,7 +87,7 @@
       "fail": 0,
       "warn": 0,
       "total": 5,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "Mutation Retry Injection",
@@ -95,7 +95,7 @@
       "fail": 0,
       "warn": 0,
       "total": 3,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Anchor Coverage (all types)",
@@ -103,7 +103,7 @@
       "fail": 0,
       "warn": 0,
       "total": 54,
-      "elapsed": "4"
+      "elapsed": "2"
     },
     {
       "name": "Anchor Deduplication",
@@ -135,7 +135,7 @@
       "fail": 0,
       "warn": 0,
       "total": 19,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "DNA Prompt Coverage",
@@ -143,7 +143,7 @@
       "fail": 0,
       "warn": 0,
       "total": 61,
-      "elapsed": "4"
+      "elapsed": "1"
     },
     {
       "name": "Consistency Audit Parser",
@@ -151,7 +151,7 @@
       "fail": 0,
       "warn": 0,
       "total": 6,
-      "elapsed": "4"
+      "elapsed": "2"
     },
     {
       "name": "VTO Pipeline Routing",
@@ -159,7 +159,7 @@
       "fail": 0,
       "warn": 0,
       "total": 6,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "Photography Config",
@@ -167,7 +167,7 @@
       "fail": 0,
       "warn": 0,
       "total": 97,
-      "elapsed": "3"
+      "elapsed": "2"
     },
     {
       "name": "Background Resolution",
@@ -183,7 +183,7 @@
       "fail": 0,
       "warn": 0,
       "total": 4,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "Self-Heal Guardian",
@@ -199,7 +199,7 @@
       "fail": 0,
       "warn": 0,
       "total": 10,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Credit System Logic",
@@ -207,15 +207,15 @@
       "fail": 0,
       "warn": 1,
       "total": 12,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Firestore Rules Review",
-      "pass": 13,
+      "pass": 16,
       "fail": 0,
       "warn": 0,
-      "total": 13,
-      "elapsed": "10"
+      "total": 16,
+      "elapsed": "4"
     },
     {
       "name": "SSE Headers",
@@ -223,7 +223,7 @@
       "fail": 0,
       "warn": 1,
       "total": 8,
-      "elapsed": "2055"
+      "elapsed": "320"
     },
     {
       "name": "Privilege Escalation",
@@ -231,7 +231,7 @@
       "fail": 0,
       "warn": 1,
       "total": 3,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Brand API Key Validation",
@@ -239,7 +239,7 @@
       "fail": 0,
       "warn": 0,
       "total": 0,
-      "elapsed": "4"
+      "elapsed": "1"
     },
     {
       "name": "Dual Auth Mode",
@@ -247,7 +247,7 @@
       "fail": 0,
       "warn": 0,
       "total": 0,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Brand Schema",
@@ -263,7 +263,7 @@
       "fail": 0,
       "warn": 0,
       "total": 0,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Brand Member Isolation",
@@ -271,7 +271,7 @@
       "fail": 0,
       "warn": 0,
       "total": 0,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "SKU Enrollment Schema",
@@ -287,7 +287,7 @@
       "fail": 0,
       "warn": 0,
       "total": 0,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "SKU API Endpoints",
@@ -295,7 +295,7 @@
       "fail": 0,
       "warn": 0,
       "total": 0,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "DNA Injection Integrity",
@@ -303,7 +303,7 @@
       "fail": 0,
       "warn": 0,
       "total": 0,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Director Brief Count",
@@ -311,7 +311,7 @@
       "fail": 0,
       "warn": 0,
       "total": 2,
-      "elapsed": "7"
+      "elapsed": "2"
     },
     {
       "name": "Fashn.ai Category Bug",
@@ -319,7 +319,7 @@
       "fail": 0,
       "warn": 0,
       "total": 3,
-      "elapsed": "4"
+      "elapsed": "1"
     },
     {
       "name": "VTO Temperature Range",
@@ -327,7 +327,7 @@
       "fail": 0,
       "warn": 0,
       "total": 3,
-      "elapsed": "4"
+      "elapsed": "1"
     },
     {
       "name": "Missing Image Error",
@@ -335,7 +335,7 @@
       "fail": 0,
       "warn": 0,
       "total": 2,
-      "elapsed": "3"
+      "elapsed": "1"
     },
     {
       "name": "Gender Edge Cases",
@@ -343,7 +343,7 @@
       "fail": 0,
       "warn": 0,
       "total": 8,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "Heartbeat Exit Paths",
@@ -351,7 +351,7 @@
       "fail": 0,
       "warn": 0,
       "total": 2,
-      "elapsed": "13"
+      "elapsed": "1"
     },
     {
       "name": "Timeout Budget",
@@ -359,7 +359,7 @@
       "fail": 0,
       "warn": 0,
       "total": 5,
-      "elapsed": "15"
+      "elapsed": "3"
     },
     {
       "name": "Prompt Lock Order",
@@ -367,39 +367,18 @@
       "fail": 0,
       "warn": 0,
       "total": 3,
-      "elapsed": "2"
+      "elapsed": "0"
     },
     {
-      "name": "Dead Code Audit",
-      "pass": 1,
-      "fail": 2,
-      "warn": 1,
-      "total": 3,
-      "elapsed": "1"
+      "name": "VTO Routing Split",
+      "pass": 4,
+      "fail": 0,
+      "warn": 0,
+      "total": 4,
+      "elapsed": "0"
     }
   ],
-  "failures": [
-    {
-      "pass": false,
-      "label": "Classifier: AI + VTO present → VTO_BACKGROUND_REPLACE (AI garment showcase)",
-      "detail": ""
-    },
-    {
-      "pass": false,
-      "label": "Architectural: VTO present → always VTO_BACKGROUND_REPLACE (VTO_EDITORIAL unreachable via build())",
-      "detail": ""
-    },
-    {
-      "pass": false,
-      "label": "Classifier: no path reaches VTO_EDITORIAL when fashnVTOImage present (mode=VTO_EDITORIAL)",
-      "detail": ""
-    },
-    {
-      "pass": false,
-      "label": "Classifier: no path reaches VTO_EDITORIAL when fashnVTOImage present (mode=VTO_EDITORIAL)",
-      "detail": ""
-    }
-  ],
+  "failures": [],
   "notices": [
     {
       "pass": null,
@@ -415,11 +394,6 @@
       "pass": null,
       "label": "VERIFY: Firestore rules must NOT include email in client-writable update fields",
       "detail": "Cross-reference runFirestoreRulesReview — if email is writable, attacker can self-escalate to admin"
-    },
-    {
-      "pass": null,
-      "label": "ARCHITECTURAL NOTE: VTO_EDITORIAL is a DEAD CODE PATH — buildVTOEditorialPrompt() and its two-image parts builder are never called by classify()",
-      "detail": "Intentional design: VTO_BACKGROUND_REPLACE replaced VTO_EDITORIAL as the primary path. VTO_EDITORIAL code is kept for reference but could be removed."
     }
   ],
   "allResults": [
@@ -429,12 +403,11 @@
     },
     {
       "pass": true,
-      "label": "Classifier: keep + VTO present → VTO_BACKGROUND_REPLACE"
+      "label": "Classifier: real-person + VTO → VTO_BACKGROUND_REPLACE (frozen-pixel garment lock)"
     },
     {
-      "pass": false,
-      "label": "Classifier: AI + VTO present → VTO_BACKGROUND_REPLACE (AI garment showcase)",
-      "detail": ""
+      "pass": true,
+      "label": "Classifier: AI character + VTO → VTO_EDITORIAL (editorial scene variation)"
     },
     {
       "pass": true,
@@ -565,9 +538,8 @@
       "label": "Client direction content present in prompt"
     },
     {
-      "pass": false,
-      "label": "Architectural: VTO present → always VTO_BACKGROUND_REPLACE (VTO_EDITORIAL unreachable via build())",
-      "detail": ""
+      "pass": true,
+      "label": "Classifier: AI character + VTO → VTO_EDITORIAL (live, context-routed)"
     },
     {
       "pass": true,
@@ -2380,6 +2352,18 @@
     },
     {
       "pass": true,
+      "label": "CRITICAL: create rule pins imageCredits to 0 (no self-granted credits at signup)"
+    },
+    {
+      "pass": true,
+      "label": "CRITICAL: create rule pins videoCredits to 0 (no self-granted video credits at signup)"
+    },
+    {
+      "pass": true,
+      "label": "CRITICAL: create rule pins tier to 'free' (no self-granted paid tier at signup)"
+    },
+    {
+      "pass": true,
       "label": "Vault sub-collection rules present"
     },
     {
@@ -2819,22 +2803,20 @@
     },
     {
       "pass": true,
-      "label": "Classifier: no path reaches VTO_EDITORIAL when fashnVTOImage present (mode=VTO_BACKGROUND_REPLACE)"
+      "label": "Classifier: real-person + VTO → VTO_BACKGROUND_REPLACE (got VTO_BACKGROUND_REPLACE)"
     },
     {
-      "pass": false,
-      "label": "Classifier: no path reaches VTO_EDITORIAL when fashnVTOImage present (mode=VTO_EDITORIAL)",
-      "detail": ""
+      "pass": true,
+      "label": "Classifier: AI character + VTO → VTO_EDITORIAL (got VTO_EDITORIAL)"
     },
     {
-      "pass": false,
-      "label": "Classifier: no path reaches VTO_EDITORIAL when fashnVTOImage present (mode=VTO_EDITORIAL)",
-      "detail": ""
+      "pass": true,
+      "label": "Classifier: AI character (keep flag) + VTO → VTO_EDITORIAL (got VTO_EDITORIAL)"
     },
     {
-      "pass": null,
-      "label": "ARCHITECTURAL NOTE: VTO_EDITORIAL is a DEAD CODE PATH — buildVTOEditorialPrompt() and its two-image parts builder are never called by classify()",
-      "detail": "Intentional design: VTO_BACKGROUND_REPLACE replaced VTO_EDITORIAL as the primary path. VTO_EDITORIAL code is kept for reference but could be removed."
+      "pass": true,
+      "label": "ARCHITECTURAL NOTE: VTO_EDITORIAL and VTO_BACKGROUND_REPLACE are both live, context-routed paths",
+      "detail": "real-person VTO → BACKGROUND_REPLACE (frozen pixels, max fidelity); AI-character VTO → EDITORIAL (scene variation via two-image garment reference). Both reachable per api/forge.js."
     }
   ]
 }

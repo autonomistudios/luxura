@@ -72,7 +72,7 @@ import {
   runHeartbeatExitTests,
   runTimeoutBudgetTests,
   runPromptOrderTest,
-  runDeadCodeAudit,
+  runVtoRoutingAudit,
 } from './tests/bugs.js';
 
 // ─── B2B Test Suites ──────────────────────────────────────────────────────────
@@ -209,7 +209,7 @@ async function main() {
   await runSuite('Heartbeat Exit Paths',        runHeartbeatExitTests);
   await runSuite('Timeout Budget',              runTimeoutBudgetTests);
   await runSuite('Prompt Lock Order',           runPromptOrderTest);
-  await runSuite('Dead Code Audit',             runDeadCodeAudit);
+  await runSuite('VTO Routing Split',           runVtoRoutingAudit);
 
   // ── FINAL REPORT ───────────────────────────────────────────────────────────
   const totalElapsed = ((performance.now() - globalStart) / 1000).toFixed(1);
@@ -281,15 +281,25 @@ async function main() {
   // Exit code
   if (totalFail > 0) {
     console.log(`\n  🔴 AUDIT FAILED — ${totalFail} test(s) require immediate attention.\n`);
-    process.exit(1);
+    gracefulExit(1);
   } else {
     console.log(`\n  🟢 AUDIT PASSED — All ${totalPass} checks passed${totalWarn > 0 ? `, ${totalWarn} notices to review` : ''}.\n`);
-    process.exit(0);
+    gracefulExit(0);
   }
+}
+
+// Graceful exit — set the code and let libuv close open handles (stdout flush,
+// undici keep-alive sockets from live mode) before exiting. An abrupt process.exit()
+// while a handle is mid-close triggers a libuv assertion on Windows
+// (`!(handle->flags & UV_HANDLE_CLOSING)`). The unref'd timer is a hard fallback:
+// if all handles close first, the process exits cleanly on its own beforehand.
+function gracefulExit(code) {
+  process.exitCode = code;
+  setTimeout(() => process.exit(code), 250).unref();
 }
 
 main().catch(err => {
   console.error('\n  💥 AUDIT SYSTEM CRASH:', err.message);
   console.error(err.stack);
-  process.exit(2);
+  gracefulExit(2);
 });

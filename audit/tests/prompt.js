@@ -111,14 +111,15 @@ export function runClassifierTests() {
     'Classifier: keep identity + no garment → PHOTO_EDIT'
   ));
 
-  // Path B: fashnVTOImage present → VTO_BACKGROUND_REPLACE (regardless of other flags)
+  // Path B1: real-person VTO (keep identity) → VTO_BACKGROUND_REPLACE — frozen garment pixels, max fidelity
   results.push(assert(
     classify({ isAiGenerated: false, isKeepGarment: true,  fashnVTOImage: { data: 'x' }, clothingMaskedModel: null }) === MODES.VTO_BACKGROUND_REPLACE,
-    'Classifier: keep + VTO present → VTO_BACKGROUND_REPLACE'
+    'Classifier: real-person + VTO → VTO_BACKGROUND_REPLACE (frozen-pixel garment lock)'
   ));
+  // Path B2: AI-generated character + VTO → VTO_EDITORIAL — Gemini composes new poses/scenes around the locked garment
   results.push(assert(
-    classify({ isAiGenerated: true,  isKeepGarment: false, fashnVTOImage: { data: 'x' }, clothingMaskedModel: null }) === MODES.VTO_BACKGROUND_REPLACE,
-    'Classifier: AI + VTO present → VTO_BACKGROUND_REPLACE (AI garment showcase)'
+    classify({ isAiGenerated: true,  isKeepGarment: false, fashnVTOImage: { data: 'x' }, clothingMaskedModel: null }) === MODES.VTO_EDITORIAL,
+    'Classifier: AI character + VTO → VTO_EDITORIAL (editorial scene variation)'
   ));
 
   // Path C: keep garment + masked model → INPAINTING
@@ -241,9 +242,9 @@ export function runVTOEditorialTests() {
   console.log('  TEST SUITE 4 — VTO_EDITORIAL BUILDER');
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 
-  // VTO_EDITORIAL is currently NOT reachable via classify() because VTO_BACKGROUND_REPLACE
-  // always fires first when fashnVTOImage is present. This tests the builder directly.
-  // NOTE: This is an architectural audit finding — VTO_EDITORIAL is dead code path.
+  // VTO_EDITORIAL is the live path for an AI-generated character (isAiGenerated:true) paired
+  // with a VTO image. classify() routes real-person VTO → BACKGROUND_REPLACE and
+  // AI-character VTO → EDITORIAL. This ctx (isAiGenerated:true) exercises the EDITORIAL path.
   const ctx = baseCtx({
     isAiGenerated: true,
     isKeepGarment: false,
@@ -257,8 +258,8 @@ export function runVTOEditorialTests() {
 
   const spec = build(ctx);
 
-  // Will route to VTO_BACKGROUND_REPLACE (not VTO_EDITORIAL) — classify() priority
-  results.push(assert(spec.mode === MODES.VTO_BACKGROUND_REPLACE, 'Architectural: VTO present → always VTO_BACKGROUND_REPLACE (VTO_EDITORIAL unreachable via build())'));
+  // AI character + VTO → VTO_EDITORIAL (live path: Gemini composes new poses/scenes around the locked garment)
+  results.push(assert(spec.mode === MODES.VTO_EDITORIAL, 'Classifier: AI character + VTO → VTO_EDITORIAL (live, context-routed)'));
 
   // Test VTO_EDITORIAL parts assembly directly (simulating old path)
   // The VTO_EDITORIAL parts builder should produce Image1 (garment) + Image2 (VTO) + prompt

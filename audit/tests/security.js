@@ -350,6 +350,23 @@ export async function runFirestoreRulesReview() {
     results.push(assert(!allowedFields.includes('subscriptionId'), 'CRITICAL: subscriptionId NOT in client-writable update fields'));
   }
 
+  // CRITICAL: create rule must pin credit/tier to free-tier defaults (no self-granting at signup).
+  // The update rule already locks these; the create rule is the other escalation vector.
+  const createBlockMatch = rules.match(/allow create:[\s\S]*?;/);
+  const createBlock = createBlockMatch ? createBlockMatch[0] : '';
+  results.push(assert(
+    /imageCredits['"]?,?\s*0\)\s*==\s*0/.test(createBlock) || /imageCredits\s*==\s*0/.test(createBlock),
+    'CRITICAL: create rule pins imageCredits to 0 (no self-granted credits at signup)'
+  ));
+  results.push(assert(
+    /videoCredits['"]?,?\s*0\)\s*==\s*0/.test(createBlock) || /videoCredits\s*==\s*0/.test(createBlock),
+    'CRITICAL: create rule pins videoCredits to 0 (no self-granted video credits at signup)'
+  ));
+  results.push(assert(
+    /tier['"]?,?\s*['"]free['"]\)\s*==\s*['"]free['"]/.test(createBlock) || /tier\s*==\s*['"]free['"]/.test(createBlock),
+    "CRITICAL: create rule pins tier to 'free' (no self-granted paid tier at signup)"
+  ));
+
   // Vault rules
   results.push(assert(rules.includes('vault/{itemId}'), 'Vault sub-collection rules present'));
   results.push(assert(rules.includes('isOwner(uid)'), 'Vault: ownership check on all vault operations'));
