@@ -16,6 +16,7 @@ const SKUEnrollmentFlow    = lazy(() => import('./pages/portal/SKUEnrollmentFlow
 const SKUBatchEnroll       = lazy(() => import('./pages/portal/SKUBatchEnroll'));
 const SKUDetail            = lazy(() => import('./pages/portal/SKUDetail'));
 const CampaignHistory      = lazy(() => import('./pages/portal/CampaignHistory'));
+const AssetVault           = lazy(() => import('./pages/portal/AssetVault'));
 const CampaignBuilder      = lazy(() => import('./pages/portal/CampaignBuilder'));
 const SetInjectionManager  = lazy(() => import('./pages/portal/SetInjectionManager'));
 const UsageDashboard       = lazy(() => import('./pages/portal/UsageDashboard'));
@@ -122,6 +123,7 @@ function App() {
             <Route path="skus/:skuId"     element={<SKUDetail />} />
             <Route path="campaigns"       element={<CampaignHistory />} />
             <Route path="campaigns/new"   element={<CampaignBuilder />} />
+            <Route path="vault"           element={<AssetVault />} />
             <Route path="sets"            element={<SetInjectionManager />} />
             <Route path="analytics"       element={<UsageDashboard />} />
             <Route path="settings"        element={<BrandSettings />} />

@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Sparkles, FolderLock, Layers, Users, ShieldCheck,
   BarChart2, Settings, Code2, LogOut, ChevronRight,
-  AlertTriangle,
+  AlertTriangle, LayoutGrid,
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -13,6 +13,7 @@ const NAV_ITEMS = [
   { to: '/portal/skus',         label: 'SKU Vault',           icon: FolderLock,  end: false },
   { to: '/portal/sets',         label: 'Virtual Backlot',     icon: Layers,      end: false },
   { to: '/portal/campaigns',    label: 'Campaigns',           icon: Sparkles,    end: false },
+  { to: '/portal/vault',        label: 'Asset Vault',         icon: LayoutGrid,  end: false },
   { to: '/portal/analytics',    label: 'Analytics',           icon: BarChart2,   end: false },
   { to: '/portal/settings',     label: 'Brand Settings',      icon: Settings,    end: false },
   { to: '/portal/team',         label: 'Team',                icon: Users,       end: false },
