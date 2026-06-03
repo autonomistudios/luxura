@@ -62,6 +62,7 @@ import {
   runFirestoreRulesReview,
   runSSEHeaderTests,
   runPrivilegeEscalationTests,
+  runRolePermissionTests,
 } from './tests/security.js';
 
 import {
@@ -176,6 +177,7 @@ async function main() {
   await runSuite('Firestore Rules Review',      runFirestoreRulesReview);
   await runSuite('SSE Headers',                 runSSEHeaderTests);
   await runSuite('Privilege Escalation',        runPrivilegeEscalationTests);
+  await runSuite('Role-Scoped Permissions',     runRolePermissionTests);
 
   if (LIVE_MODE) {
     console.log('\n  🌐 LIVE MODE: Sending requests to deployed API...');

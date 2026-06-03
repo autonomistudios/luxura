@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-06-03T15:04:54.579Z",
+  "timestamp": "2026-06-03T15:31:52.135Z",
   "mode": "STATIC",
-  "elapsed": "1.6",
+  "elapsed": "1.5",
   "summary": {
-    "pass": 618,
+    "pass": 634,
     "fail": 0,
     "warn": 3,
-    "total": 618
+    "total": 634
   },
   "suites": [
     {
@@ -15,7 +15,7 @@
       "fail": 0,
       "warn": 0,
       "total": 7,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "PHOTO_EDIT Builder",
@@ -23,7 +23,7 @@
       "fail": 0,
       "warn": 0,
       "total": 13,
-      "elapsed": "3"
+      "elapsed": "2"
     },
     {
       "name": "VTO_BACKGROUND_REPLACE",
@@ -31,7 +31,7 @@
       "fail": 0,
       "warn": 0,
       "total": 15,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "VTO_EDITORIAL Builder",
@@ -79,7 +79,7 @@
       "fail": 0,
       "warn": 0,
       "total": 62,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "Failure Classifier",
@@ -111,7 +111,7 @@
       "fail": 0,
       "warn": 0,
       "total": 54,
-      "elapsed": "4"
+      "elapsed": "2"
     },
     {
       "name": "Anchor Deduplication",
@@ -199,7 +199,7 @@
       "fail": 0,
       "warn": 0,
       "total": 6,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Rate Limiter Logic",
@@ -207,7 +207,7 @@
       "fail": 0,
       "warn": 0,
       "total": 10,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Credit System Logic",
@@ -215,7 +215,7 @@
       "fail": 0,
       "warn": 1,
       "total": 12,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Firestore Rules Review",
@@ -223,7 +223,7 @@
       "fail": 0,
       "warn": 0,
       "total": 16,
-      "elapsed": "5"
+      "elapsed": "3"
     },
     {
       "name": "SSE Headers",
@@ -231,7 +231,7 @@
       "fail": 0,
       "warn": 1,
       "total": 8,
-      "elapsed": "1537"
+      "elapsed": "1480"
     },
     {
       "name": "Privilege Escalation",
@@ -242,12 +242,20 @@
       "elapsed": "0"
     },
     {
+      "name": "Role-Scoped Permissions",
+      "pass": 16,
+      "fail": 0,
+      "warn": 0,
+      "total": 16,
+      "elapsed": "4"
+    },
+    {
       "name": "Brand API Key Validation",
       "pass": 0,
       "fail": 0,
       "warn": 0,
       "total": 0,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "Dual Auth Mode",
@@ -287,7 +295,7 @@
       "fail": 0,
       "warn": 0,
       "total": 0,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "SKU Recall Bypass",
@@ -295,7 +303,7 @@
       "fail": 0,
       "warn": 0,
       "total": 0,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "SKU API Endpoints",
@@ -319,7 +327,7 @@
       "fail": 0,
       "warn": 0,
       "total": 0,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "Director Brief Count",
@@ -327,7 +335,7 @@
       "fail": 0,
       "warn": 0,
       "total": 2,
-      "elapsed": "3"
+      "elapsed": "1"
     },
     {
       "name": "Fashn.ai Category Bug",
@@ -335,7 +343,7 @@
       "fail": 0,
       "warn": 0,
       "total": 3,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "VTO Temperature Range",
@@ -343,7 +351,7 @@
       "fail": 0,
       "warn": 0,
       "total": 3,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Missing Image Error",
@@ -351,7 +359,7 @@
       "fail": 0,
       "warn": 0,
       "total": 2,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "Gender Edge Cases",
@@ -359,7 +367,7 @@
       "fail": 0,
       "warn": 0,
       "total": 8,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Heartbeat Exit Paths",
@@ -367,7 +375,7 @@
       "fail": 0,
       "warn": 0,
       "total": 2,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "Timeout Budget",
@@ -375,7 +383,7 @@
       "fail": 0,
       "warn": 0,
       "total": 5,
-      "elapsed": "4"
+      "elapsed": "2"
     },
     {
       "name": "Prompt Lock Order",
@@ -383,7 +391,7 @@
       "fail": 0,
       "warn": 0,
       "total": 3,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "VTO Routing Split",
@@ -399,7 +407,7 @@
       "fail": 0,
       "warn": 0,
       "total": 8,
-      "elapsed": "3"
+      "elapsed": "1"
     }
   ],
   "failures": [],
@@ -2487,6 +2495,70 @@
     {
       "pass": true,
       "label": "Credit cost: same for keep and AI strategies (6 credits each)"
+    },
+    {
+      "pass": true,
+      "label": "Viewer (Social): can export, cannot forge"
+    },
+    {
+      "pass": true,
+      "label": "Viewer: cannot manage SKUs or team"
+    },
+    {
+      "pass": true,
+      "label": "Editor (Photographer): forge + manage SKUs, but not deleteSku"
+    },
+    {
+      "pass": true,
+      "label": "Editor: cannot manage team or billing"
+    },
+    {
+      "pass": true,
+      "label": "Admin (Creative Director): team + deleteSku, but not billing/API keys"
+    },
+    {
+      "pass": true,
+      "label": "Owner: full access incl. billing + API keys"
+    },
+    {
+      "pass": true,
+      "label": "API client: forge + SKUs (editor-equivalent), not team"
+    },
+    {
+      "pass": true,
+      "label": "Unknown capability denied by default"
+    },
+    {
+      "pass": true,
+      "label": "requireCapability throws 403 when role lacks capability"
+    },
+    {
+      "pass": true,
+      "label": "requireCapability passes when role holds capability"
+    },
+    {
+      "pass": true,
+      "label": "Frontend permissions.ts present"
+    },
+    {
+      "pass": true,
+      "label": "Frontend CAPABILITY_MIN_ROLE matches backend (no drift)"
+    },
+    {
+      "pass": true,
+      "label": "Frontend ROLE_HIERARCHY matches backend"
+    },
+    {
+      "pass": true,
+      "label": "forge.js: brand-scoped path resolves membership"
+    },
+    {
+      "pass": true,
+      "label": "forge.js: brand-scoped path requires forge capability"
+    },
+    {
+      "pass": true,
+      "label": "forge.js: rejects brandId mismatch (tenant isolation)"
     },
     {
       "pass": true,

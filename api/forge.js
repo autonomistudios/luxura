@@ -130,6 +130,29 @@ export default async function handler(req, res) {
       return res.status(401).json({ error: 'UNAUTHORIZED: Invalid or expired token.' });
     }
 
+    // ── Brand-scoped portal forge: enforce membership + forge capability ───
+    // When a brandId is supplied (portal generation against enrolled SKUs), the
+    // caller MUST be a member of that exact brand with forge rights. This closes
+    // two gaps: (1) viewers self-forging, and (2) tenant isolation — without it
+    // any authenticated user could pass another brand's brandId/skuId and both
+    // read that brand's SKU DNA and write campaigns into it.
+    if (req.body?.brandId) {
+      try {
+        const { resolveBrandContext } = await import('../lib/forge/services/brand-auth.js');
+        const { requireCapability }   = await import('../lib/forge/permissions.js');
+        const bctx = await resolveBrandContext(req);
+        if (bctx.brandId !== req.body.brandId) {
+          return res.status(403).json({ error: 'FORBIDDEN: You are not a member of the requested brand workspace.' });
+        }
+        requireCapability(bctx, 'forge');
+        // Membership verified — downstream reads req.body.brandId safely. We do NOT
+        // repurpose forgeBrandId here, to preserve the existing generation-record
+        // storage path (users/{uid}/generations) and avoid campaign-schema drift.
+      } catch (err) {
+        return res.status(err.statusCode || 403).json({ error: err.message || 'FORBIDDEN' });
+      }
+    }
+
     if (!checkRateLimit(forgeUid)) {
       return res.status(429).json({ error: 'RATE_LIMITED: Too many forge runs. Wait 60 seconds and try again.' });
     }

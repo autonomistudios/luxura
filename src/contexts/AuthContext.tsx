@@ -3,6 +3,7 @@ import type { User } from 'firebase/auth';
 import { onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
 import { auth, googleProvider } from '../lib/firebase';
 import { useSovereignStore } from '../store/useSovereignStore';
+import { can as hasCapability, type Capability } from '../lib/permissions';
 
 const ADMIN_EMAILS = new Set(['louis@beapillar.org', 'autonomistudiosllc@gmail.com']);
 
@@ -63,6 +64,8 @@ interface BrandAuthContextType {
   logout:           () => Promise<void>;
   refreshBrand:     () => Promise<void>;
   canForge:         () => boolean;
+  can:              (capability: Capability) => boolean;
+  role:             BrandRole | null;
   quotaRemaining:   () => number;
   quotaPercent:     () => number;
 }
@@ -138,9 +141,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     ? ADMIN_EMAILS.has(user.email.toLowerCase())
     : false;
 
+  // Capability gate (UI convenience — server re-enforces). Super-admins bypass.
+  function can(capability: Capability): boolean {
+    if (isAdmin) return true;
+    return hasCapability(brand?.role ?? null, capability);
+  }
+
   function canForge(): boolean {
     if (isAdmin) return true;
     if (!brand) return false;
+    if (!can('forge')) return false;  // viewers (Social) cannot forge
     const remaining = (brand.quota.imagesPerMonth - brand.usage.currentPeriodImages);
     return remaining > 0;
   }
@@ -167,6 +177,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       logout,
       refreshBrand,
       canForge,
+      can,
+      role: brand?.role ?? null,
       quotaRemaining,
       quotaPercent,
     }}>

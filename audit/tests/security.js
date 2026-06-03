@@ -416,6 +416,73 @@ export async function runSSEHeaderTests() {
 // ─────────────────────────────────────────────────────────────────────────────
 // ADMIN PRIVILEGE ESCALATION TESTS
 // ─────────────────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// ROLE-SCOPED PERMISSIONS — capability matrix correctness, frontend/backend sync,
+// and forge-path enforcement (membership + capability).
+// ─────────────────────────────────────────────────────────────────────────────
+export async function runRolePermissionTests() {
+  const results = [];
+  console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  console.log('  ROLE-SCOPED PERMISSIONS');
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+
+  const { can, CAPABILITY_MIN_ROLE, ROLE_HIERARCHY, requireCapability } =
+    await import('../../lib/forge/permissions.js');
+
+  // Matrix correctness — the confirmed product matrix.
+  results.push(assert(can('viewer', 'exportAssets') && !can('viewer', 'forge'),
+    'Viewer (Social): can export, cannot forge'));
+  results.push(assert(!can('viewer', 'manageSkus') && !can('viewer', 'manageTeam'),
+    'Viewer: cannot manage SKUs or team'));
+  results.push(assert(can('editor', 'forge') && can('editor', 'manageSkus') && !can('editor', 'deleteSku'),
+    'Editor (Photographer): forge + manage SKUs, but not deleteSku'));
+  results.push(assert(!can('editor', 'manageTeam') && !can('editor', 'manageBilling'),
+    'Editor: cannot manage team or billing'));
+  results.push(assert(can('admin', 'manageTeam') && can('admin', 'deleteSku') && !can('admin', 'manageBilling') && !can('admin', 'manageApiKeys'),
+    'Admin (Creative Director): team + deleteSku, but not billing/API keys'));
+  results.push(assert(can('owner', 'manageBilling') && can('owner', 'manageApiKeys') && can('owner', 'forge'),
+    'Owner: full access incl. billing + API keys'));
+  results.push(assert(can('api', 'forge') && can('api', 'manageSkus') && !can('api', 'manageTeam'),
+    'API client: forge + SKUs (editor-equivalent), not team'));
+  results.push(assert(!can('viewer', 'unknownCapXYZ'),
+    'Unknown capability denied by default'));
+
+  // requireCapability throws 403 for insufficient role.
+  let threw = false;
+  try { requireCapability({ role: 'viewer' }, 'forge'); } catch (e) { threw = e.statusCode === 403; }
+  results.push(assert(threw, 'requireCapability throws 403 when role lacks capability'));
+  let passed = true;
+  try { requireCapability({ role: 'editor' }, 'forge'); } catch { passed = false; }
+  results.push(assert(passed, 'requireCapability passes when role holds capability'));
+
+  // Frontend mirror must match backend exactly (UI gating cannot diverge from enforcement).
+  const fs = await import('node:fs/promises');
+  let feSrc;
+  try { feSrc = await fs.readFile(new URL('../../src/lib/permissions.ts', import.meta.url), 'utf8'); }
+  catch { feSrc = ''; }
+  results.push(assert(!!feSrc, 'Frontend permissions.ts present'));
+  // Every backend capability→min-role pair must appear verbatim in the frontend map.
+  const allPairsInFrontend = Object.entries(CAPABILITY_MIN_ROLE).every(([cap, min]) =>
+    new RegExp(`${cap}:\\s*'${min}'`).test(feSrc));
+  results.push(assert(allPairsInFrontend, 'Frontend CAPABILITY_MIN_ROLE matches backend (no drift)'));
+  const allHierarchyInFrontend = Object.entries(ROLE_HIERARCHY).every(([role, lvl]) =>
+    new RegExp(`${role}:\\s*${lvl}`).test(feSrc));
+  results.push(assert(allHierarchyInFrontend, 'Frontend ROLE_HIERARCHY matches backend'));
+
+  // forge.js must enforce membership + forge capability on the brand-scoped path.
+  let forgeSrc;
+  try { forgeSrc = await fs.readFile(new URL('../../api/forge.js', import.meta.url), 'utf8'); }
+  catch { forgeSrc = ''; }
+  results.push(assert(/if \(req\.body\?\.brandId\)/.test(forgeSrc) && forgeSrc.includes('resolveBrandContext'),
+    'forge.js: brand-scoped path resolves membership'));
+  results.push(assert(forgeSrc.includes("requireCapability(bctx, 'forge')"),
+    'forge.js: brand-scoped path requires forge capability'));
+  results.push(assert(forgeSrc.includes('bctx.brandId !== req.body.brandId'),
+    'forge.js: rejects brandId mismatch (tenant isolation)'));
+
+  return results;
+}
+
 export function runPrivilegeEscalationTests() {
   const results = [];
   console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');

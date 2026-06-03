@@ -30,6 +30,19 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: 'UNAUTHORIZED: Invalid or expired token.' });
   }
 
+  // Defense-in-depth: if the caller is a brand member, they must hold forge rights
+  // to refine (viewers are export-only). Non-members (consumer fallback) pass — the
+  // credit deduction below still gates them.
+  try {
+    const { resolveBrandContext } = await import('../lib/forge/services/brand-auth.js');
+    const { requireCapability }   = await import('../lib/forge/permissions.js');
+    let bctx = null;
+    try { bctx = await resolveBrandContext(req); } catch { bctx = null; }
+    if (bctx) requireCapability(bctx, 'forge');
+  } catch (err) {
+    return res.status(err.statusCode || 403).json({ error: err.message || 'FORBIDDEN' });
+  }
+
   if (!checkRateLimit(uid)) {
     return res.status(429).json({ error: 'RATE_LIMITED: Too many requests. Wait 60 seconds.' });
   }

@@ -180,11 +180,13 @@ function ForgeSlot({ image, index, isGenerating, isComplete, onRefine }: {
               </span>
             </div>
             <div className="flex items-center gap-1.5">
-              <button
-                onClick={() => onRefine?.(index)}
-                className="flex-1 flex items-center justify-center gap-1 py-1.5 border border-white/15 text-white/80 text-[8px] font-mono tracking-[0.2em] uppercase font-semibold rounded hover:border-[#B8952A]/60 hover:text-white transition-all bg-black/40">
-                <Wand2 size={9} /> Refine
-              </button>
+              {onRefine && (
+                <button
+                  onClick={() => onRefine(index)}
+                  className="flex-1 flex items-center justify-center gap-1 py-1.5 border border-white/15 text-white/80 text-[8px] font-mono tracking-[0.2em] uppercase font-semibold rounded hover:border-[#B8952A]/60 hover:text-white transition-all bg-black/40">
+                  <Wand2 size={9} /> Refine
+                </button>
+              )}
               <button className="flex-1 py-1.5 bg-[#B8952A] text-black text-[8px] font-mono tracking-[0.2em] uppercase font-semibold rounded hover:bg-[#C9A84C] transition-all">
                 Export
               </button>
@@ -407,7 +409,8 @@ function RefineModal({ slotIndex, image, getToken, onApply, onClose }: {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function CampaignBuilder() {
-  const { brand, canForge, user } = useAuth();
+  const { brand, canForge, can, user } = useAuth();
+  const canForgeRole = can('forge');
   const { skus, currentSkuId, setCurrentSkuId, currentGrid, setGridSlot, setCurrentGrid, campaigns } = useSovereignStore();
   const navigate = useNavigate();
 
@@ -967,7 +970,11 @@ export default function CampaignBuilder() {
               : <><Play size={14} fill="black" /> Engage Sovereign Forge</>
             }
           </button>
-          {!activeSku && (
+          {!canForgeRole ? (
+            <p className="text-[7px] font-mono text-amber-500/60 text-center mt-2 tracking-[0.2em] uppercase">
+              Your role (Social) is export-only — forging is disabled
+            </p>
+          ) : !activeSku && (
             <p className="text-[7px] font-mono text-white/20 text-center mt-2 tracking-[0.2em] uppercase">
               Select a SKU to continue
             </p>
@@ -1010,7 +1017,7 @@ export default function CampaignBuilder() {
                   image={slots[i] || ''}
                   isGenerating={isForging}
                   isComplete={!!slots[i]}
-                  onRefine={setRefineSlot}
+                  onRefine={canForgeRole ? setRefineSlot : undefined}
                 />
               ))}
             </div>
