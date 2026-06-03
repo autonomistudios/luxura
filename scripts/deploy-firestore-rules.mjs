@@ -112,7 +112,13 @@ async function main() {
   console.log(`[rules] auth via: ${source}`);
 
   const api = `https://firebaserules.googleapis.com/v1/projects/${projectId}`;
-  const authHeaders = { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' };
+  // X-Goog-User-Project sets the quota/billing project — required when the token
+  // comes from a user login (gcloud/ADC), which otherwise has no project attached.
+  const authHeaders = {
+    Authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json',
+    'X-Goog-User-Project': projectId,
+  };
 
   console.log(`[rules] project: ${projectId}`);
   console.log(`[rules] source : firestore.rules (${rulesSource.length} bytes)`);
