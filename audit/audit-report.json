@@ -1,7 +1,7 @@
 {
-  "timestamp": "2026-06-03T12:45:42.737Z",
+  "timestamp": "2026-06-03T14:54:59.819Z",
   "mode": "STATIC",
-  "elapsed": "1.2",
+  "elapsed": "2.1",
   "summary": {
     "pass": 615,
     "fail": 0,
@@ -23,7 +23,7 @@
       "fail": 0,
       "warn": 0,
       "total": 13,
-      "elapsed": "2"
+      "elapsed": "9"
     },
     {
       "name": "VTO_BACKGROUND_REPLACE",
@@ -31,7 +31,7 @@
       "fail": 0,
       "warn": 0,
       "total": 15,
-      "elapsed": "1"
+      "elapsed": "2"
     },
     {
       "name": "VTO_EDITORIAL Builder",
@@ -63,7 +63,7 @@
       "fail": 0,
       "warn": 0,
       "total": 14,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "Outfit Combination Parts",
@@ -95,7 +95,7 @@
       "fail": 0,
       "warn": 0,
       "total": 5,
-      "elapsed": "1"
+      "elapsed": "2"
     },
     {
       "name": "Mutation Retry Injection",
@@ -103,7 +103,7 @@
       "fail": 0,
       "warn": 0,
       "total": 3,
-      "elapsed": "0"
+      "elapsed": "1"
     },
     {
       "name": "Anchor Coverage (all types)",
@@ -143,7 +143,7 @@
       "fail": 0,
       "warn": 0,
       "total": 19,
-      "elapsed": "1"
+      "elapsed": "12"
     },
     {
       "name": "DNA Prompt Coverage",
@@ -151,7 +151,7 @@
       "fail": 0,
       "warn": 0,
       "total": 61,
-      "elapsed": "1"
+      "elapsed": "2"
     },
     {
       "name": "Consistency Audit Parser",
@@ -159,7 +159,7 @@
       "fail": 0,
       "warn": 0,
       "total": 6,
-      "elapsed": "1"
+      "elapsed": "3"
     },
     {
       "name": "VTO Pipeline Routing",
@@ -183,7 +183,7 @@
       "fail": 0,
       "warn": 0,
       "total": 10,
-      "elapsed": "0"
+      "elapsed": "1"
     },
     {
       "name": "Pass 2 Retry Logic",
@@ -191,7 +191,7 @@
       "fail": 0,
       "warn": 0,
       "total": 4,
-      "elapsed": "1"
+      "elapsed": "3"
     },
     {
       "name": "Self-Heal Guardian",
@@ -207,7 +207,7 @@
       "fail": 0,
       "warn": 0,
       "total": 10,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "Credit System Logic",
@@ -215,7 +215,7 @@
       "fail": 0,
       "warn": 1,
       "total": 12,
-      "elapsed": "1"
+      "elapsed": "2"
     },
     {
       "name": "Firestore Rules Review",
@@ -223,7 +223,7 @@
       "fail": 0,
       "warn": 0,
       "total": 16,
-      "elapsed": "5"
+      "elapsed": "12"
     },
     {
       "name": "SSE Headers",
@@ -231,7 +231,7 @@
       "fail": 0,
       "warn": 1,
       "total": 8,
-      "elapsed": "1109"
+      "elapsed": "1977"
     },
     {
       "name": "Privilege Escalation",
@@ -247,7 +247,7 @@
       "fail": 0,
       "warn": 0,
       "total": 0,
-      "elapsed": "1"
+      "elapsed": "2"
     },
     {
       "name": "Dual Auth Mode",
@@ -287,7 +287,7 @@
       "fail": 0,
       "warn": 0,
       "total": 0,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "SKU Recall Bypass",
@@ -295,7 +295,7 @@
       "fail": 0,
       "warn": 0,
       "total": 0,
-      "elapsed": "0"
+      "elapsed": "1"
     },
     {
       "name": "SKU API Endpoints",
@@ -335,7 +335,7 @@
       "fail": 0,
       "warn": 0,
       "total": 3,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "VTO Temperature Range",
@@ -351,7 +351,7 @@
       "fail": 0,
       "warn": 0,
       "total": 2,
-      "elapsed": "1"
+      "elapsed": "2"
     },
     {
       "name": "Gender Edge Cases",
@@ -367,7 +367,7 @@
       "fail": 0,
       "warn": 0,
       "total": 2,
-      "elapsed": "4"
+      "elapsed": "2"
     },
     {
       "name": "Timeout Budget",
@@ -375,7 +375,7 @@
       "fail": 0,
       "warn": 0,
       "total": 5,
-      "elapsed": "6"
+      "elapsed": "4"
     },
     {
       "name": "Prompt Lock Order",
@@ -399,7 +399,7 @@
       "fail": 0,
       "warn": 0,
       "total": 8,
-      "elapsed": "2"
+      "elapsed": "6"
     }
   ],
   "failures": [],

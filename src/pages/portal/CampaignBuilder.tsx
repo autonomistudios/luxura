@@ -10,7 +10,7 @@ import { useSovereignStore, type SkuDocument } from '../../store/useSovereignSto
 import { PHOTOGRAPHY_PRESETS } from '../../lib/photographyPresets';
 import { LOCATION_PRESETS } from '../../lib/locationPresets';
 import { ANCHOR_TYPES } from '../../lib/skuConstants';
-import { MapPin, ChevronRight, Plus, X, Shirt } from 'lucide-react';
+import { MapPin, ChevronRight, Plus, X, Shirt, Wand2 } from 'lucide-react';
 
 const ANCHOR_LABEL: Record<string, string> = Object.fromEntries(
   ANCHOR_TYPES.map(a => [a.id, a.label]),
@@ -78,8 +78,9 @@ function AgentStrip({ activeAgent, completedAgents }: { activeAgent: string | nu
 }
 
 // ─── Forge Slot ───────────────────────────────────────────────────────────────
-function ForgeSlot({ image, index, isGenerating, isComplete }: {
+function ForgeSlot({ image, index, isGenerating, isComplete, onRefine }: {
   image: string; index: number; isGenerating: boolean; isComplete: boolean;
+  onRefine?: (index: number) => void;
 }) {
   const isEmpty = !image && !isGenerating;
 
@@ -149,9 +150,16 @@ function ForgeSlot({ image, index, isGenerating, isComplete }: {
                 AUDITED
               </span>
             </div>
-            <button className="w-full py-1.5 bg-[#B8952A] text-black text-[8px] font-mono tracking-[0.2em] uppercase font-semibold rounded hover:bg-[#C9A84C] transition-all">
-              Export High-Res
-            </button>
+            <div className="flex items-center gap-1.5">
+              <button
+                onClick={() => onRefine?.(index)}
+                className="flex-1 flex items-center justify-center gap-1 py-1.5 border border-white/15 text-white/80 text-[8px] font-mono tracking-[0.2em] uppercase font-semibold rounded hover:border-[#B8952A]/60 hover:text-white transition-all bg-black/40">
+                <Wand2 size={9} /> Refine
+              </button>
+              <button className="flex-1 py-1.5 bg-[#B8952A] text-black text-[8px] font-mono tracking-[0.2em] uppercase font-semibold rounded hover:bg-[#C9A84C] transition-all">
+                Export
+              </button>
+            </div>
           </div>
         </>
       )}
@@ -187,6 +195,184 @@ function ConfigSelect({ label, value, locked, options, onChange }: {
         </select>
       )}
     </div>
+  );
+}
+
+// ─── Refine Modal — per-slot iterative refinement via /api/forge-iterate ───────
+const ITERATION_TYPES = [
+  { id: 'feature_enhance',   label: 'Enhance',     desc: 'Sharpen detail & finish, same shot' },
+  { id: 'pose_variant',      label: 'Pose',        desc: 'New pose, same look & scene' },
+  { id: 'composition_shift', label: 'Composition', desc: 'Recompose framing & crop' },
+] as const;
+
+function RefineModal({ slotIndex, image, getToken, onApply, onClose }: {
+  slotIndex: number;
+  image: string;
+  getToken: () => Promise<string>;
+  onApply: (slotIndex: number, image: string) => void;
+  onClose: () => void;
+}) {
+  const [adjustment,    setAdjustment]    = useState('');
+  const [iterationType, setIterationType] = useState<typeof ITERATION_TYPES[number]['id']>('feature_enhance');
+  const [isRefining,    setIsRefining]    = useState(false);
+  const [variants,      setVariants]      = useState<string[]>(['', '', '']);
+  const [status,        setStatus]        = useState('');
+
+  const anyVariant = variants.some(v => !!v);
+
+  async function handleRefine() {
+    if (isRefining) return;
+    setIsRefining(true);
+    setVariants(['', '', '']);
+    setStatus('Refining — generating 3 variants…');
+    try {
+      const idToken = await getToken();
+      const res = await fetch('/api/forge-iterate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
+        body: JSON.stringify({ masterImage: image, adjustmentPrompt: adjustment || 'Refine to peak editorial quality while preserving identity, garment, and scene.', iterationType }),
+      });
+      if (!res.ok || !res.body) {
+        const e = await res.json().catch(() => null);
+        setStatus(e?.error || 'Refinement failed. Please try again.');
+        setIsRefining(false);
+        return;
+      }
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          try {
+            const ev = JSON.parse(line.slice(6));
+            if (ev.type === 'image' && typeof ev.slot === 'number') {
+              setVariants(prev => { const next = [...prev]; next[ev.slot] = ev.image; return next; });
+              setStatus(`Variant ${ev.slot + 1} / 3 ready`);
+            } else if (ev.type === 'done') {
+              setStatus('3 variants ready — choose one to replace the slot');
+              setIsRefining(false);
+            } else if (ev.type === 'error') {
+              setStatus(`Error: ${ev.error}`);
+              setIsRefining(false);
+            }
+          } catch { /* malformed SSE */ }
+        }
+      }
+    } catch (err: any) {
+      setStatus(`Error: ${err.message}`);
+      setIsRefining(false);
+    }
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-6"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.97 }}
+        onClick={e => e.stopPropagation()}
+        className="w-full max-w-3xl rounded-lg flex flex-col gap-5 p-6 max-h-[90vh] overflow-y-auto"
+        style={{ background: '#0C0C11', border: '1px solid rgba(255,255,255,0.08)' }}
+      >
+        <div className="flex items-start justify-between">
+          <div>
+            <h3 className="font-serif italic text-2xl text-white">Refine Slot {slotIndex + 1}</h3>
+            <p className="text-[8px] font-mono tracking-[0.3em] uppercase text-white/30 mt-1">
+              Iterative refinement · 2 credits per run
+            </p>
+          </div>
+          <button onClick={onClose} className="text-white/30 hover:text-white transition-colors p-1"><X size={16} /></button>
+        </div>
+
+        <div className="grid grid-cols-[160px_1fr] gap-5">
+          {/* Master */}
+          <div className="flex flex-col gap-1.5">
+            <span className="text-[7px] font-mono tracking-[0.3em] uppercase text-white/25">Master</span>
+            <div className="aspect-[4/5] rounded overflow-hidden border border-white/10">
+              <img src={image} className="w-full h-full object-cover" />
+            </div>
+          </div>
+
+          {/* Controls */}
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-1.5">
+              <span className="text-[7px] font-mono tracking-[0.35em] uppercase text-white/25">Refinement Type</span>
+              <div className="grid grid-cols-3 gap-2">
+                {ITERATION_TYPES.map(t => (
+                  <button key={t.id} onClick={() => setIterationType(t.id)} disabled={isRefining}
+                    className="flex flex-col gap-1 p-2.5 rounded text-left transition-all disabled:opacity-50"
+                    style={{
+                      background: iterationType === t.id ? 'rgba(184,149,42,0.10)' : 'rgba(255,255,255,0.02)',
+                      border: iterationType === t.id ? '1px solid rgba(184,149,42,0.4)' : '1px solid rgba(255,255,255,0.07)',
+                    }}>
+                    <span className="text-[9px] font-mono" style={{ color: iterationType === t.id ? '#D4AF37' : 'rgba(255,255,255,0.5)' }}>{t.label}</span>
+                    <span className="text-[6px] font-mono text-white/25 leading-tight">{t.desc}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <span className="text-[7px] font-mono tracking-[0.35em] uppercase text-white/25">Adjustment Direction</span>
+              <textarea
+                value={adjustment} onChange={e => setAdjustment(e.target.value)} rows={3}
+                placeholder="e.g. warmer golden-hour light, turn slightly toward camera, crop tighter to waist-up…"
+                disabled={isRefining}
+                className="w-full px-3 py-2.5 rounded text-[10px] font-mono text-white/60 placeholder-white/15 outline-none resize-none disabled:opacity-50"
+                style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)' }}
+              />
+            </div>
+
+            <button
+              onClick={handleRefine} disabled={isRefining}
+              className="flex items-center justify-center gap-2 py-3 rounded font-serif italic text-black text-[13px] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+              style={{ background: '#B8952A', boxShadow: isRefining ? 'none' : '0 0 18px rgba(184,149,42,0.3)' }}>
+              {isRefining ? <><RefreshCw size={13} className="animate-spin" /> Refining…</> : <><Wand2 size={13} /> Generate 3 Variants</>}
+            </button>
+            {status && <p className="text-[8px] font-mono text-white/30 tracking-[0.15em] text-center">{status}</p>}
+          </div>
+        </div>
+
+        {/* Variants */}
+        {(isRefining || anyVariant) && (
+          <div>
+            <span className="text-[7px] font-mono tracking-[0.35em] uppercase text-white/25 mb-2 block">Variants — click to replace slot</span>
+            <div className="grid grid-cols-3 gap-3">
+              {variants.map((v, i) => (
+                <div key={i} className="relative aspect-[4/5] rounded overflow-hidden group"
+                  style={{ background: 'linear-gradient(145deg,#111116,#0D0D10)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                  {v ? (
+                    <>
+                      <img src={v} className="w-full h-full object-cover" />
+                      <button
+                        onClick={() => { onApply(slotIndex, v); onClose(); }}
+                        className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/55 transition-opacity">
+                        <span className="flex items-center gap-1.5 px-3 py-1.5 bg-[#B8952A] text-black text-[8px] font-mono tracking-[0.2em] uppercase font-semibold rounded">
+                          <Check size={10} /> Use This
+                        </span>
+                      </button>
+                    </>
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <motion.div className="w-8 h-8 rounded-full border-t-2 border-r-2 border-[#B8952A]/40"
+                        animate={{ rotate: 360 }} transition={{ duration: 1.4, repeat: Infinity, ease: 'linear' }} />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </motion.div>
+    </motion.div>
   );
 }
 
@@ -236,7 +422,11 @@ export default function CampaignBuilder() {
   const [progress,         setProgress]         = useState(0);
   const [forgeStatus,      setForgeStatus]      = useState('Pipeline Idle');
   const [showSaveModal,    setShowSaveModal]     = useState(false);
+  const [refineSlot,       setRefineSlot]        = useState<number | null>(null);
   const eventSourceRef = useRef<EventSource | null>(null);
+
+  const applyVariant = (slotIndex: number, image: string) =>
+    setSlots(prev => { const next = [...prev]; next[slotIndex] = image; return next; });
 
   const allComplete = slots.every(s => !!s);
   const anyComplete = slots.some(s => !!s);
@@ -747,6 +937,7 @@ export default function CampaignBuilder() {
                   image={slots[i] || ''}
                   isGenerating={isForging}
                   isComplete={!!slots[i]}
+                  onRefine={setRefineSlot}
                 />
               ))}
             </div>
@@ -902,6 +1093,22 @@ export default function CampaignBuilder() {
               </div>
             </motion.div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Refine modal (per-slot iterative refinement) ────────────────── */}
+      <AnimatePresence>
+        {refineSlot !== null && slots[refineSlot] && (
+          <RefineModal
+            slotIndex={refineSlot}
+            image={slots[refineSlot]}
+            getToken={async () => {
+              if (!user) throw new Error('Not signed in.');
+              return user.getIdToken();
+            }}
+            onApply={applyVariant}
+            onClose={() => setRefineSlot(null)}
+          />
         )}
       </AnimatePresence>
     </div>
