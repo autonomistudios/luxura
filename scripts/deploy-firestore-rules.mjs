@@ -45,42 +45,71 @@ function loadEnv() {
   }
 }
 
+// Parse the service-account JSON (project_id is readable even if the key is bad).
+function parseServiceAccount() {
+  const saVar = process.env.FIREBASE_SERVICE_ACCOUNT;
+  if (!saVar) return null;
+  try {
+    const sa = JSON.parse(Buffer.from(saVar, 'base64').toString('utf8'));
+    if (sa.private_key) sa.private_key = sa.private_key.replace(/\\n/g, '\n');
+    return sa;
+  } catch { return null; }
+}
+
+function saKeyIsValid(sa) {
+  if (!sa?.private_key) return false;
+  try { createPrivateKey({ key: sa.private_key, format: 'pem' }); return true; }
+  catch { return false; }
+}
+
+// Acquire a cloud-platform access token via the best available method:
+//   1. valid FIREBASE_SERVICE_ACCOUNT  → service-account JWT (preferred, no human)
+//   2. gcloud auth print-access-token  → the operator's own login (one-time browser)
+//   3. GOOGLE_ACCESS_TOKEN env         → explicitly supplied token
+// Returns { token, source }.
+async function acquireToken(sa) {
+  if (process.env.GOOGLE_ACCESS_TOKEN) {
+    return { token: process.env.GOOGLE_ACCESS_TOKEN.trim(), source: 'GOOGLE_ACCESS_TOKEN' };
+  }
+  if (saKeyIsValid(sa)) {
+    const auth = new GoogleAuth({ credentials: sa, scopes: ['https://www.googleapis.com/auth/cloud-platform'] });
+    const client = await auth.getClient();
+    const { token } = await client.getAccessToken();
+    if (token) return { token, source: 'service-account' };
+  }
+  // gcloud fallback — uses the operator's existing `gcloud auth login` session.
+  try {
+    const { execFileSync } = await import('node:child_process');
+    const cmd = process.platform === 'win32' ? 'gcloud.cmd' : 'gcloud';
+    const out = execFileSync(cmd, ['auth', 'print-access-token'], { encoding: 'utf8' }).trim();
+    if (out && out.length > 40 && !/error/i.test(out)) return { token: out, source: 'gcloud' };
+  } catch { /* gcloud absent or not logged in */ }
+  return { token: null, source: null };
+}
+
 async function main() {
   loadEnv();
 
-  const saVar = process.env.FIREBASE_SERVICE_ACCOUNT;
-  if (!saVar) throw new Error('FIREBASE_SERVICE_ACCOUNT env var not configured (.env)');
+  const sa = parseServiceAccount();
+  const projectId =
+    process.env.GCP_PROJECT_ID ||
+    sa?.project_id ||
+    process.env.VITE_FIREBASE_PROJECT_ID;
+  if (!projectId) throw new Error('Cannot determine project id (set GCP_PROJECT_ID or VITE_FIREBASE_PROJECT_ID in .env)');
 
-  const serviceAccount = JSON.parse(Buffer.from(saVar, 'base64').toString('utf8'));
-  const projectId = serviceAccount.project_id;
-  if (!projectId) throw new Error('Service account JSON has no project_id');
-
-  // Normalize double-escaped PEM newlines (\\n → \n) so the signer accepts the key.
-  if (serviceAccount.private_key) {
-    serviceAccount.private_key = serviceAccount.private_key.replace(/\\n/g, '\n');
-  }
-
-  // Preflight: fail fast with an actionable message if the private key is corrupt,
-  // rather than surfacing the cryptic OpenSSL "DECODER routines::unsupported".
-  try {
-    createPrivateKey({ key: serviceAccount.private_key, format: 'pem' });
-  } catch {
+  const { token, source } = await acquireToken(sa);
+  if (!token) {
     throw new Error(
-      'FIREBASE_SERVICE_ACCOUNT private_key is corrupt or truncated and cannot be parsed.\n' +
-      '   Re-copy the full service-account credential (base64-encoded JSON) into .env,\n' +
-      '   e.g. from the Vercel project env (vercel env pull) or the original key file.',
+      'No usable Google credential found. Pick ONE:\n' +
+      '   • Restore a valid FIREBASE_SERVICE_ACCOUNT (base64 JSON) in .env, OR\n' +
+      '   • Run `gcloud auth login` (one browser step) — this script will then use it, OR\n' +
+      '   • Set GOOGLE_ACCESS_TOKEN to a cloud-platform token.\n' +
+      `   (The local FIREBASE_SERVICE_ACCOUNT private_key is ${sa ? 'corrupt/unparseable' : 'absent'}.)`,
     );
   }
 
   const rulesSource = readFileSync(join(ROOT, 'firestore.rules'), 'utf8');
-
-  const auth = new GoogleAuth({
-    credentials: serviceAccount,
-    scopes: ['https://www.googleapis.com/auth/cloud-platform'],
-  });
-  const client = await auth.getClient();
-  const { token } = await client.getAccessToken();
-  if (!token) throw new Error('Failed to mint access token from service account');
+  console.log(`[rules] auth via: ${source}`);
 
   const api = `https://firebaserules.googleapis.com/v1/projects/${projectId}`;
   const authHeaders = { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' };
