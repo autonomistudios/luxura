@@ -139,6 +139,44 @@ export async function runMissingImageErrorTest() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// REGRESSION: anchorRefImage temporal-dead-zone in SKU recall + multi-SKU wiring
+// Bug: `anchorRefImage` was assigned in the SKU-recall block but declared (`let`)
+// far below it, so every enrolled SKU with a reference image threw a swallowed
+// ReferenceError and silently discarded frozen DNA. Declaration must precede use.
+// ─────────────────────────────────────────────────────────────────────────────
+export async function runOutfitRecallSourceTests() {
+  const results = [];
+  console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  console.log('  REGRESSION: SKU RECALL TDZ + OUTFIT COMBINATION WIRING');
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+
+  const fs = await import('node:fs/promises');
+  let src;
+  try { src = await fs.readFile(new URL('../../api/forge.js', import.meta.url), 'utf8'); }
+  catch { return [{ pass: false, label: 'Cannot read forge.js' }]; }
+
+  const declIdx   = src.indexOf('let anchorRefImage');
+  const assignIdx = src.indexOf('anchorRefImage      = { data: skuData.referenceImageBase64');
+  results.push(assert(declIdx !== -1, 'forge.js: anchorRefImage is declared with let'));
+  results.push(assert(assignIdx !== -1, 'forge.js: SKU-recall assigns anchorRefImage from referenceImageBase64'));
+  results.push(assert(declIdx !== -1 && assignIdx !== -1 && declIdx < assignIdx,
+    'forge.js: anchorRefImage DECLARED before SKU-recall use (no temporal dead zone)'));
+
+  // Exactly one `let anchorRefImage` declaration (no duplicate-declaration shadow)
+  const declCount = (src.match(/let anchorRefImage\b/g) || []).length;
+  results.push(assert(declCount === 1, `forge.js: exactly one anchorRefImage declaration (got ${declCount})`));
+
+  // Multi-SKU outfit wiring present
+  results.push(assert(src.includes('loadSkusForForge'), 'forge.js: multi-SKU loader (loadSkusForForge) wired'));
+  results.push(assert(src.includes('req.body?.skuIds'), 'forge.js: accepts skuIds[] from request body'));
+  results.push(assert(src.includes('anchorRefImages'), 'forge.js: anchorRefImages threaded for multi-ref generation'));
+  results.push(assert(/anchorRefImage\s*,\s*anchorRefAnchorType\s*,\s*anchorRefImages/.test(src),
+    'forge.js: anchorRefImages passed into PromptArchitect spec'));
+
+  return results;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // EDGE CASE: genderLabel casing and binary values
 // ─────────────────────────────────────────────────────────────────────────────
 export function runGenderEdgeCaseTests() {

@@ -448,6 +448,56 @@ export function runAiGenerateTests() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// TEST SUITE 7b: MULTI-SKU OUTFIT COMBINATION — labeled multi-reference parts
+// ─────────────────────────────────────────────────────────────────────────────
+export function runOutfitPartsTests() {
+  const results = [];
+  console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  console.log('  TEST SUITE 7b — OUTFIT COMBINATION (MULTI-REF PARTS)');
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+
+  const refs = [
+    { data: DUMMY_B64, mimeType: DUMMY_MIME, anchorType: 'SHIRT', label: 'Top / Shirt' },
+    { data: DUMMY_B64, mimeType: DUMMY_MIME, anchorType: 'PANTS', label: 'Trousers' },
+    { data: DUMMY_B64, mimeType: DUMMY_MIME, anchorType: 'SHOES', label: 'Footwear' },
+  ];
+  const ctx = baseCtx({
+    isAiGenerated: true,
+    isKeepGarment: false,
+    fashnVTOImage: null,
+    anchors: ['SHIRT', 'PANTS', 'SHOES'],
+    hasClothingAnchor: true,
+    dnaMap: { SHIRT: 'White cotton poplin shirt.', PANTS: 'Charcoal wool trousers.', SHOES: 'Black leather derby.' },
+    anchorRefImages: refs,
+    anchorRefImage: refs[0],
+    brief: 'Editorial menswear three-piece look.',
+  });
+  const spec = build(ctx);
+
+  results.push(assert(spec.mode === MODES.AI_GENERATE, 'Outfit: mode = AI_GENERATE'));
+  const imageParts = spec.parts.filter(p => p.inlineData);
+  results.push(assert(imageParts.length === 3, `Outfit: exactly 3 garment image parts (got ${imageParts.length})`));
+  // Each image preceded by its label text part
+  results.push(assert(spec.parts.some(p => p.text && p.text.includes('GARMENT REFERENCE 1') && p.text.includes('Top / Shirt')), 'Outfit: garment 1 label present'));
+  results.push(assert(spec.parts.some(p => p.text && p.text.includes('GARMENT REFERENCE 3') && p.text.includes('Footwear')), 'Outfit: garment 3 label present'));
+  // Final part is the prompt text
+  results.push(assert(spec.parts[spec.parts.length - 1].text === spec.prompt, 'Outfit: final part is the assembled prompt'));
+  // Part ordering: label,image pairs then prompt → length 3*2+1 = 7
+  results.push(assert(spec.parts.length === 7, `Outfit: parts length 7 (label+image ×3 + prompt) (got ${spec.parts.length})`));
+
+  // Single ref (length 1) must NOT use the multi-ref path — falls back to single image part
+  const single = build(baseCtx({
+    isAiGenerated: true, hasClothingAnchor: true, anchors: ['DRESS'],
+    dnaMap: { DRESS: 'Red silk gown.' },
+    anchorRefImages: [refs[0]], anchorRefImage: refs[0],
+    brief: 'Single gown editorial.',
+  }));
+  results.push(assert(single.parts.filter(p => p.inlineData).length === 1, 'Single SKU: exactly 1 image part (no multi-ref expansion)'));
+
+  return results;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // TEST SUITE 8: TEMPERATURE CALCULATOR
 // ─────────────────────────────────────────────────────────────────────────────
 export function runTemperatureTests() {

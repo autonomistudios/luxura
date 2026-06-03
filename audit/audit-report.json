@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-06-03T11:58:58.611Z",
+  "timestamp": "2026-06-03T12:45:42.737Z",
   "mode": "STATIC",
-  "elapsed": "0.4",
+  "elapsed": "1.2",
   "summary": {
-    "pass": 588,
+    "pass": 615,
     "fail": 0,
     "warn": 3,
-    "total": 588
+    "total": 615
   },
   "suites": [
     {
@@ -23,7 +23,7 @@
       "fail": 0,
       "warn": 0,
       "total": 13,
-      "elapsed": "3"
+      "elapsed": "2"
     },
     {
       "name": "VTO_BACKGROUND_REPLACE",
@@ -31,7 +31,7 @@
       "fail": 0,
       "warn": 0,
       "total": 15,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "VTO_EDITORIAL Builder",
@@ -63,6 +63,14 @@
       "fail": 0,
       "warn": 0,
       "total": 14,
+      "elapsed": "2"
+    },
+    {
+      "name": "Outfit Combination Parts",
+      "pass": 7,
+      "fail": 0,
+      "warn": 0,
+      "total": 7,
       "elapsed": "1"
     },
     {
@@ -151,7 +159,7 @@
       "fail": 0,
       "warn": 0,
       "total": 6,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "VTO Pipeline Routing",
@@ -175,7 +183,7 @@
       "fail": 0,
       "warn": 0,
       "total": 10,
-      "elapsed": "2"
+      "elapsed": "0"
     },
     {
       "name": "Pass 2 Retry Logic",
@@ -199,7 +207,7 @@
       "fail": 0,
       "warn": 0,
       "total": 10,
-      "elapsed": "0"
+      "elapsed": "2"
     },
     {
       "name": "Credit System Logic",
@@ -207,7 +215,7 @@
       "fail": 0,
       "warn": 1,
       "total": 12,
-      "elapsed": "0"
+      "elapsed": "1"
     },
     {
       "name": "Firestore Rules Review",
@@ -215,7 +223,7 @@
       "fail": 0,
       "warn": 0,
       "total": 16,
-      "elapsed": "4"
+      "elapsed": "5"
     },
     {
       "name": "SSE Headers",
@@ -223,7 +231,7 @@
       "fail": 0,
       "warn": 1,
       "total": 8,
-      "elapsed": "320"
+      "elapsed": "1109"
     },
     {
       "name": "Privilege Escalation",
@@ -255,7 +263,7 @@
       "fail": 0,
       "warn": 0,
       "total": 0,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Quota Atomicity",
@@ -306,6 +314,14 @@
       "elapsed": "0"
     },
     {
+      "name": "Outfit Combination Merge",
+      "pass": 0,
+      "fail": 0,
+      "warn": 0,
+      "total": 0,
+      "elapsed": "1"
+    },
+    {
       "name": "Director Brief Count",
       "pass": 2,
       "fail": 0,
@@ -319,7 +335,7 @@
       "fail": 0,
       "warn": 0,
       "total": 3,
-      "elapsed": "1"
+      "elapsed": "2"
     },
     {
       "name": "VTO Temperature Range",
@@ -351,7 +367,7 @@
       "fail": 0,
       "warn": 0,
       "total": 2,
-      "elapsed": "1"
+      "elapsed": "4"
     },
     {
       "name": "Timeout Budget",
@@ -359,7 +375,7 @@
       "fail": 0,
       "warn": 0,
       "total": 5,
-      "elapsed": "3"
+      "elapsed": "6"
     },
     {
       "name": "Prompt Lock Order",
@@ -367,7 +383,7 @@
       "fail": 0,
       "warn": 0,
       "total": 3,
-      "elapsed": "0"
+      "elapsed": "1"
     },
     {
       "name": "VTO Routing Split",
@@ -376,6 +392,14 @@
       "warn": 0,
       "total": 4,
       "elapsed": "0"
+    },
+    {
+      "name": "SKU Recall TDZ + Outfit",
+      "pass": 8,
+      "fail": 0,
+      "warn": 0,
+      "total": 8,
+      "elapsed": "2"
     }
   ],
   "failures": [],
@@ -692,6 +716,34 @@
     {
       "pass": true,
       "label": "Male AI_GENERATE: no female pronouns in mandatory overrides"
+    },
+    {
+      "pass": true,
+      "label": "Outfit: mode = AI_GENERATE"
+    },
+    {
+      "pass": true,
+      "label": "Outfit: exactly 3 garment image parts (got 3)"
+    },
+    {
+      "pass": true,
+      "label": "Outfit: garment 1 label present"
+    },
+    {
+      "pass": true,
+      "label": "Outfit: garment 3 label present"
+    },
+    {
+      "pass": true,
+      "label": "Outfit: final part is the assembled prompt"
+    },
+    {
+      "pass": true,
+      "label": "Outfit: parts length 7 (label+image ×3 + prompt) (got 7)"
+    },
+    {
+      "pass": true,
+      "label": "Single SKU: exactly 1 image part (no multi-ref expansion)"
     },
     {
       "pass": true,
@@ -2691,6 +2743,66 @@
     },
     {
       "pass": true,
+      "label": "OUTFIT_COMBINATION_MERGE: Merged dnaMap unions all anchor keys",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_COMBINATION_MERGE: anchorTypes de-duplicated union in order",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_COMBINATION_MERGE: One labeled anchorRef per SKU, in selection order",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_COMBINATION_MERGE: anchorRefs carry mimeType image/png",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_COMBINATION_MERGE: fidelity averaged across SKUs (90,80,100 → 90)",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_COMBINATION_MERGE: skuIds reflects all successfully-loaded SKUs",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_COMBINATION_MERGE: identity/hair taken from first SKU that carries them",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_COMBINATION_MERGE: identity/hair are NOT placed into dnaMap as anchors",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_COMBINATION_MERGE: Duplicate anchor key → first writer wins",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_COMBINATION_MERGE: Duplicate anchor type de-duplicated in anchorTypes",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_COMBINATION_MERGE: Failed SKU entries skipped; only loaded ones counted",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_COMBINATION_MERGE: SKU with no reference image contributes DNA but no anchorRef",
+      "detail": null
+    },
+    {
+      "pass": true,
       "label": "REGRESSION: Array.from({ length: 1 }) NOT present (bug fixed)"
     },
     {
@@ -2817,6 +2929,38 @@
       "pass": true,
       "label": "ARCHITECTURAL NOTE: VTO_EDITORIAL and VTO_BACKGROUND_REPLACE are both live, context-routed paths",
       "detail": "real-person VTO → BACKGROUND_REPLACE (frozen pixels, max fidelity); AI-character VTO → EDITORIAL (scene variation via two-image garment reference). Both reachable per api/forge.js."
+    },
+    {
+      "pass": true,
+      "label": "forge.js: anchorRefImage is declared with let"
+    },
+    {
+      "pass": true,
+      "label": "forge.js: SKU-recall assigns anchorRefImage from referenceImageBase64"
+    },
+    {
+      "pass": true,
+      "label": "forge.js: anchorRefImage DECLARED before SKU-recall use (no temporal dead zone)"
+    },
+    {
+      "pass": true,
+      "label": "forge.js: exactly one anchorRefImage declaration (got 1)"
+    },
+    {
+      "pass": true,
+      "label": "forge.js: multi-SKU loader (loadSkusForForge) wired"
+    },
+    {
+      "pass": true,
+      "label": "forge.js: accepts skuIds[] from request body"
+    },
+    {
+      "pass": true,
+      "label": "forge.js: anchorRefImages threaded for multi-ref generation"
+    },
+    {
+      "pass": true,
+      "label": "forge.js: anchorRefImages passed into PromptArchitect spec"
     }
   ]
 }

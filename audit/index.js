@@ -36,6 +36,7 @@ import {
   runPreFlightTests,
   runMutationTests,
   runAnchorCoverageTests,
+  runOutfitPartsTests,
 } from './tests/prompt.js';
 
 import {
@@ -73,6 +74,7 @@ import {
   runTimeoutBudgetTests,
   runPromptOrderTest,
   runVtoRoutingAudit,
+  runOutfitRecallSourceTests,
 } from './tests/bugs.js';
 
 // ─── B2B Test Suites ──────────────────────────────────────────────────────────
@@ -89,6 +91,7 @@ import {
   runSkuRecallTests,
   runSkuApiTests,
   runDnaInjectionTests,
+  runOutfitCombinationTests,
 } from './tests/sku.js';
 
 // ─── CLI args ─────────────────────────────────────────────────────────────────
@@ -145,6 +148,7 @@ async function main() {
   await runSuite('INPAINTING Builder',          runInpaintingTests);
   await runSuite('TWO_IMAGE Builder',           runTwoImageTests);
   await runSuite('AI_GENERATE Builder',         runAiGenerateTests);
+  await runSuite('Outfit Combination Parts',    runOutfitPartsTests);
   await runSuite('Temperature Calculator',      runTemperatureTests);
   await runSuite('Failure Classifier',          runFailureClassifierTests);
   await runSuite('Pre-Flight Validator',        runPreFlightTests);
@@ -198,6 +202,7 @@ async function main() {
   await runSuite('SKU Recall Bypass',         () => { runSkuRecallTests(b2bCollect); return []; });
   await runSuite('SKU API Endpoints',         () => { runSkuApiTests(b2bCollect); return []; });
   await runSuite('DNA Injection Integrity',   () => { runDnaInjectionTests(b2bCollect); return []; });
+  await runSuite('Outfit Combination Merge',  () => { runOutfitCombinationTests(b2bCollect); return []; });
 
   // ── SECTION 5: BUG REGRESSIONS & EDGE CASES ───────────────────────────────
   console.log('\n\n▓▓▓ SECTION 5: BUG REGRESSIONS & EDGE CASES ▓▓▓');
@@ -210,6 +215,7 @@ async function main() {
   await runSuite('Timeout Budget',              runTimeoutBudgetTests);
   await runSuite('Prompt Lock Order',           runPromptOrderTest);
   await runSuite('VTO Routing Split',           runVtoRoutingAudit);
+  await runSuite('SKU Recall TDZ + Outfit',     runOutfitRecallSourceTests);
 
   // ── FINAL REPORT ───────────────────────────────────────────────────────────
   const totalElapsed = ((performance.now() - globalStart) / 1000).toFixed(1);

@@ -6,10 +6,15 @@ import {
   Check, AlertTriangle, Play, Download, Save, RefreshCw,
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-import { useSovereignStore } from '../../store/useSovereignStore';
+import { useSovereignStore, type SkuDocument } from '../../store/useSovereignStore';
 import { PHOTOGRAPHY_PRESETS } from '../../lib/photographyPresets';
 import { LOCATION_PRESETS } from '../../lib/locationPresets';
-import { MapPin, ChevronRight } from 'lucide-react';
+import { ANCHOR_TYPES } from '../../lib/skuConstants';
+import { MapPin, ChevronRight, Plus, X, Shirt } from 'lucide-react';
+
+const ANCHOR_LABEL: Record<string, string> = Object.fromEntries(
+  ANCHOR_TYPES.map(a => [a.id, a.label]),
+);
 
 // ─── Photography config (mirrors lib/forge/config/photography.js) ─────────────
 const LIGHTING_OPTIONS    = ['Clean & Even', 'Sunset Side Glow', 'Deep Shadow', 'Beauty Overhead', 'Moody Cinema', 'Soft Natural'];
@@ -191,7 +196,24 @@ export default function CampaignBuilder() {
   const { skus, currentSkuId, setCurrentSkuId, currentGrid, setGridSlot, setCurrentGrid, campaigns } = useSovereignStore();
   const navigate = useNavigate();
 
-  const activeSku = skus.find(s => s.skuId === currentSkuId) || null;
+  // ── Outfit composition — one or many SKUs combined into a single look ──────
+  const [outfitSkuIds, setOutfitSkuIds] = useState<string[]>(() => currentSkuId ? [currentSkuId] : []);
+  const [skuPickerOpen, setSkuPickerOpen] = useState(false);
+
+  const readySkus  = skus.filter(s => s.enrollmentStatus === 'ready');
+  const outfitSkus = outfitSkuIds
+    .map(id => skus.find(s => s.skuId === id))
+    .filter((s): s is SkuDocument => !!s);
+  const activeSku  = outfitSkus[0] || null;
+  const isOutfit   = outfitSkus.length > 1;
+
+  // Keep the store's single-SKU pointer synced to the primary garment.
+  useEffect(() => { setCurrentSkuId(outfitSkuIds[0] ?? null); }, [outfitSkuIds, setCurrentSkuId]);
+
+  const addSku    = (id: string) => setOutfitSkuIds(prev => prev.includes(id) ? prev : [...prev, id]);
+  const removeSku = (id: string) => setOutfitSkuIds(prev => prev.filter(x => x !== id));
+  const clearOutfit = () => setOutfitSkuIds([]);
+
   const lockedParams = brand?.brandKit?.lockedParams || [];
 
   // Config state
@@ -235,12 +257,15 @@ export default function CampaignBuilder() {
     try {
       const idToken = await currentUser.getIdToken();
 
-      // Build the forge request body
+      // Build the forge request body. Outfit mode (≥2 SKUs) sends skuIds[] and the
+      // union of anchor types; single-SKU keeps the legacy skuId contract.
+      const anchorUnion = Array.from(new Set(outfitSkus.map(s => s.anchorType)));
       const body = {
-        skuId:    activeSku.skuId,
+        skuId:    isOutfit ? undefined : activeSku.skuId,
+        skuIds:   isOutfit ? outfitSkuIds : undefined,
         brandId:  brand?.brandId,
         config: {
-          anchors:       [activeSku.anchorType],
+          anchors:       isOutfit ? anchorUnion : [activeSku.anchorType],
           strategy:      'change',
           lighting,
           camera,
@@ -344,49 +369,106 @@ export default function CampaignBuilder() {
             Forge Configuration
           </p>
 
-          {/* SKU Selector */}
+          {/* SKU Selector — Outfit Composition */}
           <div>
-            <p className="text-[7px] font-mono tracking-[0.4em] uppercase text-white/25 mb-2">1. Garment SKU</p>
-            {activeSku ? (
-              <div className="flex items-center gap-3 p-3 rounded"
-                style={{ background: 'rgba(184,149,42,0.08)', border: '1px solid rgba(184,149,42,0.2)' }}>
-                <div className="w-10 h-12 rounded bg-[#0B0B0E] border border-white/10 flex items-center justify-center flex-shrink-0">
-                  {activeSku.referenceImage
-                    ? <img src={activeSku.referenceImage} className="w-full h-full object-cover rounded" />
-                    : <FolderLock size={12} className="text-white/20" />
-                  }
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-[10px] font-medium text-white/80 truncate">{activeSku.name}</p>
-                  <p className="text-[7px] font-mono text-[#B8952A]/60 mt-0.5">DNA LOCKED</p>
-                  {activeSku.fidelityScore != null && (
-                    <p className="text-[7px] font-mono text-white/25 mt-0.5">{activeSku.fidelityScore}% Fidelity</p>
-                  )}
-                </div>
-                <button onClick={() => setCurrentSkuId(null)}
-                  className="text-white/20 hover:text-white/60 text-[8px] font-mono transition-colors flex-shrink-0">
-                  Change
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-[7px] font-mono tracking-[0.4em] uppercase text-white/25">
+                1. Outfit — Garment SKU{outfitSkus.length === 1 ? '' : 's'}
+              </p>
+              <div className="flex items-center gap-2">
+                {isOutfit && (
+                  <span className="text-[6px] font-mono tracking-[0.2em] uppercase text-[#B8952A] bg-[#B8952A]/10 border border-[#B8952A]/20 px-1.5 py-0.5 rounded">
+                    {outfitSkus.length} Combined
+                  </span>
+                )}
+                {outfitSkus.length > 0 && (
+                  <button onClick={clearOutfit}
+                    className="text-[7px] font-mono text-white/20 hover:text-white/50 transition-colors">
+                    Clear
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Selected garments */}
+            {outfitSkus.length > 0 && (
+              <div className="flex flex-col gap-1.5 mb-2">
+                {outfitSkus.map((sku, i) => (
+                  <div key={sku.skuId} className="flex items-center gap-2.5 p-2 rounded"
+                    style={{ background: 'rgba(184,149,42,0.07)', border: '1px solid rgba(184,149,42,0.18)' }}>
+                    <div className="w-8 h-10 rounded bg-[#0B0B0E] border border-white/10 flex items-center justify-center flex-shrink-0">
+                      {sku.referenceImage
+                        ? <img src={sku.referenceImage} className="w-full h-full object-cover rounded" />
+                        : <FolderLock size={11} className="text-white/20" />}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[10px] font-medium text-white/80 truncate">{sku.name}</p>
+                      <p className="text-[7px] font-mono text-[#B8952A]/60 mt-0.5 tracking-[0.15em] uppercase">
+                        {ANCHOR_LABEL[sku.anchorType] || sku.anchorType}
+                        {i === 0 && isOutfit ? ' · Primary' : ''}
+                      </p>
+                    </div>
+                    <button onClick={() => removeSku(sku.skuId)}
+                      className="text-white/20 hover:text-red-400/70 transition-colors flex-shrink-0 p-1">
+                      <X size={11} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Add-garment button + picker */}
+            {readySkus.length === 0 ? (
+              <div className="p-4 text-center rounded border border-white/[0.08]">
+                <p className="text-[9px] font-mono text-white/20">No enrolled SKUs</p>
+                <button onClick={() => navigate('/portal/skus/enroll')}
+                  className="mt-2 text-[8px] font-mono text-[#B8952A] hover:text-[#D4AF37] transition-colors">
+                  Enroll a SKU →
                 </button>
               </div>
             ) : (
-              <div className="rounded border border-white/[0.08] overflow-hidden max-h-48 overflow-y-auto">
-                {skus.filter(s => s.enrollmentStatus === 'ready').length === 0 ? (
-                  <div className="p-4 text-center">
-                    <p className="text-[9px] font-mono text-white/20">No enrolled SKUs</p>
-                    <button onClick={() => navigate('/portal/skus/enroll')}
-                      className="mt-2 text-[8px] font-mono text-[#B8952A] hover:text-[#D4AF37] transition-colors">
-                      Enroll a SKU →
-                    </button>
-                  </div>
-                ) : skus.filter(s => s.enrollmentStatus === 'ready').map(sku => (
-                  <button key={sku.skuId}
-                    onClick={() => setCurrentSkuId(sku.skuId)}
-                    className="w-full flex items-center gap-2 px-3 py-2.5 hover:bg-white/[0.03] transition-colors text-left border-b border-white/[0.04] last:border-0">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#B8952A] flex-shrink-0" />
-                    <span className="text-[10px] font-mono text-white/50 truncate">{sku.name}</span>
+              <>
+                {readySkus.some(s => !outfitSkuIds.includes(s.skuId)) && (
+                  <button onClick={() => setSkuPickerOpen(o => !o)}
+                    className="w-full flex items-center justify-center gap-1.5 py-2 rounded text-[9px] font-mono tracking-[0.2em] uppercase transition-all"
+                    style={{
+                      background: skuPickerOpen ? 'rgba(184,149,42,0.10)' : 'rgba(255,255,255,0.02)',
+                      border: skuPickerOpen ? '1px solid rgba(184,149,42,0.3)' : '1px solid rgba(255,255,255,0.08)',
+                      color: skuPickerOpen ? '#D4AF37' : 'rgba(255,255,255,0.4)',
+                    }}>
+                    <Plus size={11} /> {outfitSkus.length === 0 ? 'Select Garment' : 'Add Garment to Outfit'}
                   </button>
-                ))}
-              </div>
+                )}
+                <AnimatePresence>
+                  {skuPickerOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="overflow-hidden mt-1.5 rounded"
+                      style={{ border: '1px solid rgba(255,255,255,0.08)', background: '#060608' }}>
+                      <div className="max-h-44 overflow-y-auto">
+                        {readySkus.filter(s => !outfitSkuIds.includes(s.skuId)).map(sku => (
+                          <button key={sku.skuId}
+                            onClick={() => { addSku(sku.skuId); setSkuPickerOpen(false); }}
+                            className="w-full flex items-center gap-2 px-3 py-2.5 hover:bg-white/[0.03] transition-colors text-left border-b border-white/[0.04] last:border-0">
+                            <Shirt size={11} className="text-[#B8952A]/60 flex-shrink-0" />
+                            <span className="text-[10px] font-mono text-white/50 truncate flex-1">{sku.name}</span>
+                            <span className="text-[6px] font-mono text-white/25 tracking-[0.15em] uppercase flex-shrink-0">
+                              {ANCHOR_LABEL[sku.anchorType] || sku.anchorType}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                {isOutfit && (
+                  <p className="text-[7px] font-mono text-white/25 mt-1.5 italic leading-relaxed">
+                    {outfitSkus.length} garments will be composed into one coordinated look — each held to its frozen DNA.
+                  </p>
+                )}
+              </>
             )}
           </div>
 
@@ -704,17 +786,34 @@ export default function CampaignBuilder() {
 
         <p className="text-[7px] font-mono tracking-[0.45em] uppercase text-white/25">Session Context</p>
 
-        {/* Active SKU summary */}
+        {/* Active SKU / outfit summary */}
         {activeSku && (
           <div className="flex flex-col gap-2 p-3 rounded"
             style={{ background: 'rgba(184,149,42,0.06)', border: '1px solid rgba(184,149,42,0.15)' }}>
             <div className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#B8952A]" />
-              <span className="text-[7px] font-mono text-[#B8952A] tracking-[0.3em] uppercase">DNA Recall Active</span>
+              <span className="text-[7px] font-mono text-[#B8952A] tracking-[0.3em] uppercase">
+                {isOutfit ? 'Outfit DNA Recall' : 'DNA Recall Active'}
+              </span>
             </div>
-            <p className="text-[10px] font-medium text-white/70">{activeSku.name}</p>
-            {activeSku.fidelityScore != null && (
-              <p className="text-[7px] font-mono text-white/25">{activeSku.fidelityScore}% Pattern Fidelity</p>
+            {isOutfit ? (
+              <div className="flex flex-col gap-1">
+                {outfitSkus.map(s => (
+                  <div key={s.skuId} className="flex items-center justify-between gap-2">
+                    <span className="text-[9px] font-medium text-white/70 truncate">{s.name}</span>
+                    <span className="text-[6px] font-mono text-[#B8952A]/60 tracking-[0.15em] uppercase flex-shrink-0">
+                      {ANCHOR_LABEL[s.anchorType] || s.anchorType}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <>
+                <p className="text-[10px] font-medium text-white/70">{activeSku.name}</p>
+                {activeSku.fidelityScore != null && (
+                  <p className="text-[7px] font-mono text-white/25">{activeSku.fidelityScore}% Pattern Fidelity</p>
+                )}
+              </>
             )}
             <p className="text-[7px] font-mono text-emerald-500/70">Agent 01 + 01b bypassed</p>
           </div>
