@@ -4,21 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Upload, Check, ChevronRight, AlertTriangle, X } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useSovereignStore } from '../../store/useSovereignStore';
-
-const ANCHOR_TYPES = [
-  { id: 'FULL_OUTFIT', label: 'Full Outfit',   desc: 'Complete look' },
-  { id: 'DRESS',       label: 'Dress / Gown',  desc: 'One-piece garments' },
-  { id: 'SHIRT',       label: 'Top / Shirt',   desc: 'Upper body' },
-  { id: 'PANTS',       label: 'Trousers',       desc: 'Lower body' },
-  { id: 'SHORTS',      label: 'Shorts',         desc: 'Lower body' },
-  { id: 'SWIMWEAR',    label: 'Swimwear',       desc: 'Swim / activewear' },
-  { id: 'SHOES',       label: 'Footwear',       desc: 'Shoes / boots' },
-  { id: 'HAIR',        label: 'Hair',           desc: 'Hairstyle' },
-  { id: 'MAKEUP',      label: 'Makeup',         desc: 'Beauty look' },
-  { id: 'EARRINGS',    label: 'Earrings',       desc: 'Ear accessories' },
-  { id: 'NECKLACE',    label: 'Necklace',       desc: 'Neck jewelry' },
-  { id: 'WATCH',       label: 'Watch',          desc: 'Timepiece' },
-];
+import { ANCHOR_TYPES, SKU_CATEGORIES } from '../../lib/skuConstants';
 
 const STEPS = ['Garment Details', 'Upload Images', 'DNA Extraction', 'Review & Save'];
 
@@ -210,7 +196,7 @@ export default function SKUEnrollmentFlow() {
                     className="px-3 py-2.5 rounded text-[12px] font-mono text-white/70 outline-none appearance-none"
                     style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)' }}>
                     <option value="">Select category</option>
-                    {['Outerwear', 'Tops', 'Dresses', 'Trousers', 'Footwear', 'Accessories', 'Swimwear', 'Beauty'].map(c =>
+                    {SKU_CATEGORIES.map(c =>
                       <option key={c}>{c}</option>)}
                   </select>
                 </div>

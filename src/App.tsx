@@ -13,6 +13,7 @@ const BrandPortalLayout    = lazy(() => import('./components/BrandPortalLayout')
 const BrandPortalHome      = lazy(() => import('./pages/portal/BrandPortalHome'));
 const SKUCatalog           = lazy(() => import('./pages/portal/SKUCatalog'));
 const SKUEnrollmentFlow    = lazy(() => import('./pages/portal/SKUEnrollmentFlow'));
+const SKUBatchEnroll       = lazy(() => import('./pages/portal/SKUBatchEnroll'));
 const SKUDetail            = lazy(() => import('./pages/portal/SKUDetail'));
 const CampaignHistory      = lazy(() => import('./pages/portal/CampaignHistory'));
 const CampaignBuilder      = lazy(() => import('./pages/portal/CampaignBuilder'));
@@ -117,6 +118,7 @@ function App() {
             <Route index                  element={<BrandPortalHome />} />
             <Route path="skus"            element={<SKUCatalog />} />
             <Route path="skus/enroll"     element={<SKUEnrollmentFlow />} />
+            <Route path="skus/batch"      element={<SKUBatchEnroll />} />
             <Route path="skus/:skuId"     element={<SKUDetail />} />
             <Route path="campaigns"       element={<CampaignHistory />} />
             <Route path="campaigns/new"   element={<CampaignBuilder />} />
