@@ -112,12 +112,14 @@ async function main() {
   console.log(`[rules] auth via: ${source}`);
 
   const api = `https://firebaserules.googleapis.com/v1/projects/${projectId}`;
-  // X-Goog-User-Project sets the quota/billing project — required when the token
-  // comes from a user login (gcloud/ADC), which otherwise has no project attached.
   const authHeaders = {
     Authorization: `Bearer ${token}`,
     'Content-Type': 'application/json',
-    'X-Goog-User-Project': projectId,
+    // X-Goog-User-Project sets the quota/billing project — required ONLY for user
+    // tokens (gcloud/ADC), which carry no project. A service-account token already
+    // has its project; adding the header forces an extra serviceusage.use check the
+    // SA may not hold, so we omit it in that case.
+    ...(source === 'service-account' ? {} : { 'X-Goog-User-Project': projectId }),
   };
 
   console.log(`[rules] project: ${projectId}`);
