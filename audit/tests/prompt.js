@@ -111,14 +111,15 @@ export function runClassifierTests() {
     'Classifier: keep identity + no garment → PHOTO_EDIT'
   ));
 
-  // Path B: fashnVTOImage present → VTO_BACKGROUND_REPLACE (regardless of other flags)
+  // Path B1: real-person VTO (keep identity) → VTO_BACKGROUND_REPLACE — frozen garment pixels, max fidelity
   results.push(assert(
     classify({ isAiGenerated: false, isKeepGarment: true,  fashnVTOImage: { data: 'x' }, clothingMaskedModel: null }) === MODES.VTO_BACKGROUND_REPLACE,
-    'Classifier: keep + VTO present → VTO_BACKGROUND_REPLACE'
+    'Classifier: real-person + VTO → VTO_BACKGROUND_REPLACE (frozen-pixel garment lock)'
   ));
+  // Path B2: AI-generated character + VTO → VTO_EDITORIAL — Gemini composes new poses/scenes around the locked garment
   results.push(assert(
-    classify({ isAiGenerated: true,  isKeepGarment: false, fashnVTOImage: { data: 'x' }, clothingMaskedModel: null }) === MODES.VTO_BACKGROUND_REPLACE,
-    'Classifier: AI + VTO present → VTO_BACKGROUND_REPLACE (AI garment showcase)'
+    classify({ isAiGenerated: true,  isKeepGarment: false, fashnVTOImage: { data: 'x' }, clothingMaskedModel: null }) === MODES.VTO_EDITORIAL,
+    'Classifier: AI character + VTO → VTO_EDITORIAL (editorial scene variation)'
   ));
 
   // Path C: keep garment + masked model → INPAINTING
@@ -241,9 +242,9 @@ export function runVTOEditorialTests() {
   console.log('  TEST SUITE 4 — VTO_EDITORIAL BUILDER');
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 
-  // VTO_EDITORIAL is currently NOT reachable via classify() because VTO_BACKGROUND_REPLACE
-  // always fires first when fashnVTOImage is present. This tests the builder directly.
-  // NOTE: This is an architectural audit finding — VTO_EDITORIAL is dead code path.
+  // VTO_EDITORIAL is the live path for an AI-generated character (isAiGenerated:true) paired
+  // with a VTO image. classify() routes real-person VTO → BACKGROUND_REPLACE and
+  // AI-character VTO → EDITORIAL. This ctx (isAiGenerated:true) exercises the EDITORIAL path.
   const ctx = baseCtx({
     isAiGenerated: true,
     isKeepGarment: false,
@@ -257,8 +258,8 @@ export function runVTOEditorialTests() {
 
   const spec = build(ctx);
 
-  // Will route to VTO_BACKGROUND_REPLACE (not VTO_EDITORIAL) — classify() priority
-  results.push(assert(spec.mode === MODES.VTO_BACKGROUND_REPLACE, 'Architectural: VTO present → always VTO_BACKGROUND_REPLACE (VTO_EDITORIAL unreachable via build())'));
+  // AI character + VTO → VTO_EDITORIAL (live path: Gemini composes new poses/scenes around the locked garment)
+  results.push(assert(spec.mode === MODES.VTO_EDITORIAL, 'Classifier: AI character + VTO → VTO_EDITORIAL (live, context-routed)'));
 
   // Test VTO_EDITORIAL parts assembly directly (simulating old path)
   // The VTO_EDITORIAL parts builder should produce Image1 (garment) + Image2 (VTO) + prompt
@@ -442,6 +443,69 @@ export function runAiGenerateTests() {
   // Male test
   const specMale = build({ ...ctx, genderLabel: 'male' });
   results.push(assert(!specMale.prompt.includes('she her') && !specMale.prompt.includes('FEMALE'), 'Male AI_GENERATE: no female pronouns in mandatory overrides'));
+
+  return results;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// TEST SUITE 7b: MULTI-SKU OUTFIT COMBINATION — labeled multi-reference parts
+// ─────────────────────────────────────────────────────────────────────────────
+export function runOutfitPartsTests() {
+  const results = [];
+  console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  console.log('  TEST SUITE 7b — OUTFIT COMBINATION (MULTI-REF PARTS)');
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+
+  const refs = [
+    { data: DUMMY_B64, mimeType: DUMMY_MIME, anchorType: 'SHIRT', label: 'Top / Shirt' },
+    { data: DUMMY_B64, mimeType: DUMMY_MIME, anchorType: 'PANTS', label: 'Trousers' },
+    { data: DUMMY_B64, mimeType: DUMMY_MIME, anchorType: 'SHOES', label: 'Footwear' },
+  ];
+  const ctx = baseCtx({
+    isAiGenerated: true,
+    isKeepGarment: false,
+    fashnVTOImage: null,
+    anchors: ['SHIRT', 'PANTS', 'SHOES'],
+    hasClothingAnchor: true,
+    dnaMap: { SHIRT: 'White cotton poplin shirt.', PANTS: 'Charcoal wool trousers.', SHOES: 'Black leather derby.' },
+    anchorRefImages: refs,
+    anchorRefImage: refs[0],
+    brief: 'Editorial menswear three-piece look.',
+  });
+  const spec = build(ctx);
+
+  results.push(assert(spec.mode === MODES.AI_GENERATE, 'Outfit: mode = AI_GENERATE'));
+  const imageParts = spec.parts.filter(p => p.inlineData);
+  results.push(assert(imageParts.length === 3, `Outfit: exactly 3 garment image parts (got ${imageParts.length})`));
+  // Each image preceded by its label text part
+  results.push(assert(spec.parts.some(p => p.text && p.text.includes('GARMENT REFERENCE 1') && p.text.includes('Top / Shirt')), 'Outfit: garment 1 label present'));
+  results.push(assert(spec.parts.some(p => p.text && p.text.includes('GARMENT REFERENCE 3') && p.text.includes('Footwear')), 'Outfit: garment 3 label present'));
+  // Final part is the prompt text
+  results.push(assert(spec.parts[spec.parts.length - 1].text === spec.prompt, 'Outfit: final part is the assembled prompt'));
+  // Part ordering: label,image pairs then prompt → length 3*2+1 = 7
+  results.push(assert(spec.parts.length === 7, `Outfit: parts length 7 (label+image ×3 + prompt) (got ${spec.parts.length})`));
+
+  // Single ref (length 1) must NOT use the multi-ref path — falls back to single image part
+  const single = build(baseCtx({
+    isAiGenerated: true, hasClothingAnchor: true, anchors: ['DRESS'],
+    dnaMap: { DRESS: 'Red silk gown.' },
+    anchorRefImages: [refs[0]], anchorRefImage: refs[0],
+    brief: 'Single gown editorial.',
+  }));
+  results.push(assert(single.parts.filter(p => p.inlineData).length === 1, 'Single SKU: exactly 1 image part (no multi-ref expansion)'));
+
+  // Custom background reference: single garment + environment image →
+  // 2 image parts (garment + environment) and an ENVIRONMENT REFERENCE label.
+  const withBg = build(baseCtx({
+    isAiGenerated: true, hasClothingAnchor: true, anchors: ['DRESS'],
+    dnaMap: { DRESS: 'Red silk gown.' },
+    anchorRefImage: refs[0],
+    backgroundRefImage: { data: DUMMY_B64, mimeType: DUMMY_MIME },
+    brief: 'Gown in a specific environment.',
+  }));
+  results.push(assert(withBg.parts.filter(p => p.inlineData).length === 2, 'Custom bg: garment + environment = 2 image parts'));
+  results.push(assert(withBg.parts.some(p => p.text && p.text.includes('ENVIRONMENT REFERENCE')), 'Custom bg: environment reference label present in parts'));
+  results.push(assert(withBg.prompt.includes('ENVIRONMENT REFERENCE'), 'Custom bg: prompt acknowledges environment reference image'));
 
   return results;
 }

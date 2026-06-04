@@ -6,10 +6,44 @@ import {
   Check, AlertTriangle, Play, Download, Save, RefreshCw,
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
-import { useSovereignStore } from '../../store/useSovereignStore';
+import { useSovereignStore, type SkuDocument } from '../../store/useSovereignStore';
 import { PHOTOGRAPHY_PRESETS } from '../../lib/photographyPresets';
 import { LOCATION_PRESETS } from '../../lib/locationPresets';
-import { MapPin, ChevronRight } from 'lucide-react';
+import { ANCHOR_TYPES } from '../../lib/skuConstants';
+import { MapPin, ChevronRight, Plus, X, Shirt, Wand2, Upload } from 'lucide-react';
+
+const ANCHOR_LABEL: Record<string, string> = Object.fromEntries(
+  ANCHOR_TYPES.map(a => [a.id, a.label]),
+);
+
+// Canvas-compress an uploaded environment photo (max 1600px, JPEG q0.85) so the
+// forge payload stays well under serverless body limits.
+function compressImage(file: File, maxDim = 1600, quality = 0.85): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > maxDim || height > maxDim) {
+          const scale = maxDim / Math.max(width, height);
+          width = Math.round(width * scale);
+          height = Math.round(height * scale);
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width; canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return reject(new Error('Canvas unsupported'));
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = reject;
+      img.src = reader.result as string;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
 
 // ─── Photography config (mirrors lib/forge/config/photography.js) ─────────────
 const LIGHTING_OPTIONS    = ['Clean & Even', 'Sunset Side Glow', 'Deep Shadow', 'Beauty Overhead', 'Moody Cinema', 'Soft Natural'];
@@ -73,8 +107,9 @@ function AgentStrip({ activeAgent, completedAgents }: { activeAgent: string | nu
 }
 
 // ─── Forge Slot ───────────────────────────────────────────────────────────────
-function ForgeSlot({ image, index, isGenerating, isComplete }: {
+function ForgeSlot({ image, index, isGenerating, isComplete, onRefine }: {
   image: string; index: number; isGenerating: boolean; isComplete: boolean;
+  onRefine?: (index: number) => void;
 }) {
   const isEmpty = !image && !isGenerating;
 
@@ -144,9 +179,18 @@ function ForgeSlot({ image, index, isGenerating, isComplete }: {
                 AUDITED
               </span>
             </div>
-            <button className="w-full py-1.5 bg-[#B8952A] text-black text-[8px] font-mono tracking-[0.2em] uppercase font-semibold rounded hover:bg-[#C9A84C] transition-all">
-              Export High-Res
-            </button>
+            <div className="flex items-center gap-1.5">
+              {onRefine && (
+                <button
+                  onClick={() => onRefine(index)}
+                  className="flex-1 flex items-center justify-center gap-1 py-1.5 border border-white/15 text-white/80 text-[8px] font-mono tracking-[0.2em] uppercase font-semibold rounded hover:border-[#B8952A]/60 hover:text-white transition-all bg-black/40">
+                  <Wand2 size={9} /> Refine
+                </button>
+              )}
+              <button className="flex-1 py-1.5 bg-[#B8952A] text-black text-[8px] font-mono tracking-[0.2em] uppercase font-semibold rounded hover:bg-[#C9A84C] transition-all">
+                Export
+              </button>
+            </div>
           </div>
         </>
       )}
@@ -185,13 +229,209 @@ function ConfigSelect({ label, value, locked, options, onChange }: {
   );
 }
 
+// ─── Refine Modal — per-slot iterative refinement via /api/forge-iterate ───────
+const ITERATION_TYPES = [
+  { id: 'feature_enhance',   label: 'Enhance',     desc: 'Sharpen detail & finish, same shot' },
+  { id: 'pose_variant',      label: 'Pose',        desc: 'New pose, same look & scene' },
+  { id: 'composition_shift', label: 'Composition', desc: 'Recompose framing & crop' },
+] as const;
+
+function RefineModal({ slotIndex, image, getToken, onApply, onClose }: {
+  slotIndex: number;
+  image: string;
+  getToken: () => Promise<string>;
+  onApply: (slotIndex: number, image: string) => void;
+  onClose: () => void;
+}) {
+  const [adjustment,    setAdjustment]    = useState('');
+  const [iterationType, setIterationType] = useState<typeof ITERATION_TYPES[number]['id']>('feature_enhance');
+  const [isRefining,    setIsRefining]    = useState(false);
+  const [variants,      setVariants]      = useState<string[]>(['', '', '']);
+  const [status,        setStatus]        = useState('');
+
+  const anyVariant = variants.some(v => !!v);
+
+  async function handleRefine() {
+    if (isRefining) return;
+    setIsRefining(true);
+    setVariants(['', '', '']);
+    setStatus('Refining — generating 3 variants…');
+    try {
+      const idToken = await getToken();
+      const res = await fetch('/api/forge-iterate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
+        body: JSON.stringify({ masterImage: image, adjustmentPrompt: adjustment || 'Refine to peak editorial quality while preserving identity, garment, and scene.', iterationType }),
+      });
+      if (!res.ok || !res.body) {
+        const e = await res.json().catch(() => null);
+        setStatus(e?.error || 'Refinement failed. Please try again.');
+        setIsRefining(false);
+        return;
+      }
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          try {
+            const ev = JSON.parse(line.slice(6));
+            if (ev.type === 'image' && typeof ev.slot === 'number') {
+              setVariants(prev => { const next = [...prev]; next[ev.slot] = ev.image; return next; });
+              setStatus(`Variant ${ev.slot + 1} / 3 ready`);
+            } else if (ev.type === 'done') {
+              setStatus('3 variants ready — choose one to replace the slot');
+              setIsRefining(false);
+            } else if (ev.type === 'error') {
+              setStatus(`Error: ${ev.error}`);
+              setIsRefining(false);
+            }
+          } catch { /* malformed SSE */ }
+        }
+      }
+    } catch (err: any) {
+      setStatus(`Error: ${err.message}`);
+      setIsRefining(false);
+    }
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-6"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.97 }}
+        onClick={e => e.stopPropagation()}
+        className="w-full max-w-3xl rounded-lg flex flex-col gap-5 p-6 max-h-[90vh] overflow-y-auto"
+        style={{ background: '#0C0C11', border: '1px solid rgba(255,255,255,0.08)' }}
+      >
+        <div className="flex items-start justify-between">
+          <div>
+            <h3 className="font-serif italic text-2xl text-white">Refine Slot {slotIndex + 1}</h3>
+            <p className="text-[8px] font-mono tracking-[0.3em] uppercase text-white/30 mt-1">
+              Iterative refinement · 2 credits per run
+            </p>
+          </div>
+          <button onClick={onClose} className="text-white/30 hover:text-white transition-colors p-1"><X size={16} /></button>
+        </div>
+
+        <div className="grid grid-cols-[160px_1fr] gap-5">
+          {/* Master */}
+          <div className="flex flex-col gap-1.5">
+            <span className="text-[7px] font-mono tracking-[0.3em] uppercase text-white/25">Master</span>
+            <div className="aspect-[4/5] rounded overflow-hidden border border-white/10">
+              <img src={image} className="w-full h-full object-cover" />
+            </div>
+          </div>
+
+          {/* Controls */}
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-1.5">
+              <span className="text-[7px] font-mono tracking-[0.35em] uppercase text-white/25">Refinement Type</span>
+              <div className="grid grid-cols-3 gap-2">
+                {ITERATION_TYPES.map(t => (
+                  <button key={t.id} onClick={() => setIterationType(t.id)} disabled={isRefining}
+                    className="flex flex-col gap-1 p-2.5 rounded text-left transition-all disabled:opacity-50"
+                    style={{
+                      background: iterationType === t.id ? 'rgba(184,149,42,0.10)' : 'rgba(255,255,255,0.02)',
+                      border: iterationType === t.id ? '1px solid rgba(184,149,42,0.4)' : '1px solid rgba(255,255,255,0.07)',
+                    }}>
+                    <span className="text-[9px] font-mono" style={{ color: iterationType === t.id ? '#D4AF37' : 'rgba(255,255,255,0.5)' }}>{t.label}</span>
+                    <span className="text-[6px] font-mono text-white/25 leading-tight">{t.desc}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <span className="text-[7px] font-mono tracking-[0.35em] uppercase text-white/25">Adjustment Direction</span>
+              <textarea
+                value={adjustment} onChange={e => setAdjustment(e.target.value)} rows={3}
+                placeholder="e.g. warmer golden-hour light, turn slightly toward camera, crop tighter to waist-up…"
+                disabled={isRefining}
+                className="w-full px-3 py-2.5 rounded text-[10px] font-mono text-white/60 placeholder-white/15 outline-none resize-none disabled:opacity-50"
+                style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.07)' }}
+              />
+            </div>
+
+            <button
+              onClick={handleRefine} disabled={isRefining}
+              className="flex items-center justify-center gap-2 py-3 rounded font-serif italic text-black text-[13px] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+              style={{ background: '#B8952A', boxShadow: isRefining ? 'none' : '0 0 18px rgba(184,149,42,0.3)' }}>
+              {isRefining ? <><RefreshCw size={13} className="animate-spin" /> Refining…</> : <><Wand2 size={13} /> Generate 3 Variants</>}
+            </button>
+            {status && <p className="text-[8px] font-mono text-white/30 tracking-[0.15em] text-center">{status}</p>}
+          </div>
+        </div>
+
+        {/* Variants */}
+        {(isRefining || anyVariant) && (
+          <div>
+            <span className="text-[7px] font-mono tracking-[0.35em] uppercase text-white/25 mb-2 block">Variants — click to replace slot</span>
+            <div className="grid grid-cols-3 gap-3">
+              {variants.map((v, i) => (
+                <div key={i} className="relative aspect-[4/5] rounded overflow-hidden group"
+                  style={{ background: 'linear-gradient(145deg,#111116,#0D0D10)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                  {v ? (
+                    <>
+                      <img src={v} className="w-full h-full object-cover" />
+                      <button
+                        onClick={() => { onApply(slotIndex, v); onClose(); }}
+                        className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/55 transition-opacity">
+                        <span className="flex items-center gap-1.5 px-3 py-1.5 bg-[#B8952A] text-black text-[8px] font-mono tracking-[0.2em] uppercase font-semibold rounded">
+                          <Check size={10} /> Use This
+                        </span>
+                      </button>
+                    </>
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <motion.div className="w-8 h-8 rounded-full border-t-2 border-r-2 border-[#B8952A]/40"
+                        animate={{ rotate: 360 }} transition={{ duration: 1.4, repeat: Infinity, ease: 'linear' }} />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </motion.div>
+    </motion.div>
+  );
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function CampaignBuilder() {
-  const { brand, canForge, user } = useAuth();
+  const { brand, canForge, can, user } = useAuth();
+  const canForgeRole = can('forge');
   const { skus, currentSkuId, setCurrentSkuId, currentGrid, setGridSlot, setCurrentGrid, campaigns } = useSovereignStore();
   const navigate = useNavigate();
 
-  const activeSku = skus.find(s => s.skuId === currentSkuId) || null;
+  // ── Outfit composition — one or many SKUs combined into a single look ──────
+  const [outfitSkuIds, setOutfitSkuIds] = useState<string[]>(() => currentSkuId ? [currentSkuId] : []);
+  const [skuPickerOpen, setSkuPickerOpen] = useState(false);
+
+  const readySkus  = skus.filter(s => s.enrollmentStatus === 'ready');
+  const outfitSkus = outfitSkuIds
+    .map(id => skus.find(s => s.skuId === id))
+    .filter((s): s is SkuDocument => !!s);
+  const activeSku  = outfitSkus[0] || null;
+  const isOutfit   = outfitSkus.length > 1;
+
+  // Keep the store's single-SKU pointer synced to the primary garment.
+  useEffect(() => { setCurrentSkuId(outfitSkuIds[0] ?? null); }, [outfitSkuIds, setCurrentSkuId]);
+
+  const addSku    = (id: string) => setOutfitSkuIds(prev => prev.includes(id) ? prev : [...prev, id]);
+  const removeSku = (id: string) => setOutfitSkuIds(prev => prev.filter(x => x !== id));
+  const clearOutfit = () => setOutfitSkuIds([]);
+
   const lockedParams = brand?.brandKit?.lockedParams || [];
 
   // Config state
@@ -201,6 +441,8 @@ export default function CampaignBuilder() {
   const [skinTone,          setSkinTone]          = useState('neutral');
   const [location,          setLocation]          = useState('');
   const [locationPickerOpen, setLocationPickerOpen] = useState(false);
+  const [customBg,          setCustomBg]          = useState<string | null>(null);
+  const customBgInputRef = useRef<HTMLInputElement | null>(null);
   const [selectedPreset,    setSelectedPreset]    = useState<string | null>(null);
   const [prompt,            setPrompt]            = useState('');
   const [outputMode,        setOutputMode]        = useState<'still' | 'video'>('still');
@@ -214,7 +456,11 @@ export default function CampaignBuilder() {
   const [progress,         setProgress]         = useState(0);
   const [forgeStatus,      setForgeStatus]      = useState('Pipeline Idle');
   const [showSaveModal,    setShowSaveModal]     = useState(false);
+  const [refineSlot,       setRefineSlot]        = useState<number | null>(null);
   const eventSourceRef = useRef<EventSource | null>(null);
+
+  const applyVariant = (slotIndex: number, image: string) =>
+    setSlots(prev => { const next = [...prev]; next[slotIndex] = image; return next; });
 
   const allComplete = slots.every(s => !!s);
   const anyComplete = slots.some(s => !!s);
@@ -235,18 +481,24 @@ export default function CampaignBuilder() {
     try {
       const idToken = await currentUser.getIdToken();
 
-      // Build the forge request body
+      // Build the forge request body. Outfit mode (≥2 SKUs) sends skuIds[] and the
+      // union of anchor types; single-SKU keeps the legacy skuId contract.
+      const anchorUnion = Array.from(new Set(outfitSkus.map(s => s.anchorType)));
       const body = {
-        skuId:    activeSku.skuId,
+        skuId:    isOutfit ? undefined : activeSku.skuId,
+        skuIds:   isOutfit ? outfitSkuIds : undefined,
         brandId:  brand?.brandId,
         config: {
-          anchors:       [activeSku.anchorType],
+          anchors:       isOutfit ? anchorUnion : [activeSku.anchorType],
           strategy:      'change',
           lighting,
           camera,
           colorGrade,
           skinTone,
-          locationPreset: location || undefined,
+          // Custom uploaded environment takes precedence over a preset location.
+          locationPreset: customBg ? undefined : (location || undefined),
+          background:     customBg ? 'custom-bg' : undefined,
+          backgroundImage: customBg || undefined,
           userPrompt:    prompt || undefined,
           gender:        'female',
           sourceImage:   activeSku.referenceImage || '',
@@ -344,49 +596,106 @@ export default function CampaignBuilder() {
             Forge Configuration
           </p>
 
-          {/* SKU Selector */}
+          {/* SKU Selector — Outfit Composition */}
           <div>
-            <p className="text-[7px] font-mono tracking-[0.4em] uppercase text-white/25 mb-2">1. Garment SKU</p>
-            {activeSku ? (
-              <div className="flex items-center gap-3 p-3 rounded"
-                style={{ background: 'rgba(184,149,42,0.08)', border: '1px solid rgba(184,149,42,0.2)' }}>
-                <div className="w-10 h-12 rounded bg-[#0B0B0E] border border-white/10 flex items-center justify-center flex-shrink-0">
-                  {activeSku.referenceImage
-                    ? <img src={activeSku.referenceImage} className="w-full h-full object-cover rounded" />
-                    : <FolderLock size={12} className="text-white/20" />
-                  }
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-[10px] font-medium text-white/80 truncate">{activeSku.name}</p>
-                  <p className="text-[7px] font-mono text-[#B8952A]/60 mt-0.5">DNA LOCKED</p>
-                  {activeSku.fidelityScore != null && (
-                    <p className="text-[7px] font-mono text-white/25 mt-0.5">{activeSku.fidelityScore}% Fidelity</p>
-                  )}
-                </div>
-                <button onClick={() => setCurrentSkuId(null)}
-                  className="text-white/20 hover:text-white/60 text-[8px] font-mono transition-colors flex-shrink-0">
-                  Change
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-[7px] font-mono tracking-[0.4em] uppercase text-white/25">
+                1. Outfit — Garment SKU{outfitSkus.length === 1 ? '' : 's'}
+              </p>
+              <div className="flex items-center gap-2">
+                {isOutfit && (
+                  <span className="text-[6px] font-mono tracking-[0.2em] uppercase text-[#B8952A] bg-[#B8952A]/10 border border-[#B8952A]/20 px-1.5 py-0.5 rounded">
+                    {outfitSkus.length} Combined
+                  </span>
+                )}
+                {outfitSkus.length > 0 && (
+                  <button onClick={clearOutfit}
+                    className="text-[7px] font-mono text-white/20 hover:text-white/50 transition-colors">
+                    Clear
+                  </button>
+                )}
+              </div>
+            </div>
+
+            {/* Selected garments */}
+            {outfitSkus.length > 0 && (
+              <div className="flex flex-col gap-1.5 mb-2">
+                {outfitSkus.map((sku, i) => (
+                  <div key={sku.skuId} className="flex items-center gap-2.5 p-2 rounded"
+                    style={{ background: 'rgba(184,149,42,0.07)', border: '1px solid rgba(184,149,42,0.18)' }}>
+                    <div className="w-8 h-10 rounded bg-[#0B0B0E] border border-white/10 flex items-center justify-center flex-shrink-0">
+                      {sku.referenceImage
+                        ? <img src={sku.referenceImage} className="w-full h-full object-cover rounded" />
+                        : <FolderLock size={11} className="text-white/20" />}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[10px] font-medium text-white/80 truncate">{sku.name}</p>
+                      <p className="text-[7px] font-mono text-[#B8952A]/60 mt-0.5 tracking-[0.15em] uppercase">
+                        {ANCHOR_LABEL[sku.anchorType] || sku.anchorType}
+                        {i === 0 && isOutfit ? ' · Primary' : ''}
+                      </p>
+                    </div>
+                    <button onClick={() => removeSku(sku.skuId)}
+                      className="text-white/20 hover:text-red-400/70 transition-colors flex-shrink-0 p-1">
+                      <X size={11} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Add-garment button + picker */}
+            {readySkus.length === 0 ? (
+              <div className="p-4 text-center rounded border border-white/[0.08]">
+                <p className="text-[9px] font-mono text-white/20">No enrolled SKUs</p>
+                <button onClick={() => navigate('/portal/skus/enroll')}
+                  className="mt-2 text-[8px] font-mono text-[#B8952A] hover:text-[#D4AF37] transition-colors">
+                  Enroll a SKU →
                 </button>
               </div>
             ) : (
-              <div className="rounded border border-white/[0.08] overflow-hidden max-h-48 overflow-y-auto">
-                {skus.filter(s => s.enrollmentStatus === 'ready').length === 0 ? (
-                  <div className="p-4 text-center">
-                    <p className="text-[9px] font-mono text-white/20">No enrolled SKUs</p>
-                    <button onClick={() => navigate('/portal/skus/enroll')}
-                      className="mt-2 text-[8px] font-mono text-[#B8952A] hover:text-[#D4AF37] transition-colors">
-                      Enroll a SKU →
-                    </button>
-                  </div>
-                ) : skus.filter(s => s.enrollmentStatus === 'ready').map(sku => (
-                  <button key={sku.skuId}
-                    onClick={() => setCurrentSkuId(sku.skuId)}
-                    className="w-full flex items-center gap-2 px-3 py-2.5 hover:bg-white/[0.03] transition-colors text-left border-b border-white/[0.04] last:border-0">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#B8952A] flex-shrink-0" />
-                    <span className="text-[10px] font-mono text-white/50 truncate">{sku.name}</span>
+              <>
+                {readySkus.some(s => !outfitSkuIds.includes(s.skuId)) && (
+                  <button onClick={() => setSkuPickerOpen(o => !o)}
+                    className="w-full flex items-center justify-center gap-1.5 py-2 rounded text-[9px] font-mono tracking-[0.2em] uppercase transition-all"
+                    style={{
+                      background: skuPickerOpen ? 'rgba(184,149,42,0.10)' : 'rgba(255,255,255,0.02)',
+                      border: skuPickerOpen ? '1px solid rgba(184,149,42,0.3)' : '1px solid rgba(255,255,255,0.08)',
+                      color: skuPickerOpen ? '#D4AF37' : 'rgba(255,255,255,0.4)',
+                    }}>
+                    <Plus size={11} /> {outfitSkus.length === 0 ? 'Select Garment' : 'Add Garment to Outfit'}
                   </button>
-                ))}
-              </div>
+                )}
+                <AnimatePresence>
+                  {skuPickerOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="overflow-hidden mt-1.5 rounded"
+                      style={{ border: '1px solid rgba(255,255,255,0.08)', background: '#060608' }}>
+                      <div className="max-h-44 overflow-y-auto">
+                        {readySkus.filter(s => !outfitSkuIds.includes(s.skuId)).map(sku => (
+                          <button key={sku.skuId}
+                            onClick={() => { addSku(sku.skuId); setSkuPickerOpen(false); }}
+                            className="w-full flex items-center gap-2 px-3 py-2.5 hover:bg-white/[0.03] transition-colors text-left border-b border-white/[0.04] last:border-0">
+                            <Shirt size={11} className="text-[#B8952A]/60 flex-shrink-0" />
+                            <span className="text-[10px] font-mono text-white/50 truncate flex-1">{sku.name}</span>
+                            <span className="text-[6px] font-mono text-white/25 tracking-[0.15em] uppercase flex-shrink-0">
+                              {ANCHOR_LABEL[sku.anchorType] || sku.anchorType}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                {isOutfit && (
+                  <p className="text-[7px] font-mono text-white/25 mt-1.5 italic leading-relaxed">
+                    {outfitSkus.length} garments will be composed into one coordinated look — each held to its frozen DNA.
+                  </p>
+                )}
+              </>
             )}
           </div>
 
@@ -519,6 +828,45 @@ export default function CampaignBuilder() {
               }
             </button>
 
+            {/* Custom environment upload — overrides preset when set */}
+            <input
+              ref={customBgInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={async e => {
+                const file = e.target.files?.[0];
+                e.target.value = '';
+                if (!file) return;
+                try {
+                  const compressed = await compressImage(file);
+                  setCustomBg(compressed);
+                  setLocation('');           // mutually exclusive with a preset
+                } catch { /* ignore unreadable image */ }
+              }}
+            />
+            {customBg ? (
+              <div className="flex items-center gap-2.5 p-2 mt-2 rounded"
+                style={{ background: 'rgba(184,149,42,0.07)', border: '1px solid rgba(184,149,42,0.18)' }}>
+                <img src={customBg} className="w-10 h-8 object-cover rounded flex-shrink-0 border border-white/10" />
+                <div className="min-w-0 flex-1">
+                  <p className="text-[9px] font-mono text-white/70 truncate">Custom environment</p>
+                  <p className="text-[6px] font-mono text-[#B8952A]/60 tracking-[0.15em] uppercase mt-0.5">Scene recreated from upload</p>
+                </div>
+                <button onClick={() => setCustomBg(null)}
+                  className="text-white/20 hover:text-red-400/70 transition-colors p-1 flex-shrink-0">
+                  <X size={11} />
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => customBgInputRef.current?.click()}
+                className="w-full flex items-center justify-center gap-1.5 py-2 mt-2 rounded text-[9px] font-mono tracking-[0.2em] uppercase text-white/40 hover:text-white/70 transition-all"
+                style={{ background: 'rgba(255,255,255,0.02)', border: '1px dashed rgba(255,255,255,0.12)' }}>
+                <Upload size={10} /> Upload Custom Environment
+              </button>
+            )}
+
             {/* Inline location browser */}
             <AnimatePresence>
               {locationPickerOpen && (
@@ -622,7 +970,11 @@ export default function CampaignBuilder() {
               : <><Play size={14} fill="black" /> Engage Sovereign Forge</>
             }
           </button>
-          {!activeSku && (
+          {!canForgeRole ? (
+            <p className="text-[7px] font-mono text-amber-500/60 text-center mt-2 tracking-[0.2em] uppercase">
+              Your role (Social) is export-only — forging is disabled
+            </p>
+          ) : !activeSku && (
             <p className="text-[7px] font-mono text-white/20 text-center mt-2 tracking-[0.2em] uppercase">
               Select a SKU to continue
             </p>
@@ -665,6 +1017,7 @@ export default function CampaignBuilder() {
                   image={slots[i] || ''}
                   isGenerating={isForging}
                   isComplete={!!slots[i]}
+                  onRefine={canForgeRole ? setRefineSlot : undefined}
                 />
               ))}
             </div>
@@ -704,17 +1057,34 @@ export default function CampaignBuilder() {
 
         <p className="text-[7px] font-mono tracking-[0.45em] uppercase text-white/25">Session Context</p>
 
-        {/* Active SKU summary */}
+        {/* Active SKU / outfit summary */}
         {activeSku && (
           <div className="flex flex-col gap-2 p-3 rounded"
             style={{ background: 'rgba(184,149,42,0.06)', border: '1px solid rgba(184,149,42,0.15)' }}>
             <div className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#B8952A]" />
-              <span className="text-[7px] font-mono text-[#B8952A] tracking-[0.3em] uppercase">DNA Recall Active</span>
+              <span className="text-[7px] font-mono text-[#B8952A] tracking-[0.3em] uppercase">
+                {isOutfit ? 'Outfit DNA Recall' : 'DNA Recall Active'}
+              </span>
             </div>
-            <p className="text-[10px] font-medium text-white/70">{activeSku.name}</p>
-            {activeSku.fidelityScore != null && (
-              <p className="text-[7px] font-mono text-white/25">{activeSku.fidelityScore}% Pattern Fidelity</p>
+            {isOutfit ? (
+              <div className="flex flex-col gap-1">
+                {outfitSkus.map(s => (
+                  <div key={s.skuId} className="flex items-center justify-between gap-2">
+                    <span className="text-[9px] font-medium text-white/70 truncate">{s.name}</span>
+                    <span className="text-[6px] font-mono text-[#B8952A]/60 tracking-[0.15em] uppercase flex-shrink-0">
+                      {ANCHOR_LABEL[s.anchorType] || s.anchorType}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <>
+                <p className="text-[10px] font-medium text-white/70">{activeSku.name}</p>
+                {activeSku.fidelityScore != null && (
+                  <p className="text-[7px] font-mono text-white/25">{activeSku.fidelityScore}% Pattern Fidelity</p>
+                )}
+              </>
             )}
             <p className="text-[7px] font-mono text-emerald-500/70">Agent 01 + 01b bypassed</p>
           </div>
@@ -803,6 +1173,22 @@ export default function CampaignBuilder() {
               </div>
             </motion.div>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Refine modal (per-slot iterative refinement) ────────────────── */}
+      <AnimatePresence>
+        {refineSlot !== null && slots[refineSlot] && (
+          <RefineModal
+            slotIndex={refineSlot}
+            image={slots[refineSlot]}
+            getToken={async () => {
+              if (!user) throw new Error('Not signed in.');
+              return user.getIdToken();
+            }}
+            onApply={applyVariant}
+            onClose={() => setRefineSlot(null)}
+          />
         )}
       </AnimatePresence>
     </div>

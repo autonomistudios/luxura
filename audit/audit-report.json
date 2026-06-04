@@ -1,21 +1,21 @@
 {
-  "timestamp": "2026-05-31T03:24:03.419Z",
+  "timestamp": "2026-06-03T15:31:52.135Z",
   "mode": "STATIC",
-  "elapsed": "2.2",
+  "elapsed": "1.5",
   "summary": {
-    "pass": 580,
-    "fail": 4,
-    "warn": 4,
-    "total": 584
+    "pass": 634,
+    "fail": 0,
+    "warn": 3,
+    "total": 634
   },
   "suites": [
     {
       "name": "Mode Classifier",
-      "pass": 6,
-      "fail": 1,
+      "pass": 7,
+      "fail": 0,
       "warn": 0,
       "total": 7,
-      "elapsed": "8"
+      "elapsed": "0"
     },
     {
       "name": "PHOTO_EDIT Builder",
@@ -23,7 +23,7 @@
       "fail": 0,
       "warn": 0,
       "total": 13,
-      "elapsed": "8"
+      "elapsed": "2"
     },
     {
       "name": "VTO_BACKGROUND_REPLACE",
@@ -31,12 +31,12 @@
       "fail": 0,
       "warn": 0,
       "total": 15,
-      "elapsed": "4"
+      "elapsed": "1"
     },
     {
       "name": "VTO_EDITORIAL Builder",
-      "pass": 1,
-      "fail": 1,
+      "pass": 2,
+      "fail": 0,
       "warn": 0,
       "total": 2,
       "elapsed": "1"
@@ -47,7 +47,7 @@
       "fail": 0,
       "warn": 0,
       "total": 11,
-      "elapsed": "4"
+      "elapsed": "1"
     },
     {
       "name": "TWO_IMAGE Builder",
@@ -55,7 +55,7 @@
       "fail": 0,
       "warn": 0,
       "total": 12,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "AI_GENERATE Builder",
@@ -63,7 +63,15 @@
       "fail": 0,
       "warn": 0,
       "total": 14,
-      "elapsed": "3"
+      "elapsed": "1"
+    },
+    {
+      "name": "Outfit Combination Parts",
+      "pass": 10,
+      "fail": 0,
+      "warn": 0,
+      "total": 10,
+      "elapsed": "1"
     },
     {
       "name": "Temperature Calculator",
@@ -71,7 +79,7 @@
       "fail": 0,
       "warn": 0,
       "total": 62,
-      "elapsed": "3"
+      "elapsed": "1"
     },
     {
       "name": "Failure Classifier",
@@ -79,7 +87,7 @@
       "fail": 0,
       "warn": 0,
       "total": 22,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "Pre-Flight Validator",
@@ -87,7 +95,7 @@
       "fail": 0,
       "warn": 0,
       "total": 5,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "Mutation Retry Injection",
@@ -95,7 +103,7 @@
       "fail": 0,
       "warn": 0,
       "total": 3,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Anchor Coverage (all types)",
@@ -103,7 +111,7 @@
       "fail": 0,
       "warn": 0,
       "total": 54,
-      "elapsed": "4"
+      "elapsed": "2"
     },
     {
       "name": "Anchor Deduplication",
@@ -135,7 +143,7 @@
       "fail": 0,
       "warn": 0,
       "total": 19,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "DNA Prompt Coverage",
@@ -143,7 +151,7 @@
       "fail": 0,
       "warn": 0,
       "total": 61,
-      "elapsed": "4"
+      "elapsed": "1"
     },
     {
       "name": "Consistency Audit Parser",
@@ -151,7 +159,7 @@
       "fail": 0,
       "warn": 0,
       "total": 6,
-      "elapsed": "4"
+      "elapsed": "1"
     },
     {
       "name": "VTO Pipeline Routing",
@@ -159,7 +167,7 @@
       "fail": 0,
       "warn": 0,
       "total": 6,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "Photography Config",
@@ -167,7 +175,7 @@
       "fail": 0,
       "warn": 0,
       "total": 97,
-      "elapsed": "3"
+      "elapsed": "2"
     },
     {
       "name": "Background Resolution",
@@ -175,7 +183,7 @@
       "fail": 0,
       "warn": 0,
       "total": 10,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "Pass 2 Retry Logic",
@@ -183,7 +191,7 @@
       "fail": 0,
       "warn": 0,
       "total": 4,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "Self-Heal Guardian",
@@ -191,7 +199,7 @@
       "fail": 0,
       "warn": 0,
       "total": 6,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Rate Limiter Logic",
@@ -199,7 +207,7 @@
       "fail": 0,
       "warn": 0,
       "total": 10,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Credit System Logic",
@@ -207,15 +215,15 @@
       "fail": 0,
       "warn": 1,
       "total": 12,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Firestore Rules Review",
-      "pass": 13,
+      "pass": 16,
       "fail": 0,
       "warn": 0,
-      "total": 13,
-      "elapsed": "10"
+      "total": 16,
+      "elapsed": "3"
     },
     {
       "name": "SSE Headers",
@@ -223,7 +231,7 @@
       "fail": 0,
       "warn": 1,
       "total": 8,
-      "elapsed": "2055"
+      "elapsed": "1480"
     },
     {
       "name": "Privilege Escalation",
@@ -231,7 +239,15 @@
       "fail": 0,
       "warn": 1,
       "total": 3,
-      "elapsed": "1"
+      "elapsed": "0"
+    },
+    {
+      "name": "Role-Scoped Permissions",
+      "pass": 16,
+      "fail": 0,
+      "warn": 0,
+      "total": 16,
+      "elapsed": "4"
     },
     {
       "name": "Brand API Key Validation",
@@ -239,7 +255,7 @@
       "fail": 0,
       "warn": 0,
       "total": 0,
-      "elapsed": "4"
+      "elapsed": "1"
     },
     {
       "name": "Dual Auth Mode",
@@ -247,7 +263,7 @@
       "fail": 0,
       "warn": 0,
       "total": 0,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Brand Schema",
@@ -255,7 +271,7 @@
       "fail": 0,
       "warn": 0,
       "total": 0,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Quota Atomicity",
@@ -263,7 +279,7 @@
       "fail": 0,
       "warn": 0,
       "total": 0,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Brand Member Isolation",
@@ -271,7 +287,7 @@
       "fail": 0,
       "warn": 0,
       "total": 0,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "SKU Enrollment Schema",
@@ -279,7 +295,7 @@
       "fail": 0,
       "warn": 0,
       "total": 0,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "SKU Recall Bypass",
@@ -287,7 +303,7 @@
       "fail": 0,
       "warn": 0,
       "total": 0,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "SKU API Endpoints",
@@ -295,10 +311,18 @@
       "fail": 0,
       "warn": 0,
       "total": 0,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "DNA Injection Integrity",
+      "pass": 0,
+      "fail": 0,
+      "warn": 0,
+      "total": 0,
+      "elapsed": "0"
+    },
+    {
+      "name": "Outfit Combination Merge",
       "pass": 0,
       "fail": 0,
       "warn": 0,
@@ -311,7 +335,7 @@
       "fail": 0,
       "warn": 0,
       "total": 2,
-      "elapsed": "7"
+      "elapsed": "1"
     },
     {
       "name": "Fashn.ai Category Bug",
@@ -319,7 +343,7 @@
       "fail": 0,
       "warn": 0,
       "total": 3,
-      "elapsed": "4"
+      "elapsed": "1"
     },
     {
       "name": "VTO Temperature Range",
@@ -327,7 +351,7 @@
       "fail": 0,
       "warn": 0,
       "total": 3,
-      "elapsed": "4"
+      "elapsed": "0"
     },
     {
       "name": "Missing Image Error",
@@ -335,7 +359,7 @@
       "fail": 0,
       "warn": 0,
       "total": 2,
-      "elapsed": "3"
+      "elapsed": "1"
     },
     {
       "name": "Gender Edge Cases",
@@ -343,7 +367,7 @@
       "fail": 0,
       "warn": 0,
       "total": 8,
-      "elapsed": "2"
+      "elapsed": "0"
     },
     {
       "name": "Heartbeat Exit Paths",
@@ -351,7 +375,7 @@
       "fail": 0,
       "warn": 0,
       "total": 2,
-      "elapsed": "13"
+      "elapsed": "1"
     },
     {
       "name": "Timeout Budget",
@@ -359,7 +383,7 @@
       "fail": 0,
       "warn": 0,
       "total": 5,
-      "elapsed": "15"
+      "elapsed": "2"
     },
     {
       "name": "Prompt Lock Order",
@@ -367,39 +391,26 @@
       "fail": 0,
       "warn": 0,
       "total": 3,
-      "elapsed": "2"
+      "elapsed": "0"
     },
     {
-      "name": "Dead Code Audit",
-      "pass": 1,
-      "fail": 2,
-      "warn": 1,
-      "total": 3,
+      "name": "VTO Routing Split",
+      "pass": 4,
+      "fail": 0,
+      "warn": 0,
+      "total": 4,
+      "elapsed": "0"
+    },
+    {
+      "name": "SKU Recall TDZ + Outfit",
+      "pass": 8,
+      "fail": 0,
+      "warn": 0,
+      "total": 8,
       "elapsed": "1"
     }
   ],
-  "failures": [
-    {
-      "pass": false,
-      "label": "Classifier: AI + VTO present → VTO_BACKGROUND_REPLACE (AI garment showcase)",
-      "detail": ""
-    },
-    {
-      "pass": false,
-      "label": "Architectural: VTO present → always VTO_BACKGROUND_REPLACE (VTO_EDITORIAL unreachable via build())",
-      "detail": ""
-    },
-    {
-      "pass": false,
-      "label": "Classifier: no path reaches VTO_EDITORIAL when fashnVTOImage present (mode=VTO_EDITORIAL)",
-      "detail": ""
-    },
-    {
-      "pass": false,
-      "label": "Classifier: no path reaches VTO_EDITORIAL when fashnVTOImage present (mode=VTO_EDITORIAL)",
-      "detail": ""
-    }
-  ],
+  "failures": [],
   "notices": [
     {
       "pass": null,
@@ -415,11 +426,6 @@
       "pass": null,
       "label": "VERIFY: Firestore rules must NOT include email in client-writable update fields",
       "detail": "Cross-reference runFirestoreRulesReview — if email is writable, attacker can self-escalate to admin"
-    },
-    {
-      "pass": null,
-      "label": "ARCHITECTURAL NOTE: VTO_EDITORIAL is a DEAD CODE PATH — buildVTOEditorialPrompt() and its two-image parts builder are never called by classify()",
-      "detail": "Intentional design: VTO_BACKGROUND_REPLACE replaced VTO_EDITORIAL as the primary path. VTO_EDITORIAL code is kept for reference but could be removed."
     }
   ],
   "allResults": [
@@ -429,12 +435,11 @@
     },
     {
       "pass": true,
-      "label": "Classifier: keep + VTO present → VTO_BACKGROUND_REPLACE"
+      "label": "Classifier: real-person + VTO → VTO_BACKGROUND_REPLACE (frozen-pixel garment lock)"
     },
     {
-      "pass": false,
-      "label": "Classifier: AI + VTO present → VTO_BACKGROUND_REPLACE (AI garment showcase)",
-      "detail": ""
+      "pass": true,
+      "label": "Classifier: AI character + VTO → VTO_EDITORIAL (editorial scene variation)"
     },
     {
       "pass": true,
@@ -565,9 +570,8 @@
       "label": "Client direction content present in prompt"
     },
     {
-      "pass": false,
-      "label": "Architectural: VTO present → always VTO_BACKGROUND_REPLACE (VTO_EDITORIAL unreachable via build())",
-      "detail": ""
+      "pass": true,
+      "label": "Classifier: AI character + VTO → VTO_EDITORIAL (live, context-routed)"
     },
     {
       "pass": true,
@@ -720,6 +724,46 @@
     {
       "pass": true,
       "label": "Male AI_GENERATE: no female pronouns in mandatory overrides"
+    },
+    {
+      "pass": true,
+      "label": "Outfit: mode = AI_GENERATE"
+    },
+    {
+      "pass": true,
+      "label": "Outfit: exactly 3 garment image parts (got 3)"
+    },
+    {
+      "pass": true,
+      "label": "Outfit: garment 1 label present"
+    },
+    {
+      "pass": true,
+      "label": "Outfit: garment 3 label present"
+    },
+    {
+      "pass": true,
+      "label": "Outfit: final part is the assembled prompt"
+    },
+    {
+      "pass": true,
+      "label": "Outfit: parts length 7 (label+image ×3 + prompt) (got 7)"
+    },
+    {
+      "pass": true,
+      "label": "Single SKU: exactly 1 image part (no multi-ref expansion)"
+    },
+    {
+      "pass": true,
+      "label": "Custom bg: garment + environment = 2 image parts"
+    },
+    {
+      "pass": true,
+      "label": "Custom bg: environment reference label present in parts"
+    },
+    {
+      "pass": true,
+      "label": "Custom bg: prompt acknowledges environment reference image"
     },
     {
       "pass": true,
@@ -2380,6 +2424,18 @@
     },
     {
       "pass": true,
+      "label": "CRITICAL: create rule pins imageCredits to 0 (no self-granted credits at signup)"
+    },
+    {
+      "pass": true,
+      "label": "CRITICAL: create rule pins videoCredits to 0 (no self-granted video credits at signup)"
+    },
+    {
+      "pass": true,
+      "label": "CRITICAL: create rule pins tier to 'free' (no self-granted paid tier at signup)"
+    },
+    {
+      "pass": true,
       "label": "Vault sub-collection rules present"
     },
     {
@@ -2439,6 +2495,70 @@
     {
       "pass": true,
       "label": "Credit cost: same for keep and AI strategies (6 credits each)"
+    },
+    {
+      "pass": true,
+      "label": "Viewer (Social): can export, cannot forge"
+    },
+    {
+      "pass": true,
+      "label": "Viewer: cannot manage SKUs or team"
+    },
+    {
+      "pass": true,
+      "label": "Editor (Photographer): forge + manage SKUs, but not deleteSku"
+    },
+    {
+      "pass": true,
+      "label": "Editor: cannot manage team or billing"
+    },
+    {
+      "pass": true,
+      "label": "Admin (Creative Director): team + deleteSku, but not billing/API keys"
+    },
+    {
+      "pass": true,
+      "label": "Owner: full access incl. billing + API keys"
+    },
+    {
+      "pass": true,
+      "label": "API client: forge + SKUs (editor-equivalent), not team"
+    },
+    {
+      "pass": true,
+      "label": "Unknown capability denied by default"
+    },
+    {
+      "pass": true,
+      "label": "requireCapability throws 403 when role lacks capability"
+    },
+    {
+      "pass": true,
+      "label": "requireCapability passes when role holds capability"
+    },
+    {
+      "pass": true,
+      "label": "Frontend permissions.ts present"
+    },
+    {
+      "pass": true,
+      "label": "Frontend CAPABILITY_MIN_ROLE matches backend (no drift)"
+    },
+    {
+      "pass": true,
+      "label": "Frontend ROLE_HIERARCHY matches backend"
+    },
+    {
+      "pass": true,
+      "label": "forge.js: brand-scoped path resolves membership"
+    },
+    {
+      "pass": true,
+      "label": "forge.js: brand-scoped path requires forge capability"
+    },
+    {
+      "pass": true,
+      "label": "forge.js: rejects brandId mismatch (tenant isolation)"
     },
     {
       "pass": true,
@@ -2707,6 +2827,66 @@
     },
     {
       "pass": true,
+      "label": "OUTFIT_COMBINATION_MERGE: Merged dnaMap unions all anchor keys",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_COMBINATION_MERGE: anchorTypes de-duplicated union in order",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_COMBINATION_MERGE: One labeled anchorRef per SKU, in selection order",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_COMBINATION_MERGE: anchorRefs carry mimeType image/png",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_COMBINATION_MERGE: fidelity averaged across SKUs (90,80,100 → 90)",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_COMBINATION_MERGE: skuIds reflects all successfully-loaded SKUs",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_COMBINATION_MERGE: identity/hair taken from first SKU that carries them",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_COMBINATION_MERGE: identity/hair are NOT placed into dnaMap as anchors",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_COMBINATION_MERGE: Duplicate anchor key → first writer wins",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_COMBINATION_MERGE: Duplicate anchor type de-duplicated in anchorTypes",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_COMBINATION_MERGE: Failed SKU entries skipped; only loaded ones counted",
+      "detail": null
+    },
+    {
+      "pass": true,
+      "label": "OUTFIT_COMBINATION_MERGE: SKU with no reference image contributes DNA but no anchorRef",
+      "detail": null
+    },
+    {
+      "pass": true,
       "label": "REGRESSION: Array.from({ length: 1 }) NOT present (bug fixed)"
     },
     {
@@ -2819,22 +2999,52 @@
     },
     {
       "pass": true,
-      "label": "Classifier: no path reaches VTO_EDITORIAL when fashnVTOImage present (mode=VTO_BACKGROUND_REPLACE)"
+      "label": "Classifier: real-person + VTO → VTO_BACKGROUND_REPLACE (got VTO_BACKGROUND_REPLACE)"
     },
     {
-      "pass": false,
-      "label": "Classifier: no path reaches VTO_EDITORIAL when fashnVTOImage present (mode=VTO_EDITORIAL)",
-      "detail": ""
+      "pass": true,
+      "label": "Classifier: AI character + VTO → VTO_EDITORIAL (got VTO_EDITORIAL)"
     },
     {
-      "pass": false,
-      "label": "Classifier: no path reaches VTO_EDITORIAL when fashnVTOImage present (mode=VTO_EDITORIAL)",
-      "detail": ""
+      "pass": true,
+      "label": "Classifier: AI character (keep flag) + VTO → VTO_EDITORIAL (got VTO_EDITORIAL)"
     },
     {
-      "pass": null,
-      "label": "ARCHITECTURAL NOTE: VTO_EDITORIAL is a DEAD CODE PATH — buildVTOEditorialPrompt() and its two-image parts builder are never called by classify()",
-      "detail": "Intentional design: VTO_BACKGROUND_REPLACE replaced VTO_EDITORIAL as the primary path. VTO_EDITORIAL code is kept for reference but could be removed."
+      "pass": true,
+      "label": "ARCHITECTURAL NOTE: VTO_EDITORIAL and VTO_BACKGROUND_REPLACE are both live, context-routed paths",
+      "detail": "real-person VTO → BACKGROUND_REPLACE (frozen pixels, max fidelity); AI-character VTO → EDITORIAL (scene variation via two-image garment reference). Both reachable per api/forge.js."
+    },
+    {
+      "pass": true,
+      "label": "forge.js: anchorRefImage is declared with let"
+    },
+    {
+      "pass": true,
+      "label": "forge.js: SKU-recall assigns anchorRefImage from referenceImageBase64"
+    },
+    {
+      "pass": true,
+      "label": "forge.js: anchorRefImage DECLARED before SKU-recall use (no temporal dead zone)"
+    },
+    {
+      "pass": true,
+      "label": "forge.js: exactly one anchorRefImage declaration (got 1)"
+    },
+    {
+      "pass": true,
+      "label": "forge.js: multi-SKU loader (loadSkusForForge) wired"
+    },
+    {
+      "pass": true,
+      "label": "forge.js: accepts skuIds[] from request body"
+    },
+    {
+      "pass": true,
+      "label": "forge.js: anchorRefImages threaded for multi-ref generation"
+    },
+    {
+      "pass": true,
+      "label": "forge.js: anchorRefImages passed into PromptArchitect spec"
     }
   ]
 }

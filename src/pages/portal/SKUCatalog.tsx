@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FolderLock, Upload, Eye, Play, Search } from 'lucide-react';
+import { FolderLock, Upload, Eye, Play, Search, Layers } from 'lucide-react';
 import { useSovereignStore } from '../../store/useSovereignStore';
 import type { SkuDocument } from '../../store/useSovereignStore';
+import { useAuth } from '../../contexts/AuthContext';
 
 // ─── Fidelity Ring ────────────────────────────────────────────────────────────
 function FidelityRing({ score }: { score: number }) {
@@ -186,6 +187,8 @@ function EnrollDropzone() {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 export default function SKUCatalog() {
   const { skus, skusLoading } = useSovereignStore();
+  const { can } = useAuth();
+  const canManageSkus = can('manageSkus');
   const navigate = useNavigate();
   const [filter, setFilter] = useState<'all' | 'ready' | 'processing' | 'failed'>('all');
   const [search, setSearch] = useState('');
@@ -219,12 +222,22 @@ export default function SKUCatalog() {
             {counts.ready} Ready · {counts.processing} Processing · {counts.all} Total
           </p>
         </div>
-        <button
-          onClick={() => navigate('/portal/skus/enroll')}
-          className="flex items-center gap-2 px-5 py-2.5 rounded border border-[#B8952A]/40 text-[#B8952A] text-[10px] font-mono tracking-[0.25em] uppercase hover:bg-[#B8952A]/10 transition-all"
-        >
-          <Upload size={12} /> Enroll SKU
-        </button>
+        {canManageSkus && (
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => navigate('/portal/skus/batch')}
+              className="flex items-center gap-2 px-4 py-2.5 rounded border border-white/[0.08] text-white/40 text-[10px] font-mono tracking-[0.25em] uppercase hover:border-[#B8952A]/30 hover:text-white/70 transition-all"
+            >
+              <Layers size={12} /> Batch Enroll
+            </button>
+            <button
+              onClick={() => navigate('/portal/skus/enroll')}
+              className="flex items-center gap-2 px-5 py-2.5 rounded border border-[#B8952A]/40 text-[#B8952A] text-[10px] font-mono tracking-[0.25em] uppercase hover:bg-[#B8952A]/10 transition-all"
+            >
+              <Upload size={12} /> Enroll SKU
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Filter bar */}

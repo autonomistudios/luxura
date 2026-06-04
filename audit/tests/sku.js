@@ -3,6 +3,8 @@
  * Test suite for SKU enrollment, DNA storage, forge recall bypass, and fidelity scoring.
  */
 
+import { mergeSkuForgeData } from '../../lib/forge/services/sku-service.js';
+
 export async function runSkuEnrollmentSchemaTests(report) {
   const suite = 'SKU_ENROLLMENT_SCHEMA';
   const tests = [];
@@ -304,6 +306,104 @@ export async function runDnaInjectionTests(report) {
         anchorRefImage = { data: skuData.referenceImageBase64, mimeType: 'image/png' };
       }
       return anchorRefImage === null; // gracefully null
+    },
+    true
+  ));
+
+  report(suite, tests);
+}
+
+export async function runOutfitCombinationTests(report) {
+  const suite = 'OUTFIT_COMBINATION_MERGE';
+  const tests = [];
+
+  const shirt = { skuId: 'sku_shirt', dna: { SHIRT: 'White poplin shirt.' }, referenceImageBase64: 'AAA', anchorType: 'SHIRT', skuName: 'Oxford Shirt', fidelityScore: 90 };
+  const pants = { skuId: 'sku_pants', dna: { PANTS: 'Charcoal wool trousers.' }, referenceImageBase64: 'BBB', anchorType: 'PANTS', skuName: 'Wool Trouser', fidelityScore: 80 };
+  const shoes = { skuId: 'sku_shoes', dna: { SHOES: 'Black derby.' }, referenceImageBase64: 'CCC', anchorType: 'SHOES', skuName: 'Derby', fidelityScore: 100 };
+
+  const merged = mergeSkuForgeData([shirt, pants, shoes]);
+
+  tests.push(checkTest(
+    'Merged dnaMap unions all anchor keys',
+    () => ['SHIRT', 'PANTS', 'SHOES'].every(k => merged.dnaMap[k]),
+    true
+  ));
+  tests.push(checkTest(
+    'anchorTypes de-duplicated union in order',
+    () => merged.anchorTypes.join(',') === 'SHIRT,PANTS,SHOES',
+    true
+  ));
+  tests.push(checkTest(
+    'One labeled anchorRef per SKU, in selection order',
+    () => merged.anchorRefs.length === 3
+      && merged.anchorRefs[0].data === 'AAA'
+      && merged.anchorRefs[2].anchorType === 'SHOES',
+    true
+  ));
+  tests.push(checkTest(
+    'anchorRefs carry mimeType image/png',
+    () => merged.anchorRefs.every(r => r.mimeType === 'image/png'),
+    true
+  ));
+  tests.push(checkTest(
+    'fidelity averaged across SKUs (90,80,100 → 90)',
+    () => merged.fidelity === 90,
+    true
+  ));
+  tests.push(checkTest(
+    'skuIds reflects all successfully-loaded SKUs',
+    () => merged.skuIds.length === 3,
+    true
+  ));
+
+  // identity/hair: first writer wins
+  const withId = mergeSkuForgeData([
+    { skuId: 'a', dna: { SHIRT: 'x', identity: 'Model A', hair: 'Hair A' }, anchorType: 'SHIRT' },
+    { skuId: 'b', dna: { PANTS: 'y', identity: 'Model B', hair: 'Hair B' }, anchorType: 'PANTS' },
+  ]);
+  tests.push(checkTest(
+    'identity/hair taken from first SKU that carries them',
+    () => withId.identity === 'Model A' && withId.hair === 'Hair A',
+    true
+  ));
+  tests.push(checkTest(
+    'identity/hair are NOT placed into dnaMap as anchors',
+    () => !('identity' in withId.dnaMap) && !('hair' in withId.dnaMap),
+    true
+  ));
+
+  // duplicate anchor keys → first writer wins
+  const dup = mergeSkuForgeData([
+    { skuId: 'a', dna: { SHIRT: 'first' }, anchorType: 'SHIRT' },
+    { skuId: 'b', dna: { SHIRT: 'second' }, anchorType: 'SHIRT' },
+  ]);
+  tests.push(checkTest(
+    'Duplicate anchor key → first writer wins',
+    () => dup.dnaMap.SHIRT === 'first',
+    true
+  ));
+  tests.push(checkTest(
+    'Duplicate anchor type de-duplicated in anchorTypes',
+    () => dup.anchorTypes.length === 1 && dup.anchorTypes[0] === 'SHIRT',
+    true
+  ));
+
+  // failed entries skipped
+  const withErr = mergeSkuForgeData([
+    shirt,
+    { skuId: 'bad', error: 'SKU not found' },
+    pants,
+  ]);
+  tests.push(checkTest(
+    'Failed SKU entries skipped; only loaded ones counted',
+    () => withErr.skuIds.length === 2 && !withErr.skuIds.includes('bad'),
+    true
+  ));
+  tests.push(checkTest(
+    'SKU with no reference image contributes DNA but no anchorRef',
+    () => {
+      const m = mergeSkuForgeData([{ skuId: 'n', dna: { HAIR: 'desc' }, anchorType: 'HAIR' }]);
+      return m.dnaMap.HAIR === 'desc' && m.anchorRefs.length === 0;
     },
     true
   ));

@@ -130,6 +130,29 @@ export default async function handler(req, res) {
       return res.status(401).json({ error: 'UNAUTHORIZED: Invalid or expired token.' });
     }
 
+    // ── Brand-scoped portal forge: enforce membership + forge capability ───
+    // When a brandId is supplied (portal generation against enrolled SKUs), the
+    // caller MUST be a member of that exact brand with forge rights. This closes
+    // two gaps: (1) viewers self-forging, and (2) tenant isolation — without it
+    // any authenticated user could pass another brand's brandId/skuId and both
+    // read that brand's SKU DNA and write campaigns into it.
+    if (req.body?.brandId) {
+      try {
+        const { resolveBrandContext } = await import('../lib/forge/services/brand-auth.js');
+        const { requireCapability }   = await import('../lib/forge/permissions.js');
+        const bctx = await resolveBrandContext(req);
+        if (bctx.brandId !== req.body.brandId) {
+          return res.status(403).json({ error: 'FORBIDDEN: You are not a member of the requested brand workspace.' });
+        }
+        requireCapability(bctx, 'forge');
+        // Membership verified — downstream reads req.body.brandId safely. We do NOT
+        // repurpose forgeBrandId here, to preserve the existing generation-record
+        // storage path (users/{uid}/generations) and avoid campaign-schema drift.
+      } catch (err) {
+        return res.status(err.statusCode || 403).json({ error: err.message || 'FORBIDDEN' });
+      }
+    }
+
     if (!checkRateLimit(forgeUid)) {
       return res.status(429).json({ error: 'RATE_LIMITED: Too many forge runs. Wait 60 seconds and try again.' });
     }
@@ -205,6 +228,27 @@ export default async function handler(req, res) {
       anchors = ['FULL_OUTFIT'];
     }
 
+    // ── Custom background / environment reference image ────────────────────
+    // Brand uploads a photo of a real environment (store, set, location) and the
+    // model is composited into a recreation of that scene. Face-free placement is
+    // not required — this image is used ONLY for the surroundings, never identity.
+    let backgroundRefImage = null;
+    const backgroundImageRaw = config?.backgroundImage;
+    if (backgroundImageRaw) {
+      let bgData = backgroundImageRaw;
+      let bgMime = 'image/jpeg';
+      if (backgroundImageRaw.includes(',')) {
+        const [header, data] = backgroundImageRaw.split(',');
+        bgData = data.trim().replace(/\s/g, '');
+        const m = header.match(/^data:(image\/\w+);/);
+        if (m) bgMime = m[1];
+      } else {
+        bgData = backgroundImageRaw.trim().replace(/\s/g, '');
+      }
+      backgroundRefImage = { data: bgData, mimeType: bgMime };
+      console.log(`[FORGE] CUSTOM BACKGROUND: environment reference image received (${(backgroundImageRaw.length / 1024 / 1024).toFixed(2)}MB)`);
+    }
+
     // ── Additional multi-angle reference images ────────────────────────────
     const additionalModelImages = (req.body?.additionalModelImages || [])
       .map(img => ((typeof img === 'string' ? img : '').split(',')[1] || img).trim().replace(/\s/g, ''))
@@ -265,13 +309,26 @@ export default async function handler(req, res) {
     let modelHairDNA     = null;
     let skuDnaInjected   = false;
 
-    const skuId     = req.body?.skuId   || null;
-    const bodyBrand = req.body?.brandId || forgeBrandId || null;
+    // Anchor reference images — declared here (not in the pre-pass block below) so
+    // the SKU-recall path can assign them. Previously declared with `let` further
+    // down, which put these in the temporal dead zone for the recall block: any SKU
+    // with a reference image threw a swallowed ReferenceError, silently aborting
+    // recall and discarding the frozen DNA. anchorRefImages[] carries the per-SKU
+    // labeled references used by multi-SKU outfit combination.
+    let anchorRefImage      = null;
+    let anchorRefAnchorType = null;
+    let anchorRefImages     = [];
 
-    if (skuId && bodyBrand) {
+    // Accept either a single skuId (legacy/consumer) or skuIds[] (outfit combination).
+    const skuId      = req.body?.skuId || null;
+    const skuIdsRaw  = req.body?.skuIds;
+    const skuIds     = Array.isArray(skuIdsRaw) ? skuIdsRaw.filter(Boolean) : (skuId ? [skuId] : []);
+    const bodyBrand  = req.body?.brandId || forgeBrandId || null;
+
+    if (skuIds.length === 1 && bodyBrand) {
       try {
         const { loadSkuForForge } = await import('../lib/forge/services/sku-service.js');
-        const skuData = await loadSkuForForge(bodyBrand, skuId);
+        const skuData = await loadSkuForForge(bodyBrand, skuIds[0]);
 
         // Inject frozen DNA map — mirrors in-memory dnaMap structure exactly
         Object.assign(dnaMap, skuData.dna || {});
@@ -280,15 +337,56 @@ export default async function handler(req, res) {
 
         // Override anchor ref image with pre-rendered isolation from enrollment
         if (skuData.referenceImageBase64) {
-          anchorRefImage     = { data: skuData.referenceImageBase64, mimeType: 'image/png' };
+          anchorRefImage      = { data: skuData.referenceImageBase64, mimeType: 'image/png' };
           anchorRefAnchorType = skuData.anchorType;
         }
 
         skuDnaInjected = true;
-        console.log(`[FORGE] SKU RECALL: skuId=${skuId} | anchor=${skuData.anchorType} | fidelity=${skuData.fidelityScore} | Agent 01+01b BYPASSED`);
+        console.log(`[FORGE] SKU RECALL: skuId=${skuIds[0]} | anchor=${skuData.anchorType} | fidelity=${skuData.fidelityScore} | Agent 01+01b BYPASSED`);
       } catch (err) {
         // Graceful degradation — if SKU load fails, full Agent 01 pipeline runs normally
         console.warn(`[FORGE] SKU recall failed (${err.message}) — falling back to full Agent 01 pipeline`);
+      }
+    } else if (skuIds.length > 1 && bodyBrand) {
+      // ── MULTI-SKU OUTFIT COMBINATION ──────────────────────────────────────
+      // Merge N enrolled garments (e.g. SHIRT + PANTS + SHOES) into one look.
+      // Each SKU contributes its anchor-keyed frozen DNA and a labeled, face-free
+      // reference image. anchors becomes the union of all SKU anchor types.
+      try {
+        const { loadSkusForForge } = await import('../lib/forge/services/sku-service.js');
+        const merged = await loadSkusForForge(bodyBrand, skuIds);
+
+        Object.assign(dnaMap, merged.dnaMap || {});
+        if (merged.identity) modelIdentityDNA = merged.identity;
+        if (merged.hair)     modelHairDNA     = merged.hair;
+
+        // Union the SKU anchor types into the active anchors list, then re-apply
+        // FULL_OUTFIT subsumption so a full-look SKU absorbs redundant sub-anchors.
+        for (const anc of merged.anchorTypes) {
+          if (!anchors.includes(anc)) anchors.push(anc);
+        }
+        if (anchors.includes('FULL_OUTFIT')) {
+          anchors = anchors.filter(a => a === 'FULL_OUTFIT' || !OUTFIT_SUBSUMES.includes(a));
+        }
+
+        // Labeled per-SKU references for the multi-image AI_GENERATE parts array.
+        anchorRefImages = merged.anchorRefs.map(ref => ({
+          data: ref.data,
+          mimeType: ref.mimeType,
+          anchorType: ref.anchorType,
+          label: ANCHOR_LABELS[ref.anchorType] || ref.anchorType,
+          skuName: ref.skuName,
+        }));
+        if (anchorRefImages.length) {
+          anchorRefImage      = anchorRefImages[0];          // primary (back-compat)
+          anchorRefAnchorType = anchorRefImages[0].anchorType;
+        }
+
+        skuDnaInjected = true;
+        const failedNote = merged.failed?.length ? ` | skipped ${merged.failed.length}` : '';
+        console.log(`[FORGE] OUTFIT RECALL: ${merged.skuIds.length} SKUs | anchors=${anchors.join('+')} | refs=${anchorRefImages.length}${failedNote} | Agent 01+01b BYPASSED`);
+      } catch (err) {
+        console.warn(`[FORGE] Outfit recall failed (${err.message}) — falling back to full Agent 01 pipeline`);
       }
     }
 
@@ -414,7 +512,11 @@ Be exhaustive. Every observable detail must be captured.`;
       'Pitch-Black':     'pure black void background, high-contrast dark studio',
       'editorial-white': 'bright clean white seamless backdrop, high-key editorial',
       'Editorial-White': 'bright clean white seamless backdrop, high-key editorial',
-    }[lockedBgRaw] || (lockedBgRaw === 'custom-bg' && userPromptText ? `environmental setting: ${userPromptText}` : 'clean grey seamless studio backdrop');
+    }[lockedBgRaw] || (
+      backgroundRefImage
+        ? `the exact environment shown in the attached environment reference image${userPromptText ? ` (${userPromptText})` : ''}`
+        : (lockedBgRaw === 'custom-bg' && userPromptText ? `environmental setting: ${userPromptText}` : 'clean grey seamless studio backdrop')
+    );
     const lockedCamera       = CAMERA_FORMAT_MAP[config?.cameraFormat] || CAMERA_MAP[config?.camera] || CAMERA_MAP['Soft Background (85mm)'];
     const lockedColorGrade   = COLOR_GRADE_MAP[config?.colorGrade] || null;
     const modelArchetypeDesc = MODEL_ARCHETYPE_MAP[config?.modelArchetype] || MODEL_ARCHETYPE_MAP['High Fashion'];
@@ -469,8 +571,9 @@ Be exhaustive. Every observable detail must be captured.`;
     // =========================================================
     // AGENTS 01b–01g: PRE-PASS (VTO, anchor refs, pre-renders)
     // =========================================================
-    let anchorRefImage      = null;
-    let anchorRefAnchorType = null;
+    // anchorRefImage / anchorRefAnchorType / anchorRefImages are declared above
+    // (SKU-recall block) so recall can populate them. Only the pre-pass-local
+    // refs are declared here.
     let garmentCleanRef     = null;
     let cleanGarmentRender  = null;
     let modelIdentityRef    = null;
@@ -814,12 +917,20 @@ Rules: ONLY correct slots that actually violate an invariant above. Do not rewri
       const bgLock = config?.locationPreset
         ? config.locationPreset
         : (lockedBgRaw === 'custom-bg' && userPromptText) ? userPromptText : lockedBgDesc;
-      const isCustomEnv = !!(config?.locationPreset) || (lockedBgRaw === 'custom-bg' && !!userPromptText);
+      const isCustomEnv = !!(config?.locationPreset) || !!backgroundRefImage || (lockedBgRaw === 'custom-bg' && !!userPromptText);
 
       const anchorRefLabel = anchorRefAnchorType ? (ANCHOR_LABELS[anchorRefAnchorType] || anchorRefAnchorType) : anchorDesc;
-      const anchorRefNote  = anchorRefImage
-        ? `\n\nANCHOR VISUAL REFERENCE: The attached image shows ONLY the ${anchorRefLabel} as a face-free visual style reference. Reproduce the ${anchorRefLabel} exactly as shown — every detail of color, texture, structure, and finish. All other model attributes come from the scene brief above.`
-        : '';
+      // Multi-SKU outfit: enumerate every garment reference so the model knows each
+      // attached image is a distinct, independently-locked garment in one look.
+      const anchorRefNote = anchorRefImages.length > 1
+        ? `\n\nOUTFIT VISUAL REFERENCES — ${anchorRefImages.length} GARMENTS COMPOSED INTO ONE LOOK:\n` +
+          anchorRefImages.map((ref, i) =>
+            `• Image ${i + 1} = ${ref.label}: reproduce this exact ${ref.label} — every detail of color, texture, structure, and finish — worn together with the other garments below.`
+          ).join('\n') +
+          `\nThe subject wears ALL of these garments simultaneously as a single coordinated outfit. Each garment is independently locked: do not blend, swap, merge, or omit any of them. All other model attributes come from the scene brief above.`
+        : anchorRefImage
+          ? `\n\nANCHOR VISUAL REFERENCE: The attached image shows ONLY the ${anchorRefLabel} as a face-free visual style reference. Reproduce the ${anchorRefLabel} exactly as shown — every detail of color, texture, structure, and finish. All other model attributes come from the scene brief above.`
+          : '';
 
       const spec = PromptArchitect.build({
         seed, salt, mutation,
@@ -827,7 +938,8 @@ Rules: ONLY correct slots that actually violate an invariant above. Do not rewri
         fashnVTOImage, clothingMaskedModel,
         rawImageData, rawMimeType,
         garmentImageData, garmentMimeType,
-        anchorRefImage, anchorRefAnchorType,
+        anchorRefImage, anchorRefAnchorType, anchorRefImages,
+        backgroundRefImage,
         cleanGarmentRender, garmentCleanRef,
         dnaMap, allDnaBlock: anchors.map(anc =>
           `${anc.toUpperCase()} — ${(ANCHOR_LABELS[anc] || anc).toUpperCase()}:\n${dnaMap[anc] || ''}`

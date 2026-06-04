@@ -139,6 +139,44 @@ export async function runMissingImageErrorTest() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// REGRESSION: anchorRefImage temporal-dead-zone in SKU recall + multi-SKU wiring
+// Bug: `anchorRefImage` was assigned in the SKU-recall block but declared (`let`)
+// far below it, so every enrolled SKU with a reference image threw a swallowed
+// ReferenceError and silently discarded frozen DNA. Declaration must precede use.
+// ─────────────────────────────────────────────────────────────────────────────
+export async function runOutfitRecallSourceTests() {
+  const results = [];
+  console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  console.log('  REGRESSION: SKU RECALL TDZ + OUTFIT COMBINATION WIRING');
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+
+  const fs = await import('node:fs/promises');
+  let src;
+  try { src = await fs.readFile(new URL('../../api/forge.js', import.meta.url), 'utf8'); }
+  catch { return [{ pass: false, label: 'Cannot read forge.js' }]; }
+
+  const declIdx   = src.indexOf('let anchorRefImage');
+  const assignIdx = src.indexOf('anchorRefImage      = { data: skuData.referenceImageBase64');
+  results.push(assert(declIdx !== -1, 'forge.js: anchorRefImage is declared with let'));
+  results.push(assert(assignIdx !== -1, 'forge.js: SKU-recall assigns anchorRefImage from referenceImageBase64'));
+  results.push(assert(declIdx !== -1 && assignIdx !== -1 && declIdx < assignIdx,
+    'forge.js: anchorRefImage DECLARED before SKU-recall use (no temporal dead zone)'));
+
+  // Exactly one `let anchorRefImage` declaration (no duplicate-declaration shadow)
+  const declCount = (src.match(/let anchorRefImage\b/g) || []).length;
+  results.push(assert(declCount === 1, `forge.js: exactly one anchorRefImage declaration (got ${declCount})`));
+
+  // Multi-SKU outfit wiring present
+  results.push(assert(src.includes('loadSkusForForge'), 'forge.js: multi-SKU loader (loadSkusForForge) wired'));
+  results.push(assert(src.includes('req.body?.skuIds'), 'forge.js: accepts skuIds[] from request body'));
+  results.push(assert(src.includes('anchorRefImages'), 'forge.js: anchorRefImages threaded for multi-ref generation'));
+  results.push(assert(/anchorRefImage\s*,\s*anchorRefAnchorType\s*,\s*anchorRefImages/.test(src),
+    'forge.js: anchorRefImages passed into PromptArchitect spec'));
+
+  return results;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // EDGE CASE: genderLabel casing and binary values
 // ─────────────────────────────────────────────────────────────────────────────
 export function runGenderEdgeCaseTests() {
@@ -305,36 +343,35 @@ export async function runPromptOrderTest() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// BUG WATCH: VTO_EDITORIAL is dead code path (unreachable via classify())
-// When fashnVTOImage is present → always VTO_BACKGROUND_REPLACE
-// VTO_EDITORIAL would need a separate fashnVTOForEditorial flag or similar
+// CLASSIFIER ROUTING: VTO output is routed by identity strategy — NOT collapsed to one mode.
+//   real-person VTO (isAiGenerated:false) → VTO_BACKGROUND_REPLACE (frozen garment pixels)
+//   AI-character VTO (isAiGenerated:true)  → VTO_EDITORIAL          (new poses/scenes, two-image garment lock)
+// Both prompt builders are live and reachable (confirmed in api/forge.js: runAgent01fAiVTO
+// produces fashnVTOImage with isAiGenerated=true → classify() returns VTO_EDITORIAL).
+// This suite verifies the split routes correctly — neither path is dead code.
 // ─────────────────────────────────────────────────────────────────────────────
-export async function runDeadCodeAudit() {
+export async function runVtoRoutingAudit() {
   const results = [];
   console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-  console.log('  ARCHITECTURAL FINDING: DEAD CODE PATHS');
+  console.log('  CLASSIFIER ROUTING: VTO MODE SPLIT');
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 
-  // VTO_EDITORIAL is never reached by the current classifier
-  // because VTO_BACKGROUND_REPLACE fires whenever fashnVTOImage is truthy
-  const allCtxWithVTO = [
-    { isAiGenerated: false, isKeepGarment: true,  fashnVTOImage: { data: 'x' }, clothingMaskedModel: null },
-    { isAiGenerated: true,  isKeepGarment: false, fashnVTOImage: { data: 'x' }, clothingMaskedModel: null },
-    { isAiGenerated: true,  isKeepGarment: true,  fashnVTOImage: { data: 'x' }, clothingMaskedModel: null },
+  const vtoRoutingCases = [
+    { ctx: { isAiGenerated: false, isKeepGarment: true,  fashnVTOImage: { data: 'x' }, clothingMaskedModel: null }, expect: MODES.VTO_BACKGROUND_REPLACE, label: 'real-person + VTO → VTO_BACKGROUND_REPLACE' },
+    { ctx: { isAiGenerated: true,  isKeepGarment: false, fashnVTOImage: { data: 'x' }, clothingMaskedModel: null }, expect: MODES.VTO_EDITORIAL,          label: 'AI character + VTO → VTO_EDITORIAL' },
+    { ctx: { isAiGenerated: true,  isKeepGarment: true,  fashnVTOImage: { data: 'x' }, clothingMaskedModel: null }, expect: MODES.VTO_EDITORIAL,          label: 'AI character (keep flag) + VTO → VTO_EDITORIAL' },
   ];
 
-  allCtxWithVTO.forEach(ctx => {
+  vtoRoutingCases.forEach(({ ctx, expect, label }) => {
     const mode = classify(ctx);
-    results.push(assert(mode !== MODES.VTO_EDITORIAL,
-      `Classifier: no path reaches VTO_EDITORIAL when fashnVTOImage present (mode=${mode})`
-    ));
+    results.push(assert(mode === expect, `Classifier: ${label} (got ${mode})`));
   });
 
-  // VTO_EDITORIAL prompt builder exists in code but is unreachable at runtime
+  // Confirm both VTO prompt builders are live, context-routed paths — neither is dead code.
   results.push({
-    pass: null,
-    label: 'ARCHITECTURAL NOTE: VTO_EDITORIAL is a DEAD CODE PATH — buildVTOEditorialPrompt() and its two-image parts builder are never called by classify()',
-    detail: 'Intentional design: VTO_BACKGROUND_REPLACE replaced VTO_EDITORIAL as the primary path. VTO_EDITORIAL code is kept for reference but could be removed.',
+    pass: true,
+    label: 'ARCHITECTURAL NOTE: VTO_EDITORIAL and VTO_BACKGROUND_REPLACE are both live, context-routed paths',
+    detail: 'real-person VTO → BACKGROUND_REPLACE (frozen pixels, max fidelity); AI-character VTO → EDITORIAL (scene variation via two-image garment reference). Both reachable per api/forge.js.',
   });
 
   return results;

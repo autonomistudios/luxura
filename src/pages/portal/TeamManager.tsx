@@ -4,17 +4,22 @@ import { Users, UserPlus, Trash2, Crown, Shield, Edit3, Eye } from 'lucide-react
 import { useAuth } from '../../contexts/AuthContext';
 import type { BrandRole } from '../../contexts/AuthContext';
 
+import { ROLE_LABELS } from '../../lib/permissions';
+
+// Labels come from the canonical permission model (job titles over role tiers);
+// icon/color/desc are presentation only.
 const ROLE_CONFIG: Record<BrandRole, { label: string; icon: any; color: string; desc: string }> = {
-  owner:  { label: 'Owner',  icon: Crown,  color: '#D4AF37', desc: 'Full access, billing, API keys' },
-  admin:  { label: 'Admin',  icon: Shield, color: '#B8952A', desc: 'Full access except billing' },
-  editor: { label: 'Editor', icon: Edit3,  color: 'rgba(255,255,255,0.6)', desc: 'Create campaigns, enroll SKUs' },
-  viewer: { label: 'Viewer', icon: Eye,    color: 'rgba(255,255,255,0.3)', desc: 'View only access' },
+  owner:  { label: ROLE_LABELS.owner,  icon: Crown,  color: '#D4AF37', desc: 'Full access · billing · API keys' },
+  admin:  { label: ROLE_LABELS.admin,  icon: Shield, color: '#B8952A', desc: 'Forge, SKUs, team — no billing' },
+  editor: { label: ROLE_LABELS.editor, icon: Edit3,  color: 'rgba(255,255,255,0.6)', desc: 'Forge, enroll SKUs, refine, export' },
+  viewer: { label: ROLE_LABELS.viewer, icon: Eye,    color: 'rgba(255,255,255,0.3)', desc: 'Browse & export assets only' },
 };
 
 interface Member { uid: string; email: string; role: BrandRole; joinedAt: string; }
 
 export default function TeamManager() {
-  const { user, brand } = useAuth();
+  const { user, brand, can } = useAuth();
+  const canManageTeam = can('manageTeam');
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteRole, setInviteRole] = useState<BrandRole>('editor');
   const [inviting, setInviting] = useState(false);
@@ -65,7 +70,8 @@ export default function TeamManager() {
         ))}
       </div>
 
-      {/* Invite form */}
+      {/* Invite form — Creative Director (admin) and Owner only */}
+      {canManageTeam ? (
       <div className="rounded p-6 mb-6 flex flex-col gap-4"
         style={{ background: 'linear-gradient(145deg, #111116 0%, #0B0B0E 100%)', border: '1px solid rgba(255,255,255,0.06)' }}>
         <p className="text-[7px] font-mono tracking-[0.45em] uppercase text-white/25">Invite Team Member</p>
@@ -88,6 +94,15 @@ export default function TeamManager() {
           </button>
         </div>
       </div>
+      ) : (
+        <div className="rounded p-4 mb-6 flex items-center gap-2"
+          style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
+          <Eye size={11} className="text-white/25" />
+          <p className="text-[8px] font-mono text-white/30 tracking-[0.15em] uppercase">
+            Your role can view the team but cannot invite or change members
+          </p>
+        </div>
+      )}
 
       {/* Members list */}
       <div className="rounded overflow-hidden"
@@ -134,8 +149,8 @@ export default function TeamManager() {
                 <span className="text-[8px] font-mono" style={{ color: cfg.color }}>{cfg.label}</span>
               </div>
 
-              {/* Remove (not self, not owner) */}
-              {!isCurrentUser && member.role !== 'owner' && (
+              {/* Remove (not self, not owner, requires manage-team) */}
+              {canManageTeam && !isCurrentUser && member.role !== 'owner' && (
                 <button
                   onClick={() => setMembers(prev => prev.filter(m => m.uid !== member.uid))}
                   className="text-white/15 hover:text-rose-400 transition-colors p-1">
