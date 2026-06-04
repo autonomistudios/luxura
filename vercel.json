@@ -137,7 +137,7 @@
   "crons": [
     {
       "path": "/api/agents/campaign-agent",
-      "schedule": "0 0 * * *"
+      "schedule": "*/2 * * * *"
     },
     {
       "path": "/api/agents/usage-reconciliation-agent",
