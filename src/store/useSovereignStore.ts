@@ -19,6 +19,7 @@ export interface VaultItem {
   camera:      string;
   bg:          string;
   prompt:      string;
+  dna?:        boolean;
 }
 
 export interface VideoVaultItem {

@@ -387,3 +387,27 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(197,162,83, 0.7);
 }
+
+/* ── Lookbook print / PDF ────────────────────────────────────────────────────
+   The "Print / PDF" button calls window.print(). Hide ALL app chrome and reveal
+   only the print container, laying each lookbook sheet on its own landscape page.
+   The visibility trick is chrome-agnostic; data-print-hide removes the on-screen
+   viewer's own controls from the print flow. */
+@media print {
+  body * { visibility: hidden !important; }
+  [data-print-root], [data-print-root] * { visibility: visible !important; }
+  [data-print-root] { position: absolute !important; left: 0; top: 0; width: 100%; display: block !important; }
+  [data-print-hide] { display: none !important; }
+
+  .lookbook-print-page { page-break-after: always; break-after: page; }
+  .lookbook-print-page:last-child { page-break-after: auto; break-after: auto; }
+  .lookbook-print-page .lookbook-sheet {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  /* Force photos + gold to actually print. */
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+  @page { size: landscape; margin: 8mm; }
+}

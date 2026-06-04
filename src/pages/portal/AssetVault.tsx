@@ -1,7 +1,7 @@
-import React, { useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Search, Download, Check, LayoutGrid, X, Sparkles, Loader2 } from 'lucide-react';
+import { Search, Download, Check, LayoutGrid, X, Sparkles, Loader2, BookOpen } from 'lucide-react';
 import JSZip from 'jszip';
 import { useSovereignStore, type VaultItem } from '../../store/useSovereignStore';
 
@@ -142,12 +142,9 @@ export default function AssetVault() {
         }
 
         // Generate the zip file
-        const zipBlob = await zip.generateAsync({ 
-          type: 'blob',
-          onUpdate: (metadata) => {
-            // metadata.percent is 0-100; map it to the 50-100% range of the progress bar
-            setProgress(50 + Math.round(metadata.percent / 2));
-          }
+        const zipBlob = await zip.generateAsync({ type: 'blob' }, (metadata) => {
+          // metadata.percent is 0-100; map it to the 50-100% range of the progress bar
+          setProgress(50 + Math.round(metadata.percent / 2));
         });
 
         // Trigger download
@@ -185,6 +182,10 @@ export default function AssetVault() {
           </p>
         </div>
         <div className="flex items-center gap-3">
+          <button onClick={() => navigate('/portal/lookbook')}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-full border border-hairline text-secondary hover:text-primary hover:border-hairline-gold text-[12px] font-medium transition-all">
+            <BookOpen size={14} /> View as Lookbook
+          </button>
           {selected.size > 0 && (
             <button onClick={clearSelection}
               className="flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-[#1C1C1E] text-white hover:bg-[#2C2C2E] text-[12px] font-medium transition-all">
@@ -235,17 +236,7 @@ export default function AssetVault() {
 
         {filtered.length > 0 && (
           <button
-            onClick={() => {
-              if (allVisibleSelected) {
-                const next = new Set(selected);
-                filtered.forEach(a => next.delete(a.id));
-                setSelected(next);
-              } else {
-                const next = new Set(selected);
-                filtered.forEach(a => next.add(a.id));
-                setSelected(next);
-              }
-            }}
+            onClick={toggleAllVisible}
             className="px-4 py-2.5 rounded-full border border-white/10 text-white hover:bg-white/10 text-[12px] font-medium transition-all ml-auto"
           >
             {allVisibleSelected ? 'Deselect All' : 'Select All'}
@@ -274,7 +265,7 @@ export default function AssetVault() {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 key={item.id}
-                onClick={() => toggleSelect(item.id)}
+                onClick={() => toggle(item.id)}
                 className={`group relative aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer bg-[#1C1C1E] transition-all duration-300 ${
                   isSelected ? 'ring-2 ring-white ring-offset-2 ring-offset-black' : 'hover:ring-1 hover:ring-white/30'
                 }`}

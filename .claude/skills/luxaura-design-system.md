@@ -64,3 +64,24 @@ Use `spring.{snappy,gentle,soft}`, `ease.*`, `dur.*`, variants `rise/fade/scaleI
 5. Frosted material (`var(--material-*)` + `backdrop-filter`) for chrome/floating panels — the Apple signature.
 6. Dark chrome is default; opt into light editorial spreads with `data-surface="paper"`.
 7. The portal sets `cursor:auto`; the custom `LuxCursor` is for marketing pages only.
+
+## The Lookbook — light editorial spread (the "paper" surface in production)
+- Route `/portal/lookbook` (`src/pages/portal/Lookbook.tsx`), nav item in the shell, and a
+  "View as Lookbook" entry in the Asset Vault.
+- Pure pagination core: `src/lib/lookbook.js` (+ `lookbook.d.ts`). `paginate(plates, {brandName, title})`
+  → cover → feature/duo spreads → colophon. Framework-free and unit-tested by the node audit.
+- The viewer wraps each sheet in `data-surface="paper"`, so every token-built component flips to
+  ivory ink automatically — dark Apple chrome frames the light Vanity-Fair spread.
+- **Print / PDF**: the toolbar button calls `window.print()`; the `@media print` block in `index.css`
+  reveals only `[data-print-root]` and lays each `.lookbook-print-page` on its own landscape sheet.
+- To add ANY new light-surface view: wrap its root in `data-surface="paper"` and build with the same
+  tokens + components — no per-instance overrides needed.
+
+## Tests (no framework — extends the node audit harness)
+- `audit/tests/design-system.js`:
+  - `runDesignTokenTests` — static invariants: dual-surface defined, champagne `#C5A253` is the accent,
+    retired golds (`#B8952A`/`#D4AF37`) absent, all 4 fonts loaded, Tailwind wired to tokens, lookbook
+    route/nav wired, print support present.
+  - `runLookbookPaginationTests` — unit tests of the pure core (cover/colophon bookends, every plate used
+    once, contiguous folios, Roman numerals, deterministic season/meta).
+- Wired into `audit/index.js` § 0b. Run: `npm run audit` (or `node audit/index.js --suite=design|lookbook`).

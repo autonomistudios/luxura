@@ -95,6 +95,11 @@ import {
 } from './tests/deployment.js';
 
 import {
+  runDesignTokenTests,
+  runLookbookPaginationTests,
+} from './tests/design-system.js';
+
+import {
   runSkuEnrollmentSchemaTests,
   runSkuRecallTests,
   runSkuApiTests,
@@ -152,6 +157,11 @@ async function main() {
   await runSuite('Vercel Config',                runVercelConfigTests);
   await runSuite('Firestore Index Coverage',     runFirestoreIndexTests);
   await runSuite('Env Var Preflight',            runEnvPreflightTests);
+
+  // ── SECTION 0b: DESIGN SYSTEM (Atelier OS) ───────────────────────────────
+  console.log('\n\n▓▓▓ SECTION 0b: DESIGN SYSTEM (Atelier OS) ▓▓▓');
+  await runSuite('Design Tokens & Fonts',        runDesignTokenTests);
+  await runSuite('Lookbook Pagination',          runLookbookPaginationTests);
 
   // ── SECTION 1: PROMPT ARCHITECTURE ────────────────────────────────────────
   console.log('\n\n▓▓▓ SECTION 1: PROMPT ARCHITECTURE ▓▓▓');
