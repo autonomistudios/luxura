@@ -110,9 +110,11 @@ export async function runAuthTests() {
   const r5 = await get('/api/forge');
   results.push(assert(r5.status === 405, 'GET /api/forge → 405 Method Not Allowed', `got ${r5.status}`));
 
-  // Credits endpoint — no auth (GET endpoint, 401/403 before returning balance)
-  const r6 = await get('/api/credits');
-  results.push(assert(r6.status === 401 || r6.status === 400 || r6.status === 403, 'Credits endpoint with no auth → 4xx', `got ${r6.status}`));
+  // Credit balance is now embedded in the brand context via /api/v1/brands/auth
+  // (the old /api/credits consumer endpoint was removed in the B2B rebuild).
+  // Test that vault-deploy rejects with no auth instead.
+  const r6 = await post('/api/vault-deploy', {});
+  results.push(assert(r6.status === 401 || r6.status === 400 || r6.status === 403, 'vault-deploy with no auth → 4xx', `got ${r6.status}`));
 
   // Vault delete — no auth
   const r7 = await post('/api/vault-delete', { itemId: 'fake' });

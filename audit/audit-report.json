@@ -1,21 +1,37 @@
 {
-  "timestamp": "2026-06-03T15:31:52.135Z",
-  "mode": "STATIC",
-  "elapsed": "1.5",
+  "timestamp": "2026-06-04T10:21:54.342Z",
+  "mode": "LIVE+STATIC",
+  "elapsed": "3.6",
   "summary": {
-    "pass": 634,
+    "pass": 727,
     "fail": 0,
     "warn": 3,
-    "total": 634
+    "total": 727
   },
   "suites": [
+    {
+      "name": "Vercel Config",
+      "pass": 14,
+      "fail": 0,
+      "warn": 0,
+      "total": 14,
+      "elapsed": "1"
+    },
+    {
+      "name": "Env Var Preflight",
+      "pass": 15,
+      "fail": 0,
+      "warn": 0,
+      "total": 15,
+      "elapsed": "3"
+    },
     {
       "name": "Mode Classifier",
       "pass": 7,
       "fail": 0,
       "warn": 0,
       "total": 7,
-      "elapsed": "0"
+      "elapsed": "1"
     },
     {
       "name": "PHOTO_EDIT Builder",
@@ -39,7 +55,7 @@
       "fail": 0,
       "warn": 0,
       "total": 2,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "INPAINTING Builder",
@@ -47,7 +63,7 @@
       "fail": 0,
       "warn": 0,
       "total": 11,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "TWO_IMAGE Builder",
@@ -87,7 +103,7 @@
       "fail": 0,
       "warn": 0,
       "total": 22,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Pre-Flight Validator",
@@ -95,7 +111,7 @@
       "fail": 0,
       "warn": 0,
       "total": 5,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Mutation Retry Injection",
@@ -111,7 +127,7 @@
       "fail": 0,
       "warn": 0,
       "total": 54,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "Anchor Deduplication",
@@ -119,7 +135,7 @@
       "fail": 0,
       "warn": 0,
       "total": 13,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Garment Mode Detection",
@@ -183,7 +199,7 @@
       "fail": 0,
       "warn": 0,
       "total": 10,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Pass 2 Retry Logic",
@@ -199,7 +215,7 @@
       "fail": 0,
       "warn": 0,
       "total": 6,
-      "elapsed": "0"
+      "elapsed": "1"
     },
     {
       "name": "Rate Limiter Logic",
@@ -231,7 +247,7 @@
       "fail": 0,
       "warn": 1,
       "total": 8,
-      "elapsed": "1480"
+      "elapsed": "275"
     },
     {
       "name": "Privilege Escalation",
@@ -247,7 +263,39 @@
       "fail": 0,
       "warn": 0,
       "total": 16,
-      "elapsed": "4"
+      "elapsed": "6"
+    },
+    {
+      "name": "API Smoke Tests (LIVE)",
+      "pass": 47,
+      "fail": 0,
+      "warn": 0,
+      "total": 47,
+      "elapsed": "1334"
+    },
+    {
+      "name": "Auth Bypass (LIVE)",
+      "pass": 8,
+      "fail": 0,
+      "warn": 0,
+      "total": 8,
+      "elapsed": "815"
+    },
+    {
+      "name": "Input Injection (LIVE)",
+      "pass": 6,
+      "fail": 0,
+      "warn": 0,
+      "total": 6,
+      "elapsed": "591"
+    },
+    {
+      "name": "Payload Abuse (LIVE)",
+      "pass": 3,
+      "fail": 0,
+      "warn": 0,
+      "total": 3,
+      "elapsed": "494"
     },
     {
       "name": "Brand API Key Validation",
@@ -327,7 +375,7 @@
       "fail": 0,
       "warn": 0,
       "total": 0,
-      "elapsed": "1"
+      "elapsed": "0"
     },
     {
       "name": "Director Brief Count",
@@ -351,7 +399,7 @@
       "fail": 0,
       "warn": 0,
       "total": 3,
-      "elapsed": "0"
+      "elapsed": "1"
     },
     {
       "name": "Missing Image Error",
@@ -383,7 +431,7 @@
       "fail": 0,
       "warn": 0,
       "total": 5,
-      "elapsed": "2"
+      "elapsed": "1"
     },
     {
       "name": "Prompt Lock Order",
@@ -429,6 +477,122 @@
     }
   ],
   "allResults": [
+    {
+      "pass": true,
+      "label": "vercel.json is present and valid JSON"
+    },
+    {
+      "pass": true,
+      "label": "No catch-all rewrite intercepts /api/ routes (prevents brands/auth 401 class of bug)"
+    },
+    {
+      "pass": true,
+      "label": "SPA catch-all rewrite to /index.html exists"
+    },
+    {
+      "pass": true,
+      "label": "No rewrite sends /api/* to index.html"
+    },
+    {
+      "pass": true,
+      "label": "Function declared in vercel.json: api/forge.js"
+    },
+    {
+      "pass": true,
+      "label": "Function declared in vercel.json: api/brands/onboard.js"
+    },
+    {
+      "pass": true,
+      "label": "Function declared in vercel.json: api/v1/brands/auth.js"
+    },
+    {
+      "pass": true,
+      "label": "Function declared in vercel.json: api/v1/skus/enroll.js"
+    },
+    {
+      "pass": true,
+      "label": "forge.js maxDuration ≥ 120s (got 300s)"
+    },
+    {
+      "pass": true,
+      "label": "Cron schedule is valid 5-part cron: /api/agents/campaign-agent (*/2 * * * *)"
+    },
+    {
+      "pass": true,
+      "label": "Cron schedule is valid 5-part cron: /api/agents/usage-reconciliation-agent (0 0 1 * *)"
+    },
+    {
+      "pass": true,
+      "label": "Cron schedule is valid 5-part cron: /api/agents/consistency-guardian (0 2 * * 1)"
+    },
+    {
+      "pass": true,
+      "label": "Security header X-Frame-Options is set"
+    },
+    {
+      "pass": true,
+      "label": "Security header X-Content-Type-Options is set"
+    },
+    {
+      "pass": true,
+      "label": "Env var present: FIREBASE_SERVICE_ACCOUNT"
+    },
+    {
+      "pass": true,
+      "label": "Env var present: VITE_FIREBASE_API_KEY"
+    },
+    {
+      "pass": true,
+      "label": "Env var present: VITE_FIREBASE_PROJECT_ID"
+    },
+    {
+      "pass": true,
+      "label": "Env var present: VITE_FIREBASE_AUTH_DOMAIN"
+    },
+    {
+      "pass": true,
+      "label": "Env var present: GOOGLE_API_KEY"
+    },
+    {
+      "pass": true,
+      "label": "Env var present: CRON_SECRET"
+    },
+    {
+      "pass": true,
+      "label": "Env var present (optional): FIREBASE_API_KEY"
+    },
+    {
+      "pass": true,
+      "label": "Env var present (optional): FASHN_API_KEY"
+    },
+    {
+      "pass": true,
+      "label": "Env var present (optional): WEBHOOK_SECRET"
+    },
+    {
+      "pass": true,
+      "label": "FIREBASE_SERVICE_ACCOUNT decodes to valid JSON"
+    },
+    {
+      "pass": true,
+      "label": "SA JSON type === \"service_account\""
+    },
+    {
+      "pass": true,
+      "label": "SA JSON has project_id"
+    },
+    {
+      "pass": true,
+      "label": "SA JSON has client_email"
+    },
+    {
+      "pass": true,
+      "label": "SA private_key parses as valid PEM (no corruption)"
+    },
+    {
+      "pass": true,
+      "label": "SA project_id matches VITE_FIREBASE_PROJECT_ID (both: autonomi-studios-prod)"
+    },
     {
       "pass": true,
       "label": "Classifier: keep identity + no garment → PHOTO_EDIT"
@@ -2559,6 +2723,262 @@
     {
       "pass": true,
       "label": "forge.js: rejects brandId mismatch (tenant isolation)"
+    },
+    {
+      "pass": true,
+      "label": "GET /api/v1/brands/auth: response is JSON (not HTML from rewrite)"
+    },
+    {
+      "pass": true,
+      "label": "GET /api/v1/brands/auth: not 404 (function deployed)"
+    },
+    {
+      "pass": true,
+      "label": "GET /api/v1/brands/auth: endpoint reachable (no timeout)"
+    },
+    {
+      "pass": true,
+      "label": "GET /api/v1/brands/auth: no-token → 401 (not 200/HTML from rewrite)"
+    },
+    {
+      "pass": true,
+      "label": "POST /api/brands/onboard: response is JSON (not HTML from rewrite)"
+    },
+    {
+      "pass": true,
+      "label": "POST /api/brands/onboard: not 404 (function deployed)"
+    },
+    {
+      "pass": true,
+      "label": "POST /api/brands/onboard: endpoint reachable (no timeout)"
+    },
+    {
+      "pass": true,
+      "label": "POST /api/brands/onboard: no-token → 401"
+    },
+    {
+      "pass": true,
+      "label": "GET /api/v1/skus: response is JSON (not HTML from rewrite)"
+    },
+    {
+      "pass": true,
+      "label": "GET /api/v1/skus: not 404 (function deployed)"
+    },
+    {
+      "pass": true,
+      "label": "GET /api/v1/skus: endpoint reachable (no timeout)"
+    },
+    {
+      "pass": true,
+      "label": "GET /api/v1/skus: no-token → 401/403"
+    },
+    {
+      "pass": true,
+      "label": "POST /api/v1/skus/enroll: response is JSON (not HTML from rewrite)"
+    },
+    {
+      "pass": true,
+      "label": "POST /api/v1/skus/enroll: not 404 (function deployed)"
+    },
+    {
+      "pass": true,
+      "label": "POST /api/v1/skus/enroll: endpoint reachable (no timeout)"
+    },
+    {
+      "pass": true,
+      "label": "POST /api/v1/skus/enroll: no-token → 401/403"
+    },
+    {
+      "pass": true,
+      "label": "POST /api/forge: response is JSON (not HTML from rewrite)"
+    },
+    {
+      "pass": true,
+      "label": "POST /api/forge: not 404 (function deployed)"
+    },
+    {
+      "pass": true,
+      "label": "POST /api/forge: endpoint reachable (no timeout)"
+    },
+    {
+      "pass": true,
+      "label": "POST /api/forge: no-token → 401"
+    },
+    {
+      "pass": true,
+      "label": "POST /api/forge-iterate: response is JSON (not HTML from rewrite)"
+    },
+    {
+      "pass": true,
+      "label": "POST /api/forge-iterate: not 404 (function deployed)"
+    },
+    {
+      "pass": true,
+      "label": "POST /api/forge-iterate: endpoint reachable (no timeout)"
+    },
+    {
+      "pass": true,
+      "label": "POST /api/forge-iterate: no-token → 401"
+    },
+    {
+      "pass": true,
+      "label": "POST /api/vault-deploy: response is JSON (not HTML from rewrite)"
+    },
+    {
+      "pass": true,
+      "label": "POST /api/vault-deploy: not 404 (function deployed)"
+    },
+    {
+      "pass": true,
+      "label": "POST /api/vault-deploy: endpoint reachable (no timeout)"
+    },
+    {
+      "pass": true,
+      "label": "POST /api/vault-deploy: no-token → 4xx"
+    },
+    {
+      "pass": true,
+      "label": "GET /api/v1/team: response is JSON (not HTML from rewrite)"
+    },
+    {
+      "pass": true,
+      "label": "GET /api/v1/team: not 404 (function deployed)"
+    },
+    {
+      "pass": true,
+      "label": "GET /api/v1/team: endpoint reachable (no timeout)"
+    },
+    {
+      "pass": true,
+      "label": "GET /api/v1/team: no-token → 401/403"
+    },
+    {
+      "pass": true,
+      "label": "GET /api/v1/usage: response is JSON (not HTML from rewrite)"
+    },
+    {
+      "pass": true,
+      "label": "GET /api/v1/usage: not 404 (function deployed)"
+    },
+    {
+      "pass": true,
+      "label": "GET /api/v1/usage: endpoint reachable (no timeout)"
+    },
+    {
+      "pass": true,
+      "label": "GET /api/v1/usage: no-token → 401/403"
+    },
+    {
+      "pass": true,
+      "label": "POST /api/v1/api-key/issue: response is JSON (not HTML from rewrite)"
+    },
+    {
+      "pass": true,
+      "label": "POST /api/v1/api-key/issue: not 404 (function deployed)"
+    },
+    {
+      "pass": true,
+      "label": "POST /api/v1/api-key/issue: endpoint reachable (no timeout)"
+    },
+    {
+      "pass": true,
+      "label": "POST /api/v1/api-key/issue: no-token → 401/403"
+    },
+    {
+      "pass": true,
+      "label": "GET /api/v1/docs: response is JSON (not HTML from rewrite)"
+    },
+    {
+      "pass": true,
+      "label": "GET /api/v1/docs: not 404 (function deployed)"
+    },
+    {
+      "pass": true,
+      "label": "GET /api/v1/docs: endpoint reachable (no timeout)"
+    },
+    {
+      "pass": true,
+      "label": "GET /api/v1/docs: public → 200"
+    },
+    {
+      "pass": true,
+      "label": "GET /portal/skus: SPA route → 200 HTML (React Router handles it)"
+    },
+    {
+      "pass": true,
+      "label": "GET /: root → 200 HTML"
+    },
+    {
+      "pass": true,
+      "label": "GET /api/forge → 405 Method Not Allowed (not 404/HTML)"
+    },
+    {
+      "pass": true,
+      "label": "No auth header → 401"
+    },
+    {
+      "pass": true,
+      "label": "No auth header → UNAUTHORIZED error message"
+    },
+    {
+      "pass": true,
+      "label": "Empty Bearer token → 401"
+    },
+    {
+      "pass": true,
+      "label": "Malformed JWT → 401"
+    },
+    {
+      "pass": true,
+      "label": "Well-formed but fake JWT → 401"
+    },
+    {
+      "pass": true,
+      "label": "GET /api/forge → 405 Method Not Allowed"
+    },
+    {
+      "pass": true,
+      "label": "vault-deploy with no auth → 4xx"
+    },
+    {
+      "pass": true,
+      "label": "vault-delete with no auth → 4xx"
+    },
+    {
+      "pass": true,
+      "label": "XSS in userPrompt: still requires auth (not bypassed by injection)"
+    },
+    {
+      "pass": true,
+      "label": "SQL injection string in userPrompt: no server crash"
+    },
+    {
+      "pass": true,
+      "label": "Prototype pollution attempt: still requires auth"
+    },
+    {
+      "pass": true,
+      "label": "Anchor type coercion: no server crash, proper 4xx"
+    },
+    {
+      "pass": true,
+      "label": "Empty body: no server crash"
+    },
+    {
+      "pass": true,
+      "label": "Null config: no server crash"
+    },
+    {
+      "pass": true,
+      "label": "Oversized userPrompt (50KB): server handles gracefully (no 500)"
+    },
+    {
+      "pass": true,
+      "label": "Oversized anchor array (1000 entries): no 500 crash"
+    },
+    {
+      "pass": true,
+      "label": "additionalModelImages bomb (100 images): no 500 crash"
     },
     {
       "pass": true,

@@ -88,6 +88,12 @@ import {
 } from './tests/brand-auth.js';
 
 import {
+  runVercelConfigTests,
+  runEnvPreflightTests,
+  runApiSmokeTests,
+} from './tests/deployment.js';
+
+import {
   runSkuEnrollmentSchemaTests,
   runSkuRecallTests,
   runSkuApiTests,
@@ -140,6 +146,11 @@ async function main() {
   console.log(`║   Mode: ${LIVE_MODE ? 'LIVE + STATIC' : 'STATIC ONLY'} | ${new Date().toISOString()}  ║`);
   console.log('╚══════════════════════════════════════════════════════════════╝');
 
+  // ── SECTION 0: DEPLOYMENT CORRECTNESS (always runs) ──────────────────────
+  console.log('\n\n▓▓▓ SECTION 0: DEPLOYMENT CORRECTNESS ▓▓▓');
+  await runSuite('Vercel Config',                runVercelConfigTests);
+  await runSuite('Env Var Preflight',            runEnvPreflightTests);
+
   // ── SECTION 1: PROMPT ARCHITECTURE ────────────────────────────────────────
   console.log('\n\n▓▓▓ SECTION 1: PROMPT ARCHITECTURE ▓▓▓');
   await runSuite('Mode Classifier',             runClassifierTests);
@@ -181,6 +192,7 @@ async function main() {
 
   if (LIVE_MODE) {
     console.log('\n  🌐 LIVE MODE: Sending requests to deployed API...');
+    await runSuite('API Smoke Tests (LIVE)',     runApiSmokeTests);
     await runSuite('Auth Bypass (LIVE)',         runAuthTests);
     await runSuite('Input Injection (LIVE)',     runInjectionTests);
     await runSuite('Payload Abuse (LIVE)',       runPayloadTests);
