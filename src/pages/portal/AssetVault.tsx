@@ -113,6 +113,7 @@ export default function AssetVault() {
       } else {
         // Multiple files: package into a ZIP
         const zip = new JSZip();
+        let successCount = 0;
         
         for (let i = 0; i < items.length; i++) {
           const item = items[i];
@@ -122,10 +123,22 @@ export default function AssetVault() {
             const blob = await res.blob();
             // Add file to zip
             zip.file(`${safeName(item)}.png`, blob);
+            successCount++;
           } catch (err) {
-            console.warn(`Failed to fetch ${item.name} for zip:`, err);
+            console.warn(`Failed to fetch ${item.name} for zip (likely CORS):`, err);
           }
           setProgress(Math.round(((i + 1) / items.length) * 50)); // 50% for fetching
+        }
+
+        // If CORS blocked ALL images, fallback to sequential individual downloads
+        if (successCount === 0) {
+          console.warn('All files failed to zip (CORS issue). Falling back to sequential downloads.');
+          for (let i = 0; i < items.length; i++) {
+            await downloadAsset(items[i]);
+            setProgress(50 + Math.round(((i + 1) / items.length) * 50));
+            await new Promise(r => setTimeout(r, 250));
+          }
+          return;
         }
 
         // Generate the zip file
@@ -203,23 +216,23 @@ export default function AssetVault() {
         <select value={anchor} onChange={e => setAnchor(e.target.value)}
           className="px-3 py-2 rounded text-[10px] font-mono text-white/55 outline-none cursor-pointer appearance-none"
           style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
-          <option value="all">All anchors</option>
-          {anchorFacets.map(a => <option key={a} value={a}>{a}</option>)}
+          <option value="all" className="bg-[#111116] text-white">All anchors</option>
+          {anchorFacets.map(a => <option key={a} value={a} className="bg-[#111116] text-white">{a}</option>)}
         </select>
 
         <select value={category} onChange={e => setCategory(e.target.value)}
           className="px-3 py-2 rounded text-[10px] font-mono text-white/55 outline-none cursor-pointer appearance-none"
           style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
-          <option value="all">All categories</option>
-          {categoryFacets.map(c => <option key={c} value={c}>{c}</option>)}
+          <option value="all" className="bg-[#111116] text-white">All categories</option>
+          {categoryFacets.map(c => <option key={c} value={c} className="bg-[#111116] text-white">{c}</option>)}
         </select>
 
         <select value={sort} onChange={e => setSort(e.target.value as typeof sort)}
           className="px-3 py-2 rounded text-[10px] font-mono text-white/55 outline-none cursor-pointer appearance-none"
           style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
-          <option value="newest">Newest first</option>
-          <option value="oldest">Oldest first</option>
-          <option value="name">Name A–Z</option>
+          <option value="newest" className="bg-[#111116] text-white">Newest first</option>
+          <option value="oldest" className="bg-[#111116] text-white">Oldest first</option>
+          <option value="name" className="bg-[#111116] text-white">Name A–Z</option>
         </select>
 
         {filtered.length > 0 && (
