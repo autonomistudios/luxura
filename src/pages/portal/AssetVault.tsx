@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Search, Download, Check, LayoutGrid, X, Sparkles, Loader2 } from 'lucide-react';
+import JSZip from 'jszip';
 import { useSovereignStore, type VaultItem } from '../../store/useSovereignStore';
 
 // ─── Download helpers ──────────────────────────────────────────────────────────
@@ -103,13 +104,56 @@ export default function AssetVault() {
     if (items.length === 0 || downloading) return;
     setDownloading(true);
     setProgress(0);
-    for (let i = 0; i < items.length; i++) {
-      await downloadAsset(items[i]);
-      setProgress(Math.round(((i + 1) / items.length) * 100));
-      // small gap so the browser doesn't suppress rapid sequential downloads
-      await new Promise(r => setTimeout(r, 250));
+
+    try {
+      if (items.length === 1) {
+        // Single file: download directly
+        await downloadAsset(items[0]);
+        setProgress(100);
+      } else {
+        // Multiple files: package into a ZIP
+        const zip = new JSZip();
+        
+        for (let i = 0; i < items.length; i++) {
+          const item = items[i];
+          try {
+            const res = await fetch(item.image, { mode: 'cors' });
+            if (!res.ok) throw new Error(String(res.status));
+            const blob = await res.blob();
+            // Add file to zip
+            zip.file(`${safeName(item)}.png`, blob);
+          } catch (err) {
+            console.warn(`Failed to fetch ${item.name} for zip:`, err);
+          }
+          setProgress(Math.round(((i + 1) / items.length) * 50)); // 50% for fetching
+        }
+
+        // Generate the zip file
+        const zipBlob = await zip.generateAsync({ 
+          type: 'blob',
+          onUpdate: (metadata) => {
+            // metadata.percent is 0-100; map it to the 50-100% range of the progress bar
+            setProgress(50 + Math.round(metadata.percent / 2));
+          }
+        });
+
+        // Trigger download
+        const url = URL.createObjectURL(zipBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `LuxAura_Assets.zip`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      }
+    } catch (err) {
+      console.error('Batch download failed:', err);
+    } finally {
+      setDownloading(false);
+      setProgress(0);
+      setSelected(new Set()); // Auto-clear selection after successful download
     }
-    setDownloading(false);
   }
 
   const hasFilters = search || anchor !== 'all' || category !== 'all';

@@ -400,7 +400,7 @@ export default async function handler(req, res) {
       console.log(`[FORGE] AGENT 01: Extracting DNA for anchors: ${anchors.join(', ')}...`);
       const textModel = genAI.getGenerativeModel({ model: TEXT_MODEL });
 
-      const identityTask = async () => {
+      const identityTask = config?.strategy === 'keep' ? async () => {
         try {
           const identityPrompt = `FORENSIC MODEL IDENTITY ANALYST — Extract ONLY the permanent physical characteristics of the person in this image. Ignore everything they are wearing.
 
@@ -436,7 +436,7 @@ OUTPUT: Physical identity profile only. Clothing is invisible to you.`;
         } catch (err) {
           console.warn('[FORGE] MODEL IDENTITY extraction failed — slot fallback:', err?.message);
         }
-      };
+      } : () => Promise.resolve();
 
       // Extract hair DNA whenever: keep mode, HAIR anchor, OR any source image is present (locks hair consistency across all 6 slots)
       const shouldExtractHairDNA = isKeepGarment || config?.strategy === 'keep' || anchors.includes('HAIR') || !!config?.sourceImage;

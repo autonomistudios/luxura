@@ -122,7 +122,7 @@ const GENDER_OPTIONS = ['Female', 'Male', 'Unisex (Androgynous)'];
 
 const STRATEGY_OPTIONS = [
   { id: 'change', label: 'AI Reimagine', sub: 'Generate new model' },
-  { id: 'preserve', label: 'Preserve Identity', sub: 'Keep exact face' },
+  { id: 'keep', label: 'Preserve Identity', sub: 'Keep exact face' },
 ];
 
 // ─── Agent Pipeline Strip ─────────────────────────────────────────────────────
@@ -524,7 +524,7 @@ export default function CampaignBuilder() {
   const [atmosphere,      setAtmosphere]      = useState('Auto');
   const [styling,         setStyling]         = useState('Auto');
   const [gender,          setGender]          = useState('Female');
-  const [strategy,        setStrategy]        = useState<'change' | 'preserve'>('change');
+  const [strategy,        setStrategy]        = useState<'change' | 'keep'>('change');
   const [showCreativeProps, setShowCreativeProps] = useState(false);
   const [activePropId,      setActivePropId]      = useState<string | null>(null);
 
@@ -920,7 +920,7 @@ export default function CampaignBuilder() {
                 {STRATEGY_OPTIONS.map(opt => {
                   const active = strategy === opt.id;
                   return (
-                    <button key={opt.id} onClick={() => setStrategy(opt.id as 'change'|'preserve')}
+                    <button key={opt.id} onClick={() => setStrategy(opt.id as 'change'|'keep')}
                       className="flex flex-col gap-0.5 p-2 rounded text-left transition-all"
                       style={{
                         background: active ? 'rgba(184,149,42,0.10)' : 'rgba(255,255,255,0.02)',
