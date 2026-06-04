@@ -263,35 +263,42 @@ function ForgeSlot({ image, index, isGenerating, isComplete, onRefine }: {
   );
 }
 
-// ─── Config Select ────────────────────────────────────────────────────────────
+// ─── Config Select (Premium Luxury) ────────────────────────────────────────
 function ConfigSelect({ label, value, locked, options, onChange }: {
   label: string; value: string; locked?: boolean;
   options: string[]; onChange: (v: string) => void;
 }) {
   return (
-    <div className="flex flex-col gap-2">
+    <motion.div className="flex flex-col gap-2.5" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       <div className="flex items-center justify-between">
-        <span className="text-[10px] tracking-widest uppercase text-[#86868B] font-semibold">{label}</span>
-        {locked && <Lock size={10} className="text-[#86868B]" />}
+        <span className="text-[10px] tracking-[0.15em] uppercase text-white/50 font-light">{label}</span>
+        {locked && <Lock size={10} className="text-white/30" />}
       </div>
       {locked ? (
-        <div className="flex items-center gap-3 px-4 py-3 rounded-xl bg-[#1C1C1E] border border-white/5">
-          <span className="text-[12px] font-medium text-white/50 flex-1 truncate">{value}</span>
-          <Lock size={12} className="text-white/30 flex-shrink-0" />
+        <div className="flex items-center gap-3 px-3.5 py-2 rounded-lg"
+          style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
+          <span className="text-[12px] font-light text-white/40 flex-1 truncate">{value}</span>
+          <Lock size={11} className="text-white/20 flex-shrink-0" />
         </div>
       ) : (
-        <div className="relative">
+        <div className="relative group">
           <select
             value={value}
             onChange={e => onChange(e.target.value)}
-            className="w-full px-4 py-3 rounded-xl text-[12px] font-medium text-white outline-none appearance-none cursor-pointer bg-[#1C1C1E] hover:bg-[#2C2C2E] border border-white/5 focus:border-white/20 transition-colors"
+            className="w-full px-3.5 py-2 rounded-lg text-[12px] font-light text-white outline-none appearance-none cursor-pointer transition-all duration-300"
+            style={{
+              background: 'rgba(255,255,255,0.03)',
+              border: '1px solid rgba(255,255,255,0.08)',
+            }}
+            onFocus={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'; }}
+            onBlur={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
           >
-            {options.map(o => <option key={o} value={o} className="bg-[#1C1C1E]">{o}</option>)}
+            {options.map(o => <option key={o} value={o} style={{ background: '#0A0A0A', color: 'white' }}>{o}</option>)}
           </select>
-          <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#86868B] pointer-events-none" />
+          <ChevronDown size={13} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/30 pointer-events-none" />
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }
 
@@ -691,15 +698,87 @@ export default function CampaignBuilder() {
   }
 
   return (
-    <div className="h-[calc(100vh-64px)] flex overflow-hidden font-sans">
+    <div className="h-[calc(100vh-64px)] flex flex-col overflow-hidden font-sans" style={{ background: '#0A0A0A' }}>
 
-      {/* ── LEFT: Config panel ──────────────────────────────────────────── */}
-      <aside className="w-[320px] shrink-0 border-r border-white/[0.05] flex flex-col overflow-y-auto bg-black scrollbar-none">
+      {/* ── HERO SECTION: Current/Generated Image ─────────────────────────── */}
+      <div className="relative h-[45%] shrink-0 overflow-hidden" style={{ background: 'linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 100%)' }}>
+        {slots.some(s => !!s) ? (
+          <div className="relative w-full h-full group">
+            <img src={slots.find(s => !!s) || ''} alt="Hero" className="w-full h-full object-cover" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-40" />
+            <div className="absolute inset-0 flex flex-col justify-end p-8">
+              <h1 className="font-serif text-5xl font-light text-white mb-2 tracking-tight">{campaignName || 'Untitled Campaign'}</h1>
+              <p className="text-white/60 text-sm tracking-wide">{allComplete ? '6 of 6 Assets Complete' : `${slots.filter(s => !!s).length} of 6 Assets`}</p>
+            </div>
+          </div>
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center">
+            <div className="w-24 h-32 rounded-2xl bg-white/5 border border-white/10 mb-6 flex items-center justify-center">
+              <Sparkles size={48} className="text-white/20" />
+            </div>
+            <p className="text-white/40 font-light text-lg">Select a garment to begin</p>
+          </div>
+        )}
+      </div>
 
-        <div className="p-6 flex flex-col gap-8">
-          <p className="text-[11px] font-semibold tracking-widest uppercase text-white/40">
-            Forge Configuration
-          </p>
+      {/* ── MAIN: Config + Gallery Grid ───────────────────────────────── */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Gallery Grid */}
+        <div className="flex-1 overflow-y-auto scrollbar-none p-8" style={{ background: '#0A0A0A' }}>
+          {slots.some(s => !!s) && (
+            <div>
+              <h2 className="font-serif text-2xl font-light text-white mb-6 tracking-tight">Editorial Sequence</h2>
+              <div className="grid grid-cols-3 gap-4">
+                {slots.map((image, i) => (
+                  <motion.div key={i} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.05 }}
+                    className="relative aspect-[4/5] rounded-2xl overflow-hidden group cursor-pointer"
+                    style={{ background: 'linear-gradient(135deg, #1A1A1A, #0F0F0F)', border: '1px solid rgba(255,255,255,0.08)' }}
+                    onClick={() => image && setRefineSlot(i)}>
+                    {image ? (
+                      <>
+                        <img src={image} alt={`Slot ${i + 1}`} className="w-full h-full object-cover" />
+                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex flex-col justify-between p-4">
+                          <div className="flex justify-between items-start opacity-0 group-hover:opacity-100 transition-opacity">
+                            <span className="text-white text-xs font-mono tracking-widest bg-black/60 backdrop-blur-md px-2 py-1 rounded">
+                              SLOT {i + 1}
+                            </span>
+                            <span className="text-white/80 text-xs font-mono tracking-widest">READY</span>
+                          </div>
+                          <button onClick={(e) => { e.stopPropagation(); setRefineSlot(i); }}
+                            className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 py-2.5 bg-white text-black text-xs font-semibold rounded-lg hover:bg-white/90">
+                            <Wand2 size={11} /> Refine
+                          </button>
+                        </div>
+                      </>
+                    ) : isForging ? (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <motion.div className="w-8 h-8 rounded-full border-t-2 border-r-2 border-white/40"
+                          animate={{ rotate: 360 }} transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }} />
+                      </div>
+                    ) : null}
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* ── FLOATING CONTROL PANEL (Premium) ──────────────────────────── */}
+        <div className="w-[420px] shrink-0 overflow-y-auto scrollbar-none flex flex-col"
+          style={{
+            background: 'rgba(255, 255, 255, 0.02)',
+            borderLeft: '1px solid rgba(255, 255, 255, 0.05)',
+            backdropFilter: 'blur(40px)',
+          }}>
+
+      {/* ── Config panel ──────────────────────────────────────────── */}
+      <aside className="w-full flex flex-col overflow-y-auto scrollbar-none" style={{ background: 'transparent' }}>
+
+        <div className="p-8 flex flex-col gap-10">
+          <div className="flex flex-col gap-1 border-b border-white/10 pb-6">
+            <h3 className="font-serif text-xl font-light text-white tracking-tight">Production</h3>
+            <p className="text-xs text-white/40 tracking-wide font-light">Configure your editorial direction</p>
+          </div>
 
           {/* SKU Selector — Outfit Composition */}
           <div className="flex flex-col gap-3">
