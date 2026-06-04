@@ -41,7 +41,7 @@ export const MasterExportModal: React.FC<MasterExportModalProps> = ({ isOpen, on
         >
           <div className="relative w-full max-w-lg bg-[#050505] border border-white/10 p-6 md:p-12 overflow-hidden shadow-2xl h-[100dvh] md:h-auto overflow-y-auto">
             {/* The Asset Shadow Background */}            
-            <div className="absolute top-0 right-0 w-64 h-64 bg-[#D4AF37]/5 blur-[80px] -z-10" />
+            <div className="absolute top-0 right-0 w-64 h-64 bg-[#C5A253]/5 blur-[80px] -z-10" />
             
             <div className="space-y-12">              
               <div className="flex justify-between items-start">                
@@ -69,9 +69,9 @@ export const MasterExportModal: React.FC<MasterExportModalProps> = ({ isOpen, on
                       <button                         
                         key={format.label}                        
                         onClick={() => handleExtraction(format.label)}                        
-                        className="w-full text-left p-6 border border-white/5 hover:border-[#D4AF37]/40 transition-all group relative overflow-hidden"                      
+                        className="w-full text-left p-6 border border-white/5 hover:border-[#C5A253]/40 transition-all group relative overflow-hidden"                      
                       >                        
-                        <span className="text-xs font-serif italic text-white block mb-1 group-hover:text-[#D4AF37] transition-colors">{format.label}</span>                        
+                        <span className="text-xs font-serif italic text-white block mb-1 group-hover:text-[#C5A253] transition-colors">{format.label}</span>                        
                         <span className="text-[8px] font-mono text-white/20 uppercase tracking-[0.3em]">{format.detail}</span>                      
                       </button>                    
                     ))}                  
@@ -83,12 +83,12 @@ export const MasterExportModal: React.FC<MasterExportModalProps> = ({ isOpen, on
                     animate={{ opacity: 1 }}                    
                     className="py-12 space-y-8 text-center"                  
                   >                    
-                    <p className="text-[10px] font-mono uppercase tracking-[0.8em] text-[#D4AF37] animate-pulse">Extracting Asset...</p>                    
+                    <p className="text-[10px] font-mono uppercase tracking-[0.8em] text-[#C5A253] animate-pulse">Extracting Asset...</p>                    
                     <div className="w-full h-[1px] bg-white/5 relative overflow-hidden">                       
                       <motion.div                         
                         initial={{ width: 0 }}                        
                         animate={{ width: `${progress}%` }}                        
-                        className="absolute h-full bg-gradient-to-r from-transparent via-[#D4AF37] to-white shadow-[0_0_15px_rgba(212,175,55,0.4)]"                       
+                        className="absolute h-full bg-gradient-to-r from-transparent via-[#C5A253] to-white shadow-[0_0_15px_rgba(197,162,83,0.4)]"                       
                       />
                     </div>
                   </motion.div>

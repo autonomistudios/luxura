@@ -49,13 +49,13 @@ export default function AssetActionsDrawer({ image, theme = 'light' }: AssetActi
   const txtMono = isDark ? 'text-white/20'        : 'text-[#B5B0A8]';
   const border  = isDark ? 'border-white/10'      : 'border-[#E5E0D8]';
   const bg      = isDark ? 'bg-[#111]'            : 'bg-[#FAF9F7]';
-  const active  = isDark ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/5'
+  const active  = isDark ? 'border-[#C5A253] text-[#C5A253] bg-[#C5A253]/5'
                          : 'border-[#1A1A1A] bg-[#1A1A1A] text-white';
   const inactive = isDark ? `border-white/10 ${txtMid} hover:border-white/30 hover:text-white/70`
                            : `border-[#E5E0D8] ${txtMid} hover:border-[#1A1A1A] hover:text-[#1A1A1A]`;
-  const ctaBorder = isDark ? 'border-[#D4AF37]/50 text-[#D4AF37] hover:bg-[#D4AF37]/10'
+  const ctaBorder = isDark ? 'border-[#C5A253]/50 text-[#C5A253] hover:bg-[#C5A253]/10'
                            : 'border-[#1A1A1A] text-[#1A1A1A] hover:bg-[#1A1A1A] hover:text-white';
-  const tabActive   = isDark ? 'border-[#D4AF37] text-[#D4AF37]' : 'border-[#1A1A1A] text-[#1A1A1A]';
+  const tabActive   = isDark ? 'border-[#C5A253] text-[#C5A253]' : 'border-[#1A1A1A] text-[#1A1A1A]';
   const tabInactive = isDark ? `border-transparent ${txtMid} hover:text-white/60`
                               : `border-transparent ${txtMid} hover:text-[#1A1A1A]`;
 
@@ -245,7 +245,7 @@ export default function AssetActionsDrawer({ image, theme = 'light' }: AssetActi
                     ) : (
                       <div className="w-full h-full flex flex-col items-center justify-center gap-1.5">
                         {refineRunning
-                          ? <div className={`w-4 h-4 border ${isDark ? 'border-white/10 border-t-[#D4AF37]' : 'border-[#E5E0D8] border-t-[#1A1A1A]'} rounded-full animate-spin`} />
+                          ? <div className={`w-4 h-4 border ${isDark ? 'border-white/10 border-t-[#C5A253]' : 'border-[#E5E0D8] border-t-[#1A1A1A]'} rounded-full animate-spin`} />
                           : <span className={`text-[9px] font-mono ${txtMono}`}>{i+1}</span>
                         }
                       </div>

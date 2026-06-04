@@ -5,7 +5,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useSovereignStore } from '../../store/useSovereignStore';
 
 // ─── SVG Arc Ring ─────────────────────────────────────────────────────────────
-function QuotaRing({ value, max, label, color = '#B8952A' }: { value: number; max: number; label: string; color?: string }) {
+function QuotaRing({ value, max, label, color = '#C5A253' }: { value: number; max: number; label: string; color?: string }) {
   const pct = max > 0 ? Math.min((value / max) * 100, 100) : 0;
   const r = 70; const cx = 90; const cy = 90; const stroke = 10;
   const circ = Math.PI * r * (240 / 180);
@@ -50,7 +50,7 @@ function QuotaRing({ value, max, label, color = '#B8952A' }: { value: number; ma
 }
 
 // ─── Tiny Sparkline ───────────────────────────────────────────────────────────
-function Sparkline({ data, color = '#B8952A', width = 200, height = 40 }: { data: number[]; color?: string; width?: number; height?: number }) {
+function Sparkline({ data, color = '#C5A253', width = 200, height = 40 }: { data: number[]; color?: string; width?: number; height?: number }) {
   if (!data.length) return null;
   const max = Math.max(...data, 1);
   const pts = data.map((v, i) => ({
@@ -106,7 +106,7 @@ export default function UsageDashboard() {
     <div className="p-8 min-h-full">
       <div className="flex items-start justify-between mb-8">
         <div>
-          <h1 className="font-serif italic text-4xl text-white mb-2">Analytics</h1>
+          <h1 className="font-display italic text-4xl text-primary mb-2">Analytics</h1>
           <p className="text-[9px] font-mono tracking-[0.35em] uppercase text-white/25">
             {brand?.billing?.periodStart
               ? `Period: ${new Date(brand.billing.currentPeriodEnd || '').toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`
@@ -129,13 +129,13 @@ export default function UsageDashboard() {
           <p className="text-[7px] font-mono tracking-[0.45em] uppercase text-white/25">Cost Comparison</p>
           <div>
             <p className="text-[7px] font-mono text-white/25 mb-1 uppercase tracking-[0.2em]">LuxAura This Period</p>
-            <p className="font-serif italic text-3xl text-[#B8952A]">
+            <p className="font-display italic text-3xl text-[#C5A253]">
               ${((brand?.tier === 'enterprise' ? 4999 : brand?.tier === 'agency' ? 1499 : 499) || 0).toLocaleString()}
             </p>
           </div>
           <div>
             <p className="text-[7px] font-mono text-white/25 mb-1 uppercase tracking-[0.2em]">Traditional Production Equivalent</p>
-            <p className="font-serif italic text-3xl text-white/20 line-through">${savings.toLocaleString()}</p>
+            <p className="font-display italic text-3xl text-white/20 line-through">${savings.toLocaleString()}</p>
           </div>
           <div className="flex items-center gap-2">
             <TrendingUp size={14} className="text-emerald-500" />

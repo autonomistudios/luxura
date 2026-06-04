@@ -128,8 +128,8 @@ function VaultPicker({
         <div className="flex items-center justify-between px-8 py-6 border-b border-white/5 shrink-0">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <Lock size={9} className="text-[#D4AF37]/60" />
-              <p className="text-[8px] font-mono uppercase tracking-[0.6em] text-[#D4AF37]/60">
+              <Lock size={9} className="text-[#C5A253]/60" />
+              <p className="text-[8px] font-mono uppercase tracking-[0.6em] text-[#C5A253]/60">
                 Vault — Authorized Source Images
               </p>
             </div>
@@ -157,7 +157,7 @@ function VaultPicker({
 
           {!loading && assets.length === 0 && (
             <div className="flex flex-col items-center justify-center py-24 gap-6 text-center">
-              <div className="w-12 h-[1px] bg-[#D4AF37]/20" />
+              <div className="w-12 h-[1px] bg-[#C5A253]/20" />
               <p className="text-[9px] font-mono uppercase tracking-[0.6em] text-white/20">
                 Your vault is empty
               </p>
@@ -167,12 +167,12 @@ function VaultPicker({
               <Link
                 to="/"
                 onClick={onClose}
-                className="flex items-center gap-2 text-[9px] font-mono uppercase tracking-[0.4em] text-[#D4AF37]/60 hover:text-[#D4AF37] transition-colors border border-[#D4AF37]/20 hover:border-[#D4AF37]/40 px-5 py-3"
+                className="flex items-center gap-2 text-[9px] font-mono uppercase tracking-[0.4em] text-[#C5A253]/60 hover:text-[#C5A253] transition-colors border border-[#C5A253]/20 hover:border-[#C5A253]/40 px-5 py-3"
               >
                 Go to Atelier
                 <ChevronRight size={11} />
               </Link>
-              <div className="w-12 h-[1px] bg-[#D4AF37]/20" />
+              <div className="w-12 h-[1px] bg-[#C5A253]/20" />
             </div>
           )}
 
@@ -183,7 +183,7 @@ function VaultPicker({
                   key={item.id}
                   whileTap={{ scale: 0.97 }}
                   onClick={() => onSelect(item)}
-                  className="group relative aspect-[3/4] border border-white/8 hover:border-[#D4AF37]/50 transition-all duration-500 overflow-hidden cursor-pointer"
+                  className="group relative aspect-[3/4] border border-white/8 hover:border-[#C5A253]/50 transition-all duration-500 overflow-hidden cursor-pointer"
                 >
                   <img
                     src={item.image}
@@ -191,19 +191,19 @@ function VaultPicker({
                     className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-[1.5s] scale-105 group-hover:scale-100"
                   />
                   {/* Corner marks on hover */}
-                  <div className="absolute top-2 left-2 w-3 h-3 border-t border-l border-[#D4AF37]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                  <div className="absolute top-2 right-2 w-3 h-3 border-t border-r border-[#D4AF37]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                  <div className="absolute bottom-2 left-2 w-3 h-3 border-b border-l border-[#D4AF37]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-                  <div className="absolute bottom-2 right-2 w-3 h-3 border-b border-r border-[#D4AF37]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                  <div className="absolute top-2 left-2 w-3 h-3 border-t border-l border-[#C5A253]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                  <div className="absolute top-2 right-2 w-3 h-3 border-t border-r border-[#C5A253]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                  <div className="absolute bottom-2 left-2 w-3 h-3 border-b border-l border-[#C5A253]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+                  <div className="absolute bottom-2 right-2 w-3 h-3 border-b border-r border-[#C5A253]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
 
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   <div className="absolute bottom-3 left-3 right-3 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-2 group-hover:translate-y-0">
-                    <p className="text-[7px] font-mono text-[#D4AF37] uppercase tracking-widest truncate">{item.name}</p>
+                    <p className="text-[7px] font-mono text-[#C5A253] uppercase tracking-widest truncate">{item.name}</p>
                     <p className="text-[6px] font-mono text-white/40 uppercase tracking-widest">{item.date}</p>
                   </div>
 
                   {/* Select overlay */}
-                  <div className="absolute inset-0 bg-[#D4AF37]/0 group-hover:bg-[#D4AF37]/5 transition-colors duration-500" />
+                  <div className="absolute inset-0 bg-[#C5A253]/0 group-hover:bg-[#C5A253]/5 transition-colors duration-500" />
                 </motion.button>
               ))}
             </div>
@@ -244,7 +244,7 @@ class VideoStudioErrorBoundary extends Component<
           <p className="text-[8px] font-mono text-white/15 max-w-xl">{this.state.error.stack?.split('\n').slice(0,3).join(' | ')}</p>
           <button
             onClick={() => { this.setState({ error: null }); window.location.reload(); }}
-            className="px-8 py-3 border border-[#D4AF37]/30 text-[#D4AF37]/70 text-[9px] font-mono uppercase tracking-[0.4em] hover:bg-[#D4AF37]/10 transition-all"
+            className="px-8 py-3 border border-[#C5A253]/30 text-[#C5A253]/70 text-[9px] font-mono uppercase tracking-[0.4em] hover:bg-[#C5A253]/10 transition-all"
           >
             [ Reload ]
           </button>
@@ -526,17 +526,17 @@ function VideoStudio() {
         {/* ── Header ── */}
         <div className="mb-12">
           <div className="flex items-center gap-3 mb-5">
-            <Film size={13} className="text-[#D4AF37]" />
-            <span className="text-[8px] font-mono uppercase tracking-[0.6em] text-[#D4AF37]/60">
+            <Film size={13} className="text-[#C5A253]" />
+            <span className="text-[8px] font-mono uppercase tracking-[0.6em] text-[#C5A253]/60">
               LuxAura — Cinema Studio · Powered by Google Veo 3.1
             </span>
           </div>
           <h1 className="text-5xl md:text-7xl font-serif text-white tracking-tighter leading-tight mb-4">
             Your Work,<br />
-            <span className="text-[#D4AF37] italic">In Motion.</span>
+            <span className="text-[#C5A253] italic">In Motion.</span>
           </h1>
           <div className="flex items-center gap-3 mt-4">
-            <Zap size={9} style={{ color: '#D4AF37' }} />
+            <Zap size={9} style={{ color: '#C5A253' }} />
             <span className="text-[9px] font-mono text-white/30 uppercase tracking-[0.4em]">
               {isAdmin ? '∞ video credits' : `${videoCredits} video credit${videoCredits !== 1 ? 's' : ''} remaining${videoCredits === 0 ? ' — Upgrade to generate videos' : ''}`}
             </span>
@@ -562,8 +562,8 @@ function VideoStudio() {
                     Step 1 — Source from Vault
                   </p>
                   <div className="flex items-center gap-1.5">
-                    <Lock size={8} className="text-[#D4AF37]/40" />
-                    <span className="text-[7px] font-mono uppercase tracking-[0.3em] text-[#D4AF37]/40">
+                    <Lock size={8} className="text-[#C5A253]/40" />
+                    <span className="text-[7px] font-mono uppercase tracking-[0.3em] text-[#C5A253]/40">
                       Vault Only
                     </span>
                   </div>
@@ -573,7 +573,7 @@ function VideoStudio() {
                 <motion.button
                   whileTap={{ scale: 0.99 }}
                   onClick={() => setShowVaultPicker(true)}
-                  className="relative w-full aspect-[3/4] border border-white/8 hover:border-[#D4AF37]/40 transition-all duration-700 cursor-pointer group overflow-hidden flex items-center justify-center"
+                  className="relative w-full aspect-[3/4] border border-white/8 hover:border-[#C5A253]/40 transition-all duration-700 cursor-pointer group overflow-hidden flex items-center justify-center"
                 >
 
                   {sourceImage && selectedVaultItem ? (
@@ -584,14 +584,14 @@ function VideoStudio() {
                         alt="Selected vault image"
                       />
                       {/* Corner marks */}
-                      <div className="absolute top-3 left-3 w-5 h-5 border-t border-l border-[#D4AF37]/40 pointer-events-none z-10" />
-                      <div className="absolute top-3 right-3 w-5 h-5 border-t border-r border-[#D4AF37]/40 pointer-events-none z-10" />
-                      <div className="absolute bottom-3 left-3 w-5 h-5 border-b border-l border-[#D4AF37]/40 pointer-events-none z-10" />
-                      <div className="absolute bottom-3 right-3 w-5 h-5 border-b border-r border-[#D4AF37]/40 pointer-events-none z-10" />
+                      <div className="absolute top-3 left-3 w-5 h-5 border-t border-l border-[#C5A253]/40 pointer-events-none z-10" />
+                      <div className="absolute top-3 right-3 w-5 h-5 border-t border-r border-[#C5A253]/40 pointer-events-none z-10" />
+                      <div className="absolute bottom-3 left-3 w-5 h-5 border-b border-l border-[#C5A253]/40 pointer-events-none z-10" />
+                      <div className="absolute bottom-3 right-3 w-5 h-5 border-b border-r border-[#C5A253]/40 pointer-events-none z-10" />
 
                       {/* Image name tag */}
                       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent px-5 py-4 pointer-events-none">
-                        <p className="text-[7px] font-mono uppercase tracking-[0.4em] text-[#D4AF37]/70 truncate">
+                        <p className="text-[7px] font-mono uppercase tracking-[0.4em] text-[#C5A253]/70 truncate">
                           {selectedVaultItem.name}
                         </p>
                       </div>
@@ -609,8 +609,8 @@ function VideoStudio() {
                       <div className="absolute bottom-4 right-4 w-5 h-5 border-b border-r border-white/8" />
 
                       {/* Lock icon */}
-                      <div className="w-12 h-12 border border-white/8 flex items-center justify-center group-hover:border-[#D4AF37]/30 transition-colors duration-700">
-                        <Lock size={18} className="text-white/15 group-hover:text-[#D4AF37]/40 transition-colors duration-700" />
+                      <div className="w-12 h-12 border border-white/8 flex items-center justify-center group-hover:border-[#C5A253]/30 transition-colors duration-700">
+                        <Lock size={18} className="text-white/15 group-hover:text-[#C5A253]/40 transition-colors duration-700" />
                       </div>
 
                       <div className="space-y-2">
@@ -622,7 +622,7 @@ function VideoStudio() {
                         </p>
                       </div>
 
-                      <div className="flex items-center gap-2 text-[7px] font-mono uppercase tracking-[0.4em] text-[#D4AF37]/30 group-hover:text-[#D4AF37]/60 transition-colors">
+                      <div className="flex items-center gap-2 text-[7px] font-mono uppercase tracking-[0.4em] text-[#C5A253]/30 group-hover:text-[#C5A253]/60 transition-colors">
                         <span>Open Vault</span>
                         <ChevronRight size={10} />
                       </div>
@@ -647,13 +647,13 @@ function VideoStudio() {
                 <div className="space-y-4">
                   <p className="text-[9px] font-mono uppercase tracking-[0.5em] text-white/25">Step 2 — Creative Direction</p>
                   <div className="relative">
-                    <span className="absolute left-0 top-3 text-[#D4AF37]/30 text-xs font-mono">{'>'}</span>
+                    <span className="absolute left-0 top-3 text-[#C5A253]/30 text-xs font-mono">{'>'}</span>
                     <textarea
                       value={prompt}
                       onChange={(e) => setPrompt(e.target.value)}
                       rows={4}
                       placeholder="Slow editorial walk through Paris streets, golden hour, haute couture, cinematic depth of field..."
-                      className="w-full bg-transparent border-b border-white/8 focus:border-[#D4AF37]/30 text-white text-sm font-sans placeholder:text-white/15 focus:outline-none transition-colors resize-none py-3 pl-6 pr-2 leading-relaxed"
+                      className="w-full bg-transparent border-b border-white/8 focus:border-[#C5A253]/30 text-white text-sm font-sans placeholder:text-white/15 focus:outline-none transition-colors resize-none py-3 pl-6 pr-2 leading-relaxed"
                     />
                   </div>
 
@@ -663,9 +663,9 @@ function VideoStudio() {
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: 'auto' }}
                       exit={{ opacity: 0, height: 0 }}
-                      className="border border-[#D4AF37]/20 bg-[#D4AF37]/3 px-4 py-3 space-y-1"
+                      className="border border-[#C5A253]/20 bg-[#C5A253]/3 px-4 py-3 space-y-1"
                     >
-                      <p className="text-[7px] font-mono uppercase tracking-[0.5em] text-[#D4AF37]/50">◆ Cinema Presets Active</p>
+                      <p className="text-[7px] font-mono uppercase tracking-[0.5em] text-[#C5A253]/50">◆ Cinema Presets Active</p>
                       <p className="text-[8px] font-mono text-white/30 leading-relaxed">{presetPromptSegment}</p>
                     </motion.div>
                   )}
@@ -677,10 +677,10 @@ function VideoStudio() {
                       className="w-full flex items-center justify-between px-4 py-3 hover:bg-white/3 transition-colors"
                     >
                       <div className="flex items-center gap-2.5">
-                        <Sparkles size={10} className="text-[#D4AF37]/60" />
+                        <Sparkles size={10} className="text-[#C5A253]/60" />
                         <span className="text-[9px] font-mono uppercase tracking-[0.4em] text-white/30">Cinema Presets</span>
                         {(activeCamera || activeEffect || activeFilter) && (
-                          <span className="text-[7px] font-mono text-[#D4AF37]/70 border border-[#D4AF37]/30 px-1.5 py-0.5">
+                          <span className="text-[7px] font-mono text-[#C5A253]/70 border border-[#C5A253]/30 px-1.5 py-0.5">
                             {[activeCamera, activeEffect, activeFilter].filter(Boolean).length} active
                           </span>
                         )}
@@ -711,7 +711,7 @@ function VideoStudio() {
                                 onClick={() => setPresetTab(id)}
                                 className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 text-[8px] font-mono uppercase tracking-[0.3em] transition-all ${
                                   presetTab === id
-                                    ? 'text-[#D4AF37] border-b border-[#D4AF37] bg-[#D4AF37]/5'
+                                    ? 'text-[#C5A253] border-b border-[#C5A253] bg-[#C5A253]/5'
                                     : 'text-white/20 hover:text-white/40'
                                 }`}
                               >
@@ -734,22 +734,22 @@ function VideoStudio() {
                                   onClick={() => applyPreset(presetTab, preset.id)}
                                   className={`group relative text-left px-3 py-2.5 border transition-all duration-300 ${
                                     isActive
-                                      ? 'border-[#D4AF37] bg-[#D4AF37]/8 shadow-[0_0_12px_rgba(212,175,55,0.15)]'
+                                      ? 'border-[#C5A253] bg-[#C5A253]/8 shadow-[0_0_12px_rgba(197,162,83,0.15)]'
                                       : 'border-white/6 hover:border-white/15 hover:bg-white/3'
                                   }`}
                                 >
                                   <div className="flex items-center justify-between mb-1">
                                     <p className={`text-[8px] font-mono uppercase tracking-[0.2em] ${
-                                      isActive ? 'text-[#D4AF37]' : 'text-white/40 group-hover:text-white/60'
+                                      isActive ? 'text-[#C5A253]' : 'text-white/40 group-hover:text-white/60'
                                     }`}>{preset.label}</p>
                                     {preset.tag && (
                                       <span className={`text-[6px] font-mono tracking-[0.2em] ${
-                                        isActive ? 'text-[#D4AF37]/70' : 'text-white/20'
+                                        isActive ? 'text-[#C5A253]/70' : 'text-white/20'
                                       }`}>{preset.tag}</span>
                                     )}
                                   </div>
                                   {isActive && (
-                                    <div className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-[#D4AF37]" />
+                                    <div className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-[#C5A253]" />
                                   )}
                                 </motion.button>
                               );
@@ -784,7 +784,7 @@ function VideoStudio() {
                         onClick={() => setDuration(value)}
                         className={`flex-1 py-4 border text-center transition-all duration-300 ${
                           duration === value
-                            ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/5 shadow-[0_0_12px_rgba(212,175,55,0.18)]'
+                            ? 'border-[#C5A253] text-[#C5A253] bg-[#C5A253]/5 shadow-[0_0_12px_rgba(197,162,83,0.18)]'
                             : 'border-white/8 text-white/30 hover:border-white/20 hover:text-white/60'
                         }`}
                       >
@@ -806,7 +806,7 @@ function VideoStudio() {
                         onClick={() => setAspectRatio(value)}
                         className={`flex-1 py-4 border text-center transition-all duration-300 ${
                           aspectRatio === value
-                            ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/5 shadow-[0_0_12px_rgba(212,175,55,0.18)]'
+                            ? 'border-[#C5A253] text-[#C5A253] bg-[#C5A253]/5 shadow-[0_0_12px_rgba(197,162,83,0.18)]'
                             : 'border-white/8 text-white/30 hover:border-white/20 hover:text-white/60'
                         }`}
                       >
@@ -828,7 +828,7 @@ function VideoStudio() {
                         onClick={() => setEngineModel(value)}
                         className={`flex-1 py-4 border text-center transition-all duration-300 ${
                           engineModel === value
-                            ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/5 shadow-[0_0_12px_rgba(212,175,55,0.18)]'
+                            ? 'border-[#C5A253] text-[#C5A253] bg-[#C5A253]/5 shadow-[0_0_12px_rgba(197,162,83,0.18)]'
                             : 'border-white/8 text-white/30 hover:border-white/20 hover:text-white/60'
                         }`}
                       >
@@ -859,7 +859,7 @@ function VideoStudio() {
                       onClick={handleGenerate}
                       disabled={genState === 'starting' || !sourceImage}
                       whileTap={{ scale: 0.97 }}
-                      className="group relative w-full py-5 bg-[#D4AF37] text-black text-[10px] font-mono uppercase tracking-[0.5em] overflow-hidden disabled:opacity-40 disabled:cursor-not-allowed transition-opacity"
+                      className="group relative w-full py-5 bg-[#C5A253] text-black text-[10px] font-mono uppercase tracking-[0.5em] overflow-hidden disabled:opacity-40 disabled:cursor-not-allowed transition-opacity"
                     >
                       <span className="relative z-10 flex items-center justify-center gap-3">
                         <Play size={12} />
@@ -899,14 +899,14 @@ function VideoStudio() {
                   <img src={sourceImage} className="w-full h-full object-cover blur-[80px] opacity-10 scale-110" alt="" />
                 </div>
               )}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full bg-[#D4AF37]/5 blur-[120px] pointer-events-none" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full bg-[#C5A253]/5 blur-[120px] pointer-events-none" />
 
               <div className="relative z-10 flex flex-col items-center gap-10">
                 <motion.div
                   animate={{ y: [0, -16, 0] }}
                   transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
                 >
-                  <Film size={64} className="text-[#D4AF37] opacity-50 drop-shadow-[0_0_30px_rgba(212,175,55,0.5)]" />
+                  <Film size={64} className="text-[#C5A253] opacity-50 drop-shadow-[0_0_30px_rgba(197,162,83,0.5)]" />
                 </motion.div>
 
                 <div className="space-y-2 h-12 flex flex-col items-center justify-center">
@@ -918,7 +918,7 @@ function VideoStudio() {
                       exit={{ opacity: 0, y: -6 }}
                       transition={{ duration: 0.5 }}
                     >
-                      <p className="text-[11px] font-mono uppercase tracking-[0.6em] text-[#D4AF37]">
+                      <p className="text-[11px] font-mono uppercase tracking-[0.6em] text-[#C5A253]">
                         {PROCESSING_PHASES[phaseIndex]}
                       </p>
                     </motion.div>
@@ -931,7 +931,7 @@ function VideoStudio() {
                 <div className="w-80 space-y-2">
                   <div className="relative h-[1px] bg-white/8 overflow-hidden">
                     <motion.div
-                      className="absolute left-0 top-0 h-full bg-gradient-to-r from-[#D4AF37] to-[#F5D060]"
+                      className="absolute left-0 top-0 h-full bg-gradient-to-r from-[#C5A253] to-[#F5D060]"
                       style={{ width: `${pollProgress}%` }}
                       transition={{ duration: 0.5 }}
                     />
@@ -967,11 +967,11 @@ function VideoStudio() {
               transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
               className="flex flex-col items-center gap-8"
             >
-              <div className={`relative border border-[#D4AF37]/20 overflow-hidden ${aspectRatio === '9:16' ? 'max-w-sm w-full' : 'max-w-4xl w-full'}`}>
-                <div className="absolute top-3 left-3 w-5 h-5 border-t border-l border-[#D4AF37]/40 pointer-events-none z-10" />
-                <div className="absolute top-3 right-3 w-5 h-5 border-t border-r border-[#D4AF37]/40 pointer-events-none z-10" />
-                <div className="absolute bottom-3 left-3 w-5 h-5 border-b border-l border-[#D4AF37]/40 pointer-events-none z-10" />
-                <div className="absolute bottom-3 right-3 w-5 h-5 border-b border-r border-[#D4AF37]/40 pointer-events-none z-10" />
+              <div className={`relative border border-[#C5A253]/20 overflow-hidden ${aspectRatio === '9:16' ? 'max-w-sm w-full' : 'max-w-4xl w-full'}`}>
+                <div className="absolute top-3 left-3 w-5 h-5 border-t border-l border-[#C5A253]/40 pointer-events-none z-10" />
+                <div className="absolute top-3 right-3 w-5 h-5 border-t border-r border-[#C5A253]/40 pointer-events-none z-10" />
+                <div className="absolute bottom-3 left-3 w-5 h-5 border-b border-l border-[#C5A253]/40 pointer-events-none z-10" />
+                <div className="absolute bottom-3 right-3 w-5 h-5 border-b border-r border-[#C5A253]/40 pointer-events-none z-10" />
                 <video
                   src={videoUrl}
                   controls
@@ -983,7 +983,7 @@ function VideoStudio() {
                 />
               </div>
 
-              <p className="text-[8px] font-mono uppercase tracking-[0.5em] text-[#D4AF37]/50">
+              <p className="text-[8px] font-mono uppercase tracking-[0.5em] text-[#C5A253]/50">
                 ◆ Cinema Complete · LuxAura × Veo 3.1
               </p>
 
@@ -992,7 +992,7 @@ function VideoStudio() {
                 <motion.button
                   onClick={handleDownload}
                   whileTap={{ scale: 0.97 }}
-                  className="group relative flex items-center gap-2 px-8 py-4 bg-[#D4AF37] text-black text-[9px] font-mono uppercase tracking-[0.4em] overflow-hidden"
+                  className="group relative flex items-center gap-2 px-8 py-4 bg-[#C5A253] text-black text-[9px] font-mono uppercase tracking-[0.4em] overflow-hidden"
                 >
                   <Download size={12} />
                   Download MP4
@@ -1008,10 +1008,10 @@ function VideoStudio() {
                     vaultSaveState === 'saved'
                       ? 'border-emerald-500/40 text-emerald-400/80 bg-emerald-500/5'
                       : vaultSaveState === 'saving'
-                        ? 'border-[#D4AF37]/20 text-[#D4AF37]/40 cursor-wait'
+                        ? 'border-[#C5A253]/20 text-[#C5A253]/40 cursor-wait'
                         : vaultSaveState === 'error'
                           ? 'border-red-500/30 text-red-400/60 hover:border-red-500/50'
-                          : 'border-[#D4AF37]/30 text-[#D4AF37]/70 hover:border-[#D4AF37]/60 hover:text-[#D4AF37] hover:bg-[#D4AF37]/5'
+                          : 'border-[#C5A253]/30 text-[#C5A253]/70 hover:border-[#C5A253]/60 hover:text-[#C5A253] hover:bg-[#C5A253]/5'
                   }`}
                 >
                   {vaultSaveState === 'saving' ? (
@@ -1048,7 +1048,7 @@ function VideoStudio() {
                     <p className="text-[8px] font-mono text-emerald-400/70 uppercase tracking-[0.3em]">Permanently saved to your Video Vault · </p>
                     <button
                       onClick={() => navigate('/vault', { state: { tab: 'videos' } })}
-                      className="text-[8px] font-mono text-[#D4AF37]/70 hover:text-[#D4AF37] uppercase tracking-[0.3em] flex items-center gap-1 transition-colors"
+                      className="text-[8px] font-mono text-[#C5A253]/70 hover:text-[#C5A253] uppercase tracking-[0.3em] flex items-center gap-1 transition-colors"
                     >
                       View Vault <ChevronRight size={9} />
                     </button>
@@ -1080,7 +1080,7 @@ function VideoStudio() {
               <motion.button
                 onClick={handleReset}
                 whileTap={{ scale: 0.97 }}
-                className="px-10 py-4 border border-[#D4AF37]/40 text-[#D4AF37] text-[9px] font-mono uppercase tracking-[0.4em] hover:bg-[#D4AF37]/10 transition-all"
+                className="px-10 py-4 border border-[#C5A253]/40 text-[#C5A253] text-[9px] font-mono uppercase tracking-[0.4em] hover:bg-[#C5A253]/10 transition-all"
               >
                 [ Retry ]
               </motion.button>

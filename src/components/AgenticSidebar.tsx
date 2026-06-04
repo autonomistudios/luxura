@@ -21,7 +21,7 @@ export default function AgenticSidebar({ tokens }: AgenticSidebarProps) {
       zIndex: 100,
       boxShadow: '-10px 0 40px rgba(0, 0, 0, 0.5)'
     }}>
-      <div style={{ paddingBottom: '24px', borderBottom: '1px solid rgba(212, 175, 55, 0.05)', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <div style={{ paddingBottom: '24px', borderBottom: '1px solid rgba(197,162,83, 0.05)', marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
         <Terminal size={18} style={{ color: 'var(--accent-gold)' }} />
         <h3 style={{ fontSize: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.2em', margin: 0 }}>Thought Stream</h3>
       </div>
@@ -51,7 +51,7 @@ export default function AgenticSidebar({ tokens }: AgenticSidebarProps) {
         ))}
       </div>
 
-      <div style={{ marginTop: 'auto', paddingTop: '24px', borderTop: '1px solid rgba(212, 175, 55, 0.05)', fontSize: '0.65rem', opacity: 0.5 }}>
+      <div style={{ marginTop: 'auto', paddingTop: '24px', borderTop: '1px solid rgba(197,162,83, 0.05)', fontSize: '0.65rem', opacity: 0.5 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
           <span>LOOP_LATENCY: <span style={{ color: 'white' }}>1024ms</span></span>
           <span>ROI_SHIELD: <span style={{ color: 'var(--accent-gold)' }}>ACTIVE</span></span>

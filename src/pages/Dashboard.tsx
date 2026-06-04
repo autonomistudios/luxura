@@ -274,7 +274,7 @@ export default function Dashboard() {
         {/* TOP STATUS BAR */}
         <div className="border-b border-white/[0.08] px-6 py-4 bg-[#07070a]/90 backdrop-blur-md flex items-center justify-between z-10">
           <div className="flex items-center gap-6">
-            <span className="text-[10px] font-mono tracking-[0.4em] uppercase text-[#B8952A]">Brand Workspace</span>
+            <span className="text-[10px] font-mono tracking-[0.4em] uppercase text-[#C5A253]">Brand Workspace</span>
             <span className="h-4 w-[1px] bg-white/10"></span>
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
@@ -284,7 +284,7 @@ export default function Dashboard() {
           <div className="flex items-center gap-6 text-xs font-mono">
             <div>
               <span className="text-white/40">Tier: </span>
-              <span className="text-[#B8952A] font-semibold">Sovereign Enterprise</span>
+              <span className="text-[#C5A253] font-semibold">Sovereign Enterprise</span>
             </div>
             <div>
               <span className="text-white/40">Credits Available: </span>
@@ -303,7 +303,7 @@ export default function Dashboard() {
                 <h1 className="text-2xl font-serif tracking-[0.2em] text-white font-normal uppercase">
                   LUXAURA
                 </h1>
-                <p className="text-[8px] font-mono tracking-[0.3em] uppercase text-[#B8952A] mt-1">Creation Studio 2</p>
+                <p className="text-[8px] font-mono tracking-[0.3em] uppercase text-[#C5A253] mt-1">Creation Studio 2</p>
               </div>
 
               {/* Sidebar Navigation */}
@@ -312,55 +312,55 @@ export default function Dashboard() {
                   onClick={() => { setActiveTab('forge'); luxSound.hover(); }}
                   className={`flex items-center gap-3 px-4 py-3 rounded text-sm font-medium tracking-wide transition-all ${
                     activeTab === 'forge' 
-                      ? 'bg-gradient-to-r from-[#B8952A]/15 to-transparent border-l-2 border-[#B8952A] text-white' 
+                      ? 'bg-gradient-to-r from-[#C5A253]/15 to-transparent border-l-2 border-[#C5A253] text-white' 
                       : 'text-white/40 hover:text-white hover:bg-white/[0.02]'
                   }`}
                 >
-                  <Sparkles size={16} className={activeTab === 'forge' ? 'text-[#B8952A]' : ''} />
+                  <Sparkles size={16} className={activeTab === 'forge' ? 'text-[#C5A253]' : ''} />
                   Studio Forge
                 </button>
                 <button 
                   onClick={() => { setActiveTab('skus'); luxSound.hover(); }}
                   className={`flex items-center gap-3 px-4 py-3 rounded text-sm font-medium tracking-wide transition-all ${
                     activeTab === 'skus' 
-                      ? 'bg-gradient-to-r from-[#B8952A]/15 to-transparent border-l-2 border-[#B8952A] text-white' 
+                      ? 'bg-gradient-to-r from-[#C5A253]/15 to-transparent border-l-2 border-[#C5A253] text-white' 
                       : 'text-white/40 hover:text-white hover:bg-white/[0.02]'
                   }`}
                 >
-                  <FolderLock size={16} className={activeTab === 'skus' ? 'text-[#B8952A]' : ''} />
+                  <FolderLock size={16} className={activeTab === 'skus' ? 'text-[#C5A253]' : ''} />
                   SKU Vault
                 </button>
                 <button 
                   onClick={() => { setActiveTab('backlot'); luxSound.hover(); }}
                   className={`flex items-center gap-3 px-4 py-3 rounded text-sm font-medium tracking-wide transition-all ${
                     activeTab === 'backlot' 
-                      ? 'bg-gradient-to-r from-[#B8952A]/15 to-transparent border-l-2 border-[#B8952A] text-white' 
+                      ? 'bg-gradient-to-r from-[#C5A253]/15 to-transparent border-l-2 border-[#C5A253] text-white' 
                       : 'text-white/40 hover:text-white hover:bg-white/[0.02]'
                   }`}
                 >
-                  <Layers size={16} className={activeTab === 'backlot' ? 'text-[#B8952A]' : ''} />
+                  <Layers size={16} className={activeTab === 'backlot' ? 'text-[#C5A253]' : ''} />
                   Virtual Backlot
                 </button>
                 <button 
                   onClick={() => { setActiveTab('talent'); luxSound.hover(); }}
                   className={`flex items-center gap-3 px-4 py-3 rounded text-sm font-medium tracking-wide transition-all ${
                     activeTab === 'talent' 
-                      ? 'bg-gradient-to-r from-[#B8952A]/15 to-transparent border-l-2 border-[#B8952A] text-white' 
+                      ? 'bg-gradient-to-r from-[#C5A253]/15 to-transparent border-l-2 border-[#C5A253] text-white' 
                       : 'text-white/40 hover:text-white hover:bg-white/[0.02]'
                   }`}
                 >
-                  <Users size={16} className={activeTab === 'talent' ? 'text-[#B8952A]' : ''} />
+                  <Users size={16} className={activeTab === 'talent' ? 'text-[#C5A253]' : ''} />
                   Talent Directory
                 </button>
                 <button 
                   onClick={() => { setActiveTab('ledger'); luxSound.hover(); }}
                   className={`flex items-center gap-3 px-4 py-3 rounded text-sm font-medium tracking-wide transition-all ${
                     activeTab === 'ledger' 
-                      ? 'bg-gradient-to-r from-[#B8952A]/15 to-transparent border-l-2 border-[#B8952A] text-white' 
+                      ? 'bg-gradient-to-r from-[#C5A253]/15 to-transparent border-l-2 border-[#C5A253] text-white' 
                       : 'text-white/40 hover:text-white hover:bg-white/[0.02]'
                   }`}
                 >
-                  <ShieldCheck size={16} className={activeTab === 'ledger' ? 'text-[#B8952A]' : ''} />
+                  <ShieldCheck size={16} className={activeTab === 'ledger' ? 'text-[#C5A253]' : ''} />
                   Compliance Ledger
                 </button>
               </nav>
@@ -372,7 +372,7 @@ export default function Dashboard() {
                 <span className="text-emerald-500">100%</span>
               </div>
               <div className="w-full bg-white/[0.05] h-1 rounded-full overflow-hidden">
-                <div className="bg-[#B8952A] h-full w-[80%]"></div>
+                <div className="bg-[#C5A253] h-full w-[80%]"></div>
               </div>
             </div>
           </aside>
@@ -404,7 +404,7 @@ export default function Dashboard() {
                     <div className="border border-white/[0.06] rounded bg-[#0b0b0e] p-5 flex flex-col gap-4">
                       <div className="flex justify-between items-center">
                         <span className="text-xs font-mono uppercase tracking-wider text-white/50">1. Select Garment SKU</span>
-                        <FolderLock size={14} className="text-[#B8952A]" />
+                        <FolderLock size={14} className="text-[#C5A253]" />
                       </div>
                       <div className="flex flex-col gap-3">
                         {skus.filter(s => s.status === 'locked').map(sku => (
@@ -413,7 +413,7 @@ export default function Dashboard() {
                             onClick={() => setSelectedSku(sku.id)}
                             className={`p-3 rounded border flex items-center justify-between cursor-pointer transition-all ${
                               selectedSku === sku.id 
-                                ? 'border-[#B8952A] bg-[#B8952A]/5' 
+                                ? 'border-[#C5A253] bg-[#C5A253]/5' 
                                 : 'border-white/[0.05] bg-white/[0.01] hover:bg-white/[0.03]'
                             }`}
                           >
@@ -424,7 +424,7 @@ export default function Dashboard() {
                                 <p className="text-[9px] font-mono text-white/40">{sku.category} • {sku.season}</p>
                               </div>
                             </div>
-                            <span className="text-[8px] font-mono text-[#B8952A] bg-[#B8952A]/10 px-2 py-0.5 rounded border border-[#B8952A]/20">DNA LOCKED</span>
+                            <span className="text-[8px] font-mono text-[#C5A253] bg-[#C5A253]/10 px-2 py-0.5 rounded border border-[#C5A253]/20">DNA LOCKED</span>
                           </div>
                         ))}
                       </div>
@@ -434,7 +434,7 @@ export default function Dashboard() {
                     <div className="border border-white/[0.06] rounded bg-[#0b0b0e] p-5 flex flex-col gap-4">
                       <div className="flex justify-between items-center">
                         <span className="text-xs font-mono uppercase tracking-wider text-white/50">2. Select Likeness Anchor</span>
-                        <Users size={14} className="text-[#B8952A]" />
+                        <Users size={14} className="text-[#C5A253]" />
                       </div>
                       <div className="flex flex-col gap-3">
                         {talent.map(model => (
@@ -443,7 +443,7 @@ export default function Dashboard() {
                             onClick={() => setSelectedModel(model.id)}
                             className={`p-3 rounded border flex items-center justify-between cursor-pointer transition-all ${
                               selectedModel === model.id 
-                                ? 'border-[#B8952A] bg-[#B8952A]/5' 
+                                ? 'border-[#C5A253] bg-[#C5A253]/5' 
                                 : 'border-white/[0.05] bg-white/[0.01] hover:bg-white/[0.03]'
                             }`}
                           >
@@ -464,7 +464,7 @@ export default function Dashboard() {
                     <div className="border border-white/[0.06] rounded bg-[#0b0b0e] p-5 flex flex-col gap-4">
                       <div className="flex justify-between items-center">
                         <span className="text-xs font-mono uppercase tracking-wider text-white/50">3. Select Set & Scene Moat</span>
-                        <Layers size={14} className="text-[#B8952A]" />
+                        <Layers size={14} className="text-[#C5A253]" />
                       </div>
                       <div className="flex flex-col gap-3">
                         
@@ -476,7 +476,7 @@ export default function Dashboard() {
                               onClick={() => setSelectedSet(set.id)}
                               className={`flex-shrink-0 p-2 rounded border flex flex-col gap-2 cursor-pointer transition-all ${
                                 selectedSet === set.id 
-                                  ? 'border-[#B8952A] bg-[#B8952A]/5' 
+                                  ? 'border-[#C5A253] bg-[#C5A253]/5' 
                                   : 'border-white/[0.05] bg-white/[0.01] hover:bg-white/[0.03]'
                               }`}
                             >
@@ -492,7 +492,7 @@ export default function Dashboard() {
                           <select 
                             value={selectedScene}
                             onChange={(e) => setSelectedScene(e.target.value)}
-                            className="bg-[#050507] border border-white/[0.08] text-xs px-3 py-2 rounded focus:outline-none focus:border-[#B8952A] text-white/80"
+                            className="bg-[#050507] border border-white/[0.08] text-xs px-3 py-2 rounded focus:outline-none focus:border-[#C5A253] text-white/80"
                           >
                             {SCENES.map(scene => (
                               <option key={scene.id} value={scene.id}>{scene.name}</option>
@@ -514,7 +514,7 @@ export default function Dashboard() {
                             onClick={() => setOutputMode('still')}
                             className={`px-4 py-2 rounded text-xs font-mono border transition-all ${
                               outputMode === 'still' 
-                                ? 'border-[#B8952A] text-white bg-[#B8952A]/5' 
+                                ? 'border-[#C5A253] text-white bg-[#C5A253]/5' 
                                 : 'border-white/[0.08] text-white/50 hover:border-white/20'
                             }`}
                           >
@@ -524,7 +524,7 @@ export default function Dashboard() {
                             onClick={() => setOutputMode('video')}
                             className={`px-4 py-2 rounded text-xs font-mono border transition-all ${
                               outputMode === 'video' 
-                                ? 'border-[#B8952A] text-white bg-[#B8952A]/5' 
+                                ? 'border-[#C5A253] text-white bg-[#C5A253]/5' 
                                 : 'border-white/[0.08] text-white/50 hover:border-white/20'
                             }`}
                           >
@@ -537,14 +537,14 @@ export default function Dashboard() {
 
                       <div className="flex flex-col gap-1">
                         <span className="text-[10px] font-mono uppercase tracking-wider text-white/40">Est. Internal Compute Cost</span>
-                        <span className="text-xs font-mono text-[#B8952A]">$0.50 API + $1.50 Compute ($2.00 Total)</span>
+                        <span className="text-xs font-mono text-[#C5A253]">$0.50 API + $1.50 Compute ($2.00 Total)</span>
                       </div>
                     </div>
 
                     <button 
                       onClick={handleStartForge}
                       disabled={isForging}
-                      className="px-8 py-3 rounded font-serif tracking-wider font-medium text-black bg-[#B8952A] hover:bg-[#c2a23a] transition-all flex items-center justify-center gap-3 disabled:opacity-40 disabled:cursor-not-allowed hover:shadow-[0_0_20px_rgba(184,149,42,0.3)]"
+                      className="px-8 py-3 rounded font-serif tracking-wider font-medium text-black bg-[#C5A253] hover:bg-[#c2a23a] transition-all flex items-center justify-center gap-3 disabled:opacity-40 disabled:cursor-not-allowed hover:shadow-[0_0_20px_rgba(197,162,83,0.3)]"
                     >
                       <Play size={16} fill="black" />
                       ENGAGE SOVEREIGN FORGE
@@ -556,7 +556,7 @@ export default function Dashboard() {
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-white/[0.05] pb-4">
                       <div className="flex items-center gap-3">
                         <span className="text-xs font-mono uppercase tracking-wider text-white/50">Active Generation Pipeline</span>
-                        {isForging && <span className="w-1.5 h-1.5 rounded-full bg-[#B8952A] animate-ping"></span>}
+                        {isForging && <span className="w-1.5 h-1.5 rounded-full bg-[#C5A253] animate-ping"></span>}
                       </div>
                       
                       <div className="flex-1 max-w-xl">
@@ -566,7 +566,7 @@ export default function Dashboard() {
                         </div>
                         <div className="w-full bg-white/[0.04] h-1.5 rounded-full overflow-hidden">
                           <motion.div 
-                            className="bg-[#B8952A] h-full"
+                            className="bg-[#C5A253] h-full"
                             initial={{ width: 0 }}
                             animate={{ width: `${forgeProgress}%` }}
                             transition={{ duration: 0.5 }}
@@ -592,7 +592,7 @@ export default function Dashboard() {
                             {!slot.ready ? (
                               <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-b from-[#0b0b0e] to-[#050507]">
                                 <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/[0.02] to-transparent animate-shimmer" />
-                                <div className="w-12 h-12 border-t-2 border-r-2 border-[#B8952A]/20 rounded-full animate-spin"></div>
+                                <div className="w-12 h-12 border-t-2 border-r-2 border-[#C5A253]/20 rounded-full animate-spin"></div>
                                 <span className="text-[9px] font-mono text-white/30 uppercase mt-4">Streaming Slot {slot.id}...</span>
                               </div>
                             ) : (
@@ -605,9 +605,9 @@ export default function Dashboard() {
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-between p-3">
                                   <div className="flex justify-between items-start">
                                     <span className="text-[8px] font-mono text-white bg-black/60 px-1.5 py-0.5 rounded border border-white/10">SLOT {slot.id}</span>
-                                    <span className="text-[8px] font-mono text-[#B8952A] bg-[#B8952A]/10 px-1.5 py-0.5 rounded border border-[#B8952A]/20">AUDITED</span>
+                                    <span className="text-[8px] font-mono text-[#C5A253] bg-[#C5A253]/10 px-1.5 py-0.5 rounded border border-[#C5A253]/20">AUDITED</span>
                                   </div>
-                                  <button className="w-full py-1.5 bg-[#B8952A] text-black text-[10px] font-mono tracking-wider font-semibold rounded hover:bg-[#c2a23a] transition-all">
+                                  <button className="w-full py-1.5 bg-[#C5A253] text-black text-[10px] font-mono tracking-wider font-semibold rounded hover:bg-[#c2a23a] transition-all">
                                     EXPORT HIGH-RES
                                   </button>
                                 </div>
@@ -649,11 +649,11 @@ export default function Dashboard() {
                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     
                     {/* Dotted Dropzone */}
-                    <div className="border border-dashed border-white/20 rounded bg-[#0b0b0e] p-6 flex flex-col items-center justify-center text-center gap-6 min-h-[300px] hover:border-[#B8952A]/50 transition-colors duration-300">
+                    <div className="border border-dashed border-white/20 rounded bg-[#0b0b0e] p-6 flex flex-col items-center justify-center text-center gap-6 min-h-[300px] hover:border-[#C5A253]/50 transition-colors duration-300">
                       {!uploadingSku ? (
                         <>
                           <div className="w-16 h-16 rounded-full bg-white/[0.02] flex items-center justify-center border border-white/[0.08]">
-                            <Upload size={24} className="text-[#B8952A]" />
+                            <Upload size={24} className="text-[#C5A253]" />
                           </div>
                           <div className="flex flex-col gap-2">
                             <h4 className="text-sm font-medium">New SKU Enrollment</h4>
@@ -670,15 +670,15 @@ export default function Dashboard() {
                         </>
                       ) : (
                         <div className="flex flex-col items-center gap-4 w-full px-4">
-                          <div className="w-10 h-10 border-t-2 border-r-2 border-[#B8952A] rounded-full animate-spin"></div>
+                          <div className="w-10 h-10 border-t-2 border-r-2 border-[#C5A253] rounded-full animate-spin"></div>
                           <div className="flex flex-col gap-1 w-full text-center">
-                            <h4 className="text-xs font-mono uppercase tracking-wider text-[#B8952A]">
+                            <h4 className="text-xs font-mono uppercase tracking-wider text-[#C5A253]">
                               {uploadStep === 1 && "Uploading Source Imagery..."}
                               {uploadStep === 2 && "Agent 01: Extracting Garment DNA..."}
                               {uploadStep === 3 && "Agent 01b: Creating Pre-pass Renders..."}
                             </h4>
                             <div className="w-full bg-white/[0.05] h-1 rounded-full overflow-hidden mt-2">
-                              <div className="h-full bg-[#B8952A] animate-uploadProgress"></div>
+                              <div className="h-full bg-[#C5A253] animate-uploadProgress"></div>
                             </div>
                           </div>
                         </div>
@@ -692,8 +692,8 @@ export default function Dashboard() {
                           <img src={sku.referenceImage} alt={sku.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
                           <div className="absolute top-3 right-3">
                             {sku.status === 'locked' && (
-                              <span className="text-[8px] font-mono text-[#B8952A] bg-black/80 px-2 py-0.5 rounded border border-[#B8952A]/40 flex items-center gap-1.5">
-                                <span className="w-1.5 h-1.5 rounded-full bg-[#B8952A]"></span>
+                              <span className="text-[8px] font-mono text-[#C5A253] bg-black/80 px-2 py-0.5 rounded border border-[#C5A253]/40 flex items-center gap-1.5">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#C5A253]"></span>
                                 DNA LOCKED
                               </span>
                             )}
@@ -736,7 +736,7 @@ export default function Dashboard() {
                             <button 
                               onClick={() => { setActiveTab('forge'); setSelectedSku(sku.id); }}
                               disabled={sku.status !== 'locked'}
-                              className="flex-1 py-2 text-[10px] font-mono tracking-wider font-semibold rounded bg-[#B8952A] text-black hover:bg-[#c2a23a] transition-all disabled:opacity-30 disabled:cursor-not-allowed uppercase"
+                              className="flex-1 py-2 text-[10px] font-mono tracking-wider font-semibold rounded bg-[#C5A253] text-black hover:bg-[#c2a23a] transition-all disabled:opacity-30 disabled:cursor-not-allowed uppercase"
                             >
                               Run Campaign
                             </button>
@@ -796,7 +796,7 @@ export default function Dashboard() {
                               min="0" 
                               max="100" 
                               value={set.intensity} 
-                              className="accent-[#B8952A] h-1 bg-white/10 rounded-lg cursor-pointer"
+                              className="accent-[#C5A253] h-1 bg-white/10 rounded-lg cursor-pointer"
                               onChange={(e) => {
                                 const val = parseInt(e.target.value);
                                 setSets(prev => prev.map(s => s.id === set.id ? { ...s, intensity: val } : s));
@@ -814,7 +814,7 @@ export default function Dashboard() {
                               min="0" 
                               max="100" 
                               value={set.temp} 
-                              className="accent-[#B8952A] h-1 bg-white/10 rounded-lg cursor-pointer"
+                              className="accent-[#C5A253] h-1 bg-white/10 rounded-lg cursor-pointer"
                               onChange={(e) => {
                                 const val = parseInt(e.target.value);
                                 setSets(prev => prev.map(s => s.id === set.id ? { ...s, temp: val } : s));
@@ -832,7 +832,7 @@ export default function Dashboard() {
                               min="0" 
                               max="100" 
                               value={set.softness} 
-                              className="accent-[#B8952A] h-1 bg-white/10 rounded-lg cursor-pointer"
+                              className="accent-[#C5A253] h-1 bg-white/10 rounded-lg cursor-pointer"
                               onChange={(e) => {
                                 const val = parseInt(e.target.value);
                                 setSets(prev => prev.map(s => s.id === set.id ? { ...s, softness: val } : s));
@@ -867,7 +867,7 @@ export default function Dashboard() {
                       <h2 className="text-3xl font-serif tracking-tight text-white">Talent Clearinghouse</h2>
                       <p className="text-xs text-white/40 font-mono mt-1">Authorized database for locked model identity replicas.</p>
                     </div>
-                    <span className="text-[10px] font-mono text-[#B8952A] bg-[#B8952A]/10 px-3 py-1 rounded border border-[#B8952A]/20 uppercase">
+                    <span className="text-[10px] font-mono text-[#C5A253] bg-[#C5A253]/10 px-3 py-1 rounded border border-[#C5A253]/20 uppercase">
                       New York Compliance Active
                     </span>
                   </div>
@@ -890,7 +890,7 @@ export default function Dashboard() {
                               <h3 className="text-sm font-medium">{model.name}</h3>
                               <p className="text-[10px] font-mono text-white/40">{model.agency}</p>
                             </div>
-                            <span className="text-xs font-mono text-[#B8952A]">{model.rate} credits/img</span>
+                            <span className="text-xs font-mono text-[#C5A253]">{model.rate} credits/img</span>
                           </div>
 
                           <div className="flex flex-col gap-2 bg-[#050507] p-3 rounded border border-white/[0.04]">
@@ -910,7 +910,7 @@ export default function Dashboard() {
 
                           <button 
                             onClick={() => { setActiveTab('forge'); setSelectedModel(model.id); }}
-                            className="w-full py-2.5 text-[10px] font-mono tracking-wider font-semibold rounded bg-[#B8952A] text-black hover:bg-[#c2a23a] transition-all uppercase"
+                            className="w-full py-2.5 text-[10px] font-mono tracking-wider font-semibold rounded bg-[#C5A253] text-black hover:bg-[#c2a23a] transition-all uppercase"
                           >
                             Select Model
                           </button>
@@ -962,7 +962,7 @@ export default function Dashboard() {
                     <div className="border border-white/[0.06] rounded bg-[#0b0b0e] p-5 flex flex-col gap-3">
                       <span className="text-xs font-mono text-white/40 uppercase">Compute Efficiency Report</span>
                       <div className="flex items-center gap-3">
-                        <TrendingUp className="text-[#B8952A]" size={20} />
+                        <TrendingUp className="text-[#C5A253]" size={20} />
                         <h4 className="text-sm font-medium">99.2% Profit Margins</h4>
                       </div>
                       <p className="text-xs text-white/40 leading-relaxed">
@@ -990,7 +990,7 @@ export default function Dashboard() {
                           <span className="font-mono text-white/30">02:55:04</span>
                           <span className="font-medium text-white/80">SKU Registered: Silk Slip Dress Resort 27</span>
                         </div>
-                        <span className="font-mono text-[#B8952A]">DNA BLUEPRINT LOCKED</span>
+                        <span className="font-mono text-[#C5A253]">DNA BLUEPRINT LOCKED</span>
                       </div>
                       <div className="px-6 py-3.5 flex justify-between items-center">
                         <div className="flex items-center gap-4">

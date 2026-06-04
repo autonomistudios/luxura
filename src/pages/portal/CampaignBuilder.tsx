@@ -2,8 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Sparkles, FolderLock, Layers, ChevronDown, Lock,
-  Check, AlertTriangle, Play, Download, Save, RefreshCw,
+  Sparkles, FolderLock, ChevronDown, Lock,
+  Check, Play, Download, Save, RefreshCw,
 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import { useSovereignStore, type SkuDocument } from '../../store/useSovereignStore';
@@ -13,6 +13,7 @@ import { ANCHOR_TYPES } from '../../lib/skuConstants';
 import { MapPin, ChevronRight, Plus, X, Shirt, Wand2, Upload } from 'lucide-react';
 import { CreativePropsGallery } from '../../components/CreativePropsGallery';
 import type { CreativeProp } from '../../lib/creativeProps';
+import { Badge } from '../../components/ui';
 
 const ANCHOR_LABEL: Record<string, string> = Object.fromEntries(
   ANCHOR_TYPES.map(a => [a.id, a.label]),
@@ -140,29 +141,29 @@ function AgentStrip({ activeAgent, completedAgents }: { activeAgent: string | nu
       {AGENTS.map((agent, i) => {
         const done   = completedAgents.includes(agent.id);
         const active = activeAgent === agent.id;
-        const color  = done ? '#10B981' : active ? '#B8952A' : 'rgba(255,255,255,0.15)';
+        const color  = done ? 'var(--success)' : active ? 'var(--gold)' : 'var(--text-quaternary)';
         return (
           <React.Fragment key={agent.id}>
             <div className="flex flex-col items-center gap-1">
               <div className="w-5 h-5 rounded-full flex items-center justify-center border transition-all duration-300"
                 style={{
                   borderColor: color,
-                  background: done ? '#10B98120' : active ? '#B8952A20' : 'transparent',
-                  boxShadow: active ? `0 0 8px #B8952A66` : 'none',
+                  background: done ? 'var(--success-wash)' : active ? 'var(--gold-wash)' : 'transparent',
+                  boxShadow: active ? '0 0 8px var(--gold-glow)' : 'none',
                 }}>
                 {done
-                  ? <Check size={9} style={{ color: '#10B981' }} />
+                  ? <Check size={9} style={{ color: 'var(--success)' }} />
                   : active
-                    ? <motion.div className="w-1.5 h-1.5 rounded-full bg-[#B8952A]"
+                    ? <motion.div className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--gold)' }}
                         animate={{ scale: [1, 1.4, 1] }} transition={{ duration: 0.8, repeat: Infinity }} />
-                    : <div className="w-1 h-1 rounded-full bg-white/20" />
+                    : <div className="w-1 h-1 rounded-full" style={{ background: 'var(--text-quaternary)' }} />
                 }
               </div>
               <span className="text-[6px] font-mono tracking-[0.2em] uppercase" style={{ color }}>{agent.label}</span>
             </div>
             {i < AGENTS.length - 1 && (
               <div className="flex-1 h-px mx-1 mb-4"
-                style={{ background: done ? '#10B98140' : 'rgba(255,255,255,0.06)' }} />
+                style={{ background: done ? 'var(--success-wash)' : 'var(--hairline)' }} />
             )}
           </React.Fragment>
         );
@@ -185,9 +186,9 @@ function ForgeSlot({ image, index, isGenerating, isComplete, onRefine }: {
       transition={{ delay: index * 0.06 }}
       className="relative aspect-[4/5] rounded-xl overflow-hidden group"
       style={{
-        background: '#1C1C1E',
-        border: isComplete ? '1px solid rgba(255,255,255,0.2)' : '1px solid rgba(255,255,255,0.05)',
-        boxShadow: isComplete ? '0 0 20px rgba(255,255,255,0.05)' : 'none',
+        background: 'var(--surface-raised)',
+        border: isComplete ? '1px solid var(--hairline-gold)' : '1px solid var(--hairline)',
+        boxShadow: isComplete ? '0 0 24px var(--gold-glow)' : 'none',
       }}
     >
       {/* Empty portal */}
@@ -216,7 +217,8 @@ function ForgeSlot({ image, index, isGenerating, isComplete, onRefine }: {
           {/* Rotating ring */}
           <div className="absolute inset-0 flex items-center justify-center">
             <motion.div
-              className="w-12 h-12 rounded-full border-t-2 border-r-2 border-white/40"
+              className="w-12 h-12 rounded-full border-t-2 border-r-2 border-transparent"
+              style={{ borderTopColor: 'var(--gold)', borderRightColor: 'var(--gold-deep)' }}
               animate={{ rotate: 360 }}
               transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }}
             />
@@ -237,22 +239,24 @@ function ForgeSlot({ image, index, isGenerating, isComplete, onRefine }: {
           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300
             bg-gradient-to-t from-black/80 via-transparent to-black/30 flex flex-col justify-between p-4">
             <div className="flex justify-between items-start">
-              <span className="text-[9px] font-semibold text-white bg-black/60 backdrop-blur-md px-2 py-1 rounded-md">
-                SLOT {index + 1}
+              <span className="font-mono text-[8px] tracking-[0.26em] text-white bg-black/60 backdrop-blur-md px-2 py-1 rounded-md">
+                PLATE {index + 1}
               </span>
-              <span className="text-[9px] font-semibold text-white bg-white/20 backdrop-blur-md px-2 py-1 rounded-md">
-                AUDITED
+              <span className="font-mono text-[8px] tracking-[0.26em] uppercase px-2 py-1 rounded-md backdrop-blur-md"
+                style={{ color: 'var(--gold)', background: 'var(--gold-wash)', border: '1px solid var(--hairline-gold)' }}>
+                Audited
               </span>
             </div>
             <div className="flex items-center gap-2">
               {onRefine && (
                 <button
                   onClick={() => onRefine(index)}
-                  className="flex-1 flex items-center justify-center gap-2 py-2.5 border border-white/20 text-white text-[10px] font-semibold tracking-widest uppercase rounded-lg hover:border-white/50 hover:bg-white/10 transition-all bg-black/40 backdrop-blur-md">
+                  className="flex-1 flex items-center justify-center gap-2 py-2.5 border border-white/20 text-white text-[10px] font-mono tracking-[0.2em] uppercase rounded-lg hover:border-white/50 hover:bg-white/10 transition-all bg-black/40 backdrop-blur-md">
                   <Wand2 size={12} /> Refine
                 </button>
               )}
-              <button className="flex-1 py-2.5 bg-white text-black text-[10px] font-semibold tracking-widest uppercase rounded-lg hover:bg-white/90 transition-all">
+              <button className="flex-1 py-2.5 text-[10px] font-mono tracking-[0.2em] uppercase rounded-lg transition-all hover:-translate-y-px"
+                style={{ background: 'linear-gradient(180deg,var(--gold-bright),var(--gold) 60%,var(--gold-deep))', color: 'var(--text-on-accent)' }}>
                 Export
               </button>
             </div>
@@ -269,36 +273,29 @@ function ConfigSelect({ label, value, locked, options, onChange }: {
   options: string[]; onChange: (v: string) => void;
 }) {
   return (
-    <motion.div className="flex flex-col gap-2.5" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+    <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
-        <span className="text-[10px] tracking-[0.15em] uppercase text-white/50 font-light">{label}</span>
-        {locked && <Lock size={10} className="text-white/30" />}
+        <span className="font-mono text-[9px] tracking-[0.24em] uppercase text-tertiary">{label}</span>
+        {locked && <Lock size={10} className="text-gold" />}
       </div>
       {locked ? (
-        <div className="flex items-center gap-3 px-3.5 py-2 rounded-lg"
-          style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
-          <span className="text-[12px] font-light text-white/40 flex-1 truncate">{value}</span>
-          <Lock size={11} className="text-white/20 flex-shrink-0" />
+        <div className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-[var(--gold-wash)] border border-[var(--hairline-gold)]">
+          <span className="text-[13px] font-light text-secondary flex-1 truncate">{value}</span>
+          <Lock size={11} className="text-gold flex-shrink-0" />
         </div>
       ) : (
-        <div className="relative group">
+        <div className="relative">
           <select
             value={value}
             onChange={e => onChange(e.target.value)}
-            className="w-full px-3.5 py-2 rounded-lg text-[12px] font-light text-white outline-none appearance-none cursor-pointer transition-all duration-300"
-            style={{
-              background: 'rgba(255,255,255,0.03)',
-              border: '1px solid rgba(255,255,255,0.08)',
-            }}
-            onFocus={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'; }}
-            onBlur={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'; }}
+            className="w-full appearance-none cursor-pointer pl-3.5 pr-10 py-2.5 rounded-xl bg-inset border border-hairline text-primary font-sans font-light text-[13px] transition-all duration-200 ease-[cubic-bezier(.16,1,.3,1)] hover:border-hairline-strong focus:outline-none focus:border-hairline-gold focus:ring-[3px] focus:ring-gold-wash"
           >
-            {options.map(o => <option key={o} value={o} style={{ background: '#0A0A0A', color: 'white' }}>{o}</option>)}
+            {options.map(o => <option key={o} value={o} style={{ background: 'var(--surface-overlay)', color: 'var(--text-primary)' }}>{o}</option>)}
           </select>
-          <ChevronDown size={13} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-white/30 pointer-events-none" />
+          <ChevronDown size={13} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-tertiary pointer-events-none" />
         </div>
       )}
-    </motion.div>
+    </div>
   );
 }
 
@@ -414,10 +411,10 @@ function RefineModal({ slotIndex, image, getToken, onApply, onClose }: {
                   <button key={t.id} onClick={() => setIterationType(t.id)} disabled={isRefining}
                     className="flex flex-col gap-1 p-2.5 rounded text-left transition-all disabled:opacity-50"
                     style={{
-                      background: iterationType === t.id ? 'rgba(184,149,42,0.10)' : 'rgba(255,255,255,0.02)',
-                      border: iterationType === t.id ? '1px solid rgba(184,149,42,0.4)' : '1px solid rgba(255,255,255,0.07)',
+                      background: iterationType === t.id ? 'rgba(197,162,83,0.10)' : 'rgba(255,255,255,0.02)',
+                      border: iterationType === t.id ? '1px solid rgba(197,162,83,0.4)' : '1px solid rgba(255,255,255,0.07)',
                     }}>
-                    <span className="text-[9px] font-mono" style={{ color: iterationType === t.id ? '#D4AF37' : 'rgba(255,255,255,0.5)' }}>{t.label}</span>
+                    <span className="text-[9px] font-mono" style={{ color: iterationType === t.id ? '#C5A253' : 'rgba(255,255,255,0.5)' }}>{t.label}</span>
                     <span className="text-[6px] font-mono text-white/25 leading-tight">{t.desc}</span>
                   </button>
                 ))}
@@ -438,7 +435,7 @@ function RefineModal({ slotIndex, image, getToken, onApply, onClose }: {
             <button
               onClick={handleRefine} disabled={isRefining}
               className="flex items-center justify-center gap-2 py-3 rounded font-serif italic text-black text-[13px] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-              style={{ background: '#B8952A', boxShadow: isRefining ? 'none' : '0 0 18px rgba(184,149,42,0.3)' }}>
+              style={{ background: '#C5A253', boxShadow: isRefining ? 'none' : '0 0 18px rgba(197,162,83,0.3)' }}>
               {isRefining ? <><RefreshCw size={13} className="animate-spin" /> Refining…</> : <><Wand2 size={13} /> Generate 3 Variants</>}
             </button>
             {status && <p className="text-[8px] font-mono text-white/30 tracking-[0.15em] text-center">{status}</p>}
@@ -459,14 +456,14 @@ function RefineModal({ slotIndex, image, getToken, onApply, onClose }: {
                       <button
                         onClick={() => { onApply(slotIndex, v); onClose(); }}
                         className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/55 transition-opacity">
-                        <span className="flex items-center gap-1.5 px-3 py-1.5 bg-[#B8952A] text-black text-[8px] font-mono tracking-[0.2em] uppercase font-semibold rounded">
+                        <span className="flex items-center gap-1.5 px-3 py-1.5 bg-[#C5A253] text-black text-[8px] font-mono tracking-[0.2em] uppercase font-semibold rounded">
                           <Check size={10} /> Use This
                         </span>
                       </button>
                     </>
                   ) : (
                     <div className="absolute inset-0 flex items-center justify-center">
-                      <motion.div className="w-8 h-8 rounded-full border-t-2 border-r-2 border-[#B8952A]/40"
+                      <motion.div className="w-8 h-8 rounded-full border-t-2 border-r-2 border-[#C5A253]/40"
                         animate={{ rotate: 360 }} transition={{ duration: 1.4, repeat: Infinity, ease: 'linear' }} />
                     </div>
                   )}
@@ -698,81 +695,11 @@ export default function CampaignBuilder() {
   }
 
   return (
-    <div className="h-[calc(100vh-64px)] flex flex-col overflow-hidden font-sans" style={{ background: '#0A0A0A' }}>
+    <div className="h-[calc(100vh-64px)] flex overflow-hidden font-sans bg-canvas text-primary">
 
-      {/* ── HERO SECTION: Current/Generated Image ─────────────────────────── */}
-      <div className="relative h-[45%] shrink-0 overflow-hidden" style={{ background: 'linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 100%)' }}>
-        {slots.some(s => !!s) ? (
-          <div className="relative w-full h-full group">
-            <img src={slots.find(s => !!s) || ''} alt="Hero" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-40" />
-            <div className="absolute inset-0 flex flex-col justify-end p-8">
-              <h1 className="font-serif text-5xl font-light text-white mb-2 tracking-tight">{campaignName || 'Untitled Campaign'}</h1>
-              <p className="text-white/60 text-sm tracking-wide">{allComplete ? '6 of 6 Assets Complete' : `${slots.filter(s => !!s).length} of 6 Assets`}</p>
-            </div>
-          </div>
-        ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center">
-            <div className="w-24 h-32 rounded-2xl bg-white/5 border border-white/10 mb-6 flex items-center justify-center">
-              <Sparkles size={48} className="text-white/20" />
-            </div>
-            <p className="text-white/40 font-light text-lg">Select a garment to begin</p>
-          </div>
-        )}
-      </div>
-
-      {/* ── MAIN: Config + Gallery Grid ───────────────────────────────── */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* Gallery Grid */}
-        <div className="flex-1 overflow-y-auto scrollbar-none p-8" style={{ background: '#0A0A0A' }}>
-          {slots.some(s => !!s) && (
-            <div>
-              <h2 className="font-serif text-2xl font-light text-white mb-6 tracking-tight">Editorial Sequence</h2>
-              <div className="grid grid-cols-3 gap-4">
-                {slots.map((image, i) => (
-                  <motion.div key={i} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.05 }}
-                    className="relative aspect-[4/5] rounded-2xl overflow-hidden group cursor-pointer"
-                    style={{ background: 'linear-gradient(135deg, #1A1A1A, #0F0F0F)', border: '1px solid rgba(255,255,255,0.08)' }}
-                    onClick={() => image && setRefineSlot(i)}>
-                    {image ? (
-                      <>
-                        <img src={image} alt={`Slot ${i + 1}`} className="w-full h-full object-cover" />
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex flex-col justify-between p-4">
-                          <div className="flex justify-between items-start opacity-0 group-hover:opacity-100 transition-opacity">
-                            <span className="text-white text-xs font-mono tracking-widest bg-black/60 backdrop-blur-md px-2 py-1 rounded">
-                              SLOT {i + 1}
-                            </span>
-                            <span className="text-white/80 text-xs font-mono tracking-widest">READY</span>
-                          </div>
-                          <button onClick={(e) => { e.stopPropagation(); setRefineSlot(i); }}
-                            className="opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 py-2.5 bg-white text-black text-xs font-semibold rounded-lg hover:bg-white/90">
-                            <Wand2 size={11} /> Refine
-                          </button>
-                        </div>
-                      </>
-                    ) : isForging ? (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <motion.div className="w-8 h-8 rounded-full border-t-2 border-r-2 border-white/40"
-                          animate={{ rotate: 360 }} transition={{ duration: 1.5, repeat: Infinity, ease: 'linear' }} />
-                      </div>
-                    ) : null}
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* ── FLOATING CONTROL PANEL (Premium) ──────────────────────────── */}
-        <div className="w-[420px] shrink-0 overflow-y-auto scrollbar-none flex flex-col"
-          style={{
-            background: 'rgba(255, 255, 255, 0.02)',
-            borderLeft: '1px solid rgba(255, 255, 255, 0.05)',
-            backdropFilter: 'blur(40px)',
-          }}>
-
-      {/* ── Config panel ──────────────────────────────────────────── */}
-      <aside className="w-full flex flex-col overflow-y-auto scrollbar-none" style={{ background: 'transparent' }}>
+      {/* ── LEFT: Control panel — frosted material chrome ─────────────────── */}
+      <aside className="w-[400px] shrink-0 border-r border-hairline flex flex-col overflow-y-auto scrollbar-none"
+        style={{ background: 'var(--material-panel)', backdropFilter: 'var(--material-blur-lg)', WebkitBackdropFilter: 'var(--material-blur-lg)' }}>
 
         <div className="p-8 flex flex-col gap-10">
           <div className="flex flex-col gap-1 border-b border-white/10 pb-6">
@@ -783,7 +710,7 @@ export default function CampaignBuilder() {
           {/* SKU Selector — Outfit Composition */}
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between">
-              <p className="text-[10px] font-semibold tracking-widest uppercase text-[#86868B]">
+              <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary">
                 1. Garment SKU{outfitSkus.length === 1 ? '' : 's'}
               </p>
               <div className="flex items-center gap-3">
@@ -794,7 +721,7 @@ export default function CampaignBuilder() {
                 )}
                 {outfitSkus.length > 0 && (
                   <button onClick={clearOutfit}
-                    className="text-[10px] font-semibold text-[#86868B] hover:text-white transition-colors uppercase tracking-widest">
+                    className="text-[10px] font-semibold text-tertiary hover:text-white transition-colors uppercase tracking-widest">
                     Clear
                   </button>
                 )}
@@ -805,21 +732,21 @@ export default function CampaignBuilder() {
             {outfitSkus.length > 0 && (
               <div className="flex flex-col gap-2">
                 {outfitSkus.map((sku, i) => (
-                  <div key={sku.skuId} className="flex items-center gap-3 p-2.5 rounded-xl bg-[#1C1C1E] border border-white/5">
+                  <div key={sku.skuId} className="flex items-center gap-3 p-2.5 rounded-xl bg-overlay border border-white/5">
                     <div className="w-10 h-12 rounded-lg bg-black border border-white/10 flex items-center justify-center flex-shrink-0 overflow-hidden">
                       {sku.referenceImage
                         ? <img src={sku.referenceImage} className="w-full h-full object-cover" />
-                        : <FolderLock size={14} className="text-[#86868B]" />}
+                        : <FolderLock size={14} className="text-tertiary" />}
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="text-[13px] font-medium text-white truncate">{sku.name}</p>
-                      <p className="text-[10px] font-medium text-[#86868B] mt-1 uppercase tracking-wider">
+                      <p className="text-[10px] font-medium text-tertiary mt-1 uppercase tracking-wider">
                         {ANCHOR_LABEL[sku.anchorType] || sku.anchorType}
                         {i === 0 && isOutfit ? ' · Primary' : ''}
                       </p>
                     </div>
                     <button onClick={() => removeSku(sku.skuId)}
-                      className="text-[#86868B] hover:text-red-400 transition-colors flex-shrink-0 p-2 hover:bg-white/5 rounded-full">
+                      className="text-tertiary hover:text-red-400 transition-colors flex-shrink-0 p-2 hover:bg-white/5 rounded-full">
                       <X size={14} />
                     </button>
                   </div>
@@ -829,8 +756,8 @@ export default function CampaignBuilder() {
 
             {/* Add-garment button + picker */}
             {readySkus.length === 0 ? (
-              <div className="p-5 text-center rounded-xl bg-[#1C1C1E] border border-white/5">
-                <p className="text-[12px] font-medium text-[#86868B]">No enrolled SKUs</p>
+              <div className="p-5 text-center rounded-xl bg-overlay border border-white/5">
+                <p className="text-[12px] font-medium text-tertiary">No enrolled SKUs</p>
                 <button onClick={() => navigate('/portal/skus/enroll')}
                   className="mt-2 text-[12px] font-medium text-white hover:text-white/80 transition-colors underline">
                   Enroll a SKU
@@ -842,7 +769,7 @@ export default function CampaignBuilder() {
                   <button onClick={() => setSkuPickerOpen(o => !o)}
                     className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-[12px] font-semibold transition-all"
                     style={{
-                      background: skuPickerOpen ? 'white' : '#1C1C1E',
+                      background: skuPickerOpen ? 'white' : 'var(--surface-overlay)',
                       color: skuPickerOpen ? 'black' : 'white',
                     }}>
                     <Plus size={14} strokeWidth={2.5} /> {outfitSkus.length === 0 ? 'Select Garment' : 'Add Garment'}
@@ -854,7 +781,7 @@ export default function CampaignBuilder() {
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: 'auto' }}
                       exit={{ opacity: 0, height: 0 }}
-                      className="overflow-hidden mt-1 rounded-xl bg-[#1C1C1E] border border-white/5">
+                      className="overflow-hidden mt-1 rounded-xl bg-overlay border border-white/5">
                       <div className="max-h-56 overflow-y-auto">
                         {readySkus.filter(s => !outfitSkuIds.includes(s.skuId)).map(sku => (
                           <button key={sku.skuId}
@@ -862,7 +789,7 @@ export default function CampaignBuilder() {
                             className="w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors text-left border-b border-white/5 last:border-0">
                             <Shirt size={14} className="text-white/40 flex-shrink-0" />
                             <span className="text-[13px] font-medium text-white truncate flex-1">{sku.name}</span>
-                            <span className="text-[10px] font-semibold text-[#86868B] tracking-wider uppercase flex-shrink-0">
+                            <span className="text-[10px] font-semibold text-tertiary tracking-wider uppercase flex-shrink-0">
                               {ANCHOR_LABEL[sku.anchorType] || sku.anchorType}
                             </span>
                           </button>
@@ -872,7 +799,7 @@ export default function CampaignBuilder() {
                   )}
                 </AnimatePresence>
                 {isOutfit && (
-                  <p className="text-[11px] font-medium text-[#86868B] mt-1 leading-relaxed">
+                  <p className="text-[11px] font-medium text-tertiary mt-1 leading-relaxed">
                     {outfitSkus.length} garments will be composed into one coordinated look — each held to its frozen DNA.
                   </p>
                 )}
@@ -883,10 +810,10 @@ export default function CampaignBuilder() {
           {/* ── Photography Presets ────────────────────────────────── */}
           <div>
             <div className="flex items-center justify-between mb-3">
-              <p className="text-[10px] font-semibold tracking-widest uppercase text-[#86868B]">2. Photography Preset</p>
+              <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary">2. Photography Preset</p>
               {selectedPreset && (
                 <button onClick={() => { setSelectedPreset(null); }}
-                  className="text-[10px] font-semibold text-[#86868B] hover:text-white transition-colors uppercase tracking-widest">
+                  className="text-[10px] font-semibold text-tertiary hover:text-white transition-colors uppercase tracking-widest">
                   Clear
                 </button>
               )}
@@ -903,7 +830,7 @@ export default function CampaignBuilder() {
                       if (!lockedParams.includes('camera'))   setCamera(preset.camera);
                     }}
                     className={`flex-shrink-0 flex flex-col gap-2 p-3 rounded-xl text-left transition-all snap-start border ${
-                      active ? 'bg-white border-white text-black' : 'bg-[#1C1C1E] border-white/5 hover:border-white/20 hover:bg-[#2C2C2E]'
+                      active ? 'bg-gold border-gold text-on-accent' : 'bg-overlay border-white/5 hover:border-white/20 hover:bg-raised-2'
                     }`}
                     style={{ width: 130 }}
                   >
@@ -914,7 +841,7 @@ export default function CampaignBuilder() {
                       {active && <Check size={14} className="text-black" />}
                     </div>
                     <span className={`text-[9px] font-semibold tracking-wider uppercase px-2 py-1 rounded-full leading-none ${
-                      active ? 'bg-black/10 text-black' : 'bg-black/40 text-[#86868B]'
+                      active ? 'bg-black/10 text-black' : 'bg-black/40 text-tertiary'
                     }`}>
                       {preset.tag}
                     </span>
@@ -925,26 +852,26 @@ export default function CampaignBuilder() {
             {selectedPreset && (() => {
               const p = PHOTOGRAPHY_PRESETS.find(x => x.id === selectedPreset);
               return p ? (
-                <p className="text-[12px] text-[#86868B] mt-2 font-medium">{p.vibe}</p>
+                <p className="text-[12px] text-tertiary mt-2 font-medium">{p.vibe}</p>
               ) : null;
             })()}
           </div>
 
           {/* ── Editorial Direction ───────────────────────────────── */}
           <div>
-            <p className="text-[10px] font-semibold tracking-widest uppercase text-[#86868B] mb-3">3. Editorial Direction</p>
+            <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary mb-3">3. Editorial Direction</p>
             <div className="grid grid-cols-2 gap-2">
               {PHOTO_STYLE_OPTIONS.map(style => {
                 const active = photoDirection === style.id;
                 return (
                   <button key={style.id} onClick={() => setPhotoDirection(style.id)}
                     className={`flex flex-col gap-1 p-3 rounded-xl text-left transition-all border ${
-                      active ? 'bg-white border-white text-black' : 'bg-[#1C1C1E] border-white/5 hover:border-white/20 hover:bg-[#2C2C2E]'
+                      active ? 'bg-gold border-gold text-on-accent' : 'bg-overlay border-white/5 hover:border-white/20 hover:bg-raised-2'
                     }`}>
                     <span className={`text-[11px] font-semibold leading-tight ${active ? 'text-black' : 'text-white'}`}>
                       {style.name}
                     </span>
-                    <span className={`text-[9px] font-medium leading-tight ${active ? 'text-black/60' : 'text-[#86868B]'}`}>{style.pub}</span>
+                    <span className={`text-[9px] font-medium leading-tight ${active ? 'text-black/60' : 'text-tertiary'}`}>{style.pub}</span>
                   </button>
                 );
               })}
@@ -954,7 +881,7 @@ export default function CampaignBuilder() {
           {/* ── Production ──────────────────────────────────────────── */}
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
-              <p className="text-[10px] font-semibold tracking-widest uppercase text-[#86868B]">4. Production</p>
+              <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary">4. Production</p>
               {lockedParams.length > 0 && (
                 <span className="text-[9px] font-semibold text-white bg-white/10 px-2 py-1 rounded-full tracking-widest uppercase">
                   Brand Kit Active
@@ -983,7 +910,7 @@ export default function CampaignBuilder() {
 
           {/* ── Model Casting ─────────────────────────────────────────── */}
           <div>
-            <p className="text-[10px] font-semibold tracking-widest uppercase text-[#86868B] mb-3">5. Model Casting</p>
+            <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary mb-3">5. Model Casting</p>
             <div className="flex flex-col gap-4">
               {/* Strategy Toggle */}
               <div className="grid grid-cols-2 gap-2 mb-2">
@@ -992,12 +919,12 @@ export default function CampaignBuilder() {
                   return (
                     <button key={opt.id} onClick={() => setStrategy(opt.id as 'change'|'keep')}
                       className={`flex flex-col gap-1 p-3 rounded-xl text-left transition-all border ${
-                        active ? 'bg-white border-white text-black' : 'bg-[#1C1C1E] border-white/5 hover:border-white/20 hover:bg-[#2C2C2E]'
+                        active ? 'bg-gold border-gold text-on-accent' : 'bg-overlay border-white/5 hover:border-white/20 hover:bg-raised-2'
                       }`}>
                       <span className={`text-[11px] font-semibold leading-tight ${active ? 'text-black' : 'text-white'}`}>
                         {opt.label}
                       </span>
-                      <span className={`text-[9px] font-medium leading-tight ${active ? 'text-black/60' : 'text-[#86868B]'}`}>{opt.sub}</span>
+                      <span className={`text-[9px] font-medium leading-tight ${active ? 'text-black/60' : 'text-tertiary'}`}>{opt.sub}</span>
                     </button>
                   );
                 })}
@@ -1018,7 +945,7 @@ export default function CampaignBuilder() {
 
           {/* ── Skin Tone ─────────────────────────────────────────────── */}
           <div>
-            <p className="text-[10px] font-semibold tracking-widest uppercase text-[#86868B] mb-3">6. Skin Tone</p>
+            <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary mb-3">6. Skin Tone</p>
             <div className="grid grid-cols-4 gap-2">
               {SKIN_TONES.map(tone => {
                 const active = skinTone === tone.id;
@@ -1044,7 +971,7 @@ export default function CampaignBuilder() {
 
           {/* ── Shoot Direction ────────────────────────────────────────── */}
           <div>
-            <p className="text-[10px] font-semibold tracking-widest uppercase text-[#86868B] mb-3">7. Shoot Direction</p>
+            <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary mb-3">7. Shoot Direction</p>
             <div className="flex flex-col gap-4">
               <ConfigSelect label="Expression" value={expression}
                 options={EXPRESSION_OPTIONS} onChange={setExpression} />
@@ -1059,20 +986,20 @@ export default function CampaignBuilder() {
 
           {/* ── Location / Background ─────────────────────────────────── */}
           <div>
-            <p className="text-[10px] font-semibold tracking-widest uppercase text-[#86868B] mb-3">8. Location</p>
+            <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary mb-3">8. Location</p>
             <button
               onClick={() => setLocationPickerOpen(true)}
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all bg-[#1C1C1E] hover:bg-[#2C2C2E] border border-white/5 hover:border-white/20"
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all bg-overlay hover:bg-raised-2 border border-white/5 hover:border-white/20"
             >
-              <MapPin size={14} className={location ? 'text-white' : 'text-[#86868B]'} />
-              <span className="text-[12px] font-medium flex-1 truncate" style={{ color: location ? 'white' : '#86868B' }}>
+              <MapPin size={14} className={location ? 'text-white' : 'text-tertiary'} />
+              <span className="text-[12px] font-medium flex-1 truncate" style={{ color: location ? 'white' : 'var(--text-tertiary)' }}>
                 {location
                   ? LOCATION_PRESETS.find(p => p.id === location)?.label || location
                   : 'Studio backdrop (default)'}
               </span>
               {location
-                ? <button onClick={e => { e.stopPropagation(); setLocation(''); }} className="text-[#86868B] hover:text-white text-[10px] font-semibold uppercase tracking-widest">Clear</button>
-                : <ChevronRight size={14} className="text-[#86868B]" />
+                ? <button onClick={e => { e.stopPropagation(); setLocation(''); }} className="text-tertiary hover:text-white text-[10px] font-semibold uppercase tracking-widest">Clear</button>
+                : <ChevronRight size={14} className="text-tertiary" />
               }
             </button>
 
@@ -1094,21 +1021,21 @@ export default function CampaignBuilder() {
               }}
             />
             {customBg ? (
-              <div className="flex items-center gap-3 p-3 mt-3 rounded-xl bg-[#1C1C1E] border border-white/5">
+              <div className="flex items-center gap-3 p-3 mt-3 rounded-xl bg-overlay border border-white/5">
                 <img src={customBg} className="w-12 h-10 object-cover rounded-lg flex-shrink-0 border border-white/10" />
                 <div className="min-w-0 flex-1">
                   <p className="text-[12px] font-medium text-white truncate">Custom environment</p>
-                  <p className="text-[9px] font-medium text-[#86868B] tracking-wider uppercase mt-1">Scene recreated from upload</p>
+                  <p className="text-[9px] font-medium text-tertiary tracking-wider uppercase mt-1">Scene recreated from upload</p>
                 </div>
                 <button onClick={() => setCustomBg(null)}
-                  className="text-[#86868B] hover:text-red-400 transition-colors p-2 flex-shrink-0 hover:bg-white/5 rounded-full">
+                  className="text-tertiary hover:text-red-400 transition-colors p-2 flex-shrink-0 hover:bg-white/5 rounded-full">
                   <X size={14} />
                 </button>
               </div>
             ) : (
               <button
                 onClick={() => customBgInputRef.current?.click()}
-                className="w-full flex items-center justify-center gap-2 py-3 mt-3 rounded-xl text-[10px] font-semibold tracking-widest uppercase text-[#86868B] hover:text-white transition-all bg-[#1C1C1E] hover:bg-[#2C2C2E] border border-dashed border-white/10 hover:border-white/20">
+                className="w-full flex items-center justify-center gap-2 py-3 mt-3 rounded-xl text-[10px] font-semibold tracking-widest uppercase text-tertiary hover:text-white transition-all bg-overlay hover:bg-raised-2 border border-dashed border-white/10 hover:border-white/20">
                 <Upload size={14} /> Upload Custom Environment
               </button>
             )}
@@ -1120,10 +1047,10 @@ export default function CampaignBuilder() {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 280 }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="overflow-hidden mt-3 rounded-xl bg-[#1C1C1E] border border-white/5"
+                  className="overflow-hidden mt-3 rounded-xl bg-overlay border border-white/5"
                 >
                   <div className="p-3 border-b border-white/5 flex items-center justify-between">
-                    <span className="text-[10px] font-semibold text-[#86868B] uppercase tracking-widest">
+                    <span className="text-[10px] font-semibold text-tertiary uppercase tracking-widest">
                       {LOCATION_PRESETS.length} locations
                     </span>
                     <button onClick={() => setLocationPickerOpen(false)}
@@ -1137,14 +1064,14 @@ export default function CampaignBuilder() {
                       const catPresets = LOCATION_PRESETS.filter(p => p.category === cat);
                       return (
                         <div key={cat}>
-                          <div className="px-4 py-2 sticky top-0 bg-[#1C1C1E]/95 backdrop-blur-sm z-10 border-b border-white/5">
-                            <span className="text-[9px] font-semibold tracking-widest uppercase text-[#86868B]">{cat}</span>
+                          <div className="px-4 py-2 sticky top-0 bg-overlay backdrop-blur-sm z-10 border-b border-white/5">
+                            <span className="text-[9px] font-semibold tracking-widest uppercase text-tertiary">{cat}</span>
                           </div>
                           {catPresets.map(preset => (
                             <button key={preset.id}
                               onClick={() => { setLocation(preset.id); setLocationPickerOpen(false); }}
                               className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-white/5 transition-colors border-b border-white/5 last:border-0">
-                              <span className={`text-[12px] font-medium truncate flex-1 ${location === preset.id ? 'text-white' : 'text-[#86868B]'}`}>
+                              <span className={`text-[12px] font-medium truncate flex-1 ${location === preset.id ? 'text-white' : 'text-tertiary'}`}>
                                 {preset.label}
                               </span>
                               {location === preset.id && <Check size={14} className="text-white flex-shrink-0" />}
@@ -1161,12 +1088,12 @@ export default function CampaignBuilder() {
 
           {/* ── Scene Props ──────────────────────────────────── */}
           <div>
-            <p className="text-[10px] font-semibold tracking-widest uppercase text-[#86868B] mb-3">9. Scene Props</p>
+            <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary mb-3">9. Scene Props</p>
             <button
               onClick={() => setShowCreativeProps(true)}
               className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-[11px] font-semibold tracking-widest uppercase transition-all"
               style={{
-                background: activePropId ? 'white' : '#1C1C1E',
+                background: activePropId ? 'white' : 'var(--surface-overlay)',
                 color: activePropId ? 'black' : 'white',
               }}>
               <Sparkles size={14} />
@@ -1174,7 +1101,7 @@ export default function CampaignBuilder() {
             </button>
             {activePropId && (
               <button onClick={() => setActivePropId(null)}
-                className="w-full text-center text-[10px] font-semibold text-[#86868B] hover:text-white mt-3 uppercase tracking-widest transition-colors">
+                className="w-full text-center text-[10px] font-semibold text-tertiary hover:text-white mt-3 uppercase tracking-widest transition-colors">
                 Clear Prop
               </button>
             )}
@@ -1182,19 +1109,19 @@ export default function CampaignBuilder() {
 
           {/* ── Creative Direction ────────────────────────────── */}
           <div>
-            <p className="text-[10px] font-semibold tracking-widest uppercase text-[#86868B] mb-3">10. Creative Direction</p>
+            <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary mb-3">10. Creative Direction</p>
             <textarea
               value={prompt}
               onChange={e => setPrompt(e.target.value)}
               placeholder="Additional creative direction..."
               rows={3}
-              className="w-full px-4 py-3 rounded-xl text-[12px] font-medium text-white placeholder-[#86868B] outline-none resize-none bg-[#1C1C1E] border border-white/5 focus:border-white/20 transition-colors"
+              className="w-full px-4 py-3 rounded-xl text-[12px] font-medium text-white placeholder-[#86868B] outline-none resize-none bg-overlay border border-white/5 focus:border-white/20 transition-colors"
             />
           </div>
 
           {/* ── Output Mode ───────────────────────────────────────────── */}
           <div>
-            <p className="text-[10px] font-semibold tracking-widest uppercase text-[#86868B] mb-3">11. Output</p>
+            <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary mb-3">11. Output</p>
             <div className="grid grid-cols-2 gap-3">
               {([
                 { mode: 'still' as const, label: '6 Stills', sub: '3 credits' },
@@ -1202,12 +1129,12 @@ export default function CampaignBuilder() {
               ] as const).map(({ mode, label, sub }) => (
                 <button key={mode} onClick={() => setOutputMode(mode)}
                   className={`flex flex-col items-center py-3 rounded-xl transition-all text-center border ${
-                    outputMode === mode ? 'bg-white border-white text-black' : 'bg-[#1C1C1E] border-white/5 hover:border-white/20 hover:bg-[#2C2C2E]'
+                    outputMode === mode ? 'bg-gold border-gold text-on-accent' : 'bg-overlay border-white/5 hover:border-white/20 hover:bg-raised-2'
                   }`}>
                   <span className={`text-[12px] font-semibold ${outputMode === mode ? 'text-black' : 'text-white'}`}>
                     {label}
                   </span>
-                  <span className={`text-[9px] font-medium mt-1 ${outputMode === mode ? 'text-black/60' : 'text-[#86868B]'}`}>{sub}</span>
+                  <span className={`text-[9px] font-medium mt-1 ${outputMode === mode ? 'text-black/60' : 'text-tertiary'}`}>{sub}</span>
                 </button>
               ))}
             </div>
@@ -1219,11 +1146,13 @@ export default function CampaignBuilder() {
           <button
             onClick={handleForge}
             disabled={isForging || !activeSku || !canForge()}
-            className="w-full flex items-center justify-center gap-3 py-4 rounded-xl font-medium text-black text-[14px] transition-all disabled:opacity-40 disabled:cursor-not-allowed bg-white hover:bg-white/90"
+            className="group relative w-full flex items-center justify-center gap-3 py-4 rounded-xl font-display italic text-[15px] text-on-accent overflow-hidden transition-all duration-300 ease-[cubic-bezier(.16,1,.3,1)] hover:-translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+            style={{ background: 'linear-gradient(180deg,var(--gold-bright) 0%,var(--gold) 55%,var(--gold-deep) 100%)', boxShadow: '0 8px 28px var(--gold-glow)' }}
           >
+            <span aria-hidden className="pointer-events-none absolute top-0 -left-1/3 h-full w-1/3 bg-gradient-to-r from-transparent via-white/40 to-transparent transition-[left] duration-700 ease-[cubic-bezier(.16,1,.3,1)] group-hover:left-[130%]" style={{ transform: 'skewX(-20deg)' }} />
             {isForging
-              ? <><RefreshCw size={16} className="animate-spin" /> Forging...</>
-              : <><Play size={16} fill="black" /> Engage Sovereign Forge</>
+              ? <><RefreshCw size={16} className="animate-spin" /> Forging…</>
+              : <><Play size={16} fill="currentColor" /> Engage the Forge</>
             }
           </button>
           {!canForgeRole ? (
@@ -1231,15 +1160,34 @@ export default function CampaignBuilder() {
               Your role (Social) is export-only — forging is disabled
             </p>
           ) : !activeSku && (
-            <p className="text-[10px] font-semibold text-[#86868B] text-center mt-3 tracking-widest uppercase">
+            <p className="text-[10px] font-semibold text-tertiary text-center mt-3 tracking-widest uppercase">
               Select a SKU to continue
             </p>
           )}
         </div>
       </aside>
 
-      {/* ── CENTER: Forge grid ──────────────────────────────────────────── */}
-      <main className="flex-1 flex flex-col overflow-hidden bg-[#0A0A0C]">
+      {/* ── CENTER: Forge stage ─────────────────────────────────────────── */}
+      <main className="flex-1 flex flex-col overflow-hidden bg-canvas">
+
+        {/* Editorial masthead */}
+        <div className="px-8 pt-7 pb-5 border-b border-hairline shrink-0">
+          <div className="flex items-end justify-between gap-6">
+            <div className="min-w-0">
+              <p className="font-mono text-[10px] tracking-[0.34em] uppercase text-gold mb-2">
+                {isOutfit ? `Outfit · ${outfitSkus.length} Garments` : activeSku ? 'Campaign · DNA Locked' : 'Campaign'}
+              </p>
+              <h1 className="font-display italic font-medium text-[40px] leading-none tracking-[-0.02em] text-primary truncate">
+                {campaignName || activeSku?.name || 'Untitled Campaign'}
+              </h1>
+            </div>
+            {activeSku && (
+              <Badge tone={allComplete ? 'success' : 'gold'} dot>
+                {allComplete ? '6 of 6 Plates' : `${slots.filter(s => !!s).length} of 6 Plates`}
+              </Badge>
+            )}
+          </div>
+        </div>
 
         {/* Pipeline status bar */}
         <div className="px-8 pt-6 pb-4 border-b border-white/5 bg-black">
@@ -1248,7 +1196,7 @@ export default function CampaignBuilder() {
             <span className="text-[10px] font-semibold text-white/50 tracking-widest uppercase">{forgeStatus}</span>
             <span className="text-[10px] font-semibold text-white/40">{progress}%</span>
           </div>
-          <div className="w-full h-1 bg-[#1C1C1E] rounded-full overflow-hidden">
+          <div className="w-full h-1 bg-overlay rounded-full overflow-hidden">
             <motion.div
               className="h-full bg-white rounded-full"
               animate={{ width: `${progress}%` }}
@@ -1287,16 +1235,18 @@ export default function CampaignBuilder() {
               >
                 <button
                   onClick={() => setShowSaveModal(true)}
-                  className="flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-black text-[11px] font-semibold tracking-widest uppercase hover:bg-white/90 transition-all shadow-[0_0_24px_rgba(255,255,255,0.15)]"
+                  className="group relative flex items-center gap-2 px-6 py-3 rounded-xl text-on-accent text-[11px] font-mono tracking-[0.2em] uppercase overflow-hidden transition-all hover:-translate-y-0.5"
+                  style={{ background: 'linear-gradient(180deg,var(--gold-bright),var(--gold) 60%,var(--gold-deep))', boxShadow: '0 8px 28px var(--gold-glow)' }}
                 >
+                  <span aria-hidden className="pointer-events-none absolute top-0 -left-1/3 h-full w-1/3 bg-gradient-to-r from-transparent via-white/40 to-transparent transition-[left] duration-700 ease-[cubic-bezier(.16,1,.3,1)] group-hover:left-[130%]" style={{ transform: 'skewX(-20deg)' }} />
                   <Save size={14} /> Save as Campaign
                 </button>
-                <button className="flex items-center gap-2 px-6 py-3 rounded-xl bg-[#1C1C1E] border border-white/5 text-white/70 hover:text-white text-[11px] font-semibold tracking-widest uppercase transition-all">
+                <button className="flex items-center gap-2 px-6 py-3 rounded-xl bg-overlay border border-white/5 text-white/70 hover:text-white text-[11px] font-semibold tracking-widest uppercase transition-all">
                   <Download size={14} /> Download All
                 </button>
                 <button
                   onClick={handleForge}
-                  className="flex items-center gap-2 px-6 py-3 rounded-xl bg-[#1C1C1E] border border-white/5 text-white/70 hover:text-white text-[11px] font-semibold tracking-widest uppercase transition-all"
+                  className="flex items-center gap-2 px-6 py-3 rounded-xl bg-overlay border border-white/5 text-white/70 hover:text-white text-[11px] font-semibold tracking-widest uppercase transition-all"
                 >
                   <RefreshCw size={14} /> Regenerate
                 </button>
@@ -1313,7 +1263,7 @@ export default function CampaignBuilder() {
 
         {/* Active SKU / outfit summary */}
         {activeSku && (
-          <div className="flex flex-col gap-3 p-4 rounded-xl bg-[#1C1C1E] border border-white/5">
+          <div className="flex flex-col gap-3 p-4 rounded-xl bg-overlay border border-white/5">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
               <span className="text-[10px] font-semibold text-white tracking-widest uppercase">
@@ -1325,7 +1275,7 @@ export default function CampaignBuilder() {
                 {outfitSkus.map(s => (
                   <div key={s.skuId} className="flex items-center justify-between gap-3">
                     <span className="text-[12px] font-medium text-white truncate">{s.name}</span>
-                    <span className="text-[9px] font-semibold text-[#86868B] tracking-wider uppercase flex-shrink-0">
+                    <span className="text-[9px] font-semibold text-tertiary tracking-wider uppercase flex-shrink-0">
                       {ANCHOR_LABEL[s.anchorType] || s.anchorType}
                     </span>
                   </div>
@@ -1335,7 +1285,7 @@ export default function CampaignBuilder() {
               <>
                 <p className="text-[13px] font-medium text-white">{activeSku.name}</p>
                 {activeSku.fidelityScore != null && (
-                  <p className="text-[11px] font-medium text-[#86868B]">{activeSku.fidelityScore}% Pattern Fidelity</p>
+                  <p className="text-[11px] font-medium text-tertiary">{activeSku.fidelityScore}% Pattern Fidelity</p>
                 )}
               </>
             )}
@@ -1356,7 +1306,7 @@ export default function CampaignBuilder() {
             ['Shot Type',     shotType],
           ].map(([label, value]) => (
             <div key={label} className="flex flex-col gap-1">
-              <span className="text-[9px] font-semibold tracking-widest uppercase text-[#86868B]">{label}</span>
+              <span className="text-[9px] font-semibold tracking-widest uppercase text-tertiary">{label}</span>
               <span className="text-[12px] font-medium text-white truncate">{value}</span>
             </div>
           ))}
@@ -1364,7 +1314,7 @@ export default function CampaignBuilder() {
 
         {/* Quota */}
         <div className="border-t border-white/5 pt-6">
-          <span className="text-[9px] font-semibold tracking-widest uppercase text-[#86868B]">Brand Quota</span>
+          <span className="text-[9px] font-semibold tracking-widest uppercase text-tertiary">Brand Quota</span>
           <p className="text-[12px] font-medium text-white mt-2">
             {(brand?.usage.currentPeriodImages || 0).toLocaleString()} / {(brand?.quota.imagesPerMonth || 0).toLocaleString()} images
           </p>
@@ -1373,13 +1323,13 @@ export default function CampaignBuilder() {
         {/* Recent with this SKU */}
         {activeSku && campaigns.filter(c => c.skuId === activeSku.skuId).length > 0 && (
           <div className="border-t border-white/5 pt-6">
-            <span className="text-[9px] font-semibold tracking-widest uppercase text-[#86868B] mb-3 block">
+            <span className="text-[9px] font-semibold tracking-widest uppercase text-tertiary mb-3 block">
               Previous Campaigns
             </span>
             <div className="flex flex-col gap-2">
               {campaigns.filter(c => c.skuId === activeSku.skuId).slice(0, 3).map(c => (
                 <div key={c.campaignId} className="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-white/5 transition-colors">
-                  <div className="w-8 h-10 rounded-md bg-[#1C1C1E] border border-white/5 flex-shrink-0" />
+                  <div className="w-8 h-10 rounded-md bg-overlay border border-white/5 flex-shrink-0" />
                   <div className="min-w-0">
                     <p className="text-[11px] font-medium text-white/70 truncate">{c.name || 'Campaign'}</p>
                   </div>
@@ -1420,7 +1370,7 @@ export default function CampaignBuilder() {
               <div className="flex gap-3">
                 <button
                   onClick={() => { setShowSaveModal(false); navigate('/portal/campaigns'); }}
-                  className="flex-1 py-2.5 rounded bg-[#B8952A] text-black text-[10px] font-mono tracking-[0.2em] uppercase font-semibold hover:bg-[#C9A84C] transition-all"
+                  className="flex-1 py-2.5 rounded bg-[#C5A253] text-black text-[10px] font-mono tracking-[0.2em] uppercase font-semibold hover:bg-[#C9A84C] transition-all"
                 >
                   Save to Vault
                 </button>

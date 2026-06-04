@@ -14,7 +14,7 @@ function CodeBlock({ code, language = 'bash' }: { code: string; language?: strin
     <div className="relative rounded overflow-hidden" style={{ background: '#060608', border: '1px solid rgba(255,255,255,0.07)' }}>
       <div className="flex items-center justify-between px-4 py-2 border-b border-white/[0.05]">
         <span className="text-[7px] font-mono tracking-[0.3em] uppercase text-white/20">{language}</span>
-        <button onClick={copy} className="flex items-center gap-1.5 text-[7px] font-mono text-white/20 hover:text-[#B8952A] transition-colors uppercase tracking-[0.2em]">
+        <button onClick={copy} className="flex items-center gap-1.5 text-[7px] font-mono text-white/20 hover:text-[#C5A253] transition-colors uppercase tracking-[0.2em]">
           {copied ? <><Check size={9} /> Copied</> : <><Copy size={9} /> Copy</>}
         </button>
       </div>
@@ -100,7 +100,7 @@ export default function APIAccessPortal() {
   return (
     <div className="p-8 min-h-full max-w-3xl">
       <div className="mb-8">
-        <h1 className="font-serif italic text-4xl text-white mb-2">API Access</h1>
+        <h1 className="font-display italic text-4xl text-primary mb-2">API Access</h1>
         <p className="text-[9px] font-mono tracking-[0.35em] uppercase text-white/25">
           Integrate LuxAura into your existing workflows via REST API
         </p>
@@ -120,15 +120,15 @@ export default function APIAccessPortal() {
               <p className="text-[9px] font-mono text-emerald-400">New API key generated. Copy it now — it will not be shown again.</p>
             </div>
             <div className="flex items-center gap-2 px-3 py-2.5 rounded"
-              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(184,149,42,0.3)' }}>
-              <code className="text-[10px] font-mono text-[#B8952A] flex-1 break-all">
+              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(197,162,83,0.3)' }}>
+              <code className="text-[10px] font-mono text-[#C5A253] flex-1 break-all">
                 {showKey ? rawKey : `${rawKey.slice(0, 12)}${'•'.repeat(32)}`}
               </code>
               <button onClick={() => setShowKey(s => !s)} className="text-white/20 hover:text-white/60 transition-colors p-1">
                 {showKey ? <EyeOff size={13} /> : <Eye size={13} />}
               </button>
               <button onClick={() => { navigator.clipboard.writeText(rawKey); }}
-                className="text-white/20 hover:text-[#B8952A] transition-colors p-1">
+                className="text-white/20 hover:text-[#C5A253] transition-colors p-1">
                 <Copy size={13} />
               </button>
             </div>
@@ -150,7 +150,7 @@ export default function APIAccessPortal() {
           <div className="flex flex-col items-center gap-4 py-4">
             <p className="text-[9px] font-mono text-white/25">No API key issued yet</p>
             <button onClick={issueApiKey} disabled={issuingKey}
-              className="flex items-center gap-2 px-5 py-2.5 rounded bg-[#B8952A] text-black text-[10px] font-mono tracking-[0.2em] uppercase font-semibold transition-all">
+              className="flex items-center gap-2 px-5 py-2.5 rounded bg-[#C5A253] text-black text-[10px] font-mono tracking-[0.2em] uppercase font-semibold transition-all">
               <Code2 size={12} /> Generate API Key
             </button>
           </div>
@@ -161,7 +161,7 @@ export default function APIAccessPortal() {
       <div className="rounded p-6 mb-6 flex flex-col gap-4"
         style={{ background: 'linear-gradient(145deg, #111116 0%, #0B0B0E 100%)', border: '1px solid rgba(255,255,255,0.06)' }}>
         <div className="flex items-center gap-2">
-          <Webhook size={13} className="text-[#B8952A]" />
+          <Webhook size={13} className="text-[#C5A253]" />
           <p className="text-[7px] font-mono tracking-[0.45em] uppercase text-white/25">Webhook Endpoint</p>
         </div>
         <p className="text-[8px] font-mono text-white/25">
@@ -174,7 +174,7 @@ export default function APIAccessPortal() {
             style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.10)' }} />
           <button onClick={saveWebhook} disabled={savingWebhook || !webhookUrl}
             className="flex items-center gap-2 px-4 py-2.5 rounded text-[9px] font-mono tracking-[0.2em] uppercase font-semibold disabled:opacity-40 transition-all"
-            style={{ background: webhookSaved ? '#10B981' : '#B8952A', color: '#000' }}>
+            style={{ background: webhookSaved ? '#10B981' : '#C5A253', color: '#000' }}>
             {webhookSaved ? <><Check size={11} /> Saved</> : 'Save'}
           </button>
           {webhookUrl && (
@@ -197,7 +197,7 @@ export default function APIAccessPortal() {
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <p className="text-[7px] font-mono tracking-[0.45em] uppercase text-white/25">Quick Reference</p>
-          <button className="flex items-center gap-1.5 text-[7px] font-mono text-white/20 hover:text-[#B8952A] transition-colors uppercase tracking-[0.3em]">
+          <button className="flex items-center gap-1.5 text-[7px] font-mono text-white/20 hover:text-[#C5A253] transition-colors uppercase tracking-[0.3em]">
             <ExternalLink size={9} /> Full Docs
           </button>
         </div>
@@ -229,7 +229,7 @@ export default function APIAccessPortal() {
             ['set.calibrated',    'Set injection spatial calibration complete'],
           ].map(([event, desc]) => (
             <div key={event} className="flex items-center gap-4 px-5 py-3 border-b border-white/[0.04] last:border-0">
-              <code className="text-[9px] font-mono text-[#B8952A] w-40 flex-shrink-0">{event}</code>
+              <code className="text-[9px] font-mono text-[#C5A253] w-40 flex-shrink-0">{event}</code>
               <span className="text-[9px] font-mono text-white/30">{desc}</span>
             </div>
           ))}

@@ -16,7 +16,7 @@ gsap.registerPlugin(ScrollTrigger);
 const T = {
   alabaster : '#FAF9F6',
   charcoal  : '#1C1C1C',
-  gold      : '#D4AF37',
+  gold      : '#C5A253',
   void      : '#080807',
   serif     : 'Cormorant Garamond, serif',
   sans      : 'Inter, sans-serif',
@@ -466,7 +466,7 @@ export default function Landing() {
 
                 {/* Arrow connector */}
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.3rem', paddingBottom: '1.8rem' }}>
-                  <div style={{ width: 32, height: 0.5, background: `linear-gradient(to right, rgba(212,175,55,0.4), ${T.gold})` }} />
+                  <div style={{ width: 32, height: 0.5, background: `linear-gradient(to right, rgba(197,162,83,0.4), ${T.gold})` }} />
                   <span style={{ fontFamily: T.sans, fontSize: 9, color: T.gold, lineHeight: 1, marginTop: '-0.2rem' }}>›</span>
                   <p style={{ fontFamily: T.sans, fontSize: 5.5, letterSpacing: '0.28em', textTransform: 'uppercase', color: `${T.gold}70`, marginTop: '0.15rem' }}>LuxAura</p>
                 </div>
@@ -623,7 +623,7 @@ export default function Landing() {
         </div>
 
         {/* Progress bar */}
-        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 1, background: 'rgba(212,175,55,0.12)', zIndex: 25 }}>
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 1, background: 'rgba(197,162,83,0.12)', zIndex: 25 }}>
           <div
             ref={bProgressRef}
             style={{

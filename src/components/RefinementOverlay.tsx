@@ -17,7 +17,7 @@ export const RefinementOverlay: React.FC<{ isRefining: boolean, message?: string
               <p className="font-mono text-[10px] tracking-[0.5em] text-white/50 uppercase">DEVELOPING THE VISION</p>
             </div>
             
-            <div className="w-16 h-16 border-t-2 border-[#D4AF37] rounded-full animate-spin mt-4" />
+            <div className="w-16 h-16 border-t-2 border-[#C5A253] rounded-full animate-spin mt-4" />
           </motion.div>
         </div>
       )}

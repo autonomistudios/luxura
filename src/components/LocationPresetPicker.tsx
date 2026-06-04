@@ -28,15 +28,15 @@ export function LocationPresetPicker({ selected, onSelect }: LocationPresetPicke
         onClick={() => setOpen(true)}
         className={`w-full flex items-center gap-3 px-4 py-3 border text-left transition-all duration-300 ${
           selected
-            ? 'border-[#D4AF37]/40 bg-[#D4AF37]/[0.03]'
+            ? 'border-[#C5A253]/40 bg-[#C5A253]/[0.03]'
             : 'border-[#1C1C1C]/10 bg-[#1C1C1C]/[0.02] hover:border-[#1C1C1C]/25'
         }`}
       >
-        <MapPin size={10} className={selected ? 'text-[#D4AF37]' : 'text-[#1C1C1C]/30'} />
+        <MapPin size={10} className={selected ? 'text-[#C5A253]' : 'text-[#1C1C1C]/30'} />
         <div className="flex-1 min-w-0">
           {selected ? (
             <>
-              <p className="text-[10px] font-mono text-[#D4AF37] truncate">{selected.label}</p>
+              <p className="text-[10px] font-mono text-[#C5A253] truncate">{selected.label}</p>
               <p className="text-[8px] font-mono text-[#1C1C1C]/35 uppercase tracking-[0.2em]">{selected.category}</p>
             </>
           ) : (
@@ -72,7 +72,7 @@ export function LocationPresetPicker({ selected, onSelect }: LocationPresetPicke
             >
               <div className="px-8 py-6 border-b border-[#1C1C1C]/8 flex items-start justify-between gap-6 shrink-0">
                 <div>
-                  <p className="text-[9px] font-mono uppercase tracking-[0.5em] text-[#D4AF37]/60 mb-1">100 Editorial Environments</p>
+                  <p className="text-[9px] font-mono uppercase tracking-[0.5em] text-[#C5A253]/60 mb-1">100 Editorial Environments</p>
                   <h3 className="text-2xl font-serif text-[#1C1C1C] italic">Select a Location</h3>
                 </div>
                 <button onClick={() => setOpen(false)} className="text-[#1C1C1C]/30 hover:text-[#1C1C1C] transition-colors mt-1">
@@ -88,7 +88,7 @@ export function LocationPresetPicker({ selected, onSelect }: LocationPresetPicke
                     placeholder="Search locations…"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="w-full bg-[#1C1C1C]/[0.03] border border-[#1C1C1C]/10 pl-8 pr-4 py-2.5 text-[10px] font-mono text-[#1C1C1C] placeholder:text-[#1C1C1C]/30 focus:outline-none focus:border-[#D4AF37]/40 transition-colors"
+                    className="w-full bg-[#1C1C1C]/[0.03] border border-[#1C1C1C]/10 pl-8 pr-4 py-2.5 text-[10px] font-mono text-[#1C1C1C] placeholder:text-[#1C1C1C]/30 focus:outline-none focus:border-[#C5A253]/40 transition-colors"
                   />
                 </div>
                 <div className="flex flex-wrap gap-2">
@@ -98,7 +98,7 @@ export function LocationPresetPicker({ selected, onSelect }: LocationPresetPicke
                       onClick={() => setCategory(cat)}
                       className={`px-4 py-1.5 border text-[8px] font-mono uppercase tracking-[0.2em] transition-all duration-200 ${
                         category === cat
-                          ? 'border-[#D4AF37]/50 text-[#D4AF37] bg-[#D4AF37]/5'
+                          ? 'border-[#C5A253]/50 text-[#C5A253] bg-[#C5A253]/5'
                           : 'border-[#1C1C1C]/10 text-[#1C1C1C]/40 hover:border-[#1C1C1C]/25 hover:text-[#1C1C1C]/70'
                       }`}
                     >
@@ -118,15 +118,15 @@ export function LocationPresetPicker({ selected, onSelect }: LocationPresetPicke
                         onClick={() => { onSelect(preset); setOpen(false); }}
                         className={`text-left p-4 border transition-all duration-300 ${
                           isSelected
-                            ? 'border-[#D4AF37]/50 bg-[#D4AF37]/[0.05]'
+                            ? 'border-[#C5A253]/50 bg-[#C5A253]/[0.05]'
                             : 'border-[#1C1C1C]/8 bg-transparent hover:border-[#1C1C1C]/20 hover:bg-[#1C1C1C]/[0.02]'
                         }`}
                       >
                         <div className="flex items-start justify-between gap-2 mb-2">
-                          <p className={`text-[11px] font-serif leading-tight ${isSelected ? 'text-[#D4AF37]' : 'text-[#1C1C1C]'}`}>
+                          <p className={`text-[11px] font-serif leading-tight ${isSelected ? 'text-[#C5A253]' : 'text-[#1C1C1C]'}`}>
                             {preset.label}
                           </p>
-                          <span className={`text-[7px] font-mono uppercase tracking-[0.2em] shrink-0 ${isSelected ? 'text-[#D4AF37]/60' : 'text-[#1C1C1C]/35'}`}>
+                          <span className={`text-[7px] font-mono uppercase tracking-[0.2em] shrink-0 ${isSelected ? 'text-[#C5A253]/60' : 'text-[#1C1C1C]/35'}`}>
                             {preset.category}
                           </span>
                         </div>

@@ -1,4 +1,5 @@
-/* Cormorant Garant loaded via index.html preconnect for faster paint */
+/* Atelier OS — global stylesheet. Design tokens (src/styles/tokens.css) are the single source of truth. */
+@import './styles/tokens.css';
 
 @tailwind base;
 @tailwind components;
@@ -17,11 +18,11 @@
   --mercury: #E5E5E5;
   --border-color: rgba(255, 255, 255, 0.1);
   --obsidian: #000000;
-  --bg-obsidian: #000000;
+  --bg-obsidian: #08080A;
   --bg-anthracite: #1C1C1E;
   --text-primary: #F5F5F7;
   --text-secondary: #86868B;
-  --accent-color: #D4AF37;
+  --accent-color: var(--gold);
   --accent-glow: transparent;
   --ui-bg: #1C1C1E;
 
@@ -143,10 +144,10 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Gold-accented glass — for active/selected panels */
 .glass-gold {
-  background: rgba(212, 175, 55, 0.1);
+  background: rgba(197,162,83, 0.1);
   backdrop-filter: blur(24px) saturate(180%);
   -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid rgba(212, 175, 55, 0.4);
+  border: 1px solid rgba(197,162,83, 0.4);
   border-radius: 12px;
   transition: var(--transition-sovereign);
 }
@@ -267,7 +268,7 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--accent-color);
   border-color: var(--accent-color);
   transform: translateY(-2px);
-  box-shadow: 0 4px 24px rgba(212, 175, 55, 0.12);
+  box-shadow: 0 4px 24px rgba(197,162,83, 0.12);
 }
 
 /* 🕰️ Kinetic Typography */
@@ -322,7 +323,7 @@ h1, h2, h3, h4, h5, h6 {
 
 @keyframes breath {
   0%, 100% { color: var(--text-primary); text-shadow: none; }
-  50% { color: var(--accent-color); text-shadow: 0 0 12px rgba(212,175,55,0.25); }
+  50% { color: var(--accent-color); text-shadow: 0 0 12px rgba(197,162,83,0.25); }
 }
 
 .animate-slow-rotate {
@@ -354,7 +355,7 @@ h1, h2, h3, h4, h5, h6 {
   .mobile-dock {
     backdrop-filter: blur(20px) saturate(180%);
     background: rgba(250, 249, 246, 0.92);
-    border: 0.5px solid rgba(212, 175, 55, 0.3);
+    border: 0.5px solid rgba(197,162,83, 0.3);
   }
 
   /* Ensure the "Glint" shimmer is larger for thumb-taps */
@@ -379,10 +380,10 @@ body {
 ::-webkit-scrollbar { width: 3px; height: 3px; }
 ::-webkit-scrollbar-track { background: var(--bg-obsidian); }
 ::-webkit-scrollbar-thumb {
-  background: rgba(212, 175, 55, 0.35);
+  background: rgba(197,162,83, 0.35);
   border-radius: 10px;
   transition: background 0.3s ease;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(212, 175, 55, 0.7);
+  background: rgba(197,162,83, 0.7);
 }

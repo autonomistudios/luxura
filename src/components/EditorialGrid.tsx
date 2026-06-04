@@ -19,7 +19,7 @@ export default function EditorialGrid() {
     <div className="max-w-[1600px] mx-auto px-8 py-32 transition-colors duration-1000">
       <header className="mb-32 border-b border-[#1C1C1C]/8 pb-10 blur-in" style={{ animationDelay: '0.2s' }}>
         <h1 className="text-7xl font-serif text-[#1C1C1C] tracking-tighter leading-none mb-6 luxury-script">
-          The <span className="text-[#D4AF37]">Atelier</span>
+          The <span className="text-[#C5A253]">Atelier</span>
         </h1>
         <p className="text-[11px] font-mono uppercase tracking-[0.6em] text-[#1C1C1C]/40">
           SELECT A DISCIPLINE TO INITIALIZE THE MASTER RENDER
@@ -31,12 +31,12 @@ export default function EditorialGrid() {
           <button
             key={i}
             type="button"
-            className="group cursor-pointer blur-in text-left w-full block focus:outline-none focus:ring-1 focus:ring-[#D4AF37]/50"
+            className="group cursor-pointer blur-in text-left w-full block focus:outline-none focus:ring-1 focus:ring-[#C5A253]/50"
             style={{ animationDelay: `${0.3 + (i * 0.1)}s` }}
             onClick={() => handleSelect(cat.id)}
           >
             {/* Artifact tile */}
-            <div className="aspect-square mb-6 bg-[#F2EFE9] border border-[#1C1C1C]/8 flex items-center justify-center overflow-hidden transition-all duration-700 group-hover:border-[#D4AF37]/30">
+            <div className="aspect-square mb-6 bg-[#F2EFE9] border border-[#1C1C1C]/8 flex items-center justify-center overflow-hidden transition-all duration-700 group-hover:border-[#C5A253]/30">
               <img src={cat.artifact} alt={`${cat.name} Artifact`} className="w-1/2 object-contain opacity-50 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" />
             </div>
 
@@ -46,8 +46,8 @@ export default function EditorialGrid() {
             </div>
 
             {/* Typography */}
-            <div className="mt-8 border-l border-[#1C1C1C]/10 pl-6 transition-colors duration-700 group-hover:border-[#D4AF37]/30">
-              <h3 className="text-4xl font-serif text-[#1C1C1C] mb-2 group-hover:text-[#D4AF37] transition-colors luxury-script">
+            <div className="mt-8 border-l border-[#1C1C1C]/10 pl-6 transition-colors duration-700 group-hover:border-[#C5A253]/30">
+              <h3 className="text-4xl font-serif text-[#1C1C1C] mb-2 group-hover:text-[#C5A253] transition-colors luxury-script">
                 {cat.name}
               </h3>
               <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-[#1C1C1C]/40">

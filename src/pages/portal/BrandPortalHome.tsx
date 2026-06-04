@@ -28,7 +28,7 @@ function QuotaArc({ percent, isAdmin }: { percent: number; isAdmin: boolean }) {
 
   const endAngle = startAngle + sweep;
   const fillEnd = startAngle + (sweep * Math.min(percent, 100)) / 100;
-  const color = percent >= 95 ? '#EF4444' : percent >= 80 ? '#F59E0B' : '#B8952A';
+  const color = percent >= 95 ? '#EF4444' : percent >= 80 ? '#F59E0B' : '#C5A253';
 
   return (
     <div className="relative" style={{ width: 200, height: 200 }}>
@@ -71,7 +71,7 @@ function StatNumber({ label, value, gold = false, delay = 0 }: {
         className="font-serif italic leading-none"
         style={{
           fontSize: 'clamp(40px, 5vw, 64px)',
-          color: gold ? '#D4AF37' : '#ffffff',
+          color: gold ? '#C5A253' : '#ffffff',
         }}
       >
         {value}
@@ -97,7 +97,7 @@ function CampaignCard({ index }: { index: number }) {
     >
       <div className="aspect-[4/5] bg-[#0D0D10] relative">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0B0B0E]/80" />
-        <span className="absolute top-2 right-2 text-[7px] font-mono text-[#B8952A] bg-black/60 border border-[#B8952A]/30 px-1.5 py-0.5 rounded">
+        <span className="absolute top-2 right-2 text-[7px] font-mono text-[#C5A253] bg-black/60 border border-[#C5A253]/30 px-1.5 py-0.5 rounded">
           AUDITED
         </span>
       </div>
@@ -106,7 +106,7 @@ function CampaignCard({ index }: { index: number }) {
         <p className="text-[8px] font-mono text-white/25 mt-0.5">6 images</p>
       </div>
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
-        style={{ boxShadow: 'inset 0 0 0 1px rgba(184,149,42,0.25)' }} />
+        style={{ boxShadow: 'inset 0 0 0 1px rgba(197,162,83,0.25)' }} />
     </motion.div>
   );
 }
@@ -129,12 +129,12 @@ export default function BrandPortalHome() {
         <div style={{
           position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
           width: 1000, height: 700,
-          background: 'radial-gradient(ellipse at 50% 0%, rgba(184,149,42,0.07) 0%, transparent 60%)',
+          background: 'radial-gradient(ellipse at 50% 0%, rgba(197,162,83,0.07) 0%, transparent 60%)',
         }} />
         <div style={{
           position: 'absolute', bottom: 0, right: 0,
           width: 600, height: 600,
-          background: 'radial-gradient(circle at 100% 100%, rgba(184,149,42,0.04) 0%, transparent 60%)',
+          background: 'radial-gradient(circle at 100% 100%, rgba(197,162,83,0.04) 0%, transparent 60%)',
         }} />
       </div>
 
@@ -146,7 +146,7 @@ export default function BrandPortalHome() {
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4 }}
-            className="text-[8px] font-mono tracking-[0.5em] uppercase text-[#B8952A] mb-4"
+            className="text-[8px] font-mono tracking-[0.5em] uppercase text-[#C5A253] mb-4"
           >
             {brand?.name || 'Brand Studio'} · Sovereign AI Production
           </motion.p>
@@ -155,11 +155,11 @@ export default function BrandPortalHome() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="font-serif italic text-white leading-[0.95] mb-6"
-            style={{ fontSize: 'clamp(48px, 6vw, 80px)', letterSpacing: '-0.02em' }}
+            className="font-display italic text-primary leading-[0.95] mb-6"
+            style={{ fontSize: 'clamp(48px, 6vw, 88px)', letterSpacing: '-0.025em' }}
           >
             Command Your<br />
-            <span style={{ color: '#D4AF37' }}>Narrative.</span>
+            <span style={{ color: '#C5A253' }}>Narrative.</span>
           </motion.h1>
 
           <motion.div
@@ -170,22 +170,22 @@ export default function BrandPortalHome() {
           >
             <button
               onClick={() => navigate('/portal/campaigns/new')}
-              className="flex items-center gap-2.5 px-6 py-3 rounded bg-[#B8952A] hover:bg-[#C9A84C] text-black text-[11px] font-mono tracking-[0.2em] uppercase font-semibold transition-all"
-              style={{ boxShadow: '0 0 24px rgba(184,149,42,0.3)' }}
+              className="flex items-center gap-2.5 px-6 py-3 rounded bg-[#C5A253] hover:bg-[#C9A84C] text-black text-[11px] font-mono tracking-[0.2em] uppercase font-semibold transition-all"
+              style={{ boxShadow: '0 0 24px rgba(197,162,83,0.3)' }}
             >
               <Sparkles size={13} />
               New Campaign
             </button>
             <button
               onClick={() => navigate('/portal/skus/enroll')}
-              className="flex items-center gap-2.5 px-6 py-3 rounded border border-white/[0.08] hover:border-[#B8952A]/40 text-white/50 hover:text-white text-[11px] font-mono tracking-[0.2em] uppercase transition-all"
+              className="flex items-center gap-2.5 px-6 py-3 rounded border border-white/[0.08] hover:border-[#C5A253]/40 text-white/50 hover:text-white text-[11px] font-mono tracking-[0.2em] uppercase transition-all"
             >
               <FolderLock size={13} />
               Enroll SKU
             </button>
             <button
               onClick={() => navigate('/portal/sets')}
-              className="flex items-center gap-2.5 px-6 py-3 rounded border border-white/[0.08] hover:border-[#B8952A]/40 text-white/50 hover:text-white text-[11px] font-mono tracking-[0.2em] uppercase transition-all"
+              className="flex items-center gap-2.5 px-6 py-3 rounded border border-white/[0.08] hover:border-[#C5A253]/40 text-white/50 hover:text-white text-[11px] font-mono tracking-[0.2em] uppercase transition-all"
             >
               <Layers size={13} />
               Inject Set
@@ -248,7 +248,7 @@ export default function BrandPortalHome() {
               </span>
               <button
                 onClick={() => navigate('/portal/campaigns')}
-                className="flex items-center gap-1.5 text-[8px] font-mono text-white/20 hover:text-[#B8952A] transition-colors uppercase tracking-[0.3em]"
+                className="flex items-center gap-1.5 text-[8px] font-mono text-white/20 hover:text-[#C5A253] transition-colors uppercase tracking-[0.3em]"
               >
                 View all <ArrowRight size={10} />
               </button>
@@ -274,7 +274,7 @@ export default function BrandPortalHome() {
             </p>
             <button
               onClick={() => navigate('/portal/campaigns/new')}
-              className="px-5 py-2.5 rounded border border-white/[0.08] text-[10px] font-mono text-white/30 hover:text-white hover:border-[#B8952A]/40 transition-all uppercase tracking-[0.25em]"
+              className="px-5 py-2.5 rounded border border-white/[0.08] text-[10px] font-mono text-white/30 hover:text-white hover:border-[#C5A253]/40 transition-all uppercase tracking-[0.25em]"
             >
               Start Now
             </button>
@@ -290,7 +290,7 @@ export default function BrandPortalHome() {
               </span>
               <button
                 onClick={() => navigate('/portal/skus')}
-                className="flex items-center gap-1.5 text-[8px] font-mono text-white/20 hover:text-[#B8952A] transition-colors uppercase tracking-[0.3em]"
+                className="flex items-center gap-1.5 text-[8px] font-mono text-white/20 hover:text-[#C5A253] transition-colors uppercase tracking-[0.3em]"
               >
                 View all <ArrowRight size={10} />
               </button>
@@ -301,7 +301,7 @@ export default function BrandPortalHome() {
                   key={sku.skuId}
                   initial={{ opacity: 0, scale: 0.96 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  whileHover={{ borderColor: 'rgba(184,149,42,0.35)' }}
+                  whileHover={{ borderColor: 'rgba(197,162,83,0.35)' }}
                   onClick={() => navigate(`/portal/skus/${sku.skuId}`)}
                   className="flex items-center gap-2 px-3 py-2 rounded text-left transition-all"
                   style={{
@@ -316,7 +316,7 @@ export default function BrandPortalHome() {
                   }`} />
                   <span className="text-[10px] font-mono text-white/50 max-w-[140px] truncate">{sku.name}</span>
                   {sku.fidelityScore != null && (
-                    <span className="text-[8px] font-mono text-[#B8952A]/60 ml-1">{sku.fidelityScore}%</span>
+                    <span className="text-[8px] font-mono text-[#C5A253]/60 ml-1">{sku.fidelityScore}%</span>
                   )}
                 </motion.button>
               ))}

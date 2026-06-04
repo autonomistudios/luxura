@@ -284,7 +284,7 @@ export const StudioConcierge: React.FC<StudioConciergeProps> = ({ onSelect }) =>
         className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-12"
       >
         <div>
-          <p className="text-[9px] font-mono uppercase tracking-[0.6em] text-[#D4AF37]/50 mb-3">
+          <p className="text-[9px] font-mono uppercase tracking-[0.6em] text-[#C5A253]/50 mb-3">
             Sovereign Session Initialization
           </p>
           <h2 className="text-5xl font-serif italic text-white">Select Your Domain</h2>
@@ -293,9 +293,9 @@ export const StudioConcierge: React.FC<StudioConciergeProps> = ({ onSelect }) =>
         {/* Credit status */}
         {profile && (
           <div className="flex items-center gap-4 shrink-0">
-            <div className={`flex items-center gap-2 px-4 py-2 border ${canForge ? 'border-[#D4AF37]/20 bg-[#D4AF37]/[0.03]' : 'border-red-500/20 bg-red-500/[0.03]'}`}>
-              <Zap size={10} className={canForge ? 'text-[#D4AF37]' : 'text-red-400'} />
-              <span className={`text-[9px] font-mono ${canForge ? 'text-[#D4AF37]' : 'text-red-400'}`}>
+            <div className={`flex items-center gap-2 px-4 py-2 border ${canForge ? 'border-[#C5A253]/20 bg-[#C5A253]/[0.03]' : 'border-red-500/20 bg-red-500/[0.03]'}`}>
+              <Zap size={10} className={canForge ? 'text-[#C5A253]' : 'text-red-400'} />
+              <span className={`text-[9px] font-mono ${canForge ? 'text-[#C5A253]' : 'text-red-400'}`}>
                 {profile.imageCredits} credits available
               </span>
             </div>
@@ -359,7 +359,7 @@ export const StudioConcierge: React.FC<StudioConciergeProps> = ({ onSelect }) =>
                   className={`group relative text-left p-6 border transition-all duration-500 overflow-hidden min-h-[140px] flex flex-col justify-end ${
                     canForge
                       ? isHovered
-                        ? 'border-[#D4AF37]/50 cursor-pointer shadow-[0_0_30px_-5px_rgba(212,175,55,0.15)]'
+                        ? 'border-[#C5A253]/50 cursor-pointer shadow-[0_0_30px_-5px_rgba(197,162,83,0.15)]'
                         : 'border-white/5 cursor-pointer hover:border-white/20 hover:shadow-2xl'
                       : 'border-white/[0.03] cursor-not-allowed opacity-40'
                   }`}
@@ -381,7 +381,7 @@ export const StudioConcierge: React.FC<StudioConciergeProps> = ({ onSelect }) =>
                   <div className="relative z-10 w-full mt-auto">
                     {/* Title */}
                     <p className={`text-[13px] font-serif text-white mb-1 transition-colors duration-500 drop-shadow-md ${
-                      isHovered && canForge ? 'text-[#D4AF37]' : ''
+                      isHovered && canForge ? 'text-[#C5A253]' : ''
                     }`}>
                       {domain.title}
                     </p>
@@ -392,11 +392,11 @@ export const StudioConcierge: React.FC<StudioConciergeProps> = ({ onSelect }) =>
                     </p>
 
                     {/* Credit cost chip */}
-                    <div className={`mt-4 w-fit flex items-center gap-1.5 transition-opacity duration-300 bg-black/40 backdrop-blur-sm px-2 py-1 rounded-sm border border-[#D4AF37]/10 ${
+                    <div className={`mt-4 w-fit flex items-center gap-1.5 transition-opacity duration-300 bg-black/40 backdrop-blur-sm px-2 py-1 rounded-sm border border-[#C5A253]/10 ${
                       isHovered && canForge ? 'opacity-100' : 'opacity-0'
                     }`}>
-                      <Zap size={8} className="text-[#D4AF37]" />
-                      <span className="text-[8px] font-mono text-[#D4AF37]/80 uppercase tracking-widest drop-shadow-md">
+                      <Zap size={8} className="text-[#C5A253]" />
+                      <span className="text-[8px] font-mono text-[#C5A253]/80 uppercase tracking-widest drop-shadow-md">
                         1 credit
                       </span>
                     </div>
@@ -404,7 +404,7 @@ export const StudioConcierge: React.FC<StudioConciergeProps> = ({ onSelect }) =>
 
                   {/* Corner mark on hover */}
                   {isHovered && canForge && (
-                    <div className="absolute top-3 right-3 w-4 h-4 border-t border-r border-[#D4AF37]/60 z-10 transition-all duration-300" />
+                    <div className="absolute top-3 right-3 w-4 h-4 border-t border-r border-[#C5A253]/60 z-10 transition-all duration-300" />
                   )}
                 </motion.button>
               );

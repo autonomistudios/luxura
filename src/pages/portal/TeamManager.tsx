@@ -9,8 +9,8 @@ import { ROLE_LABELS } from '../../lib/permissions';
 // Labels come from the canonical permission model (job titles over role tiers);
 // icon/color/desc are presentation only.
 const ROLE_CONFIG: Record<BrandRole, { label: string; icon: any; color: string; desc: string }> = {
-  owner:  { label: ROLE_LABELS.owner,  icon: Crown,  color: '#D4AF37', desc: 'Full access · billing · API keys' },
-  admin:  { label: ROLE_LABELS.admin,  icon: Shield, color: '#B8952A', desc: 'Forge, SKUs, team — no billing' },
+  owner:  { label: ROLE_LABELS.owner,  icon: Crown,  color: '#C5A253', desc: 'Full access · billing · API keys' },
+  admin:  { label: ROLE_LABELS.admin,  icon: Shield, color: '#C5A253', desc: 'Forge, SKUs, team — no billing' },
   editor: { label: ROLE_LABELS.editor, icon: Edit3,  color: 'rgba(255,255,255,0.6)', desc: 'Forge, enroll SKUs, refine, export' },
   viewer: { label: ROLE_LABELS.viewer, icon: Eye,    color: 'rgba(255,255,255,0.3)', desc: 'Browse & export assets only' },
 };
@@ -50,7 +50,7 @@ export default function TeamManager() {
   return (
     <div className="p-8 min-h-full max-w-3xl">
       <div className="mb-8">
-        <h1 className="font-serif italic text-4xl text-white mb-2">Team</h1>
+        <h1 className="font-display italic text-4xl text-primary mb-2">Team</h1>
         <p className="text-[9px] font-mono tracking-[0.35em] uppercase text-white/25">
           Manage brand workspace access and permissions
         </p>
@@ -89,7 +89,7 @@ export default function TeamManager() {
             ))}
           </select>
           <button onClick={handleInvite} disabled={!inviteEmail || inviting}
-            className="flex items-center gap-2 px-5 py-2.5 rounded bg-[#B8952A] text-black text-[10px] font-mono tracking-[0.2em] uppercase font-semibold disabled:opacity-40 transition-all">
+            className="flex items-center gap-2 px-5 py-2.5 rounded bg-[#C5A253] text-black text-[10px] font-mono tracking-[0.2em] uppercase font-semibold disabled:opacity-40 transition-all">
             <UserPlus size={12} /> Invite
           </button>
         </div>

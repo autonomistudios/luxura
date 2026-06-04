@@ -35,7 +35,7 @@ const STATUS_CFG: Record<DraftStatus, { label: string; color: string; dot: strin
   idle:      { label: 'DRAFT',      color: 'rgba(255,255,255,0.30)', dot: 'bg-white/20' },
   queued:    { label: 'QUEUED',     color: 'rgba(255,255,255,0.30)', dot: 'bg-white/20' },
   enrolling: { label: 'ENROLLING',  color: '#F59E0B',               dot: 'bg-amber-500', pulse: true },
-  ready:     { label: 'DNA LOCKED', color: '#B8952A',               dot: 'bg-[#B8952A]' },
+  ready:     { label: 'DNA LOCKED', color: '#C5A253',               dot: 'bg-[#C5A253]' },
   failed:    { label: 'FAILED',     color: '#EF4444',               dot: 'bg-rose-500' },
 };
 
@@ -120,7 +120,7 @@ function DraftRow({
       style={{
         background: 'linear-gradient(145deg, #111116 0%, #0B0B0E 100%)',
         border: draft.status === 'ready'
-          ? '1px solid rgba(184,149,42,0.25)'
+          ? '1px solid rgba(197,162,83,0.25)'
           : draft.status === 'failed'
             ? '1px solid rgba(239,68,68,0.20)'
             : '1px solid rgba(255,255,255,0.06)',
@@ -132,7 +132,7 @@ function DraftRow({
         <div className="flex gap-1.5 flex-shrink-0">
           {draft.previews.slice(0, 3).map((src, i) => (
             <div key={i} className="relative w-14 h-[72px] rounded overflow-hidden flex-shrink-0"
-              style={{ border: i === 0 ? '1px solid rgba(184,149,42,0.35)' : '1px solid rgba(255,255,255,0.08)' }}>
+              style={{ border: i === 0 ? '1px solid rgba(197,162,83,0.35)' : '1px solid rgba(255,255,255,0.08)' }}>
               <img src={src} className="w-full h-full object-cover" alt="" />
               {mode === 'group' && !locked && draft.previews.length > 1 && (
                 <button
@@ -143,7 +143,7 @@ function DraftRow({
                 </button>
               )}
               {i === 0 && draft.previews.length > 1 && (
-                <span className="absolute bottom-0.5 left-0.5 text-[5px] font-mono text-[#B8952A] bg-black/70 px-1 rounded tracking-wider uppercase">
+                <span className="absolute bottom-0.5 left-0.5 text-[5px] font-mono text-[#C5A253] bg-black/70 px-1 rounded tracking-wider uppercase">
                   Primary
                 </span>
               )}
@@ -218,9 +218,9 @@ function DraftRow({
                   disabled={locked}
                   className="px-2 py-1 rounded text-[8px] font-mono transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                   style={{
-                    background: draft.anchorType === at.id ? 'rgba(184,149,42,0.12)' : 'rgba(255,255,255,0.02)',
-                    border:     draft.anchorType === at.id ? '1px solid rgba(184,149,42,0.35)' : '1px solid rgba(255,255,255,0.06)',
-                    color:      draft.anchorType === at.id ? '#B8952A' : 'rgba(255,255,255,0.35)',
+                    background: draft.anchorType === at.id ? 'rgba(197,162,83,0.12)' : 'rgba(255,255,255,0.02)',
+                    border:     draft.anchorType === at.id ? '1px solid rgba(197,162,83,0.35)' : '1px solid rgba(255,255,255,0.06)',
+                    color:      draft.anchorType === at.id ? '#C5A253' : 'rgba(255,255,255,0.35)',
                   }}
                 >
                   {at.label}
@@ -236,7 +236,7 @@ function DraftRow({
             <span className={`w-1.5 h-1.5 rounded-full ${cfg.dot} ${cfg.pulse ? 'animate-pulse' : ''}`} />
             <span className="text-[7px] font-mono tracking-[0.3em]" style={{ color: cfg.color }}>{cfg.label}</span>
             {draft.status === 'ready' && draft.fidelity != null && (
-              <span className="text-[7px] font-mono text-[#B8952A]/60 ml-1">{draft.fidelity}%</span>
+              <span className="text-[7px] font-mono text-[#C5A253]/60 ml-1">{draft.fidelity}%</span>
             )}
           </div>
 
@@ -286,7 +286,7 @@ function UnassignedTray({
         {selected.size > 0 && (
           <button
             onClick={onGroup}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#B8952A] text-black text-[9px] font-mono tracking-[0.2em] uppercase font-semibold"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#C5A253] text-black text-[9px] font-mono tracking-[0.2em] uppercase font-semibold"
           >
             <Layers size={10} /> Group into SKU ({Math.min(selected.size, 3)})
           </button>
@@ -301,15 +301,15 @@ function UnassignedTray({
               key={i}
               className="relative w-16 h-20 rounded overflow-hidden cursor-pointer transition-all"
               style={{
-                border: sel ? '2px solid rgba(184,149,42,0.70)' : '1px solid rgba(255,255,255,0.08)',
-                boxShadow: sel ? '0 0 10px rgba(184,149,42,0.20)' : 'none',
+                border: sel ? '2px solid rgba(197,162,83,0.70)' : '1px solid rgba(255,255,255,0.08)',
+                boxShadow: sel ? '0 0 10px rgba(197,162,83,0.20)' : 'none',
               }}
               onClick={() => onToggle(i)}
             >
               <img src={url} className="w-full h-full object-cover" alt="" />
               {sel && (
-                <div className="absolute inset-0 bg-[#B8952A]/20 flex items-center justify-center">
-                  <Check size={14} className="text-[#D4AF37]" />
+                <div className="absolute inset-0 bg-[#C5A253]/20 flex items-center justify-center">
+                  <Check size={14} className="text-[#C5A253]" />
                 </div>
               )}
               <button
@@ -589,7 +589,7 @@ export default function SKUBatchEnroll() {
     <div className="min-h-full p-8 relative">
       {/* Atmospheric glow */}
       <div className="absolute top-0 left-0 right-0 h-64 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(184,149,42,0.05) 0%, transparent 60%)' }} />
+        style={{ background: 'radial-gradient(ellipse at 50% 0%, rgba(197,162,83,0.05) 0%, transparent 60%)' }} />
 
       <div className="relative max-w-5xl mx-auto">
 
@@ -598,11 +598,11 @@ export default function SKUBatchEnroll() {
           <div>
             <button
               onClick={() => navigate('/portal/skus')}
-              className="flex items-center gap-1.5 text-[8px] font-mono tracking-[0.3em] uppercase text-white/25 hover:text-[#B8952A] transition-colors mb-4"
+              className="flex items-center gap-1.5 text-[8px] font-mono tracking-[0.3em] uppercase text-white/25 hover:text-[#C5A253] transition-colors mb-4"
             >
               <ChevronLeft size={11} /> SKU Vault
             </button>
-            <h1 className="font-serif italic text-4xl text-white leading-none mb-2">Batch Enrollment</h1>
+            <h1 className="font-display italic text-4xl text-primary leading-none mb-2">Batch Enrollment</h1>
             <p className="text-[9px] font-mono tracking-[0.35em] uppercase text-white/25">
               {drafts.length} GARMENT{drafts.length !== 1 ? 'S' : ''} STAGED
               {readyCount > 0 ? ` · ${readyCount} ENROLLED` : ''}
@@ -615,8 +615,8 @@ export default function SKUBatchEnroll() {
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               onClick={() => navigate('/portal/skus')}
-              className="flex items-center gap-2 px-5 py-2.5 rounded bg-[#B8952A] text-black text-[10px] font-mono tracking-[0.2em] uppercase font-semibold"
-              style={{ boxShadow: '0 0 20px rgba(184,149,42,0.3)' }}
+              className="flex items-center gap-2 px-5 py-2.5 rounded bg-[#C5A253] text-black text-[10px] font-mono tracking-[0.2em] uppercase font-semibold"
+              style={{ boxShadow: '0 0 20px rgba(197,162,83,0.3)' }}
             >
               SKU Vault <ArrowRight size={12} />
             </motion.button>
@@ -633,7 +633,7 @@ export default function SKUBatchEnroll() {
               className="mb-6 overflow-hidden"
             >
               <div className="flex items-center justify-between mb-2">
-                <span className="text-[8px] font-mono tracking-[0.35em] uppercase text-[#B8952A]">
+                <span className="text-[8px] font-mono tracking-[0.35em] uppercase text-[#C5A253]">
                   Enrolling — {doneCount} of {totalCount}
                 </span>
                 <span className="text-[8px] font-mono text-white/25">{progressPct}%</span>
@@ -641,7 +641,7 @@ export default function SKUBatchEnroll() {
               <div className="h-0.5 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.06)' }}>
                 <motion.div
                   className="h-full rounded-full"
-                  style={{ background: 'linear-gradient(90deg, #B8952A, #D4AF37)' }}
+                  style={{ background: 'linear-gradient(90deg, #C5A253, #C5A253)' }}
                   animate={{ width: `${progressPct}%` }}
                   transition={{ duration: 0.4 }}
                 />
@@ -657,7 +657,7 @@ export default function SKUBatchEnroll() {
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               className="mb-6 rounded p-4 flex items-center justify-between"
-              style={{ background: failedDrafts.length ? 'rgba(239,68,68,0.06)' : 'rgba(184,149,42,0.06)', border: `1px solid ${failedDrafts.length ? 'rgba(239,68,68,0.2)' : 'rgba(184,149,42,0.2)'}` }}
+              style={{ background: failedDrafts.length ? 'rgba(239,68,68,0.06)' : 'rgba(197,162,83,0.06)', border: `1px solid ${failedDrafts.length ? 'rgba(239,68,68,0.2)' : 'rgba(197,162,83,0.2)'}` }}
             >
               <div className="flex items-center gap-3">
                 {failedDrafts.length === 0
@@ -691,8 +691,8 @@ export default function SKUBatchEnroll() {
                 onClick={() => switchMode(m)}
                 className="px-4 py-2 text-[9px] font-mono tracking-[0.2em] uppercase transition-all disabled:opacity-40"
                 style={{
-                  background: mode === m ? 'rgba(184,149,42,0.12)' : 'transparent',
-                  color:      mode === m ? '#B8952A' : 'rgba(255,255,255,0.30)',
+                  background: mode === m ? 'rgba(197,162,83,0.12)' : 'transparent',
+                  color:      mode === m ? '#C5A253' : 'rgba(255,255,255,0.30)',
                   borderRight: m === 'one' ? '1px solid rgba(255,255,255,0.08)' : undefined,
                 }}
               >
@@ -730,7 +730,7 @@ export default function SKUBatchEnroll() {
               </select>
               <button
                 disabled={!bulkCategory} onClick={applyBulkCategory}
-                className="px-2 py-1 rounded text-[8px] font-mono text-white/40 hover:text-[#B8952A] disabled:opacity-30 transition-colors uppercase tracking-[0.15em]"
+                className="px-2 py-1 rounded text-[8px] font-mono text-white/40 hover:text-[#C5A253] disabled:opacity-30 transition-colors uppercase tracking-[0.15em]"
                 style={{ border: '1px solid rgba(255,255,255,0.08)' }}
               >Apply to all</button>
             </div>
@@ -748,7 +748,7 @@ export default function SKUBatchEnroll() {
               />
               <button
                 disabled={!bulkSeason.trim()} onClick={applyBulkSeason}
-                className="px-2 py-1 rounded text-[8px] font-mono text-white/40 hover:text-[#B8952A] disabled:opacity-30 transition-colors uppercase tracking-[0.15em]"
+                className="px-2 py-1 rounded text-[8px] font-mono text-white/40 hover:text-[#C5A253] disabled:opacity-30 transition-colors uppercase tracking-[0.15em]"
                 style={{ border: '1px solid rgba(255,255,255,0.08)' }}
               >Apply to all</button>
             </div>
@@ -766,7 +766,7 @@ export default function SKUBatchEnroll() {
               />
               <button
                 onClick={autoNumberSkus}
-                className="px-2 py-1 rounded text-[8px] font-mono text-white/40 hover:text-[#B8952A] transition-colors uppercase tracking-[0.15em]"
+                className="px-2 py-1 rounded text-[8px] font-mono text-white/40 hover:text-[#C5A253] transition-colors uppercase tracking-[0.15em]"
                 style={{ border: '1px solid rgba(255,255,255,0.08)' }}
               >Auto-number</button>
             </div>
@@ -779,13 +779,13 @@ export default function SKUBatchEnroll() {
             onDrop={handleDrop}
             onDragOver={e => e.preventDefault()}
             onClick={() => fileInputRef.current?.click()}
-            whileHover={{ borderColor: 'rgba(184,149,42,0.45)' }}
+            whileHover={{ borderColor: 'rgba(197,162,83,0.45)' }}
             className="rounded cursor-pointer flex flex-col items-center justify-center gap-4 p-10 text-center mb-6 transition-all"
             style={{ border: '2px dashed rgba(255,255,255,0.10)', background: 'rgba(255,255,255,0.01)' }}
           >
             <div className="w-12 h-12 rounded-full flex items-center justify-center border border-white/[0.06]"
-              style={{ background: 'rgba(184,149,42,0.06)' }}>
-              <Upload size={20} className="text-[#B8952A]" />
+              style={{ background: 'rgba(197,162,83,0.06)' }}>
+              <Upload size={20} className="text-[#C5A253]" />
             </div>
             <div>
               <p className="text-sm font-medium text-white/40 mb-1">Drop garment images or click to browse</p>
@@ -865,8 +865,8 @@ export default function SKUBatchEnroll() {
                 disabled={!canEnroll}
                 className="flex items-center gap-2 px-6 py-3 rounded text-black text-[10px] font-mono tracking-[0.2em] uppercase font-semibold disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                 style={{
-                  background: canEnroll ? '#B8952A' : 'rgba(184,149,42,0.4)',
-                  boxShadow:  canEnroll ? '0 0 24px rgba(184,149,42,0.30)' : 'none',
+                  background: canEnroll ? '#C5A253' : 'rgba(197,162,83,0.4)',
+                  boxShadow:  canEnroll ? '0 0 24px rgba(197,162,83,0.30)' : 'none',
                 }}
               >
                 Enroll {validDrafts.length} SKU{validDrafts.length !== 1 ? 's' : ''}

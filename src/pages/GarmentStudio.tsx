@@ -171,7 +171,7 @@ function ConsoleSelect({ label, value, options, onChange, disabled }: {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         disabled={disabled}
-        className="minimal-select w-full bg-transparent border-0 border-b border-[#E5E0D8] focus:border-[#D4AF37] focus:ring-0 px-0 py-1 text-xs text-[#1C1C1C] appearance-none cursor-pointer transition-colors duration-200"
+        className="minimal-select w-full bg-transparent border-0 border-b border-[#E5E0D8] focus:border-[#C5A253] focus:ring-0 px-0 py-1 text-xs text-[#1C1C1C] appearance-none cursor-pointer transition-colors duration-200"
       >
         {options.map(opt => <option key={opt} value={opt} className="bg-white text-[#1C1C1C]">{opt}</option>)}
       </select>

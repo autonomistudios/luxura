@@ -73,17 +73,17 @@ export const ForgeActivation: React.FC<ForgeActivationProps> = ({ artifactImg, i
         <motion.div
           animate={{
             boxShadow: [
-              '0 0 40px rgba(212,175,55,0.08)',
-              '0 0 90px rgba(212,175,55,0.28)',
-              '0 0 40px rgba(212,175,55,0.08)',
+              '0 0 40px rgba(197,162,83,0.08)',
+              '0 0 90px rgba(197,162,83,0.28)',
+              '0 0 40px rgba(197,162,83,0.08)',
             ],
           }}
           transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-          className="w-1 h-1 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#D4AF37]"
+          className="w-1 h-1 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#C5A253]"
         />
         <img
           src={artifactImg}
-          className="w-28 object-contain drop-shadow-[0_0_30px_rgba(212,175,55,0.45)]"
+          className="w-28 object-contain drop-shadow-[0_0_30px_rgba(197,162,83,0.45)]"
           alt=""
         />
       </motion.div>
@@ -99,7 +99,7 @@ export const ForgeActivation: React.FC<ForgeActivationProps> = ({ artifactImg, i
             transition={{ duration: 0.6 }}
             className="flex flex-col items-center gap-2"
           >
-            <p className="text-[11px] font-mono uppercase tracking-[0.6em] text-[#D4AF37]">
+            <p className="text-[11px] font-mono uppercase tracking-[0.6em] text-[#C5A253]">
               {phase.label}
             </p>
             <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-white/30">
@@ -113,7 +113,7 @@ export const ForgeActivation: React.FC<ForgeActivationProps> = ({ artifactImg, i
       <div className="relative z-10 w-64 md:w-96 flex flex-col gap-3">
         <div className="w-full h-[1px] bg-white/8 relative overflow-hidden">
           <motion.div
-            className="absolute left-0 top-0 h-full bg-[#D4AF37]"
+            className="absolute left-0 top-0 h-full bg-[#C5A253]"
             style={{ width: `${progress}%` }}
             transition={{ duration: 0.4, ease: 'linear' }}
           />

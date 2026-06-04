@@ -22,14 +22,14 @@ export default function DomainTransition({ visible, label, discipline }: Props) 
           className="fixed inset-0 z-[300] bg-[#050505] flex flex-col items-center justify-center overflow-hidden"
         >
           {/* Gold atmospheric bloom */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] rounded-full bg-[#D4AF37]/6 blur-[150px] pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] rounded-full bg-[#C5A253]/6 blur-[150px] pointer-events-none" />
 
           {/* Discipline eyebrow */}
           <motion.p
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1, duration: 0.5 }}
-            className="text-[8px] font-mono uppercase tracking-[0.8em] text-[#D4AF37]/50 mb-5"
+            className="text-[8px] font-mono uppercase tracking-[0.8em] text-[#C5A253]/50 mb-5"
           >
             {discipline}
           </motion.p>
@@ -42,7 +42,7 @@ export default function DomainTransition({ visible, label, discipline }: Props) 
             className="text-5xl md:text-7xl font-serif text-white tracking-tighter text-center px-8 mb-10 leading-tight"
           >
             Initializing&nbsp;
-            <span className="text-[#D4AF37] italic">{label}</span>
+            <span className="text-[#C5A253] italic">{label}</span>
           </motion.h2>
 
           {/* Hairline progress bar */}
@@ -51,7 +51,7 @@ export default function DomainTransition({ visible, label, discipline }: Props) 
               initial={{ x: '-100%' }}
               animate={{ x: '0%' }}
               transition={{ delay: 0.2, duration: 0.65, ease: 'easeInOut' }}
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-[#D4AF37] to-[#D4AF37]"
+              className="absolute inset-0 bg-gradient-to-r from-transparent via-[#C5A253] to-[#C5A253]"
             />
             {/* Shimmer sweep */}
             <motion.div

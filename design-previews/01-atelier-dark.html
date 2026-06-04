@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LuxAura — Example 1 · The Atelier (Dark Chrome)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;1,6..96,400;1,6..96,500;1,6..96,600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --surface-canvas:#08080A; --surface-raised:#0E0E11; --surface-raised-2:#16161A; --surface-overlay:#1C1C21;
+    --surface-inset:rgba(255,255,255,.03);
+    --text-primary:#F5F4F0; --text-secondary:rgba(245,244,240,.62); --text-tertiary:rgba(245,244,240,.38); --text-quaternary:rgba(245,244,240,.20);
+    --hairline:rgba(255,255,255,.08); --hairline-strong:rgba(255,255,255,.16); --hairline-gold:rgba(197,162,83,.32);
+    --gold:#C5A253; --gold-bright:#E4CC8F; --gold-deep:#957A36; --gold-glow:rgba(197,162,83,.22); --gold-wash:rgba(197,162,83,.08);
+    --success:#34C77B;
+    --font-display:'Bodoni Moda',Georgia,serif; --font-serif:'Cormorant Garamond',Georgia,serif;
+    --font-sans:'Inter',-apple-system,sans-serif; --font-mono:'JetBrains Mono',monospace;
+    --ease:cubic-bezier(.16,1,.3,1);
+    --grain:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--surface-canvas); color:var(--text-primary); font-family:var(--font-sans);
+    -webkit-font-smoothing:antialiased; overflow-x:hidden; min-height:100vh;
+  }
+  body::before{ /* atmospheric gold dawn */
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background:radial-gradient(120% 80% at 18% -10%, var(--gold-wash) 0%, transparent 45%),
+               radial-gradient(80% 60% at 100% 0%, rgba(197,162,83,.05) 0%, transparent 50%);
+  }
+  .grain{position:fixed; inset:0; background-image:var(--grain); background-size:140px; opacity:.025; pointer-events:none; z-index:1; mix-blend-mode:overlay}
+  .app{position:relative; z-index:2; min-height:100vh; display:flex; flex-direction:column}
+
+  /* ── Top bar ─────────────────────────────────────────── */
+  .topbar{height:64px; display:flex; align-items:center; justify-content:space-between;
+    padding:0 28px; border-bottom:1px solid var(--hairline);
+    background:rgba(8,8,10,.72); backdrop-filter:saturate(180%) blur(24px); position:sticky; top:0; z-index:10}
+  .brand{display:flex; align-items:center; gap:18px}
+  .wordmark{font-family:var(--font-display); font-style:italic; font-weight:500; font-size:22px; letter-spacing:.01em}
+  .wordmark b{font-style:normal; font-weight:600; letter-spacing:.02em}
+  .vr{width:1px; height:20px; background:var(--hairline-strong)}
+  .kicker{font-family:var(--font-mono); font-size:10px; letter-spacing:.34em; text-transform:uppercase; color:var(--text-tertiary)}
+  .status{display:flex; align-items:center; gap:28px; font-family:var(--font-mono); font-size:11px; letter-spacing:.06em; color:var(--text-secondary)}
+  .dot{width:6px; height:6px; border-radius:50%; background:var(--success); box-shadow:0 0 10px rgba(52,199,123,.7); margin-right:8px; display:inline-block; animation:pulse 2.4s var(--ease) infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+  .status .val{color:var(--text-primary)}
+  .status .gold{color:var(--gold)}
+
+  /* ── Body grid ───────────────────────────────────────── */
+  .stage{flex:1; display:grid; grid-template-columns:1fr 392px; gap:0}
+  .editorial{padding:44px 48px 56px}
+  .panel{border-left:1px solid var(--hairline); background:rgba(20,20,24,.55); backdrop-filter:saturate(160%) blur(40px); padding:36px 32px}
+
+  /* masthead */
+  .label{font-family:var(--font-mono); font-size:11px; letter-spacing:.34em; text-transform:uppercase; color:var(--gold); margin-bottom:18px}
+  .headline{font-family:var(--font-display); font-style:italic; font-weight:500; font-size:clamp(48px,6vw,86px); line-height:1.02; letter-spacing:-.02em; margin-bottom:22px}
+  .byline{display:flex; align-items:center; gap:18px; margin-bottom:38px}
+  .byline .meta{font-family:var(--font-mono); font-size:10px; letter-spacing:.22em; text-transform:uppercase; color:var(--text-tertiary)}
+  .badge{display:inline-flex; align-items:center; gap:7px; font-family:var(--font-mono); font-size:9px; letter-spacing:.26em; text-transform:uppercase;
+    padding:5px 11px; border-radius:980px; color:var(--gold); border:1px solid var(--hairline-gold); background:var(--gold-wash)}
+  .badge .b-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px var(--gold-glow)}
+
+  /* gallery */
+  .gallery{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:6px}
+  .plate{position:relative; aspect-ratio:4/5; border-radius:14px; overflow:hidden; border:1px solid var(--hairline);
+    background-color:#0c0c0e; background-size:cover; background-position:center 18%; cursor:pointer;
+    filter:grayscale(.18) contrast(1.04) brightness(.9);
+    transition:transform .5s var(--ease),border-color .4s var(--ease),box-shadow .5s var(--ease),filter .6s var(--ease)}
+  .plate::before{content:''; position:absolute; inset:0; z-index:1; background:linear-gradient(to top, rgba(6,6,8,.88) 0%, rgba(6,6,8,.12) 40%, transparent 64%)}
+  .plate::after{content:''; position:absolute; inset:0; z-index:2; background-image:var(--grain); background-size:120px; opacity:.06; mix-blend-mode:overlay}
+  .plate .cap{position:absolute; z-index:3; left:13px; bottom:12px; font-family:var(--font-mono); font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--text-secondary); text-shadow:0 1px 8px rgba(0,0,0,.6); transition:color .4s var(--ease)}
+  .plate .no{position:absolute; z-index:3; right:13px; top:11px; font-family:var(--font-display); font-style:italic; font-size:15px; color:rgba(245,244,240,.55); text-shadow:0 1px 8px rgba(0,0,0,.6)}
+  .plate:hover{transform:translateY(-4px); border-color:var(--hairline-strong); box-shadow:0 24px 60px rgba(0,0,0,.6); filter:grayscale(0) contrast(1.05) brightness(1)}
+  .plate:hover .cap{color:var(--text-primary)}
+  .plate.active{border-color:var(--hairline-gold); box-shadow:0 0 0 1px var(--gold-wash),0 24px 64px rgba(0,0,0,.6),0 0 40px var(--gold-glow); filter:grayscale(0) contrast(1.05) brightness(1)}
+  .plate.active .cap{color:var(--gold)}
+  .plate.active .no{color:var(--gold)}
+
+  /* control panel */
+  .sec{font-family:var(--font-mono); font-size:10px; letter-spacing:.42em; text-transform:uppercase; color:var(--text-quaternary); margin:0 0 16px}
+  .field{margin-bottom:16px}
+  .field label{display:block; font-family:var(--font-mono); font-size:9px; letter-spacing:.24em; text-transform:uppercase; color:var(--text-tertiary); margin-bottom:7px}
+  .select{position:relative}
+  .select select{appearance:none; width:100%; background:var(--surface-inset); color:var(--text-primary); font-family:var(--font-sans); font-weight:300; font-size:13px;
+    padding:11px 36px 11px 13px; border:1px solid var(--hairline); border-radius:10px; cursor:pointer; transition:border-color .3s var(--ease),background .3s var(--ease)}
+  .select select:hover{border-color:var(--hairline-strong); background:rgba(255,255,255,.045)}
+  .select select:focus{outline:none; border-color:var(--hairline-gold); box-shadow:0 0 0 3px var(--gold-wash)}
+  .select .chev{position:absolute; right:13px; top:50%; transform:translateY(-50%); pointer-events:none; color:var(--text-tertiary); font-size:10px}
+  .divider{height:1px; background:var(--hairline); margin:26px 0}
+  .credits{font-family:var(--font-mono); font-size:9px; line-height:1.9; letter-spacing:.12em; text-transform:uppercase; color:var(--text-quaternary); margin-bottom:24px}
+  .credits b{color:var(--text-tertiary); font-weight:500}
+
+  .btn-forge{width:100%; display:flex; align-items:center; justify-content:center; gap:10px; padding:15px; border:none; border-radius:14px; cursor:pointer;
+    font-family:var(--font-display); font-style:italic; font-weight:500; font-size:16px; color:#18130A;
+    background:linear-gradient(180deg,var(--gold-bright) 0%,var(--gold) 55%,var(--gold-deep) 100%);
+    box-shadow:0 8px 28px var(--gold-glow); transition:transform .35s var(--ease),box-shadow .35s var(--ease); position:relative; overflow:hidden}
+  .btn-forge::before{content:''; position:absolute; top:0; left:-60%; width:40%; height:100%; transform:skewX(-20deg);
+    background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent); transition:left .7s var(--ease)}
+  .btn-forge:hover{transform:translateY(-2px); box-shadow:0 14px 40px var(--gold-glow)}
+  .btn-forge:hover::before{left:120%}
+  .btn-ghost{width:100%; margin-top:10px; padding:12px; border-radius:12px; cursor:pointer; background:transparent;
+    border:1px solid var(--hairline); color:var(--text-secondary); font-family:var(--font-mono); font-size:10px; letter-spacing:.24em; text-transform:uppercase; transition:all .3s var(--ease)}
+  .btn-ghost:hover{border-color:var(--hairline-strong); color:var(--text-primary)}
+
+  .folio{display:flex; justify-content:space-between; padding:14px 28px; border-top:1px solid var(--hairline);
+    font-family:var(--font-mono); font-size:9px; letter-spacing:.3em; text-transform:uppercase; color:var(--text-quaternary); background:rgba(8,8,10,.72)}
+  @media(max-width:900px){.stage{grid-template-columns:1fr} .panel{border-left:none; border-top:1px solid var(--hairline)}}
+</style>
+</head>
+<body>
+  <div class="grain"></div>
+  <div class="app">
+
+    <header class="topbar">
+      <div class="brand">
+        <span class="wordmark">Lux<b>Aura</b></span>
+        <span class="vr"></span>
+        <span class="kicker">The Atelier · Studio Forge</span>
+      </div>
+      <div class="status">
+        <span><span class="dot"></span>Edge Connected</span>
+        <span>Plan / <span class="val">Enterprise</span></span>
+        <span>Usage / <span class="gold">1,284</span> of 5,000</span>
+      </div>
+    </header>
+
+    <div class="stage">
+      <!-- EDITORIAL -->
+      <section class="editorial">
+        <p class="label">Campaign · Spring / Summer 26</p>
+        <h1 class="headline">Aurelia Noir</h1>
+        <div class="byline">
+          <span class="badge"><span class="b-dot"></span>DNA Locked · Compliant</span>
+          <span class="meta">Vol. I &nbsp;·&nbsp; 06 Plates &nbsp;·&nbsp; SKU AURELIA-001</span>
+        </div>
+
+        <div class="gallery">
+          <div class="plate active" style="background-image:url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=600&h=750&q=80&auto=format&fit=crop&crop=faces'),linear-gradient(150deg,#1a1a1f,#0c0c0e 60%,#100d08)"><span class="no">I</span><span class="cap">Plate 01 · Selected</span></div>
+          <div class="plate" style="background-image:url('https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=600&h=750&q=80&auto=format&fit=crop&crop=faces'),linear-gradient(150deg,#1a1a1f,#0c0c0e 60%,#100d08)"><span class="no">II</span><span class="cap">Plate 02</span></div>
+          <div class="plate" style="background-image:url('https://images.unsplash.com/photo-1492707892479-7bc8d5a4ee93?w=600&h=750&q=80&auto=format&fit=crop&crop=faces'),linear-gradient(150deg,#1a1a1f,#0c0c0e 60%,#100d08)"><span class="no">III</span><span class="cap">Plate 03</span></div>
+          <div class="plate" style="background-image:url('https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600&h=750&q=80&auto=format&fit=crop&crop=faces'),linear-gradient(150deg,#1a1a1f,#0c0c0e 60%,#100d08)"><span class="no">IV</span><span class="cap">Plate 04</span></div>
+          <div class="plate" style="background-image:url('https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&h=750&q=80&auto=format&fit=crop&crop=faces'),linear-gradient(150deg,#1a1a1f,#0c0c0e 60%,#100d08)"><span class="no">V</span><span class="cap">Plate 05</span></div>
+          <div class="plate" style="background-image:url('https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=600&h=750&q=80&auto=format&fit=crop&crop=faces'),linear-gradient(150deg,#1a1a1f,#0c0c0e 60%,#100d08)"><span class="no">VI</span><span class="cap">Plate 06</span></div>
+        </div>
+      </section>
+
+      <!-- CONTROL PANEL -->
+      <aside class="panel">
+        <p class="sec">Direction</p>
+
+        <div class="field"><label>Garment SKU</label>
+          <div class="select"><select><option>Aurelia Slip — Noir Silk</option><option>Celestine Gown</option></select><span class="chev">▾</span></div></div>
+
+        <div class="field"><label>Model Archetype</label>
+          <div class="select"><select><option>Editorial — Statuesque</option><option>Avant-Garde</option><option>Commercial Warm</option></select><span class="chev">▾</span></div></div>
+
+        <div class="field"><label>Camera / Optics</label>
+          <div class="select"><select><option>85mm · f/1.4 · Medium Format</option><option>50mm · f/2.0</option></select><span class="chev">▾</span></div></div>
+
+        <div class="field"><label>Lighting</label>
+          <div class="select"><select><option>Rembrandt · Single Source</option><option>Butterfly · Beauty Dish</option></select><span class="chev">▾</span></div></div>
+
+        <div class="field"><label>Atmosphere</label>
+          <div class="select"><select><option>Editorial Noir</option><option>Avant-Garde</option><option>Fashion Beauty</option></select><span class="chev">▾</span></div></div>
+
+        <div class="divider"></div>
+        <p class="credits">Photographed by <b>The Atelier Engine</b><br>Styling / <b>DNA-Locked Fidelity</b><br>Output / <b>2K · 100% Pattern Recall</b></p>
+
+        <button class="btn-forge">Forge Campaign &nbsp;·&nbsp; 6 Plates</button>
+        <button class="btn-ghost">Save as Draft</button>
+      </aside>
+    </div>
+
+    <footer class="folio">
+      <span>LuxAura Creation Studio</span>
+      <span>Atelier OS · Dark Chrome</span>
+      <span>SS26 · № 001</span>
+    </footer>
+  </div>
+</body>
+</html>

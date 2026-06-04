@@ -23,7 +23,7 @@ function Slider({ label, value, onChange }: { label: string; value: number; onCh
       <input type="range" min="0" max="100" value={value}
         onChange={e => onChange(parseInt(e.target.value))}
         className="w-full h-1 rounded-full appearance-none cursor-pointer"
-        style={{ accentColor: '#B8952A', background: `linear-gradient(to right, #B8952A ${value}%, rgba(255,255,255,0.08) ${value}%)` }} />
+        style={{ accentColor: '#C5A253', background: `linear-gradient(to right, #C5A253 ${value}%, rgba(255,255,255,0.08) ${value}%)` }} />
     </div>
   );
 }
@@ -46,7 +46,7 @@ function SetCard({ set, onUpdate }: { set: SetItem; onUpdate: (id: string, field
           : <div className="absolute inset-0 flex items-center justify-center"><Layers size={24} className="text-white/10" /></div>
         }
         {set.status === 'calibrating' && (
-          <motion.div className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#B8952A] to-transparent opacity-70"
+          <motion.div className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C5A253] to-transparent opacity-70"
             animate={{ top: ['0%', '100%', '0%'] }} transition={{ duration: 3, repeat: Infinity, ease: 'linear' }} />
         )}
         <div className="absolute top-3 right-3 flex items-center gap-1.5 px-2 py-1 rounded text-[7px] font-mono tracking-[0.2em]"
@@ -80,7 +80,7 @@ function SetCard({ set, onUpdate }: { set: SetItem; onUpdate: (id: string, field
         )}
 
         <button className="w-full py-2 rounded text-[9px] font-mono tracking-[0.2em] uppercase transition-all"
-          style={{ background: set.status === 'ready' ? '#B8952A' : 'rgba(255,255,255,0.04)',
+          style={{ background: set.status === 'ready' ? '#C5A253' : 'rgba(255,255,255,0.04)',
             color: set.status === 'ready' ? '#000' : 'rgba(255,255,255,0.4)',
             border: set.status === 'ready' ? 'none' : '1px solid rgba(255,255,255,0.08)' }}>
           {set.status === 'ready' ? 'Use in Forge' : set.status === 'failed' ? 'Retry' : 'Calibrating...'}
@@ -106,7 +106,7 @@ export default function SetInjectionManager() {
     <div className="p-8 min-h-full">
       <div className="flex items-start justify-between mb-8">
         <div>
-          <h1 className="font-serif italic text-4xl text-white mb-2">Virtual Backlot</h1>
+          <h1 className="font-display italic text-4xl text-primary mb-2">Virtual Backlot</h1>
           <p className="text-[9px] font-mono tracking-[0.35em] uppercase text-white/25">
             Upload physical set references — LuxAura calibrates light-bounce and spatial depth
           </p>
@@ -120,14 +120,14 @@ export default function SetInjectionManager() {
 
       {/* Upload zone */}
       <motion.div
-        whileHover={{ borderColor: 'rgba(184,149,42,0.4)' }}
+        whileHover={{ borderColor: 'rgba(197,162,83,0.4)' }}
         className="rounded flex items-center justify-between gap-6 px-8 py-6 mb-8 cursor-pointer transition-all"
         style={{ border: '2px dashed rgba(255,255,255,0.10)', background: 'linear-gradient(145deg, #0D0D10 0%, #050505 100%)' }}
       >
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-full flex items-center justify-center border border-white/[0.06]"
-            style={{ background: 'rgba(184,149,42,0.06)' }}>
-            <Upload size={18} className="text-[#B8952A]" />
+            style={{ background: 'rgba(197,162,83,0.06)' }}>
+            <Upload size={18} className="text-[#C5A253]" />
           </div>
           <div>
             <p className="text-sm font-medium text-white/50">Inject New Set</p>

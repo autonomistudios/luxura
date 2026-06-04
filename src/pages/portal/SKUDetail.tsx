@@ -26,28 +26,28 @@ export default function SKUDetail() {
     <div className="p-8 flex flex-col items-center justify-center min-h-full gap-4">
       <p className="font-serif italic text-2xl text-white/20">SKU not found</p>
       <button onClick={() => navigate('/portal/skus')}
-        className="text-[9px] font-mono text-[#B8952A] hover:text-[#D4AF37] transition-colors uppercase tracking-[0.3em]">
+        className="text-[9px] font-mono text-[#C5A253] hover:text-[#C5A253] transition-colors uppercase tracking-[0.3em]">
         ← Back to Vault
       </button>
     </div>
   );
 
   const color = statusColor[sku.enrollmentStatus] || 'rgba(255,255,255,0.3)';
-  const fidelityColor = (sku.fidelityScore || 0) >= 90 ? '#10B981' : (sku.fidelityScore || 0) >= 70 ? '#B8952A' : '#EF4444';
+  const fidelityColor = (sku.fidelityScore || 0) >= 90 ? '#10B981' : (sku.fidelityScore || 0) >= 70 ? '#C5A253' : '#EF4444';
 
   return (
     <div className="p-8 min-h-full">
       {/* Back + Header */}
       <button onClick={() => navigate('/portal/skus')}
-        className="flex items-center gap-1.5 text-[8px] font-mono text-white/25 hover:text-[#B8952A] transition-colors mb-6 uppercase tracking-[0.3em]">
+        className="flex items-center gap-1.5 text-[8px] font-mono text-white/25 hover:text-[#C5A253] transition-colors mb-6 uppercase tracking-[0.3em]">
         <ArrowLeft size={11} /> SKU Vault
       </button>
 
       <div className="flex items-start justify-between mb-8">
         <div>
-          <h1 className="font-serif italic text-4xl text-white mb-2">{sku.name}</h1>
+          <h1 className="font-display italic text-4xl text-primary mb-2">{sku.name}</h1>
           <div className="flex items-center gap-3">
-            {sku.skuCode && <span className="text-[9px] font-mono text-[#B8952A]/70">{sku.skuCode}</span>}
+            {sku.skuCode && <span className="text-[9px] font-mono text-[#C5A253]/70">{sku.skuCode}</span>}
             <span className="text-[8px] font-mono text-white/25 uppercase tracking-[0.25em]">
               {[sku.category, sku.season].filter(Boolean).join(' · ')}
             </span>
@@ -62,8 +62,8 @@ export default function SKUDetail() {
           <div className="flex gap-3">
             <button
               onClick={() => { setCurrentSkuId(sku.skuId); navigate('/portal/campaigns/new'); }}
-              className="flex items-center gap-2 px-5 py-2.5 rounded bg-[#B8952A] text-black text-[10px] font-mono tracking-[0.2em] uppercase font-semibold transition-all"
-              style={{ boxShadow: '0 0 20px rgba(184,149,42,0.25)' }}>
+              className="flex items-center gap-2 px-5 py-2.5 rounded bg-[#C5A253] text-black text-[10px] font-mono tracking-[0.2em] uppercase font-semibold transition-all"
+              style={{ boxShadow: '0 0 20px rgba(197,162,83,0.25)' }}>
               <Play size={12} fill="black" /> Generate Campaign
             </button>
           </div>
@@ -87,7 +87,7 @@ export default function SKUDetail() {
             <div className="p-5 rounded flex items-center gap-4"
               style={{ background: 'linear-gradient(145deg, #111116 0%, #0B0B0E 100%)', border: '1px solid rgba(255,255,255,0.06)' }}>
               <div className="text-center">
-                <span className="font-serif italic text-5xl" style={{ color: fidelityColor }}>{sku.fidelityScore}</span>
+                <span className="font-display italic text-5xl" style={{ color: fidelityColor }}>{sku.fidelityScore}</span>
                 <p className="text-[6px] font-mono tracking-[0.35em] uppercase text-white/20 mt-1">/ 100</p>
               </div>
               <div>
@@ -123,7 +123,7 @@ export default function SKUDetail() {
                   <button
                     className="w-full flex items-center justify-between px-5 py-3 hover:bg-white/[0.01] transition-colors"
                     onClick={() => setExpandedDna(expandedDna === key ? null : key)}>
-                    <span className="text-[8px] font-mono tracking-[0.3em] uppercase text-[#B8952A]/70">{key}</span>
+                    <span className="text-[8px] font-mono tracking-[0.3em] uppercase text-[#C5A253]/70">{key}</span>
                     {expandedDna === key ? <ChevronUp size={12} className="text-white/20" /> : <ChevronDown size={12} className="text-white/20" />}
                   </button>
                   {expandedDna === key && (
@@ -162,7 +162,7 @@ export default function SKUDetail() {
                 <p className="text-[9px] font-mono text-white/20">No campaigns yet</p>
                 {sku.enrollmentStatus === 'ready' && (
                   <button onClick={() => { setCurrentSkuId(sku.skuId); navigate('/portal/campaigns/new'); }}
-                    className="mt-3 text-[8px] font-mono text-[#B8952A] hover:text-[#D4AF37] transition-colors uppercase tracking-[0.3em]">
+                    className="mt-3 text-[8px] font-mono text-[#C5A253] hover:text-[#C5A253] transition-colors uppercase tracking-[0.3em]">
                     Generate first campaign →
                   </button>
                 )}

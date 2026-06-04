@@ -1,0 +1,219 @@
+/* ============================================================================
+   LUXAURA — ATELIER OS · DESIGN TOKENS (single source of truth)
+   ----------------------------------------------------------------------------
+   Direction: "Apple × Versace × Vanity Fair / Elle"
+     · Apple        — material precision, restraint, spring physics
+     · Versace      — confident editorial gold (intent, never excess)
+     · VF / Elle    — Didone masthead typography, photo-led spreads
+
+   DUAL-SURFACE ARCHITECTURE
+     :root                       → DARK ATELIER CHROME (the app)
+     [data-surface="paper"]      → LIGHT EDITORIAL SPREAD (lookbook / export)
+   Any component that references the SEMANTIC tokens below automatically
+   re-skins when dropped inside a [data-surface="paper"] container.
+
+   Rule of the house: components consume SEMANTIC tokens (--surface-*,
+   --text-*, --hairline-*, --accent). They should rarely hard-code a raw hex.
+   ============================================================================ */
+
+/* ----------------------------------------------------------------------------
+   1 · DARK ATELIER CHROME  (default)
+   ---------------------------------------------------------------------------- */
+:root {
+  /* — Surfaces · Apple elevation ladder (each step catches a little more light) */
+  --surface-canvas:    #08080A;            /* app base — near-black, faint cool */
+  --surface-sunken:    #050506;            /* recessed wells, code, image mats   */
+  --surface-raised:    #0E0E11;            /* cards / panels                      */
+  --surface-raised-2:  #16161A;            /* hover / elevated                    */
+  --surface-overlay:   #1C1C21;            /* popovers / selected / modals        */
+  --surface-inset:     rgba(255,255,255,0.03); /* inputs / fields                 */
+
+  /* — Text · Apple label model (warm ivory, never pure #FFF) */
+  --text-primary:      #F5F4F0;
+  --text-secondary:    rgba(245,244,240,0.62);
+  --text-tertiary:     rgba(245,244,240,0.38);
+  --text-quaternary:   rgba(245,244,240,0.20);
+  --text-disabled:     rgba(245,244,240,0.13);
+  --text-on-gold:      #18130A;            /* ink for text sitting on gold fill   */
+
+  /* — Hairlines / separators */
+  --hairline:          rgba(255,255,255,0.08);
+  --hairline-strong:   rgba(255,255,255,0.16);
+  --hairline-gold:     rgba(197,162,83,0.32);
+
+  /* — Editorial gold (the single confident accent) */
+  --gold:              #C5A253;            /* core — refined warm gold            */
+  --gold-bright:       #E4CC8F;            /* sheen / hover highlight             */
+  --gold-deep:         #957A36;            /* pressed / shadow side               */
+  --gold-glow:         rgba(197,162,83,0.22);
+  --gold-wash:         rgba(197,162,83,0.08);
+  --gold-line:         rgba(197,162,83,0.30);
+
+  /* — Semantic status (Apple dark system, lightly couture-tuned) */
+  --success:           #34C77B;
+  --success-wash:      rgba(52,199,123,0.12);
+  --warning:           #F5A623;
+  --warning-wash:      rgba(245,166,35,0.12);
+  --danger:            #FF4D4F;
+  --danger-wash:       rgba(255,77,79,0.12);
+  --info:              #5B9DFF;
+  --info-wash:         rgba(91,157,255,0.12);
+
+  /* — Accent alias (so components say var(--accent), gold today, tunable tomorrow) */
+  --accent:            var(--gold);
+  --accent-bright:     var(--gold-bright);
+  --accent-deep:       var(--gold-deep);
+  --accent-glow:       var(--gold-glow);
+  --accent-wash:       var(--gold-wash);
+  --accent-line:       var(--gold-line);
+  --text-on-accent:    var(--text-on-gold);
+
+  /* — Elevation shadows (dark · barely-there, large blur) */
+  --shadow-sm:  0 1px 2px rgba(0,0,0,0.40);
+  --shadow-md:  0 4px 16px rgba(0,0,0,0.45);
+  --shadow-lg:  0 16px 48px rgba(0,0,0,0.55);
+  --shadow-xl:  0 32px 80px rgba(0,0,0,0.60);
+  --glow-gold:  0 0 28px var(--gold-glow);
+
+  /* — Vibrancy materials (the Apple frosted-glass signature) */
+  --material-chrome:   rgba(8,8,10,0.72);   /* top bars / nav                     */
+  --material-panel:    rgba(20,20,24,0.55);  /* floating control panels            */
+  --material-blur:     saturate(180%) blur(24px);
+  --material-blur-lg:  saturate(160%) blur(40px);
+}
+
+/* ----------------------------------------------------------------------------
+   2 · LIGHT EDITORIAL SPREAD  ([data-surface="paper"])
+       The lookbook / gallery / export view — Vanity Fair on ivory stock.
+   ---------------------------------------------------------------------------- */
+[data-surface="paper"] {
+  --surface-canvas:    #F4F1EA;            /* warm ivory paper                    */
+  --surface-sunken:    #EAE6DC;            /* tray / mat                          */
+  --surface-raised:    #FBFAF6;            /* card on paper                       */
+  --surface-raised-2:  #FFFFFF;            /* hover / lifted                      */
+  --surface-overlay:   #FFFFFF;
+  --surface-inset:     rgba(24,20,12,0.035);
+
+  --text-primary:      #16140F;            /* warm near-black ink                 */
+  --text-secondary:    rgba(22,20,15,0.66);
+  --text-tertiary:     rgba(22,20,15,0.42);
+  --text-quaternary:   rgba(22,20,15,0.26);
+  --text-disabled:     rgba(22,20,15,0.18);
+  --text-on-gold:      #FFFBF0;
+
+  --hairline:          rgba(22,20,15,0.10);
+  --hairline-strong:   rgba(22,20,15,0.20);
+  --hairline-gold:     rgba(150,122,54,0.40);
+
+  /* gold deepens to antique on light so it still reads as precious */
+  --gold:              #94762C;
+  --gold-bright:       #C5A253;
+  --gold-deep:         #6E561E;
+  --gold-glow:         rgba(148,118,44,0.16);
+  --gold-wash:         rgba(148,118,44,0.08);
+  --gold-line:         rgba(148,118,44,0.34);
+
+  --success:           #1E9E5A;
+  --warning:           #B9791A;
+  --danger:            #D23638;
+  --info:              #2D6FE0;
+
+  /* print shadows — soft, warm, like ink lifting off the page */
+  --shadow-sm:  0 1px 2px rgba(40,33,18,0.06);
+  --shadow-md:  0 8px 24px rgba(40,33,18,0.10);
+  --shadow-lg:  0 24px 60px rgba(40,33,18,0.14);
+  --shadow-xl:  0 40px 96px rgba(40,33,18,0.18);
+  --glow-gold:  0 0 24px var(--gold-glow);
+
+  --material-chrome:   rgba(244,241,234,0.80);
+  --material-panel:    rgba(251,250,246,0.70);
+}
+
+/* ----------------------------------------------------------------------------
+   3 · TYPOGRAPHY  (theme-agnostic)
+       Magazine model: a Didone display + a text serif + Apple sans + spec mono.
+   ---------------------------------------------------------------------------- */
+:root {
+  --font-display: 'Bodoni Moda', 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-serif:   'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+  --font-sans:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, 'SF Mono', 'SFMono-Regular', Menlo, monospace;
+
+  /* — Editorial type scale (rem) */
+  --text-micro:   0.625rem;   /* 10 — mono micro-labels                          */
+  --text-label:   0.6875rem;  /* 11 — mono section labels                        */
+  --text-caption: 0.75rem;    /* 12 — captions / credits                         */
+  --text-sm:      0.8125rem;  /* 13 — secondary UI                               */
+  --text-base:    0.9375rem;  /* 15 — body (Apple-dense)                         */
+  --text-lg:      1.0625rem;  /* 17 — lead body                                  */
+  --text-xl:      1.25rem;    /* 20 — title 3                                    */
+  --text-2xl:     1.5rem;     /* 24 — title 2                                    */
+  --text-3xl:     2rem;       /* 32 — title 1 (display)                          */
+  --text-4xl:     2.75rem;    /* 44 — large title (masthead)                     */
+  --text-5xl:     3.75rem;    /* 60 — display masthead                           */
+  --text-6xl:     5rem;       /* 80 — hero masthead                              */
+  --text-7xl:     7rem;       /* 112 — cover masthead                            */
+
+  /* — Tracking (Didone & big sans go tight; mono labels go wide) */
+  --tracking-tightest: -0.045em;
+  --tracking-tight:    -0.02em;
+  --tracking-normal:   0em;
+  --tracking-wide:     0.08em;
+  --tracking-wider:    0.18em;
+  --tracking-widest:   0.30em;
+  --tracking-mega:     0.45em;
+
+  /* — Leading */
+  --leading-none:    1;
+  --leading-display: 1.05;
+  --leading-tight:   1.15;
+  --leading-snug:    1.3;
+  --leading-normal:  1.55;
+  --leading-relaxed: 1.7;
+}
+
+/* ----------------------------------------------------------------------------
+   4 · SPACE · RADII · Z  (theme-agnostic)
+   ---------------------------------------------------------------------------- */
+:root {
+  /* editorial margins — the page "gutter" */
+  --gutter:       clamp(1.5rem, 5vw, 5rem);
+  --gutter-wide:  clamp(2rem, 8vw, 8.5rem);
+  --topbar-h:     64px;
+  --sidebar-w:    248px;
+
+  /* radii — Apple-generous continuous corners */
+  --radius-xs:   6px;
+  --radius-sm:   10px;
+  --radius-md:   14px;
+  --radius-lg:   20px;
+  --radius-xl:   28px;
+  --radius-2xl:  36px;
+  --radius-pill: 980px;
+
+  /* z-index ladder */
+  --z-base:    0;
+  --z-raised:  10;
+  --z-sticky:  100;
+  --z-overlay: 1000;
+  --z-modal:   2000;
+  --z-toast:   3000;
+  --z-cursor:  9999;
+}
+
+/* ----------------------------------------------------------------------------
+   5 · MOTION  (Apple spring physics, expressed as eases + durations)
+       JS spring configs live in src/lib/motion.ts; these are the CSS curves.
+   ---------------------------------------------------------------------------- */
+:root {
+  --ease-editorial: cubic-bezier(0.16, 1, 0.3, 1);   /* expo-out — the house ease */
+  --ease-entrance:  cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-exit:      cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-inout:     cubic-bezier(0.83, 0, 0.17, 1);
+
+  --dur-instant:    0.12s;
+  --dur-fast:       0.18s;
+  --dur-base:       0.32s;
+  --dur-slow:       0.6s;
+  --dur-cinematic:  1s;
+}

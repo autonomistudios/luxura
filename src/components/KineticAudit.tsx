@@ -18,7 +18,7 @@ const KineticMetric: React.FC<KineticMetricProps> = ({ label, value, icon: Icon,
   >
     <div className="flex items-center justify-between mb-2">
       <div className="flex items-center gap-4 text-[#1C1C1C]">
-        <div className="p-2 border border-[#1C1C1C]/10 group-hover:border-[#D4AF37]/30 transition-all duration-700 bg-[#1C1C1C]/[0.02]">
+        <div className="p-2 border border-[#1C1C1C]/10 group-hover:border-[#C5A253]/30 transition-all duration-700 bg-[#1C1C1C]/[0.02]">
           <Icon size={12} className="opacity-40" />
         </div>
         <span className="text-[10px] font-mono uppercase tracking-[0.4em] text-[#1C1C1C]/35 group-hover:text-[#1C1C1C] transition-opacity">{label}</span>
@@ -30,7 +30,7 @@ const KineticMetric: React.FC<KineticMetricProps> = ({ label, value, icon: Icon,
         initial={{ width: 0 }}
         animate={{ width: `${value}%` }}
         transition={{ delay: delay + 0.8, duration: 2, ease: [0.16, 1, 0.3, 1] }}
-        className="h-full bg-[#D4AF37]/50"
+        className="h-full bg-[#C5A253]/50"
       />
     </div>
   </motion.div>
@@ -43,11 +43,11 @@ export const KineticAudit: React.FC = () => {
       animate={{ opacity: 1, x: 0 }}
       className="p-10 border border-[#1C1C1C]/8 bg-[#F2EFE9] relative overflow-hidden"
     >
-      <div className="absolute top-8 left-0 w-[1px] h-32 bg-gradient-to-b from-[#D4AF37]/30 to-transparent" />
+      <div className="absolute top-8 left-0 w-[1px] h-32 bg-gradient-to-b from-[#C5A253]/30 to-transparent" />
 
       <div className="flex justify-between items-baseline mb-12">
         <h4 className="text-[11px] font-mono text-[#1C1C1C]/60 uppercase tracking-[0.8em] italic">NOIR_KINETIC_AUDIT</h4>
-        <div className="w-2 h-2 rounded-full bg-[#D4AF37] animate-pulse shadow-[0_0_8px_rgba(212,175,55,0.4)]" />
+        <div className="w-2 h-2 rounded-full bg-[#C5A253] animate-pulse shadow-[0_0_8px_rgba(197,162,83,0.4)]" />
       </div>
 
       <div className="space-y-2">
@@ -66,7 +66,7 @@ export const KineticAudit: React.FC = () => {
                   key={i}
                   animate={{ height: [4, 14, 4], opacity: [0.2, 0.6, 0.2] }}
                   transition={{ repeat: Infinity, duration: 2, delay: i * 0.1 }}
-                  className="w-[1px] bg-[#D4AF37]/50"
+                  className="w-[1px] bg-[#C5A253]/50"
                 />
               ))}
             </div>

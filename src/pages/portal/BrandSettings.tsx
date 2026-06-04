@@ -18,13 +18,13 @@ function VisualSelect({ label, value, options, locked, onChange }: {
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
         <label className="text-[7px] font-mono tracking-[0.4em] uppercase text-white/30">{label}</label>
-        {locked && <Lock size={9} className="text-[#B8952A]/60" />}
+        {locked && <Lock size={9} className="text-[#C5A253]/60" />}
       </div>
       {locked ? (
         <div className="flex items-center gap-2 px-3 py-2 rounded"
-          style={{ background: 'rgba(184,149,42,0.06)', border: '1px solid rgba(184,149,42,0.15)' }}>
-          <span className="text-[10px] font-mono text-[#B8952A]/70 flex-1">{value}</span>
-          <Lock size={9} className="text-[#B8952A]/40" />
+          style={{ background: 'rgba(197,162,83,0.06)', border: '1px solid rgba(197,162,83,0.15)' }}>
+          <span className="text-[10px] font-mono text-[#C5A253]/70 flex-1">{value}</span>
+          <Lock size={9} className="text-[#C5A253]/40" />
         </div>
       ) : (
         <select value={value} onChange={e => onChange(e.target.value)}
@@ -41,13 +41,13 @@ function LockToggle({ label, locked, onToggle }: { label: string; locked: boolea
   return (
     <button onClick={onToggle}
       className="flex items-center justify-between w-full p-3 rounded transition-all text-left"
-      style={{ background: locked ? 'rgba(184,149,42,0.06)' : 'rgba(255,255,255,0.02)', border: `1px solid ${locked ? 'rgba(184,149,42,0.2)' : 'rgba(255,255,255,0.06)'}` }}>
+      style={{ background: locked ? 'rgba(197,162,83,0.06)' : 'rgba(255,255,255,0.02)', border: `1px solid ${locked ? 'rgba(197,162,83,0.2)' : 'rgba(255,255,255,0.06)'}` }}>
       <span className="text-[10px] font-mono text-white/50">{label}</span>
       <div className="flex items-center gap-2">
-        <span className="text-[7px] font-mono uppercase tracking-[0.2em]" style={{ color: locked ? '#B8952A' : 'rgba(255,255,255,0.2)' }}>
+        <span className="text-[7px] font-mono uppercase tracking-[0.2em]" style={{ color: locked ? '#C5A253' : 'rgba(255,255,255,0.2)' }}>
           {locked ? 'Locked' : 'Editable'}
         </span>
-        {locked ? <Lock size={11} className="text-[#B8952A]" /> : <Unlock size={11} className="text-white/20" />}
+        {locked ? <Lock size={11} className="text-[#C5A253]" /> : <Unlock size={11} className="text-white/20" />}
       </div>
     </button>
   );
@@ -112,7 +112,7 @@ export default function BrandSettings() {
   return (
     <div className="p-8 min-h-full max-w-3xl">
       <div className="mb-8">
-        <h1 className="font-serif italic text-4xl text-white mb-2">Brand Settings</h1>
+        <h1 className="font-display italic text-4xl text-primary mb-2">Brand Settings</h1>
         <p className="text-[9px] font-mono tracking-[0.35em] uppercase text-white/25">
           Configure your brand workspace and visual identity
         </p>
@@ -126,7 +126,7 @@ export default function BrandSettings() {
             style={{ color: tab === t ? 'white' : 'rgba(255,255,255,0.3)' }}>
             {t}
             {tab === t && (
-              <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-px bg-[#B8952A]" />
+              <motion.div layoutId="tab-underline" className="absolute bottom-0 left-0 right-0 h-px bg-[#C5A253]" />
             )}
           </button>
         ))}
@@ -143,7 +143,7 @@ export default function BrandSettings() {
             <div className="flex items-start gap-6">
               {/* Preview */}
               <div className="flex items-center justify-center rounded"
-                style={{ width: 200, height: 80, background: 'rgba(255,255,255,0.03)', border: logoPreview ? '1px solid rgba(184,149,42,0.2)' : '2px dashed rgba(255,255,255,0.08)' }}>
+                style={{ width: 200, height: 80, background: 'rgba(255,255,255,0.03)', border: logoPreview ? '1px solid rgba(197,162,83,0.2)' : '2px dashed rgba(255,255,255,0.08)' }}>
                 {logoPreview
                   ? <img src={logoPreview} className="max-w-full max-h-full object-contain p-2" />
                   : <span className="text-[8px] font-mono text-white/20 uppercase tracking-[0.3em]">No Logo</span>
@@ -201,8 +201,8 @@ export default function BrandSettings() {
               <div className="flex flex-col gap-1.5">
                 <label className="text-[7px] font-mono tracking-[0.4em] uppercase text-white/30">Tier</label>
                 <div className="flex items-center gap-2 px-3 py-2.5 rounded"
-                  style={{ background: 'rgba(184,149,42,0.06)', border: '1px solid rgba(184,149,42,0.15)' }}>
-                  <span className="text-[10px] font-mono text-[#B8952A] capitalize">{brand?.tier || 'Studio'}</span>
+                  style={{ background: 'rgba(197,162,83,0.06)', border: '1px solid rgba(197,162,83,0.15)' }}>
+                  <span className="text-[10px] font-mono text-[#C5A253] capitalize">{brand?.tier || 'Studio'}</span>
                 </div>
               </div>
             </div>
@@ -256,7 +256,7 @@ export default function BrandSettings() {
             <div className="flex items-center gap-4">
               <div>
                 <p className="text-[7px] font-mono tracking-[0.4em] uppercase text-white/25 mb-1">Current Plan</p>
-                <span className="text-xl font-serif italic text-[#B8952A]">{tierInfo.label}</span>
+                <span className="text-xl font-serif italic text-[#C5A253]">{tierInfo.label}</span>
               </div>
               <div className="ml-auto text-right">
                 <p className="text-2xl font-serif italic text-white">{tierInfo.price}</p>
@@ -289,7 +289,7 @@ export default function BrandSettings() {
         <div className="mt-8 flex justify-end">
           <button onClick={handleSave} disabled={saving}
             className="flex items-center gap-2 px-6 py-3 rounded text-[10px] font-mono tracking-[0.2em] uppercase font-semibold transition-all disabled:opacity-60"
-            style={{ background: saved ? '#10B981' : '#B8952A', color: '#000', boxShadow: saved ? '0 0 20px rgba(16,185,129,0.25)' : '0 0 20px rgba(184,149,42,0.25)' }}>
+            style={{ background: saved ? '#10B981' : '#C5A253', color: '#000', boxShadow: saved ? '0 0 20px rgba(16,185,129,0.25)' : '0 0 20px rgba(197,162,83,0.25)' }}>
             {saved ? <><Check size={12} /> Saved</> : saving ? 'Saving...' : 'Save Changes'}
           </button>
         </div>

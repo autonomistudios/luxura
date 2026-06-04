@@ -18,18 +18,18 @@ export default function CampaignHistory() {
   return (
     <div className="p-8 min-h-full">
       <div className="absolute top-0 right-0 w-80 h-80 pointer-events-none"
-        style={{ background: 'radial-gradient(circle at 100% 0%, rgba(184,149,42,0.04) 0%, transparent 60%)' }} />
+        style={{ background: 'radial-gradient(circle at 100% 0%, rgba(197,162,83,0.04) 0%, transparent 60%)' }} />
 
       <div className="flex items-start justify-between mb-8">
         <div>
-          <h1 className="font-serif italic text-4xl text-white mb-2">Campaigns</h1>
+          <h1 className="font-display italic text-4xl text-primary mb-2">Campaigns</h1>
           <p className="text-[9px] font-mono tracking-[0.35em] uppercase text-white/25">
             {campaigns.length} total · {campaigns.filter(c => c.status === 'complete').length} complete
           </p>
         </div>
         <button onClick={() => navigate('/portal/campaigns/new')}
-          className="flex items-center gap-2 px-5 py-2.5 rounded bg-[#B8952A] text-black text-[10px] font-mono tracking-[0.2em] uppercase font-semibold transition-all"
-          style={{ boxShadow: '0 0 20px rgba(184,149,42,0.2)' }}>
+          className="flex items-center gap-2 px-5 py-2.5 rounded bg-[#C5A253] text-black text-[10px] font-mono tracking-[0.2em] uppercase font-semibold transition-all"
+          style={{ boxShadow: '0 0 20px rgba(197,162,83,0.2)' }}>
           <Sparkles size={12} /> New Campaign
         </button>
       </div>
@@ -56,7 +56,7 @@ export default function CampaignHistory() {
             {search ? 'No campaigns match your search' : 'No campaigns yet'}
           </p>
           <button onClick={() => navigate('/portal/campaigns/new')}
-            className="text-[8px] font-mono text-[#B8952A] hover:text-[#D4AF37] transition-colors uppercase tracking-[0.3em]">
+            className="text-[8px] font-mono text-[#C5A253] hover:text-[#C5A253] transition-colors uppercase tracking-[0.3em]">
             Create your first campaign →
           </button>
         </div>
@@ -72,7 +72,7 @@ export default function CampaignHistory() {
                 background: 'linear-gradient(145deg, #111116 0%, #0B0B0E 100%)',
                 border: '1px solid rgba(255,255,255,0.06)',
               }}
-              onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(184,149,42,0.2)')}
+              onMouseEnter={e => (e.currentTarget.style.borderColor = 'rgba(197,162,83,0.2)')}
               onMouseLeave={e => (e.currentTarget.style.borderColor = 'rgba(255,255,255,0.06)')}
             >
               {/* Thumbnail */}

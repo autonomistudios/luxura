@@ -93,14 +93,14 @@ export default function AtelierGrid() {
         className="relative flex flex-col items-center justify-center text-center px-6 pt-16 pb-24 overflow-hidden"
       >
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full bg-[#D4AF37]/6 blur-[120px]" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] rounded-full bg-[#C5A253]/6 blur-[120px]" />
         </div>
 
         <motion.p
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 1 }}
-          className="text-[9px] font-mono uppercase tracking-[0.8em] text-[#B8952A] mb-6"
+          className="text-[9px] font-mono uppercase tracking-[0.8em] text-[#C5A253] mb-6"
         >
           Private Atelier — Est. MMXXV
         </motion.p>
@@ -111,7 +111,7 @@ export default function AtelierGrid() {
           transition={{ delay: 0.6, duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
           className="text-6xl md:text-8xl font-serif text-[#1a1612] tracking-tighter leading-[0.9] mb-8"
         >
-          The&nbsp;<span className="text-[#B8952A] italic">Atelier</span>
+          The&nbsp;<span className="text-[#C5A253] italic">Atelier</span>
         </motion.h1>
 
         <motion.p
@@ -127,7 +127,7 @@ export default function AtelierGrid() {
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
           transition={{ delay: 1.2, duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-12 w-16 h-[1px] bg-[#D4AF37]/30 origin-center"
+          className="mt-12 w-16 h-[1px] bg-[#C5A253]/30 origin-center"
         />
       </motion.section>
 
@@ -139,7 +139,7 @@ export default function AtelierGrid() {
               {['Hair Architecture', 'Nail Artistry', 'Fashion Direction', 'Makeup Mastery', 'Barber Precision', 'Editorial Vision', 'Silhouette Design', 'Pigment & Form', 'Fiber & Texture', 'Fade Craft'].map((label, j) => (
                 <span key={j} className="flex items-center gap-4">
                   <span className="text-[9px] font-mono uppercase tracking-[0.6em] text-[#1a1612]/30">{label}</span>
-                  <span className="text-[#B8952A]/40 text-[8px]">◆</span>
+                  <span className="text-[#C5A253]/40 text-[8px]">◆</span>
                 </span>
               ))}
             </span>
@@ -163,7 +163,7 @@ export default function AtelierGrid() {
             {/* ── Icon / Cinema placeholder ── */}
             <div className="relative w-full h-52 flex items-center justify-center bg-[#EDE7D9] overflow-hidden">
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none flex items-center justify-center">
-                <div className="w-3/4 h-3/4 rounded-full bg-[#B8952A]/10 blur-3xl" />
+                <div className="w-3/4 h-3/4 rounded-full bg-[#C5A253]/10 blur-3xl" />
               </div>
 
               {cat.isComing ? (
@@ -174,15 +174,15 @@ export default function AtelierGrid() {
                 >
                   <Film
                     size={80}
-                    className="opacity-40 group-hover:opacity-90 transition-all duration-1000 drop-shadow-[0_0_0px_rgba(184,149,42,0)] group-hover:drop-shadow-[0_0_30px_rgba(184,149,42,0.4)]"
-                    style={{ color: '#B8952A' }}
+                    className="opacity-40 group-hover:opacity-90 transition-all duration-1000 drop-shadow-[0_0_0px_rgba(197,162,83,0)] group-hover:drop-shadow-[0_0_30px_rgba(197,162,83,0.4)]"
+                    style={{ color: '#C5A253' }}
                   />
                 </motion.div>
               ) : (
                 <motion.img
                   src={cat.artifact}
                   alt={cat.name}
-                  className="w-[82%] h-[82%] object-contain opacity-70 group-hover:opacity-100 transition-all duration-1000 drop-shadow-[0_4px_16px_rgba(26,22,18,0.15)] group-hover:drop-shadow-[0_8px_32px_rgba(184,149,42,0.30)]"
+                  className="w-[82%] h-[82%] object-contain opacity-70 group-hover:opacity-100 transition-all duration-1000 drop-shadow-[0_4px_16px_rgba(26,22,18,0.15)] group-hover:drop-shadow-[0_8px_32px_rgba(197,162,83,0.30)]"
                   style={{ filter: 'brightness(0.4) sepia(0.3) saturate(0.8)' }}
                   animate={{ y: [0, -14, 0] }}
                   transition={{ duration: 5 + i * 0.5, repeat: Infinity, ease: 'easeInOut' }}
@@ -196,19 +196,19 @@ export default function AtelierGrid() {
                 <div className="w-full h-full bg-[#E8E0D0] flex flex-col items-center justify-center relative">
                   {/* Animated scan line */}
                   <motion.div
-                    className="absolute left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#B8952A]/30 to-transparent"
+                    className="absolute left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#C5A253]/30 to-transparent"
                     animate={{ top: ['10%', '90%', '10%'] }}
                     transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
                   />
                   {/* Corner marks */}
-                  <div className="absolute top-4 left-4 w-5 h-5 border-t border-l border-[#B8952A]/30" />
-                  <div className="absolute top-4 right-4 w-5 h-5 border-t border-r border-[#B8952A]/30" />
-                  <div className="absolute bottom-4 left-4 w-5 h-5 border-b border-l border-[#B8952A]/30" />
-                  <div className="absolute bottom-4 right-4 w-5 h-5 border-b border-r border-[#B8952A]/30" />
+                  <div className="absolute top-4 left-4 w-5 h-5 border-t border-l border-[#C5A253]/30" />
+                  <div className="absolute top-4 right-4 w-5 h-5 border-t border-r border-[#C5A253]/30" />
+                  <div className="absolute bottom-4 left-4 w-5 h-5 border-b border-l border-[#C5A253]/30" />
+                  <div className="absolute bottom-4 right-4 w-5 h-5 border-b border-r border-[#C5A253]/30" />
                   {/* Play icon center */}
                   <Play size={28} className="text-[#1a1612] opacity-15 group-hover:opacity-35 transition-opacity duration-700" fill="#1a1612" />
                   <div className="absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-[#E8E0D0] to-transparent" />
-                  <div className="absolute inset-0 border border-transparent group-hover:border-[#B8952A]/25 transition-colors duration-700 pointer-events-none" />
+                  <div className="absolute inset-0 border border-transparent group-hover:border-[#C5A253]/25 transition-colors duration-700 pointer-events-none" />
                 </div>
               ) : (
                 <>
@@ -220,25 +220,25 @@ export default function AtelierGrid() {
                   />
                   <div className="absolute inset-0 bg-[#F5F0E8]/15 group-hover:bg-transparent transition-colors duration-[2s]" />
                   <div className="absolute bottom-0 left-0 right-0 h-28 bg-gradient-to-t from-[#F5F0E8] to-transparent" />
-                  <div className="absolute inset-0 border border-transparent group-hover:border-[#B8952A]/20 transition-colors duration-700 pointer-events-none" />
+                  <div className="absolute inset-0 border border-transparent group-hover:border-[#C5A253]/20 transition-colors duration-700 pointer-events-none" />
                 </>
               )}
             </div>
 
             {/* ── Label ── */}
-            <div className="px-6 py-6 border-t border-[#1a1612]/8 group-hover:border-[#B8952A]/25 transition-colors duration-700">
+            <div className="px-6 py-6 border-t border-[#1a1612]/8 group-hover:border-[#C5A253]/25 transition-colors duration-700">
               <div className="flex items-center gap-3 mb-1">
-                <p className="text-[8px] font-mono uppercase tracking-[0.5em] text-[#B8952A]/60 group-hover:text-[#B8952A] transition-colors">
+                <p className="text-[8px] font-mono uppercase tracking-[0.5em] text-[#C5A253]/60 group-hover:text-[#C5A253] transition-colors">
                   {cat.discipline}
                 </p>
                 {cat.isComing && (
-                  <span className="text-[7px] font-mono uppercase tracking-[0.3em] text-[#B8952A]/70 border border-[#B8952A]/35 px-1.5 py-0.5 flex items-center gap-1">
-                    <span className="w-1 h-1 rounded-full bg-[#B8952A] animate-pulse inline-block" />
+                  <span className="text-[7px] font-mono uppercase tracking-[0.3em] text-[#C5A253]/70 border border-[#C5A253]/35 px-1.5 py-0.5 flex items-center gap-1">
+                    <span className="w-1 h-1 rounded-full bg-[#C5A253] animate-pulse inline-block" />
                     Soon
                   </span>
                 )}
               </div>
-              <h3 className="text-xl font-serif text-[#1a1612] tracking-tight leading-tight luxury-script group-hover:text-[#B8952A] transition-colors duration-700">
+              <h3 className="text-xl font-serif text-[#1a1612] tracking-tight leading-tight luxury-script group-hover:text-[#C5A253] transition-colors duration-700">
                 {cat.name}
               </h3>
               <p className="text-[8px] font-mono uppercase tracking-[0.4em] text-[#1a1612]/35 mt-2">

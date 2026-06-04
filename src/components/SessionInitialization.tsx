@@ -23,7 +23,7 @@ export const SessionInitialization: React.FC<SessionInitializationProps> = ({ do
         transition={{ duration: 0.8, ease: "circOut" }}
       >
         <h2 className="text-5xl font-serif italic text-white tracking-tighter">
-          Initializing <span className="text-[#D4AF37]">{domainName}</span>
+          Initializing <span className="text-[#C5A253]">{domainName}</span>
         </h2>
         <p className="text-[10px] font-mono uppercase tracking-[0.6em] text-white/30 mt-4">
           Sovereign Protocol // Secure Intake Active
@@ -36,7 +36,7 @@ export const SessionInitialization: React.FC<SessionInitializationProps> = ({ do
           initial={{ x: "-100%" }}
           animate={{ x: "0%" }}
           transition={{ duration: 1.5, ease: "easeInOut" }}
-          className="absolute inset-0 bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent"
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-[#C5A253] to-transparent"
         />
       </div>
 
@@ -45,7 +45,7 @@ export const SessionInitialization: React.FC<SessionInitializationProps> = ({ do
         initial={{ opacity: 0 }}
         animate={{ opacity: [0, 1, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
-        className="text-[9px] font-mono italic text-[#D4AF37]/50 tracking-[0.4em] uppercase"
+        className="text-[9px] font-mono italic text-[#C5A253]/50 tracking-[0.4em] uppercase"
       >
         Opening the Atelier...
       </motion.p>

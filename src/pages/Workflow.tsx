@@ -60,7 +60,7 @@ const ConsoleSelect = ({ label, value, options, onChange, disabled }: { label: s
             value={value}
             onChange={(e) => onChange(e.target.value)}
             disabled={disabled}
-            className="minimal-select w-full bg-transparent border-0 border-b border-[#1C1C1C]/15 focus:border-[#D4AF37] focus:ring-0 px-0 py-1 text-xs text-[#1C1C1C] appearance-none cursor-pointer transition-colors duration-200 disabled:cursor-not-allowed"
+            className="minimal-select w-full bg-transparent border-0 border-b border-[#1C1C1C]/15 focus:border-[#C5A253] focus:ring-0 px-0 py-1 text-xs text-[#1C1C1C] appearance-none cursor-pointer transition-colors duration-200 disabled:cursor-not-allowed"
         >
             {options.map(opt => <option key={opt} value={opt} className="bg-white text-[#1C1C1C]">{opt}</option>)}
         </select>
@@ -364,10 +364,10 @@ export default function Workflow() {
                             className="w-full aspect-[3/4] overflow-hidden border border-[#1C1C1C]/12 relative"
                         >
                             {/* Corner marks — framed artwork aesthetic */}
-                            <div className="absolute top-2 left-2 w-5 h-5 border-t border-l border-[#D4AF37]/30 pointer-events-none z-10" />
-                            <div className="absolute top-2 right-2 w-5 h-5 border-t border-r border-[#D4AF37]/30 pointer-events-none z-10" />
-                            <div className="absolute bottom-2 left-2 w-5 h-5 border-b border-l border-[#D4AF37]/30 pointer-events-none z-10" />
-                            <div className="absolute bottom-2 right-2 w-5 h-5 border-b border-r border-[#D4AF37]/30 pointer-events-none z-10" />
+                            <div className="absolute top-2 left-2 w-5 h-5 border-t border-l border-[#C5A253]/30 pointer-events-none z-10" />
+                            <div className="absolute top-2 right-2 w-5 h-5 border-t border-r border-[#C5A253]/30 pointer-events-none z-10" />
+                            <div className="absolute bottom-2 left-2 w-5 h-5 border-b border-l border-[#C5A253]/30 pointer-events-none z-10" />
+                            <div className="absolute bottom-2 right-2 w-5 h-5 border-b border-r border-[#C5A253]/30 pointer-events-none z-10" />
                             <img src={intakeImg} alt="Source DNA" className="w-full h-full object-cover" />
                         </motion.div>
                     ) : (
@@ -378,7 +378,7 @@ export default function Workflow() {
                             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                         />
                     )}
-                    <div className="text-center font-mono text-[9px] uppercase tracking-[0.4em] text-[#D4AF37]/40 border-t border-[#1C1C1C]/8 pt-8 w-3/4">
+                    <div className="text-center font-mono text-[9px] uppercase tracking-[0.4em] text-[#C5A253]/40 border-t border-[#1C1C1C]/8 pt-8 w-3/4">
                         <p>{intakeImg ? 'DNA_LOCKED // SOURCE CONFIRMED' : 'Subject Calibration // 150MP'}</p>
                     </div>
                 </aside>
@@ -442,7 +442,7 @@ export default function Workflow() {
                                             ].map(({ id, label }) => (
                                                 <button key={id}
                                                     onClick={() => { toggleAnchor(id); setExpandedGroup(null); }}
-                                                    className={`px-5 py-2 border text-[9px] font-mono uppercase tracking-[0.2em] transition-all duration-300 ${anchors.includes(id) ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/5 shadow-[0_0_12px_rgba(212,175,55,0.18)]' : 'border-[#1C1C1C]/12 text-[#1C1C1C]/45 hover:text-[#1C1C1C]/65 hover:border-[#1C1C1C]/20'}`}>
+                                                    className={`px-5 py-2 border text-[9px] font-mono uppercase tracking-[0.2em] transition-all duration-300 ${anchors.includes(id) ? 'border-[#C5A253] text-[#C5A253] bg-[#C5A253]/5 shadow-[0_0_12px_rgba(197,162,83,0.18)]' : 'border-[#1C1C1C]/12 text-[#1C1C1C]/45 hover:text-[#1C1C1C]/65 hover:border-[#1C1C1C]/20'}`}>
                                                     [ {label} ]
                                                 </button>
                                             ))}
@@ -456,14 +456,14 @@ export default function Workflow() {
                                                     }
                                                     return next;
                                                 })}
-                                                className={`px-5 py-2 border text-[9px] font-mono uppercase tracking-[0.2em] transition-all duration-300 ${expandedGroup === 'CLOTHING' || anchors.some(a => CLOTHING_ANCHOR_IDS.includes(a)) ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/5 shadow-[0_0_12px_rgba(212,175,55,0.18)]' : 'border-[#1C1C1C]/12 text-[#1C1C1C]/45 hover:text-[#1C1C1C]/65 hover:border-[#1C1C1C]/20'}`}>
+                                                className={`px-5 py-2 border text-[9px] font-mono uppercase tracking-[0.2em] transition-all duration-300 ${expandedGroup === 'CLOTHING' || anchors.some(a => CLOTHING_ANCHOR_IDS.includes(a)) ? 'border-[#C5A253] text-[#C5A253] bg-[#C5A253]/5 shadow-[0_0_12px_rgba(197,162,83,0.18)]' : 'border-[#1C1C1C]/12 text-[#1C1C1C]/45 hover:text-[#1C1C1C]/65 hover:border-[#1C1C1C]/20'}`}>
                                                 [ Clothing ▾ ]
                                             </button>
 
                                             {/* Accessories group toggle */}
                                             <button
                                                 onClick={() => setExpandedGroup(g => g === 'ACCESSORIES' ? null : 'ACCESSORIES')}
-                                                className={`px-5 py-2 border text-[9px] font-mono uppercase tracking-[0.2em] transition-all duration-300 ${expandedGroup === 'ACCESSORIES' ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/5 shadow-[0_0_12px_rgba(212,175,55,0.18)]' : 'border-[#1C1C1C]/12 text-[#1C1C1C]/45 hover:text-[#1C1C1C]/65 hover:border-[#1C1C1C]/20'}`}>
+                                                className={`px-5 py-2 border text-[9px] font-mono uppercase tracking-[0.2em] transition-all duration-300 ${expandedGroup === 'ACCESSORIES' ? 'border-[#C5A253] text-[#C5A253] bg-[#C5A253]/5 shadow-[0_0_12px_rgba(197,162,83,0.18)]' : 'border-[#1C1C1C]/12 text-[#1C1C1C]/45 hover:text-[#1C1C1C]/65 hover:border-[#1C1C1C]/20'}`}>
                                                 [ Accessories ▾ ]
                                             </button>
                                         </div>
@@ -471,7 +471,7 @@ export default function Workflow() {
                                         {/* Tier 2 — Clothing subcategories */}
                                         {expandedGroup === 'CLOTHING' && (
                                             <motion.div initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }}
-                                                className="flex justify-center flex-wrap gap-2 pt-2 pl-4 border-l border-[#D4AF37]/20 ml-4">
+                                                className="flex justify-center flex-wrap gap-2 pt-2 pl-4 border-l border-[#C5A253]/20 ml-4">
                                                 {[
                                                     { id: 'SHIRT', label: 'Shirt / Blouse' },
                                                     { id: 'PANTS', label: 'Pants / Trousers' },
@@ -482,7 +482,7 @@ export default function Workflow() {
                                                 ].map(({ id, label }) => (
                                                     <button key={id}
                                                         onClick={() => toggleAnchor(id)}
-                                                        className={`px-4 py-1.5 border text-[8px] font-mono uppercase tracking-[0.2em] transition-all duration-200 ${anchors.includes(id) ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/5 shadow-[0_0_12px_rgba(212,175,55,0.18)]' : 'border-[#1C1C1C]/12 text-[#1C1C1C]/55 hover:text-[#1C1C1C]/60 hover:border-[#1C1C1C]/20'}`}>
+                                                        className={`px-4 py-1.5 border text-[8px] font-mono uppercase tracking-[0.2em] transition-all duration-200 ${anchors.includes(id) ? 'border-[#C5A253] text-[#C5A253] bg-[#C5A253]/5 shadow-[0_0_12px_rgba(197,162,83,0.18)]' : 'border-[#1C1C1C]/12 text-[#1C1C1C]/55 hover:text-[#1C1C1C]/60 hover:border-[#1C1C1C]/20'}`}>
                                                         {label}
                                                     </button>
                                                 ))}
@@ -492,7 +492,7 @@ export default function Workflow() {
                                         {/* Tier 2 — Accessories subcategories */}
                                         {expandedGroup === 'ACCESSORIES' && (
                                             <motion.div initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }}
-                                                className="flex justify-center flex-wrap gap-2 pt-2 pl-4 border-l border-[#D4AF37]/20 ml-4">
+                                                className="flex justify-center flex-wrap gap-2 pt-2 pl-4 border-l border-[#C5A253]/20 ml-4">
                                                 {[
                                                     { id: 'BELT', label: 'Belt' },
                                                     { id: 'SHOES', label: 'Shoes' },
@@ -504,7 +504,7 @@ export default function Workflow() {
                                                 ].map(({ id, label }) => (
                                                     <button key={id}
                                                         onClick={() => toggleAnchor(id)}
-                                                        className={`px-4 py-1.5 border text-[8px] font-mono uppercase tracking-[0.2em] transition-all duration-200 ${anchors.includes(id) ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/5 shadow-[0_0_12px_rgba(212,175,55,0.18)]' : 'border-[#1C1C1C]/12 text-[#1C1C1C]/55 hover:text-[#1C1C1C]/60 hover:border-[#1C1C1C]/20'}`}>
+                                                        className={`px-4 py-1.5 border text-[8px] font-mono uppercase tracking-[0.2em] transition-all duration-200 ${anchors.includes(id) ? 'border-[#C5A253] text-[#C5A253] bg-[#C5A253]/5 shadow-[0_0_12px_rgba(197,162,83,0.18)]' : 'border-[#1C1C1C]/12 text-[#1C1C1C]/55 hover:text-[#1C1C1C]/60 hover:border-[#1C1C1C]/20'}`}>
                                                         {label}
                                                     </button>
                                                 ))}
@@ -513,7 +513,7 @@ export default function Workflow() {
 
                                         {/* Selected anchors readout */}
                                         {anchors.length > 0 && (
-                                            <p className="text-center text-[8px] font-mono text-[#D4AF37]/40 tracking-[0.4em] uppercase pt-1">
+                                            <p className="text-center text-[8px] font-mono text-[#C5A253]/40 tracking-[0.4em] uppercase pt-1">
                                                 Locked → {anchors.map(a => a.replace(/_/g, ' ')).join(' + ')}
                                             </p>
                                         )}
@@ -525,13 +525,13 @@ export default function Workflow() {
                                         <div className="flex justify-center gap-4">
                                             <button
                                                 onClick={() => setStrategy('keep')}
-                                                className={`px-8 py-3 border text-[10px] font-mono uppercase tracking-[0.2em] transition-colors ${strategy === 'keep' ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/5 shadow-[0_0_12px_rgba(212,175,55,0.18)]' : 'border-[#1C1C1C]/12 text-[#1C1C1C]/55 hover:text-[#1C1C1C]/80'}`}
+                                                className={`px-8 py-3 border text-[10px] font-mono uppercase tracking-[0.2em] transition-colors ${strategy === 'keep' ? 'border-[#C5A253] text-[#C5A253] bg-[#C5A253]/5 shadow-[0_0_12px_rgba(197,162,83,0.18)]' : 'border-[#1C1C1C]/12 text-[#1C1C1C]/55 hover:text-[#1C1C1C]/80'}`}
                                             >
                                                 [ Preserve Original ]
                                             </button>
                                             <button
                                                 onClick={() => setStrategy('change')}
-                                                className={`px-8 py-3 border text-[10px] font-mono uppercase tracking-[0.2em] transition-colors ${strategy === 'change' ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/5 shadow-[0_0_12px_rgba(212,175,55,0.18)]' : 'border-[#1C1C1C]/12 text-[#1C1C1C]/55 hover:text-[#1C1C1C]/80'}`}
+                                                className={`px-8 py-3 border text-[10px] font-mono uppercase tracking-[0.2em] transition-colors ${strategy === 'change' ? 'border-[#C5A253] text-[#C5A253] bg-[#C5A253]/5 shadow-[0_0_12px_rgba(197,162,83,0.18)]' : 'border-[#1C1C1C]/12 text-[#1C1C1C]/55 hover:text-[#1C1C1C]/80'}`}
                                             >
                                                 [ AI Reimagination ]
                                             </button>
@@ -542,13 +542,13 @@ export default function Workflow() {
                                     <div className="flex flex-col items-center gap-3 pt-1">
                                         <button
                                             onClick={() => setShowCreativeProps(true)}
-                                            className="px-8 py-3 border text-[10px] font-mono uppercase tracking-[0.3em] transition-all duration-300 hover:border-[#D4AF37]/60 hover:text-[#D4AF37] hover:bg-[#D4AF37]/5"
-                                            style={{ borderColor: activePropId ? 'rgba(212,175,55,0.5)' : 'rgba(28,28,28,0.2)', color: activePropId ? '#D4AF37' : 'rgba(28,28,28,0.5)' }}
+                                            className="px-8 py-3 border text-[10px] font-mono uppercase tracking-[0.3em] transition-all duration-300 hover:border-[#C5A253]/60 hover:text-[#C5A253] hover:bg-[#C5A253]/5"
+                                            style={{ borderColor: activePropId ? 'rgba(197,162,83,0.5)' : 'rgba(28,28,28,0.2)', color: activePropId ? '#C5A253' : 'rgba(28,28,28,0.5)' }}
                                         >
                                             ✦ Creative Props
                                         </button>
                                         {activePropId && (
-                                            <p className="text-[7px] font-mono uppercase tracking-[0.3em] text-[#D4AF37]/50">
+                                            <p className="text-[7px] font-mono uppercase tracking-[0.3em] text-[#C5A253]/50">
                                                 Active: {activePropId.replace(/-/g, ' ')}
                                             </p>
                                         )}
@@ -560,24 +560,24 @@ export default function Workflow() {
                                     {/* Photography Direction — 10-card style picker */}
                                     <div className="space-y-4">
                                         <div className="text-center space-y-1">
-                                            <p className="text-[9px] font-mono uppercase tracking-[0.5em] text-[#D4AF37]/50">Step 2 — Photography Direction</p>
+                                            <p className="text-[9px] font-mono uppercase tracking-[0.5em] text-[#C5A253]/50">Step 2 — Photography Direction</p>
                                             <p className="text-[8px] font-mono uppercase tracking-[0.3em] text-[#1C1C1C]/60">Choose a style or let the system cycle all 6</p>
                                         </div>
                                         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
                                             <button
                                                 onClick={() => setPhotoDirection('full-spread')}
-                                                className={`p-3 border text-left transition-all duration-300 ${photoDirection === 'full-spread' ? 'border-[#D4AF37]/70 bg-[#D4AF37]/8' : 'border-[#1C1C1C]/8 hover:border-[#1C1C1C]/25'}`}
+                                                className={`p-3 border text-left transition-all duration-300 ${photoDirection === 'full-spread' ? 'border-[#C5A253]/70 bg-[#C5A253]/8' : 'border-[#1C1C1C]/8 hover:border-[#1C1C1C]/25'}`}
                                             >
-                                                <p className={`text-[8px] font-mono uppercase tracking-[0.2em] mb-1 leading-tight ${photoDirection === 'full-spread' ? 'text-[#D4AF37]' : 'text-[#1C1C1C]/60'}`}>Full Editorial Spread</p>
+                                                <p className={`text-[8px] font-mono uppercase tracking-[0.2em] mb-1 leading-tight ${photoDirection === 'full-spread' ? 'text-[#C5A253]' : 'text-[#1C1C1C]/60'}`}>Full Editorial Spread</p>
                                                 <p className="text-[6px] font-mono text-[#1C1C1C]/60 uppercase tracking-[0.1em]">All 6 styles · Auto</p>
                                             </button>
                                             {PHOTO_STYLE_OPTIONS.map(style => (
                                                 <button
                                                     key={style.id}
                                                     onClick={() => setPhotoDirection(style.id)}
-                                                    className={`p-3 border text-left transition-all duration-300 ${photoDirection === style.id ? 'border-[#D4AF37]/70 bg-[#D4AF37]/8' : 'border-[#1C1C1C]/8 hover:border-[#1C1C1C]/25'}`}
+                                                    className={`p-3 border text-left transition-all duration-300 ${photoDirection === style.id ? 'border-[#C5A253]/70 bg-[#C5A253]/8' : 'border-[#1C1C1C]/8 hover:border-[#1C1C1C]/25'}`}
                                                 >
-                                                    <p className={`text-[8px] font-mono uppercase tracking-[0.15em] mb-1 leading-tight ${photoDirection === style.id ? 'text-[#D4AF37]' : 'text-[#1C1C1C]/60'}`}>{style.name}</p>
+                                                    <p className={`text-[8px] font-mono uppercase tracking-[0.15em] mb-1 leading-tight ${photoDirection === style.id ? 'text-[#C5A253]' : 'text-[#1C1C1C]/60'}`}>{style.name}</p>
                                                     <p className="text-[6px] font-mono text-[#1C1C1C]/60 leading-relaxed">{style.pub}</p>
                                                 </button>
                                             ))}
@@ -589,7 +589,7 @@ export default function Workflow() {
                                     {/* STEP 3 — Visual Preset (pick the vibe first) */}
                                     <div className="space-y-4">
                                         <div className="text-center space-y-1">
-                                            <p className="text-[9px] font-mono uppercase tracking-[0.5em] text-[#D4AF37]/50">Step 3 — Choose Your Vibe</p>
+                                            <p className="text-[9px] font-mono uppercase tracking-[0.5em] text-[#C5A253]/50">Step 3 — Choose Your Vibe</p>
                                             <p className="text-[8px] font-mono uppercase tracking-[0.3em] text-[#1C1C1C]/60">Visual preset · sets lighting, camera & atmosphere</p>
                                         </div>
                                         <PersonaCarousel
@@ -612,7 +612,7 @@ export default function Workflow() {
                                     {/* STEP 4 — Location (where is the shoot?) */}
                                     <div className="space-y-4">
                                         <div className="text-center space-y-1">
-                                            <p className="text-[9px] font-mono uppercase tracking-[0.5em] text-[#D4AF37]/50">Step 3 — Set the Scene</p>
+                                            <p className="text-[9px] font-mono uppercase tracking-[0.5em] text-[#C5A253]/50">Step 3 — Set the Scene</p>
                                             <p className="text-[8px] font-mono uppercase tracking-[0.3em] text-[#1C1C1C]/60">100 editorial locations · or leave as studio</p>
                                         </div>
                                         <div className="max-w-2xl mx-auto">
@@ -678,21 +678,21 @@ export default function Workflow() {
                                         {/* Custom direction */}
                                         <div className="max-w-2xl mx-auto relative">
                                             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                                <span className="text-[#D4AF37]/30 text-xs font-mono">{'>'}</span>
+                                                <span className="text-[#C5A253]/30 text-xs font-mono">{'>'}</span>
                                             </div>
                                             <input
                                                 type="text"
                                                 value={prompt}
                                                 onChange={(e) => setPrompt(e.target.value)}
                                                 placeholder="Additional creative direction — e.g. 'model on a red Vespa, racing jacket'"
-                                                className="w-full bg-transparent border-b border-[#1C1C1C]/12 focus:border-[#D4AF37]/40 text-[#1C1C1C] py-4 pl-10 pr-4 text-sm font-sans placeholder:text-[#1C1C1C]/50 focus:outline-none transition-colors"
+                                                className="w-full bg-transparent border-b border-[#1C1C1C]/12 focus:border-[#C5A253]/40 text-[#1C1C1C] py-4 pl-10 pr-4 text-sm font-sans placeholder:text-[#1C1C1C]/50 focus:outline-none transition-colors"
                                             />
                                         </div>
                                         {/* Warn when keep strategy + scene-specific prompt */}
                                         {strategy === 'keep' && prompt.trim().length > 0 && (
-                                            <div className="max-w-2xl mx-auto mt-2 px-3 py-2 border border-[#D4AF37]/20 bg-[#D4AF37]/5">
-                                                <p className="text-[9px] font-mono text-[#D4AF37]/70 tracking-[0.15em] uppercase">
-                                                    Preserve Original locks the model's pose and clothing. For scene props, vehicles, or outfit changes — switch to <button onClick={() => setStrategy('change')} className="underline text-[#D4AF37] hover:text-[#D4AF37]/80 cursor-pointer">AI Reimagination</button>.
+                                            <div className="max-w-2xl mx-auto mt-2 px-3 py-2 border border-[#C5A253]/20 bg-[#C5A253]/5">
+                                                <p className="text-[9px] font-mono text-[#C5A253]/70 tracking-[0.15em] uppercase">
+                                                    Preserve Original locks the model's pose and clothing. For scene props, vehicles, or outfit changes — switch to <button onClick={() => setStrategy('change')} className="underline text-[#C5A253] hover:text-[#C5A253]/80 cursor-pointer">AI Reimagination</button>.
                                                 </p>
                                             </div>
                                         )}
@@ -714,7 +714,7 @@ export default function Workflow() {
                                             <div className="text-[10px] font-mono text-red-400 tracking-[0.6em] uppercase">[ ENGINE_FAILURE ]</div>
                                             <p className="text-[#1C1C1C] font-mono text-sm leading-relaxed break-all">{engineError}</p>
                                             <button
-                                                className="px-8 py-3 border border-[#D4AF37] text-[#D4AF37] text-[10px] font-mono uppercase tracking-[0.4em] hover:bg-[#D4AF37]/10 transition-all"
+                                                className="px-8 py-3 border border-[#C5A253] text-[#C5A253] text-[10px] font-mono uppercase tracking-[0.4em] hover:bg-[#C5A253]/10 transition-all"
                                                 onClick={() => { setEngineError(null); setFinalPrompt(''); setStep('model-strategy'); }}
                                             >
                                                 [ RETRY_SEQUENCE ]
@@ -817,7 +817,7 @@ export default function Workflow() {
                                         onClick={nextStep}
                                     >
                                         {freeRunAvailable() && step === 'model-strategy' && (
-                                            <span className="absolute -top-2 -right-2 bg-[#D4AF37] text-white text-[8px] font-mono px-1.5 py-0.5 tracking-widest uppercase">
+                                            <span className="absolute -top-2 -right-2 bg-[#C5A253] text-white text-[8px] font-mono px-1.5 py-0.5 tracking-widest uppercase">
                                                 1 Free Run
                                             </span>
                                         )}
@@ -864,10 +864,10 @@ export default function Workflow() {
                             <Link
                                 key={tier}
                                 to="/profile"
-                                className="flex items-center justify-between px-6 py-4 border border-[#1C1C1C]/10 hover:border-[#D4AF37] transition-colors duration-300 group"
+                                className="flex items-center justify-between px-6 py-4 border border-[#1C1C1C]/10 hover:border-[#C5A253] transition-colors duration-300 group"
                                 onClick={() => setShowUpgradeWall(false)}
                             >
-                                <span className="text-xs font-mono uppercase tracking-[0.3em] text-[#1C1C1C] group-hover:text-[#D4AF37] transition-colors">{tier}</span>
+                                <span className="text-xs font-mono uppercase tracking-[0.3em] text-[#1C1C1C] group-hover:text-[#C5A253] transition-colors">{tier}</span>
                                 <span className="text-[10px] text-[#1C1C1C]/40 font-light">{credits}</span>
                                 <span className="text-xs font-light text-[#1C1C1C]">{price}<span className="text-[9px] text-[#1C1C1C]/40">/mo</span></span>
                             </Link>

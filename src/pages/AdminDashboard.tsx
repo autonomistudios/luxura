@@ -12,7 +12,7 @@ type SubscriptionTier = 'free' | 'aura' | 'sovereign' | 'luminary';
 interface UserProfile { uid: string; email: string; displayName: string; photoURL: string; tier: string; imageCredits: number; videoCredits: number; subscriptionStatus: string | null; createdAt?: unknown; }
 const TIER_CONFIG: Record<string, { label: string; color: string; price: number }> = {
   free:      { label: 'Free',      color: 'white',   price: 0   },
-  aura:      { label: 'Aura',      color: '#D4AF37', price: 85  },
+  aura:      { label: 'Aura',      color: '#C5A253', price: 85  },
   sovereign: { label: 'Sovereign', color: '#C0C0C0', price: 165 },
   luminary:  { label: 'Luminary',  color: '#E5D3FF', price: 299 },
 };
@@ -75,7 +75,7 @@ export default function AdminDashboard() {
 
         {/* ── Header ── */}
         <div className="mb-12 pb-8 border-b border-[#1C1C1C]/8">
-          <p className="text-[8px] font-mono uppercase tracking-[0.6em] text-[#D4AF37]/50 mb-2">
+          <p className="text-[8px] font-mono uppercase tracking-[0.6em] text-[#C5A253]/50 mb-2">
             Sovereign Console · Admin Access
           </p>
           <h1 className="text-4xl font-serif text-[#1C1C1C] italic mb-2">Studio Intelligence</h1>
@@ -89,7 +89,7 @@ export default function AdminDashboard() {
             <p className="text-[8px] font-mono text-[#1C1C1C]/45 leading-relaxed mb-3">
               Add this rule in Firebase Console → Firestore → Rules to allow admin read access:
             </p>
-            <pre className="text-[8px] font-mono text-[#D4AF37]/60 bg-black/40 p-4 overflow-x-auto leading-relaxed rounded-none">
+            <pre className="text-[8px] font-mono text-[#C5A253]/60 bg-black/40 p-4 overflow-x-auto leading-relaxed rounded-none">
 {`match /users/{uid} {
   allow read, write: if request.auth != null && (
     request.auth.uid == uid ||
@@ -116,13 +116,13 @@ export default function AdminDashboard() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.08, duration: 0.6 }}
-                  className="border border-[#1C1C1C]/8 bg-[#F2EFE9] p-6 hover:border-[#D4AF37]/20 transition-colors duration-700 group"
+                  className="border border-[#1C1C1C]/8 bg-[#F2EFE9] p-6 hover:border-[#C5A253]/20 transition-colors duration-700 group"
                 >
                   <div className="flex justify-between items-start mb-4">
                     <p className="text-[7px] font-mono uppercase tracking-[0.4em] text-[#1C1C1C]/40">{label}</p>
-                    <Icon size={11} className="text-[#1C1C1C]/20 group-hover:text-[#D4AF37]/40 transition-colors" />
+                    <Icon size={11} className="text-[#1C1C1C]/20 group-hover:text-[#C5A253]/40 transition-colors" />
                   </div>
-                  <p className="text-3xl font-serif text-[#D4AF37] leading-none mb-1">{value}</p>
+                  <p className="text-3xl font-serif text-[#C5A253] leading-none mb-1">{value}</p>
                   <p className="text-[7px] font-mono text-[#1C1C1C]/35">{sub}</p>
                 </motion.div>
               ))}

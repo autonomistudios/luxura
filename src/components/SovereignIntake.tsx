@@ -36,8 +36,8 @@ export const SovereignIntake: React.FC<SovereignIntakeProps> = ({ onUpload }) =>
         className="relative aspect-[4/5] bg-black border border-white/10 flex flex-col items-center justify-center overflow-hidden group"
       >
         {/* The Gold-Leaf Border Detail (Top Right & Bottom Left) */}
-        <div className="absolute top-0 right-0 w-16 h-16 border-t border-r border-[#D4AF37]/65 pointer-events-none" />
-        <div className="absolute bottom-0 left-0 w-16 h-16 border-b border-l border-[#D4AF37]/65 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-16 h-16 border-t border-r border-[#C5A253]/65 pointer-events-none" />
+        <div className="absolute bottom-0 left-0 w-16 h-16 border-b border-l border-[#C5A253]/65 pointer-events-none" />
 
         <AnimatePresence mode="wait">
           {!preview ? (
@@ -46,8 +46,8 @@ export const SovereignIntake: React.FC<SovereignIntakeProps> = ({ onUpload }) =>
               exit={{ opacity: 0, y: 10 }}
               className="cursor-pointer flex flex-col items-center space-y-6 z-10 w-full h-full justify-center"
             >
-              <div className="p-8 rounded-full border border-white/15 bg-white/[0.04] group-hover:border-[#D4AF37]/30 transition-all duration-700">
-                <Camera size={32} className="text-white/50 group-hover:text-[#D4AF37]/80 transition-colors" />
+              <div className="p-8 rounded-full border border-white/15 bg-white/[0.04] group-hover:border-[#C5A253]/30 transition-all duration-700">
+                <Camera size={32} className="text-white/50 group-hover:text-[#C5A253]/80 transition-colors" />
               </div>
               <div className="text-center">
                 <h3 className="text-2xl font-serif italic text-white mb-2">Initialize Intake</h3>
@@ -69,11 +69,11 @@ export const SovereignIntake: React.FC<SovereignIntakeProps> = ({ onUpload }) =>
               <motion.div
                 animate={{ top: ['0%', '100%', '0%'] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                className="absolute left-0 w-full h-[1px] bg-[#D4AF37]/40 shadow-[0_0_15px_#D4AF37] z-20"
+                className="absolute left-0 w-full h-[1px] bg-[#C5A253]/40 shadow-[0_0_15px_#C5A253] z-20"
               />
               <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                 {!scanned ? (
-                  <p className="text-[10px] font-mono uppercase tracking-[0.8em] text-[#D4AF37] animate-pulse">
+                  <p className="text-[10px] font-mono uppercase tracking-[0.8em] text-[#C5A253] animate-pulse">
                     Calibrating DNA...
                   </p>
                 ) : (

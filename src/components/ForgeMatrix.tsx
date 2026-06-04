@@ -12,7 +12,7 @@ function ForgeTile({ id, image, category, fidelity, onSelect }: ForgeTileProps) 
   return (
     <button
       type="button"
-      className="forge-tile dna-helix-scan text-left w-full block focus:outline-none focus:ring-1 focus:ring-[#D4AF37]/50"
+      className="forge-tile dna-helix-scan text-left w-full block focus:outline-none focus:ring-1 focus:ring-[#C5A253]/50"
       onClick={() => onSelect(id)}
     >
       <div className="fidelity-score">

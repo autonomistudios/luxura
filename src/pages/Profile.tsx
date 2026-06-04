@@ -6,7 +6,7 @@ import Layout from '../components/Layout';
 import { useAuth } from '../contexts/AuthContext';
 const TIER_CONFIG: Record<string, { label: string; color: string; price: number; imageCredits: number; videoCredits: number }> = {
   free:      { label: 'Free',      color: 'white',   price: 0,   imageCredits: 0,    videoCredits: 0  },
-  aura:      { label: 'Aura',      color: '#D4AF37', price: 85,  imageCredits: 300,  videoCredits: 0  },
+  aura:      { label: 'Aura',      color: '#C5A253', price: 85,  imageCredits: 300,  videoCredits: 0  },
   sovereign: { label: 'Sovereign', color: '#C0C0C0', price: 165, imageCredits: 750,  videoCredits: 5  },
   luminary:  { label: 'Luminary',  color: '#E5D3FF', price: 299, imageCredits: 1500, videoCredits: 20 },
 };
@@ -49,7 +49,7 @@ const TRUST_TIER_LABELS: Record<string, string> = {
 
 const TRUST_TIER_COLORS: Record<string, string> = {
   new:      '#888',
-  familiar: '#D4AF37',
+  familiar: '#C5A253',
   trusted:  '#C0C0C0',
   partner:  '#E5D3FF',
 };
@@ -178,7 +178,7 @@ export default function Profile() {
         <p className="text-[8px] font-mono text-[#1C1C1C]/40 max-w-xs text-center leading-relaxed">
           Could not load your profile. This is usually a Firestore rules issue — check Firebase Console → Firestore → Rules.
         </p>
-        <Link to="/login" className="text-[9px] font-mono uppercase tracking-[0.4em] text-[#D4AF37]/50 hover:text-[#D4AF37] transition-colors border border-[#D4AF37]/20 px-5 py-2">
+        <Link to="/login" className="text-[9px] font-mono uppercase tracking-[0.4em] text-[#C5A253]/50 hover:text-[#C5A253] transition-colors border border-[#C5A253]/20 px-5 py-2">
           Back to Login
         </Link>
       </div>
@@ -208,8 +208,8 @@ export default function Profile() {
             className="flex flex-col md:flex-row items-center md:items-start gap-10 border-b border-[#1C1C1C]/8 pb-16 text-center md:text-left"
           >
             <div className="relative w-28 h-28 shrink-0">
-              <div className="absolute inset-0 rounded-full border border-[#D4AF37]/20 animate-[ping_3s_infinite]" />
-              <div className="w-full h-full rounded-full border border-[#D4AF37]/30 p-0.5 overflow-hidden">
+              <div className="absolute inset-0 rounded-full border border-[#C5A253]/20 animate-[ping_3s_infinite]" />
+              <div className="w-full h-full rounded-full border border-[#C5A253]/30 p-0.5 overflow-hidden">
                 {profile.photoURL ? (
                   <img src={profile.photoURL} alt={profile.displayName} className="w-full h-full object-cover rounded-full" />
                 ) : (
@@ -226,7 +226,7 @@ export default function Profile() {
                 {profile.email}
               </p>
               {auraProfile?.profession && (
-                <p className="text-[10px] font-mono text-[#D4AF37]/60 uppercase tracking-[0.3em] mb-4">
+                <p className="text-[10px] font-mono text-[#C5A253]/60 uppercase tracking-[0.3em] mb-4">
                   {auraProfile.profession}
                 </p>
               )}
@@ -263,7 +263,7 @@ export default function Profile() {
               >
                 <p className="text-[8px] font-mono uppercase tracking-[0.4em] text-[#1C1C1C]/40 mb-4 group-hover:text-[#1C1C1C]/70 transition-colors">{stat.label}</p>
                 <h3 className="text-3xl font-serif text-[#1C1C1C] mb-1">{stat.value}</h3>
-                <p className="text-[8px] font-mono text-[#D4AF37]/40 uppercase tracking-[0.2em] group-hover:text-[#D4AF37] transition-colors">{stat.detail}</p>
+                <p className="text-[8px] font-mono text-[#C5A253]/40 uppercase tracking-[0.2em] group-hover:text-[#C5A253] transition-colors">{stat.detail}</p>
               </motion.div>
             ))}
           </div>
@@ -274,7 +274,7 @@ export default function Profile() {
             <div className="space-y-2">
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
-                  <Zap size={10} className="text-[#D4AF37]" />
+                  <Zap size={10} className="text-[#C5A253]" />
                   <span className="text-[9px] font-mono uppercase tracking-[0.3em] text-[#1C1C1C]/50">Image Credits</span>
                 </div>
                 <span className="text-[9px] font-mono text-[#1C1C1C]/45">{profile.imageCredits} / {tierCfg.imageCredits}</span>
@@ -287,7 +287,7 @@ export default function Profile() {
               <div className="space-y-2">
                 <div className="flex justify-between items-center">
                   <div className="flex items-center gap-2">
-                    <Video size={10} className="text-[#D4AF37]" />
+                    <Video size={10} className="text-[#C5A253]" />
                     <span className="text-[9px] font-mono uppercase tracking-[0.3em] text-[#1C1C1C]/50">Video Credits</span>
                   </div>
                   <span className="text-[9px] font-mono text-[#1C1C1C]/45">{profile.videoCredits} / {tierCfg.videoCredits}</span>
@@ -305,7 +305,7 @@ export default function Profile() {
             {/* Section header */}
             <div className="flex items-center justify-between border-b border-[#1C1C1C]/8 pb-4">
               <div className="flex items-center gap-3">
-                <Sparkles size={14} className="text-[#D4AF37]" />
+                <Sparkles size={14} className="text-[#C5A253]" />
                 <h4 className="text-[10px] font-mono uppercase tracking-[0.6em] text-[#1C1C1C]/60">Aura Intelligence</h4>
               </div>
               {!auraLoading && auraProfile && (
@@ -342,7 +342,7 @@ export default function Profile() {
                         <ul className="space-y-1">
                           {auraProfile.goals.map((g, i) => (
                             <li key={i} className="text-[11px] font-light text-[#1C1C1C]/55 flex items-center gap-2">
-                              <span className="w-1 h-1 rounded-full bg-[#D4AF37]/40 shrink-0" />
+                              <span className="w-1 h-1 rounded-full bg-[#C5A253]/40 shrink-0" />
                               {g}
                             </li>
                           ))}
@@ -363,7 +363,7 @@ export default function Profile() {
                     </div>
                     <div className="flex flex-wrap gap-2">
                       {auraProfile.primaryAnchor && (
-                        <span className="px-3 py-1.5 border border-[#D4AF37]/30 text-[8px] font-mono text-[#D4AF37]/70 uppercase tracking-[0.2em]">
+                        <span className="px-3 py-1.5 border border-[#C5A253]/30 text-[8px] font-mono text-[#C5A253]/70 uppercase tracking-[0.2em]">
                           Primary: {auraProfile.primaryAnchor}
                         </span>
                       )}
@@ -399,7 +399,7 @@ export default function Profile() {
                       {auraProfile.memories.map((m, i) => (
                         <div key={i} className="flex gap-3 p-4 border border-[#1C1C1C]/5 bg-[#F8F7F5]">
                           <div className="shrink-0 mt-1">
-                            <div className="w-1 h-1 rounded-full bg-[#D4AF37]/30" />
+                            <div className="w-1 h-1 rounded-full bg-[#C5A253]/30" />
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="text-[11px] font-light text-[#1C1C1C]/65 leading-relaxed">{m.fact}</p>
@@ -453,12 +453,12 @@ export default function Profile() {
                       onChange={e => setNewDirective(e.target.value)}
                       onKeyDown={e => e.key === 'Enter' && !savingDirective && addDirective()}
                       placeholder="e.g. Always keep my skin tone consistent"
-                      className="flex-1 bg-transparent border-b border-[#1C1C1C]/10 py-2 text-[11px] font-light text-[#1C1C1C]/70 placeholder-[#1C1C1C]/20 focus:outline-none focus:border-[#D4AF37]/30"
+                      className="flex-1 bg-transparent border-b border-[#1C1C1C]/10 py-2 text-[11px] font-light text-[#1C1C1C]/70 placeholder-[#1C1C1C]/20 focus:outline-none focus:border-[#C5A253]/30"
                     />
                     <button
                       onClick={addDirective}
                       disabled={!newDirective.trim() || savingDirective}
-                      className="flex items-center gap-1.5 px-4 py-2 border border-[#D4AF37]/30 text-[#D4AF37]/70 text-[8px] font-mono uppercase tracking-[0.3em] hover:bg-[#D4AF37]/10 transition-all disabled:opacity-20 disabled:cursor-not-allowed"
+                      className="flex items-center gap-1.5 px-4 py-2 border border-[#C5A253]/30 text-[#C5A253]/70 text-[8px] font-mono uppercase tracking-[0.3em] hover:bg-[#C5A253]/10 transition-all disabled:opacity-20 disabled:cursor-not-allowed"
                     >
                       <Plus size={10} />
                       Add
@@ -484,12 +484,12 @@ export default function Profile() {
                       onChange={e => setConversationMsg(e.target.value)}
                       placeholder="e.g. I mostly shoot indoors under ring light. My main product is loc extensions…"
                       rows={3}
-                      className="flex-1 bg-[#F8F7F5] border border-[#1C1C1C]/8 p-4 text-[11px] font-light text-[#1C1C1C]/70 placeholder-[#1C1C1C]/20 focus:outline-none focus:border-[#D4AF37]/30 resize-none leading-relaxed"
+                      className="flex-1 bg-[#F8F7F5] border border-[#1C1C1C]/8 p-4 text-[11px] font-light text-[#1C1C1C]/70 placeholder-[#1C1C1C]/20 focus:outline-none focus:border-[#C5A253]/30 resize-none leading-relaxed"
                     />
                     <button
                       onClick={sendConversationMessage}
                       disabled={!conversationMsg.trim() || sendingMsg}
-                      className="flex items-center gap-2 px-5 py-3 border border-[#D4AF37]/30 text-[#D4AF37]/70 text-[8px] font-mono uppercase tracking-[0.3em] hover:bg-[#D4AF37]/10 transition-all disabled:opacity-20 disabled:cursor-not-allowed self-end"
+                      className="flex items-center gap-2 px-5 py-3 border border-[#C5A253]/30 text-[#C5A253]/70 text-[8px] font-mono uppercase tracking-[0.3em] hover:bg-[#C5A253]/10 transition-all disabled:opacity-20 disabled:cursor-not-allowed self-end"
                     >
                       <Send size={11} />
                       {sendingMsg ? 'Saving…' : 'Tell Aura'}
@@ -501,7 +501,7 @@ export default function Profile() {
                         initial={{ opacity: 0, y: 4 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0 }}
-                        className="text-[9px] font-mono uppercase tracking-[0.4em] text-[#D4AF37]/60"
+                        className="text-[9px] font-mono uppercase tracking-[0.4em] text-[#C5A253]/60"
                       >
                         Aura remembers.
                       </motion.p>
@@ -518,7 +518,7 @@ export default function Profile() {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6, duration: 1 }} className="flex flex-col md:flex-row gap-4 items-start">
             <Link
               to="/pricing"
-              className="px-8 py-3 border border-[#D4AF37]/30 text-[#D4AF37] text-[10px] font-mono uppercase tracking-[0.3em] hover:bg-[#D4AF37]/10 transition-colors"
+              className="px-8 py-3 border border-[#C5A253]/30 text-[#C5A253] text-[10px] font-mono uppercase tracking-[0.3em] hover:bg-[#C5A253]/10 transition-colors"
             >
               {tier === 'free' ? 'Upgrade Plan' : 'Manage Subscription'}
             </Link>

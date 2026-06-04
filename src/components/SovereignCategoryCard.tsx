@@ -30,7 +30,7 @@ const SovereignCategoryCard: React.FC<SovereignCategoryCardProps> = ({
     <div 
       onClick={onClick}
       className={`relative group w-full overflow-hidden rounded-[4px] bg-obsidian border transition-all duration-700 cursor-pointer 
-        ${selected ? 'border-gold shadow-[0_0_30px_rgba(212,175,55,0.2)]' : 'border-neutral-900 hover:border-gold/40'}`}
+        ${selected ? 'border-gold shadow-[0_0_30px_rgba(197,162,83,0.2)]' : 'border-neutral-900 hover:border-gold/40'}`}
     >
       
       {/* Background Image Kinetic Zoom */}
@@ -77,7 +77,7 @@ const SovereignCategoryCard: React.FC<SovereignCategoryCardProps> = ({
           <motion.div 
             initial={{ width: 0 }}
             animate={{ width: '40%' }}
-            className="h-[2px] bg-gold mt-6 shadow-[0_0_10px_#D4AF37]"
+            className="h-[2px] bg-gold mt-6 shadow-[0_0_10px_#C5A253]"
           />
         )}
 

@@ -4,7 +4,7 @@ export default function SovereignHeader() {
   return (
     <header className="sovereign-header" style={{
       height: 'var(--header-height)',
-      borderBottom: '1px solid rgba(212, 175, 55, 0.1)',
+      borderBottom: '1px solid rgba(197,162,83, 0.1)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
@@ -32,12 +32,12 @@ export default function SovereignHeader() {
           </span>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '24px', padding: '8px 16px', background: 'rgba(212, 175, 55, 0.03)', borderRadius: '8px', border: '1px solid rgba(212, 175, 55, 0.05)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '24px', padding: '8px 16px', background: 'rgba(197,162,83, 0.03)', borderRadius: '8px', border: '1px solid rgba(197,162,83, 0.05)' }}>
           <div className="ledger-item">
             <span className="ledger-label">Session_Fidelity:</span>
             <span className="ledger-value" style={{ color: 'white' }}>Ultra-2K</span>
           </div>
-          <div style={{ width: '1px', height: '16px', background: 'rgba(212, 175, 55, 0.1)' }}></div>
+          <div style={{ width: '1px', height: '16px', background: 'rgba(197,162,83, 0.1)' }}></div>
           <div className="ledger-item">
             <Cpu size={14} style={{ color: 'var(--accent-gold)' }} />
             <span className="ledger-label">Aura_Latency:</span>

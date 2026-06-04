@@ -47,10 +47,10 @@ export default function Login() {
       <div className="fixed inset-0 pointer-events-none bg-gradient-radial from-transparent to-black/60" />
 
       {/* Decorative corner marks */}
-      <div className="absolute top-10 left-10 w-12 h-12 border-t border-l border-[#D4AF37]/20" />
-      <div className="absolute top-10 right-10 w-12 h-12 border-t border-r border-[#D4AF37]/20" />
-      <div className="absolute bottom-10 left-10 w-12 h-12 border-b border-l border-[#D4AF37]/20" />
-      <div className="absolute bottom-10 right-10 w-12 h-12 border-b border-r border-[#D4AF37]/20" />
+      <div className="absolute top-10 left-10 w-12 h-12 border-t border-l border-[#C5A253]/20" />
+      <div className="absolute top-10 right-10 w-12 h-12 border-t border-r border-[#C5A253]/20" />
+      <div className="absolute bottom-10 left-10 w-12 h-12 border-b border-l border-[#C5A253]/20" />
+      <div className="absolute bottom-10 right-10 w-12 h-12 border-b border-r border-[#C5A253]/20" />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}
@@ -61,7 +61,7 @@ export default function Login() {
         {/* Logo */}
         <div className="space-y-2">
           <h1 className="text-5xl font-serif text-white tracking-tighter">
-            LUX<span className="text-[#D4AF37] italic font-light">AURA</span>
+            LUX<span className="text-[#C5A253] italic font-light">AURA</span>
           </h1>
           <p className="text-[9px] font-mono uppercase tracking-[0.6em] text-white/20">
             Private Atelier
@@ -69,7 +69,7 @@ export default function Login() {
         </div>
 
         {/* Divider */}
-        <div className="w-px h-16 bg-gradient-to-b from-transparent via-[#D4AF37]/30 to-transparent" />
+        <div className="w-px h-16 bg-gradient-to-b from-transparent via-[#C5A253]/30 to-transparent" />
 
         {/* Sign-in block */}
         <div className="w-full space-y-6">
@@ -86,7 +86,7 @@ export default function Login() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={handleSignIn}
-            className="w-full flex items-center justify-center gap-4 bg-white/[0.04] border border-white/10 hover:border-[#D4AF37]/40 hover:bg-white/[0.07] transition-all duration-500 px-6 py-4 text-white group"
+            className="w-full flex items-center justify-center gap-4 bg-white/[0.04] border border-white/10 hover:border-[#C5A253]/40 hover:bg-white/[0.07] transition-all duration-500 px-6 py-4 text-white group"
           >
             {/* Google G icon */}
             <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
@@ -107,7 +107,7 @@ export default function Login() {
                 d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
               />
             </svg>
-            <span className="text-[11px] font-mono uppercase tracking-[0.3em] group-hover:text-[#D4AF37] transition-colors">
+            <span className="text-[11px] font-mono uppercase tracking-[0.3em] group-hover:text-[#C5A253] transition-colors">
               Continue with Google
             </span>
           </motion.button>
@@ -134,7 +134,7 @@ export default function Login() {
           </p>
           <Link
             to="/pricing"
-            className="text-[11px] font-mono uppercase tracking-[0.3em] text-[#D4AF37]/60 hover:text-[#D4AF37] transition-colors"
+            className="text-[11px] font-mono uppercase tracking-[0.3em] text-[#C5A253]/60 hover:text-[#C5A253] transition-colors"
           >
             View Plans &amp; Pricing →
           </Link>

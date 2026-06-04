@@ -39,7 +39,7 @@ export default function CinematicIntro() {
         {/* Gold scan line */}
         <div className="relative w-48 h-[1px] overflow-hidden mb-10">
           <motion.div
-            className="absolute top-0 left-0 h-full bg-[#D4AF37]"
+            className="absolute top-0 left-0 h-full bg-[#C5A253]"
             initial={{ width: '0%' }}
             animate={{ width: phase === 'line' || phase === 'text' || phase === 'out' ? '100%' : '0%' }}
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
@@ -53,18 +53,18 @@ export default function CinematicIntro() {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="text-center"
         >
-          <p className="text-[11px] font-mono uppercase tracking-[0.8em] text-[#D4AF37]/60 mb-4">
+          <p className="text-[11px] font-mono uppercase tracking-[0.8em] text-[#C5A253]/60 mb-4">
             Private Atelier
           </p>
           <h1 className="text-5xl font-serif font-light text-white tracking-[0.15em]">
-            LUX<span className="italic text-[#D4AF37]">AURA</span>
+            LUX<span className="italic text-[#C5A253]">AURA</span>
           </h1>
         </motion.div>
 
         {/* Bottom scan line */}
         <div className="relative w-48 h-[1px] overflow-hidden mt-10">
           <motion.div
-            className="absolute top-0 right-0 h-full bg-[#D4AF37]/40"
+            className="absolute top-0 right-0 h-full bg-[#C5A253]/40"
             initial={{ width: '0%' }}
             animate={{ width: phase === 'text' || phase === 'out' ? '100%' : '0%' }}
             transition={{ duration: 0.9, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}

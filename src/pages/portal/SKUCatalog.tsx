@@ -11,7 +11,7 @@ function FidelityRing({ score }: { score: number }) {
   const r = 16;
   const circ = 2 * Math.PI * r;
   const fill = (score / 100) * circ;
-  const color = score >= 90 ? '#10B981' : score >= 70 ? '#B8952A' : '#EF4444';
+  const color = score >= 90 ? '#10B981' : score >= 70 ? '#C5A253' : '#EF4444';
 
   return (
     <div className="relative" style={{ width: 44, height: 44 }}>
@@ -39,7 +39,7 @@ function SKUCard({ sku, onSelect }: { sku: SkuDocument; onSelect: () => void }) 
   const [hovered, setHovered] = useState(false);
 
   const STATUS = {
-    ready:      { label: 'DNA LOCKED',  color: '#B8952A', bg: 'rgba(184,149,42,0.10)', border: 'rgba(184,149,42,0.25)', dot: 'bg-[#B8952A]' },
+    ready:      { label: 'DNA LOCKED',  color: '#C5A253', bg: 'rgba(197,162,83,0.10)', border: 'rgba(197,162,83,0.25)', dot: 'bg-[#C5A253]' },
     processing: { label: 'ENROLLING',   color: '#F59E0B', bg: 'rgba(245,158,11,0.10)', border: 'rgba(245,158,11,0.25)', dot: 'bg-amber-500 animate-pulse' },
     failed:     { label: 'FAILED',      color: '#EF4444', bg: 'rgba(239,68,68,0.10)',  border: 'rgba(239,68,68,0.25)',  dot: 'bg-rose-500' },
     archived:   { label: 'ARCHIVED',    color: 'rgba(255,255,255,0.3)', bg: 'rgba(255,255,255,0.03)', border: 'rgba(255,255,255,0.08)', dot: 'bg-white/20' },
@@ -57,8 +57,8 @@ function SKUCard({ sku, onSelect }: { sku: SkuDocument; onSelect: () => void }) 
       className="group relative rounded overflow-hidden cursor-pointer"
       style={{
         background: 'linear-gradient(145deg, #111116 0%, #0B0B0E 100%)',
-        border: hovered ? '1px solid rgba(184,149,42,0.3)' : '1px solid rgba(255,255,255,0.06)',
-        boxShadow: hovered ? '0 0 20px rgba(184,149,42,0.07)' : 'none',
+        border: hovered ? '1px solid rgba(197,162,83,0.3)' : '1px solid rgba(255,255,255,0.06)',
+        boxShadow: hovered ? '0 0 20px rgba(197,162,83,0.07)' : 'none',
         transition: 'border-color 0.2s, box-shadow 0.2s',
       }}
     >
@@ -76,7 +76,7 @@ function SKUCard({ sku, onSelect }: { sku: SkuDocument; onSelect: () => void }) 
         {/* Scan animation */}
         {sku.enrollmentStatus === 'processing' && (
           <motion.div
-            className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#B8952A] to-transparent opacity-60"
+            className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#C5A253] to-transparent opacity-60"
             animate={{ top: ['0%', '100%', '0%'] }}
             transition={{ duration: 2.5, repeat: Infinity, ease: 'linear' }}
           />
@@ -103,7 +103,7 @@ function SKUCard({ sku, onSelect }: { sku: SkuDocument; onSelect: () => void }) 
             >
               {sku.enrollmentStatus === 'ready' && (
                 <button onClick={e => { e.stopPropagation(); onSelect(); }}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#B8952A] text-black text-[9px] font-mono tracking-[0.2em] uppercase font-semibold">
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#C5A253] text-black text-[9px] font-mono tracking-[0.2em] uppercase font-semibold">
                   <Play size={10} fill="black" /> Generate
                 </button>
               )}
@@ -121,7 +121,7 @@ function SKUCard({ sku, onSelect }: { sku: SkuDocument; onSelect: () => void }) 
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0 flex-1">
             <h3 className="text-[13px] font-medium text-white/90 truncate">{sku.name}</h3>
-            {sku.skuCode && <p className="text-[9px] font-mono text-[#B8952A]/60 mt-0.5 truncate">{sku.skuCode}</p>}
+            {sku.skuCode && <p className="text-[9px] font-mono text-[#C5A253]/60 mt-0.5 truncate">{sku.skuCode}</p>}
             <p className="text-[8px] font-mono text-white/25 mt-1.5 uppercase tracking-[0.25em]">
               {[sku.category, sku.season].filter(Boolean).join(' · ')}
             </p>
@@ -139,7 +139,7 @@ function SKUCard({ sku, onSelect }: { sku: SkuDocument; onSelect: () => void }) 
           {sku.enrollmentStatus === 'ready' && (
             <button
               onClick={() => { useSovereignStore.getState().setCurrentSkuId(sku.skuId); navigate('/portal/campaigns/new'); }}
-              className="ml-auto text-[8px] font-mono text-white/25 hover:text-[#B8952A] transition-colors uppercase tracking-[0.2em]"
+              className="ml-auto text-[8px] font-mono text-white/25 hover:text-[#C5A253] transition-colors uppercase tracking-[0.2em]"
             >
               Run Campaign →
             </button>
@@ -157,7 +157,7 @@ function EnrollDropzone() {
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ borderColor: 'rgba(184,149,42,0.4)' }}
+      whileHover={{ borderColor: 'rgba(197,162,83,0.4)' }}
       onClick={() => navigate('/portal/skus/enroll')}
       className="rounded cursor-pointer flex flex-col items-center justify-center gap-5 p-8 text-center"
       style={{
@@ -168,8 +168,8 @@ function EnrollDropzone() {
       }}
     >
       <div className="w-14 h-14 rounded-full flex items-center justify-center border border-white/[0.06]"
-        style={{ background: 'rgba(184,149,42,0.06)' }}>
-        <Upload size={22} className="text-[#B8952A]" />
+        style={{ background: 'rgba(197,162,83,0.06)' }}>
+        <Upload size={22} className="text-[#C5A253]" />
       </div>
       <div>
         <p className="text-[13px] font-medium text-white/40 mb-1">New SKU Enrollment</p>
@@ -212,12 +212,12 @@ export default function SKUCatalog() {
     <div className="p-8 min-h-full relative">
       {/* Atmospheric glow */}
       <div className="absolute top-0 right-0 w-96 h-96 pointer-events-none"
-        style={{ background: 'radial-gradient(circle at 100% 0%, rgba(184,149,42,0.04) 0%, transparent 60%)' }} />
+        style={{ background: 'radial-gradient(circle at 100% 0%, rgba(197,162,83,0.04) 0%, transparent 60%)' }} />
 
       {/* Header */}
       <div className="flex items-start justify-between mb-8">
         <div>
-          <h1 className="font-serif italic text-4xl text-white leading-none mb-2">SKU Registry</h1>
+          <h1 className="font-display italic text-4xl text-primary leading-none mb-2">SKU Registry</h1>
           <p className="text-[9px] font-mono tracking-[0.35em] uppercase text-white/25">
             {counts.ready} Ready · {counts.processing} Processing · {counts.all} Total
           </p>
@@ -226,13 +226,13 @@ export default function SKUCatalog() {
           <div className="flex items-center gap-2">
             <button
               onClick={() => navigate('/portal/skus/batch')}
-              className="flex items-center gap-2 px-4 py-2.5 rounded border border-white/[0.08] text-white/40 text-[10px] font-mono tracking-[0.25em] uppercase hover:border-[#B8952A]/30 hover:text-white/70 transition-all"
+              className="flex items-center gap-2 px-4 py-2.5 rounded border border-white/[0.08] text-white/40 text-[10px] font-mono tracking-[0.25em] uppercase hover:border-[#C5A253]/30 hover:text-white/70 transition-all"
             >
               <Layers size={12} /> Batch Enroll
             </button>
             <button
               onClick={() => navigate('/portal/skus/enroll')}
-              className="flex items-center gap-2 px-5 py-2.5 rounded border border-[#B8952A]/40 text-[#B8952A] text-[10px] font-mono tracking-[0.25em] uppercase hover:bg-[#B8952A]/10 transition-all"
+              className="flex items-center gap-2 px-5 py-2.5 rounded border border-[#C5A253]/40 text-[#C5A253] text-[10px] font-mono tracking-[0.25em] uppercase hover:bg-[#C5A253]/10 transition-all"
             >
               <Upload size={12} /> Enroll SKU
             </button>
@@ -247,9 +247,9 @@ export default function SKUCatalog() {
             <button key={f} onClick={() => setFilter(f)}
               className="px-3 py-1.5 rounded text-[9px] font-mono tracking-[0.2em] uppercase transition-all"
               style={{
-                background: filter === f ? 'rgba(184,149,42,0.10)' : 'transparent',
-                border: filter === f ? '1px solid rgba(184,149,42,0.35)' : '1px solid rgba(255,255,255,0.06)',
-                color: filter === f ? '#B8952A' : 'rgba(255,255,255,0.3)',
+                background: filter === f ? 'rgba(197,162,83,0.10)' : 'transparent',
+                border: filter === f ? '1px solid rgba(197,162,83,0.35)' : '1px solid rgba(255,255,255,0.06)',
+                color: filter === f ? '#C5A253' : 'rgba(255,255,255,0.3)',
               }}>
               {f}{counts[f] > 0 ? ` (${counts[f]})` : ''}
             </button>

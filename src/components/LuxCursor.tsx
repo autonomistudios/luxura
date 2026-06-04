@@ -74,7 +74,7 @@ export default function LuxCursor() {
         style={{ willChange: 'transform' }}
       >
         <div
-          className="rounded-full bg-[#D4AF37] transition-all duration-200"
+          className="rounded-full bg-[#C5A253] transition-all duration-200"
           style={{
             width:  hovering ? 6  : 4,
             height: hovering ? 6  : 4,
@@ -92,14 +92,14 @@ export default function LuxCursor() {
         style={{ willChange: 'transform' }}
       >
         <div
-          className="rounded-full border border-[#D4AF37] transition-all duration-300"
+          className="rounded-full border border-[#C5A253] transition-all duration-300"
           style={{
             width:      hovering ? 44  : 28,
             height:     hovering ? 44  : 28,
             marginLeft: hovering ? -22 : -14,
             marginTop:  hovering ? -22 : -14,
             opacity:    hovering ? 0.6 : 0.3,
-            background: hovering ? 'rgba(212,175,55,0.06)' : 'transparent',
+            background: hovering ? 'rgba(197,162,83,0.06)' : 'transparent',
           }}
         />
       </div>

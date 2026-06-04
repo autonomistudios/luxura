@@ -161,7 +161,7 @@ function RemixPanel({ item, onClose }: { item: VaultItem; onClose: () => void })
           {/* Header + Tabs */}
           <div className="px-8 pt-8 pb-0 pr-12 flex-shrink-0 space-y-5">
             <div>
-              <p className="text-[8px] font-mono uppercase tracking-[0.6em] text-[#D4AF37]/50 mb-1">
+              <p className="text-[8px] font-mono uppercase tracking-[0.6em] text-[#C5A253]/50 mb-1">
                 {item.date} // {item.category}
               </p>
               <h2 className="text-2xl font-serif italic text-white">{item.name}</h2>
@@ -177,7 +177,7 @@ function RemixPanel({ item, onClose }: { item: VaultItem; onClose: () => void })
                   onClick={() => setActiveTab(id)}
                   className={`flex items-center gap-1.5 px-4 py-2.5 text-[8px] font-mono uppercase tracking-[0.3em] border-b-2 transition-all -mb-px cursor-pointer ${
                     activeTab === id
-                      ? 'border-[#D4AF37] text-[#D4AF37]'
+                      ? 'border-[#C5A253] text-[#C5A253]'
                       : 'border-transparent text-white/25 hover:text-white/50'
                   }`}
                 >
@@ -212,7 +212,7 @@ function RemixPanel({ item, onClose }: { item: VaultItem; onClose: () => void })
                   onClick={() => toggleAnchor(id)}
                   className={`px-3 py-1.5 border text-[8px] font-mono uppercase tracking-[0.2em] transition-all duration-200 cursor-pointer ${
                     remixAnchors.includes(id)
-                      ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/5'
+                      ? 'border-[#C5A253] text-[#C5A253] bg-[#C5A253]/5'
                       : 'border-white/10 text-white/25 hover:text-white/50 hover:border-white/20'
                   }`}
                 >
@@ -228,7 +228,7 @@ function RemixPanel({ item, onClose }: { item: VaultItem; onClose: () => void })
                   onClick={() => toggleAnchor(id)}
                   className={`px-3 py-1.5 border text-[8px] font-mono uppercase tracking-[0.2em] transition-all duration-200 cursor-pointer ${
                     remixAnchors.includes(id)
-                      ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/5'
+                      ? 'border-[#C5A253] text-[#C5A253] bg-[#C5A253]/5'
                       : 'border-white/10 text-white/25 hover:text-white/50 hover:border-white/20'
                   }`}
                 >
@@ -244,7 +244,7 @@ function RemixPanel({ item, onClose }: { item: VaultItem; onClose: () => void })
                   onClick={() => toggleAnchor(id)}
                   className={`px-3 py-1.5 border text-[8px] font-mono uppercase tracking-[0.2em] transition-all duration-200 cursor-pointer ${
                     remixAnchors.includes(id)
-                      ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/5'
+                      ? 'border-[#C5A253] text-[#C5A253] bg-[#C5A253]/5'
                       : 'border-white/10 text-white/25 hover:text-white/50 hover:border-white/20'
                   }`}
                 >
@@ -252,7 +252,7 @@ function RemixPanel({ item, onClose }: { item: VaultItem; onClose: () => void })
                 </button>
               ))}
             </div>
-            <p className="text-[7px] font-mono text-[#D4AF37]/40 tracking-[0.4em] uppercase">
+            <p className="text-[7px] font-mono text-[#C5A253]/40 tracking-[0.4em] uppercase">
               Locked → {remixAnchors.map((a) => ANCHOR_DISPLAY[a] || a).join(' + ')}
               {hasClothing ? '  ·  outfit-safe framing active' : ''}
             </p>
@@ -273,7 +273,7 @@ function RemixPanel({ item, onClose }: { item: VaultItem; onClose: () => void })
                   onClick={() => setRemixStrategy(val)}
                   className={`px-4 py-2 border text-[8px] font-mono uppercase tracking-[0.2em] transition-all duration-300 cursor-pointer ${
                     remixStrategy === val
-                      ? 'border-[#D4AF37] text-[#D4AF37] bg-[#D4AF37]/5'
+                      ? 'border-[#C5A253] text-[#C5A253] bg-[#C5A253]/5'
                       : 'border-white/10 text-white/30 hover:text-white/60'
                   }`}
                 >
@@ -297,7 +297,7 @@ function RemixPanel({ item, onClose }: { item: VaultItem; onClose: () => void })
                   value={remixSkin}
                   onChange={(e) => setRemixSkin(e.target.value)}
                   disabled={remixStrategy === 'keep'}
-                  className="w-full bg-transparent border-b border-white/10 py-1 text-[10px] font-mono text-[#D4AF37] focus:outline-none disabled:opacity-20"
+                  className="w-full bg-transparent border-b border-white/10 py-1 text-[10px] font-mono text-[#C5A253] focus:outline-none disabled:opacity-20"
                 >
                   {['Fair', 'Porcelain', 'Tan', 'Cinnamon', 'Brown', 'Chocolate', 'Deep'].map(opt => <option key={opt} value={opt} className="bg-black">{opt}</option>)}
                 </select>
@@ -309,7 +309,7 @@ function RemixPanel({ item, onClose }: { item: VaultItem; onClose: () => void })
                 <select 
                   value={remixLighting}
                   onChange={(e) => setRemixLighting(e.target.value)}
-                  className="w-full bg-transparent border-b border-white/10 py-1 text-[10px] font-mono text-[#D4AF37] focus:outline-none"
+                  className="w-full bg-transparent border-b border-white/10 py-1 text-[10px] font-mono text-[#C5A253] focus:outline-none"
                 >
                   {['Clean & Even', 'Sunset Side Glow', 'Deep Shadow', 'Beauty Overhead', 'Moody Cinema', 'Soft Natural'].map(opt => <option key={opt} value={opt} className="bg-black">{opt}</option>)}
                 </select>
@@ -321,7 +321,7 @@ function RemixPanel({ item, onClose }: { item: VaultItem; onClose: () => void })
                 <select 
                   value={remixCamera}
                   onChange={(e) => setRemixCamera(e.target.value)}
-                  className="w-full bg-transparent border-b border-white/10 py-1 text-[10px] font-mono text-[#D4AF37] focus:outline-none"
+                  className="w-full bg-transparent border-b border-white/10 py-1 text-[10px] font-mono text-[#C5A253] focus:outline-none"
                 >
                   {['Soft Background (85mm)', 'Natural Eye (50mm)', 'Fashion Zoom (135mm)', 'Editorial Wide (24mm)', 'Street Style (35mm)', 'Ultra Close-Up (Macro)'].map(opt => <option key={opt} value={opt} className="bg-black">{opt}</option>)}
                 </select>
@@ -332,7 +332,7 @@ function RemixPanel({ item, onClose }: { item: VaultItem; onClose: () => void })
                 <p className="text-[7px] font-mono uppercase tracking-[0.3em] text-white/20">Environment</p>
                 <button 
                   onClick={() => setRemixPrompt('REMIX_LOC')} 
-                  className="w-full text-left border-b border-white/10 py-1 text-[10px] font-mono text-[#D4AF37] truncate hover:text-white transition-colors"
+                  className="w-full text-left border-b border-white/10 py-1 text-[10px] font-mono text-[#C5A253] truncate hover:text-white transition-colors"
                 >
                    {remixLocation ? remixLocation.label : (item.bg === 'custom-bg' ? 'Custom Env' : (item.bg || 'Studio Grey'))}
                 </button>
@@ -347,7 +347,7 @@ function RemixPanel({ item, onClose }: { item: VaultItem; onClose: () => void })
                  value={remixPrompt === 'REMIX_LOC' ? '' : remixPrompt}
                  onChange={(e) => setRemixPrompt(e.target.value)}
                  placeholder="e.g. model on a yacht, rainy street..."
-                 className="w-full bg-transparent border-b border-white/10 py-1 text-[10px] font-mono text-white/60 focus:outline-none focus:border-[#D4AF37]/40"
+                 className="w-full bg-transparent border-b border-white/10 py-1 text-[10px] font-mono text-white/60 focus:outline-none focus:border-[#C5A253]/40"
               />
             </div>
             
@@ -364,7 +364,7 @@ function RemixPanel({ item, onClose }: { item: VaultItem; onClose: () => void })
                            <button 
                               key={loc.id} 
                               onClick={() => { setRemixLocation(loc); setRemixPrompt(''); }}
-                              className="p-3 border border-white/5 hover:border-[#D4AF37]/50 text-[8px] font-mono text-left uppercase tracking-widest text-white/40 hover:text-[#D4AF37] transition-all"
+                              className="p-3 border border-white/5 hover:border-[#C5A253]/50 text-[8px] font-mono text-left uppercase tracking-widest text-white/40 hover:text-[#C5A253] transition-all"
                            >
                               {loc.label}
                            </button>
@@ -380,7 +380,7 @@ function RemixPanel({ item, onClose }: { item: VaultItem; onClose: () => void })
             <motion.button
               onClick={handleRemix}
               whileTap={{ scale: 0.97 }}
-              className="w-full py-4 border border-[#D4AF37]/50 text-[#D4AF37] text-[9px] font-mono uppercase tracking-[0.5em] hover:bg-[#D4AF37]/10 transition-all duration-500 flex items-center justify-center gap-3 cursor-pointer"
+              className="w-full py-4 border border-[#C5A253]/50 text-[#C5A253] text-[9px] font-mono uppercase tracking-[0.5em] hover:bg-[#C5A253]/10 transition-all duration-500 flex items-center justify-center gap-3 cursor-pointer"
             >
               <Wand2 size={14} />
               Create New Variations
@@ -439,7 +439,7 @@ export default function Vault() {
         <div className="flex justify-between items-end mb-12 border-b border-[#1C1C1C]/8 pb-8 max-w-7xl mx-auto">
           <div>
             <h1 className="text-5xl font-serif italic text-[#1C1C1C] mb-2">The Vault</h1>
-            <p className="text-[10px] font-mono uppercase tracking-[0.6em] text-[#D4AF37]/50">
+            <p className="text-[10px] font-mono uppercase tracking-[0.6em] text-[#C5A253]/50">
               Saved Masterpieces // {vaultAssets.length} Image{vaultAssets.length !== 1 ? 's' : ''} · {videoVaultAssets.length} Video{videoVaultAssets.length !== 1 ? 's' : ''}
             </p>
           </div>
@@ -458,7 +458,7 @@ export default function Vault() {
               onClick={() => setTab(t)}
               className={`flex items-center gap-2 px-6 py-3 text-[8px] font-mono uppercase tracking-[0.4em] transition-all border-b-2 ${
                 tab === t
-                  ? 'border-[#D4AF37] text-[#D4AF37]'
+                  ? 'border-[#C5A253] text-[#C5A253]'
                   : 'border-transparent text-[#1C1C1C]/35 hover:text-[#1C1C1C]/65'
               }`}
             >
@@ -488,7 +488,7 @@ export default function Vault() {
             transition={{ duration: 1, delay: 0.3 }}
             className="flex flex-col items-center justify-center py-48 text-center gap-8"
           >
-            <div className="w-16 h-[1px] bg-[#D4AF37]/20" />
+            <div className="w-16 h-[1px] bg-[#C5A253]/20" />
             <div className="space-y-3">
               <p className="text-[10px] font-mono uppercase tracking-[0.8em] text-[#1C1C1C]/45">
                 The Vault Awaits
@@ -497,7 +497,7 @@ export default function Vault() {
                 Generate variations in the Atelier, click any image, and press Deploy to Vault to save it here.
               </p>
             </div>
-            <div className="w-16 h-[1px] bg-[#D4AF37]/20" />
+            <div className="w-16 h-[1px] bg-[#C5A253]/20" />
           </motion.div>
         )}
 
@@ -516,12 +516,12 @@ export default function Vault() {
                 onClick={() => setSelected(asset)}
               >
                 {/* Asset Preview */}
-                <div className="relative aspect-[4/5] overflow-hidden border border-[#1C1C1C]/8 group-hover:border-[#D4AF37]/30 transition-all duration-1000">
+                <div className="relative aspect-[4/5] overflow-hidden border border-[#1C1C1C]/8 group-hover:border-[#C5A253]/30 transition-all duration-1000">
                   {/* Corner marks */}
-                  <div className="absolute top-3 left-3 w-4 h-4 border-t border-l border-[#D4AF37]/20 pointer-events-none z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                  <div className="absolute top-3 right-3 w-4 h-4 border-t border-r border-[#D4AF37]/20 pointer-events-none z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                  <div className="absolute bottom-3 left-3 w-4 h-4 border-b border-l border-[#D4AF37]/20 pointer-events-none z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                  <div className="absolute bottom-3 right-3 w-4 h-4 border-b border-r border-[#D4AF37]/20 pointer-events-none z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                  <div className="absolute top-3 left-3 w-4 h-4 border-t border-l border-[#C5A253]/20 pointer-events-none z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                  <div className="absolute top-3 right-3 w-4 h-4 border-t border-r border-[#C5A253]/20 pointer-events-none z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                  <div className="absolute bottom-3 left-3 w-4 h-4 border-b border-l border-[#C5A253]/20 pointer-events-none z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                  <div className="absolute bottom-3 right-3 w-4 h-4 border-b border-r border-[#C5A253]/20 pointer-events-none z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                   <VaultImage
                     src={asset.image}
                     alt={asset.name}
@@ -532,7 +532,7 @@ export default function Vault() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
                   <div className="absolute bottom-6 left-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-700 translate-y-4 group-hover:translate-y-0">
-                    <p className="text-[8px] font-mono text-[#D4AF37] tracking-[0.4em] mb-1 uppercase">
+                    <p className="text-[8px] font-mono text-[#C5A253] tracking-[0.4em] mb-1 uppercase">
                       {Array.isArray(asset.anchors)
                         ? asset.anchors.map((a) => ANCHOR_DISPLAY[a] || a).join(' + ')
                         : ''}
@@ -542,9 +542,9 @@ export default function Vault() {
 
                   {/* Click hint */}
                   <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                    <div className="flex items-center gap-1.5 border border-[#D4AF37]/30 px-2 py-1 bg-black/60">
-                      <Wand2 size={9} className="text-[#D4AF37]/60" />
-                      <span className="text-[7px] font-mono text-[#D4AF37]/60 uppercase tracking-[0.3em]">Remix</span>
+                    <div className="flex items-center gap-1.5 border border-[#C5A253]/30 px-2 py-1 bg-black/60">
+                      <Wand2 size={9} className="text-[#C5A253]/60" />
+                      <span className="text-[7px] font-mono text-[#C5A253]/60 uppercase tracking-[0.3em]">Remix</span>
                     </div>
                   </div>
                 </div>
@@ -552,7 +552,7 @@ export default function Vault() {
                 {/* Asset Footer */}
                 <div className="mt-4 flex justify-between items-center px-1 opacity-50 group-hover:opacity-100 transition-opacity duration-700">
                   <span className="text-[9px] font-mono text-[#1C1C1C]/40 tracking-widest">{asset.date}</span>
-                  <span className="text-[9px] font-mono text-[#D4AF37] tracking-widest uppercase">
+                  <span className="text-[9px] font-mono text-[#C5A253] tracking-widest uppercase">
                     {asset.strategy === 'keep' ? 'Preserved' : 'AI Gen'}
                   </span>
                 </div>
@@ -600,7 +600,7 @@ export default function Vault() {
                   >
                     {/* Video Thumbnail / Preview */}
                     <div
-                      className={`relative overflow-hidden border border-white/6 group-hover:border-[#D4AF37]/30 transition-all duration-700 cursor-pointer ${
+                      className={`relative overflow-hidden border border-white/6 group-hover:border-[#C5A253]/30 transition-all duration-700 cursor-pointer ${
                         video.aspectRatio === '9:16' ? 'aspect-[9/16] max-w-[200px] mx-auto' : 'aspect-video'
                       }`}
                       onClick={() => setPlayingVideo(video)}
@@ -616,19 +616,19 @@ export default function Vault() {
                       />
                       {/* Hover play overlay */}
                       <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                        <div className="w-12 h-12 border border-[#D4AF37]/50 rounded-full flex items-center justify-center bg-black/60">
-                          <Play size={16} className="text-[#D4AF37] ml-0.5" />
+                        <div className="w-12 h-12 border border-[#C5A253]/50 rounded-full flex items-center justify-center bg-black/60">
+                          <Play size={16} className="text-[#C5A253] ml-0.5" />
                         </div>
                       </div>
                       {/* Corner marks */}
-                      <div className="absolute top-2 left-2 w-4 h-4 border-t border-l border-[#D4AF37]/30 opacity-0 group-hover:opacity-100 transition-opacity" />
-                      <div className="absolute top-2 right-2 w-4 h-4 border-t border-r border-[#D4AF37]/30 opacity-0 group-hover:opacity-100 transition-opacity" />
-                      <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-[#D4AF37]/30 opacity-0 group-hover:opacity-100 transition-opacity" />
-                      <div className="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-[#D4AF37]/30 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <div className="absolute top-2 left-2 w-4 h-4 border-t border-l border-[#C5A253]/30 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <div className="absolute top-2 right-2 w-4 h-4 border-t border-r border-[#C5A253]/30 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-[#C5A253]/30 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      <div className="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-[#C5A253]/30 opacity-0 group-hover:opacity-100 transition-opacity" />
 
                       {/* Model badge */}
                       <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <span className="text-[6px] font-mono text-[#D4AF37]/60 uppercase tracking-[0.3em] border border-[#D4AF37]/20 px-1.5 py-0.5 bg-black/60">
+                        <span className="text-[6px] font-mono text-[#C5A253]/60 uppercase tracking-[0.3em] border border-[#C5A253]/20 px-1.5 py-0.5 bg-black/60">
                           Veo 3.1 {video.model === 'fast' ? 'Fast' : 'STD'}
                         </span>
                       </div>
@@ -700,7 +700,7 @@ export default function Vault() {
               >
                 <X size={18} />
               </button>
-              <div className="border border-[#D4AF37]/20 overflow-hidden">
+              <div className="border border-[#C5A253]/20 overflow-hidden">
                 <video
                   src={playingVideo.videoUrl}
                   controls
@@ -713,13 +713,13 @@ export default function Vault() {
               </div>
               <div className="mt-4 flex items-center justify-between">
                 <div>
-                  <p className="text-[9px] font-mono text-[#D4AF37]/60 uppercase tracking-[0.4em]">{playingVideo.title}</p>
+                  <p className="text-[9px] font-mono text-[#C5A253]/60 uppercase tracking-[0.4em]">{playingVideo.title}</p>
                   <p className="text-[7px] font-mono text-white/25 mt-1">{playingVideo.aspectRatio} · {playingVideo.duration}s · Veo 3.1 {playingVideo.model === 'fast' ? 'Fast' : 'Standard'}</p>
                 </div>
                 <a
                   href={playingVideo.videoUrl}
                   download={`${playingVideo.title.replace(/[^a-z0-9]/gi, '_')}.mp4`}
-                  className="flex items-center gap-2 px-5 py-2.5 border border-[#D4AF37]/30 text-[#D4AF37]/70 text-[8px] font-mono uppercase tracking-[0.3em] hover:bg-[#D4AF37]/10 transition-colors"
+                  className="flex items-center gap-2 px-5 py-2.5 border border-[#C5A253]/30 text-[#C5A253]/70 text-[8px] font-mono uppercase tracking-[0.3em] hover:bg-[#C5A253]/10 transition-colors"
                 >
                   <Download size={11} /> Download
                 </a>

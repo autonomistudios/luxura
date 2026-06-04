@@ -23,7 +23,7 @@ const SovereignNavigation = () => {
   ];
 
   const isActive = (path: string) => location.pathname === path;
-  const tierCfg = brand ? { label: brand.tier, color: '#B8952A' } : null;
+  const tierCfg = brand ? { label: brand.tier, color: '#C5A253' } : null;
 
   async function handleLogout() {
     await logout();
@@ -36,9 +36,9 @@ const SovereignNavigation = () => {
       <nav className="hidden md:flex fixed top-0 left-0 w-full z-50 px-12 py-8 justify-between items-center backdrop-blur-md bg-[#FAF9F6]/85 border-b border-[#1C1C1C]/10">
         <Link to="/" className="group">
           <span className="text-3xl font-serif text-[#1C1C1C] tracking-tighter leading-none block">
-            LUX<span className="text-[#D4AF37] italic font-light">AURA</span>
+            LUX<span className="text-[#C5A253] italic font-light">AURA</span>
           </span>
-          <p className="text-[8px] font-mono uppercase tracking-[0.5em] text-[#1C1C1C]/30 group-hover:text-[#D4AF37]/60 transition-colors">
+          <p className="text-[8px] font-mono uppercase tracking-[0.5em] text-[#1C1C1C]/30 group-hover:text-[#C5A253]/60 transition-colors">
             Private Atelier
           </p>
         </Link>
@@ -49,12 +49,12 @@ const SovereignNavigation = () => {
               key={link.name}
               to={link.path}
               className={`relative text-[11px] font-mono uppercase tracking-[0.4em] transition-all duration-700 flex items-center gap-1.5 ${
-                isActive(link.path) ? 'text-[#D4AF37]' : 'text-[#1C1C1C]/45 hover:text-[#1C1C1C]'
+                isActive(link.path) ? 'text-[#C5A253]' : 'text-[#1C1C1C]/45 hover:text-[#1C1C1C]'
               }`}
             >
               {link.name}
               {link.soon && (
-                <span className="w-1 h-1 rounded-full bg-[#D4AF37] animate-pulse" />
+                <span className="w-1 h-1 rounded-full bg-[#C5A253] animate-pulse" />
               )}
             </Link>
           ))}
@@ -62,7 +62,7 @@ const SovereignNavigation = () => {
             <Link
               to="/admin"
               className={`text-[11px] font-mono uppercase tracking-[0.4em] transition-all duration-700 border-l border-[#1C1C1C]/10 pl-12 ${
-                isActive('/admin') ? 'text-[#D4AF37]' : 'text-[#1C1C1C]/25 hover:text-[#1C1C1C]/60'
+                isActive('/admin') ? 'text-[#C5A253]' : 'text-[#1C1C1C]/25 hover:text-[#1C1C1C]/60'
               }`}
             >
               Console
@@ -74,11 +74,11 @@ const SovereignNavigation = () => {
           {profile && (
             <>
               <div className="flex items-center gap-2 px-3 py-1.5 border border-[#1C1C1C]/10 bg-[#1C1C1C]/[0.02]">
-                <Zap size={9} style={{ color: tierCfg?.color || '#D4AF37' }} />
+                <Zap size={9} style={{ color: tierCfg?.color || '#C5A253' }} />
                 {isAdmin ? (
                   <span className="text-[9px] font-mono text-[#1C1C1C]/55">∞ <span className="text-[8px] text-[#1C1C1C]/35 uppercase tracking-widest">credits</span></span>
                 ) : profile.tier === 'free' && !profile.freeRunUsed ? (
-                  <span className="text-[9px] font-mono text-[#D4AF37]/80 uppercase tracking-widest">1 Free Run</span>
+                  <span className="text-[9px] font-mono text-[#C5A253]/80 uppercase tracking-widest">1 Free Run</span>
                 ) : (
                   <>
                     <span className="text-[9px] font-mono text-[#1C1C1C]/55">{profile.imageCredits}</span>
@@ -90,8 +90,8 @@ const SovereignNavigation = () => {
               <span
                 className="text-[8px] font-mono uppercase tracking-[0.3em] px-2 py-1 border"
                 style={{
-                  borderColor: `${tierCfg?.color || '#D4AF37'}40`,
-                  color:        tierCfg?.color || '#D4AF37',
+                  borderColor: `${tierCfg?.color || '#C5A253'}40`,
+                  color:        tierCfg?.color || '#C5A253',
                 }}
               >
                 {tierCfg?.label}
@@ -99,7 +99,7 @@ const SovereignNavigation = () => {
 
               <button
                 onClick={() => navigate('/profile')}
-                className="w-8 h-8 rounded-full overflow-hidden border border-[#1C1C1C]/15 hover:border-[#D4AF37]/40 transition-colors shrink-0"
+                className="w-8 h-8 rounded-full overflow-hidden border border-[#1C1C1C]/15 hover:border-[#C5A253]/40 transition-colors shrink-0"
               >
                 {profile.photoURL ? (
                   <img src={profile.photoURL} alt={profile.displayName} className="w-full h-full object-cover" />
@@ -129,7 +129,7 @@ const SovereignNavigation = () => {
       <nav className="md:hidden fixed top-0 left-0 w-full z-[1100] px-6 py-4 flex justify-between items-center backdrop-blur-md bg-[#FAF9F6]/85 border-b border-[#1C1C1C]/10">
         <Link to="/" className="group" onClick={() => setIsMobileMenuOpen(false)}>
           <span className="text-2xl font-serif text-[#1C1C1C] tracking-tighter leading-none block">
-            LUX<span className="text-[#D4AF37] italic font-light">AURA</span>
+            LUX<span className="text-[#C5A253] italic font-light">AURA</span>
           </span>
         </Link>
         <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className="text-[#1C1C1C] p-2">
@@ -146,19 +146,19 @@ const SovereignNavigation = () => {
                 key={link.name}
                 to={link.path}
                 className={`text-xl font-mono uppercase tracking-[0.3em] flex items-center gap-3 ${
-                  isActive(link.path) ? 'text-[#D4AF37]' : 'text-white/60'
+                  isActive(link.path) ? 'text-[#C5A253]' : 'text-white/60'
                 }`}
               >
                 {link.name}
-                {link.soon && <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] animate-pulse" />}
+                {link.soon && <span className="w-1.5 h-1.5 rounded-full bg-[#C5A253] animate-pulse" />}
               </Link>
             ))}
 
             {isAdmin && (
               <Link
                 to="/admin"
-                className={`text-xl font-mono uppercase tracking-[0.3em] border-l-2 border-[#D4AF37]/50 pl-4 mt-4 ${
-                  isActive('/admin') ? 'text-[#D4AF37]' : 'text-white/50'
+                className={`text-xl font-mono uppercase tracking-[0.3em] border-l-2 border-[#C5A253]/50 pl-4 mt-4 ${
+                  isActive('/admin') ? 'text-[#C5A253]' : 'text-white/50'
                 }`}
               >
                 Console
@@ -184,7 +184,7 @@ const SovereignNavigation = () => {
                   <div className="flex flex-col gap-1">
                     <span className="text-xs font-mono text-white/60">{profile.displayName}</span>
                     <div className="flex items-center gap-1.5 border border-white/10 rounded-full px-2 py-0.5 w-max">
-                      <Zap size={10} style={{ color: tierCfg?.color || '#D4AF37' }} />
+                      <Zap size={10} style={{ color: tierCfg?.color || '#C5A253' }} />
                       <span className="text-[10px] font-mono text-white/60">
                         {isAdmin ? '∞ credits' : profile.tier === 'free' && !profile.freeRunUsed ? '1 Free Run' : `${profile.imageCredits} credits`}
                       </span>
@@ -198,7 +198,7 @@ const SovereignNavigation = () => {
             ) : (
               <Link
                 to="/login"
-                className="w-full text-center text-xs font-mono uppercase tracking-[0.3em] text-[#D4AF37] border border-[#D4AF37]/30 py-4 hover:bg-[#D4AF37]/5"
+                className="w-full text-center text-xs font-mono uppercase tracking-[0.3em] text-[#C5A253] border border-[#C5A253]/30 py-4 hover:bg-[#C5A253]/5"
               >
                 Sign In
               </Link>

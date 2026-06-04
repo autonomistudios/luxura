@@ -87,7 +87,7 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
         <div className="max-w-7xl mx-auto">
           <div className="flex items-start justify-between mb-6">
             <div>
-              <p className="text-[9px] font-mono uppercase tracking-[0.6em] text-[#D4AF37]/50 mb-1">
+              <p className="text-[9px] font-mono uppercase tracking-[0.6em] text-[#C5A253]/50 mb-1">
                 LuxAura · Creative Inspirations
               </p>
               <h2 className="text-xl font-light tracking-[0.12em] text-white/90">
@@ -113,9 +113,9 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
                 onClick={() => setFilter(cat as PropCategory | 'all')}
                 className="px-4 py-1.5 text-[7px] font-mono uppercase tracking-[0.25em] border transition-all duration-200"
                 style={{
-                  borderColor: filter === cat ? 'rgba(212,175,55,0.6)' : 'rgba(255,255,255,0.08)',
-                  color: filter === cat ? '#D4AF37' : 'rgba(255,255,255,0.3)',
-                  background: filter === cat ? 'rgba(212,175,55,0.06)' : 'transparent',
+                  borderColor: filter === cat ? 'rgba(197,162,83,0.6)' : 'rgba(255,255,255,0.08)',
+                  color: filter === cat ? '#C5A253' : 'rgba(255,255,255,0.3)',
+                  background: filter === cat ? 'rgba(197,162,83,0.06)' : 'transparent',
                 }}
               >
                 {CATEGORY_LABELS[cat] ?? cat}
@@ -144,14 +144,14 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
                   key={prop.id}
                   type="button"
                   onClick={() => handleSelect(prop)}
-                  className="flex flex-col text-left w-full border cursor-pointer transition-all duration-300 group focus:outline-none focus:ring-1 focus:ring-[#D4AF37]/50"
+                  className="flex flex-col text-left w-full border cursor-pointer transition-all duration-300 group focus:outline-none focus:ring-1 focus:ring-[#C5A253]/50"
                   style={{
-                    borderColor: isSelected ? 'rgba(212,175,55,0.8)' : 'rgba(255,255,255,0.06)',
+                    borderColor: isSelected ? 'rgba(197,162,83,0.8)' : 'rgba(255,255,255,0.06)',
                     background: 'rgba(8,8,8,0.9)',
-                    boxShadow: isSelected ? '0 0 24px rgba(212,175,55,0.15)' : 'none',
+                    boxShadow: isSelected ? '0 0 24px rgba(197,162,83,0.15)' : 'none',
                   }}
                   onMouseEnter={e => {
-                    if (!isSelected) (e.currentTarget as HTMLElement).style.borderColor = 'rgba(212,175,55,0.3)';
+                    if (!isSelected) (e.currentTarget as HTMLElement).style.borderColor = 'rgba(197,162,83,0.3)';
                   }}
                   onMouseLeave={e => {
                     if (!isSelected) (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.06)';
@@ -177,7 +177,7 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
                           onClick={e => handleGenerateCover(e, prop)}
                           disabled={!!generating}
                           className="px-3 py-1.5 text-[7px] font-mono uppercase tracking-[0.2em] border transition-all duration-200 disabled:opacity-40"
-                          style={{ borderColor: 'rgba(212,175,55,0.3)', color: 'rgba(212,175,55,0.6)' }}
+                          style={{ borderColor: 'rgba(197,162,83,0.3)', color: 'rgba(197,162,83,0.6)' }}
                         >
                           {isGenerating ? '· Generating ·' : '✦ Generate Preview'}
                         </button>
@@ -193,7 +193,7 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
                         <span
                           key={tag}
                           className="text-[6px] font-mono uppercase tracking-[0.15em] px-1.5 py-0.5"
-                          style={{ background: 'rgba(0,0,0,0.6)', color: 'rgba(212,175,55,0.75)' }}
+                          style={{ background: 'rgba(0,0,0,0.6)', color: 'rgba(197,162,83,0.75)' }}
                         >
                           {tag}
                         </span>
@@ -210,7 +210,7 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
                       </h3>
                       <span
                         className="text-[6px] font-mono uppercase tracking-[0.15em] ml-2 flex-shrink-0"
-                        style={{ color: 'rgba(212,175,55,0.45)' }}
+                        style={{ color: 'rgba(197,162,83,0.45)' }}
                       >
                         {prop.category}
                       </span>
@@ -233,9 +233,9 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
                               onClick={e => handleSceneChange(e, prop.id, idx)}
                               className="w-6 h-6 text-[7px] font-mono border transition-all duration-150"
                               style={{
-                                borderColor: activeIdx === idx ? 'rgba(212,175,55,0.8)' : 'rgba(255,255,255,0.12)',
-                                color: activeIdx === idx ? '#D4AF37' : 'rgba(255,255,255,0.3)',
-                                background: activeIdx === idx ? 'rgba(212,175,55,0.1)' : 'transparent',
+                                borderColor: activeIdx === idx ? 'rgba(197,162,83,0.8)' : 'rgba(255,255,255,0.12)',
+                                color: activeIdx === idx ? '#C5A253' : 'rgba(255,255,255,0.3)',
+                                background: activeIdx === idx ? 'rgba(197,162,83,0.1)' : 'transparent',
                               }}
                             >
                               {idx + 1}
@@ -272,8 +272,8 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
                     <button
                       className="w-full py-2 text-[8px] font-mono uppercase tracking-[0.35em] border transition-all duration-200"
                       style={{
-                        borderColor: 'rgba(212,175,55,0.3)',
-                        color: 'rgba(212,175,55,0.65)',
+                        borderColor: 'rgba(197,162,83,0.3)',
+                        color: 'rgba(197,162,83,0.65)',
                       }}
                       onClick={e => { e.stopPropagation(); handleSelect(prop); }}
                     >
