@@ -32,6 +32,11 @@ export default {
         text: '#1C1C1C',
         muted: '#6E6A60',
         obsidian: '#0B0B0B', 
+        'apple-black': '#000000',
+        'apple-glass': 'rgba(28, 28, 30, 0.65)',
+        'apple-glass-hover': 'rgba(44, 44, 46, 0.8)',
+        'apple-border': 'rgba(255, 255, 255, 0.1)',
+        'apple-border-light': 'rgba(255, 255, 255, 0.15)',
         gold: {
           light: '#FDE68A',
           DEFAULT: '#D4AF37',

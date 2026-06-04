@@ -15,27 +15,27 @@
 :root {
   --primary-gold: #D4AF37;
   --mercury: #E5E5E5;
-  --border-color: #E5E0D8;
-  --obsidian: #0B0B0B;
-  --bg-obsidian: #FAF9F6;
-  --bg-anthracite: #F2EFE9;
-  --text-primary: #1C1C1C;
-  --text-secondary: #6E6A60;
+  --border-color: rgba(255, 255, 255, 0.1);
+  --obsidian: #000000;
+  --bg-obsidian: #000000;
+  --bg-anthracite: #1C1C1E;
+  --text-primary: #F5F5F7;
+  --text-secondary: #86868B;
   --accent-color: #D4AF37;
   --accent-glow: transparent;
-  --ui-bg: #F2EFE9;
+  --ui-bg: #1C1C1E;
 
   /* Editorial Spacing */
   --gutter: clamp(4rem, 10vw, 12rem);
-  --header-height: 100px;
+  --header-height: 80px;
   --footer-ledger-height: 60px;
 
-  /* Typography */
+  /* Typography (Inter for body, maintaining Garamond for luxury headers) */
   --font-heading: 'Cormorant Garamond', serif;
-  --font-body: 'Inter', sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --font-mono: 'JetBrains Mono', 'Courier New', 'Courier', monospace;
 
-  --transition-sovereign: 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-sovereign: 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   --ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
 }
 
@@ -126,34 +126,38 @@ h1, h2, h3, h4, h5, h6 {
   padding: var(--gutter);
 }
 
-/* 💠 High-End Glass UI -> Soft Brutalism */
+/* 💠 High-End Glass UI -> Apple Pro Glass */
 .glass-panel {
-  background: var(--bg-anthracite);
+  background: rgba(28, 28, 30, 0.65);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
   border: 1px solid var(--border-color);
-  border-radius: 2px;
+  border-radius: 12px;
   transition: var(--transition-sovereign);
 }
 
 .glass-panel:hover {
-  border-color: rgba(212, 175, 55, 0.4);
-  box-shadow: none;
+  background: rgba(44, 44, 46, 0.8);
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 /* Gold-accented glass — for active/selected panels */
 .glass-gold {
-  background: #F8F5F0;
+  background: rgba(212, 175, 55, 0.1);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
   border: 1px solid rgba(212, 175, 55, 0.4);
-  border-radius: 2px;
-  box-shadow: none;
+  border-radius: 12px;
   transition: var(--transition-sovereign);
 }
 
 /* Elevated active state — stronger glow for primary selection */
 .glass-active {
-  background: #F8F5F0;
-  border: 1px solid var(--accent-color);
-  border-radius: 2px;
-  box-shadow: none;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 12px;
   transition: var(--transition-sovereign);
 }
 
@@ -213,8 +217,9 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid var(--border-color);
-  background: rgba(250, 249, 246, 0.85);
-  backdrop-filter: blur(20px);
+  background: rgba(28, 28, 30, 0.65);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
 }
 
 /* 💰 The Sovereign Ledger Footer */
@@ -226,7 +231,9 @@ h1, h2, h3, h4, h5, h6 {
   height: var(--footer-ledger-height);
   z-index: 1000;
   padding: 0 var(--gutter);
-  background: var(--bg-obsidian);
+  background: rgba(28, 28, 30, 0.65);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
   border-top: 1px solid var(--border-color);
   display: flex;
   align-items: center;

@@ -172,147 +172,145 @@ export default function AssetVault() {
   const hasFilters = search || anchor !== 'all' || category !== 'all';
 
   return (
-    <div className="p-8 min-h-full">
-      <div className="absolute top-0 right-0 w-80 h-80 pointer-events-none"
-        style={{ background: 'radial-gradient(circle at 100% 0%, rgba(184,149,42,0.04) 0%, transparent 60%)' }} />
+    <div className="p-10 min-h-full font-sans">
+      <div className="absolute top-0 right-0 w-full h-96 pointer-events-none"
+        style={{ background: 'radial-gradient(circle at 50% 0%, rgba(255,255,255,0.03) 0%, transparent 70%)' }} />
 
       {/* Header */}
-      <div className="flex items-start justify-between mb-7">
+      <div className="flex items-end justify-between mb-10 border-b border-white/[0.05] pb-8">
         <div>
-          <h1 className="font-serif italic text-4xl text-white mb-2">Asset Vault</h1>
-          <p className="text-[9px] font-mono tracking-[0.35em] uppercase text-white/25">
+          <h1 className="text-3xl font-semibold text-white tracking-tight mb-2">Asset Vault</h1>
+          <p className="text-[12px] font-medium tracking-wide text-[#86868B]">
             {vaultAssets.length} assets · {filtered.length} shown{selected.size > 0 ? ` · ${selected.size} selected` : ''}
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           {selected.size > 0 && (
             <button onClick={clearSelection}
-              className="flex items-center gap-1.5 px-3 py-2.5 rounded border border-white/10 text-white/40 hover:text-white text-[10px] font-mono tracking-[0.2em] uppercase transition-all">
-              <X size={12} /> Clear
+              className="flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-[#1C1C1E] text-white hover:bg-[#2C2C2E] text-[12px] font-medium transition-all">
+              <X size={14} /> Clear Selection
             </button>
           )}
           <button
             onClick={downloadSelected}
             disabled={selected.size === 0 || downloading}
-            className="flex items-center gap-2 px-5 py-2.5 rounded bg-[#B8952A] text-black text-[10px] font-mono tracking-[0.2em] uppercase font-semibold transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-            style={{ boxShadow: selected.size > 0 && !downloading ? '0 0 20px rgba(184,149,42,0.2)' : 'none' }}>
+            className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-white text-black hover:bg-white/90 text-[12px] font-semibold transition-all disabled:opacity-30 disabled:cursor-not-allowed"
+            style={{ boxShadow: selected.size > 0 && !downloading ? '0 4px 14px rgba(255,255,255,0.2)' : 'none' }}>
             {downloading
-              ? <><Loader2 size={12} className="animate-spin" /> Downloading {progress}%</>
-              : <><Download size={12} /> Download Selected{selected.size > 0 ? ` (${selected.size})` : ''}</>}
+              ? <><Loader2 size={14} className="animate-spin" /> Packaging {progress}%</>
+              : <><Download size={14} strokeWidth={2.5} /> Download Selected</>}
           </button>
         </div>
       </div>
 
-      {/* Controls */}
-      <div className="flex flex-wrap items-center gap-2 mb-7">
-        <div className="flex items-center gap-2 px-3 py-2 rounded flex-1 min-w-[220px] max-w-sm"
-          style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
-          <Search size={11} className="text-white/25" />
-          <input value={search} onChange={e => setSearch(e.target.value)}
-            placeholder="Search by name, anchor, prompt, lighting…"
-            className="bg-transparent text-[11px] font-mono text-white/60 placeholder-white/20 outline-none flex-1" />
+      {/* Filter Bar */}
+      <div className="flex flex-wrap items-center gap-4 mb-8">
+        <div className="flex items-center gap-3 bg-[#1C1C1E] rounded-full px-4 py-2 border border-white/5 flex-1 max-w-sm focus-within:border-white/20 transition-colors">
+          <Search size={16} className="text-[#86868B]" />
+          <input
+            placeholder="Search assets..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="bg-transparent text-[13px] text-white placeholder-[#86868B] outline-none flex-1 font-medium" />
         </div>
 
         <select value={anchor} onChange={e => setAnchor(e.target.value)}
-          className="px-3 py-2 rounded text-[10px] font-mono text-white/55 outline-none cursor-pointer appearance-none"
-          style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
+          className="px-4 py-2.5 rounded-full bg-[#1C1C1E] text-[12px] font-medium text-white border border-white/5 outline-none cursor-pointer appearance-none">
           <option value="all" className="bg-[#111116] text-white">All anchors</option>
           {anchorFacets.map(a => <option key={a} value={a} className="bg-[#111116] text-white">{a}</option>)}
         </select>
 
         <select value={category} onChange={e => setCategory(e.target.value)}
-          className="px-3 py-2 rounded text-[10px] font-mono text-white/55 outline-none cursor-pointer appearance-none"
-          style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
+          className="px-4 py-2.5 rounded-full bg-[#1C1C1E] text-[12px] font-medium text-white border border-white/5 outline-none cursor-pointer appearance-none">
           <option value="all" className="bg-[#111116] text-white">All categories</option>
           {categoryFacets.map(c => <option key={c} value={c} className="bg-[#111116] text-white">{c}</option>)}
         </select>
 
         <select value={sort} onChange={e => setSort(e.target.value as typeof sort)}
-          className="px-3 py-2 rounded text-[10px] font-mono text-white/55 outline-none cursor-pointer appearance-none"
-          style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.07)' }}>
+          className="px-4 py-2.5 rounded-full bg-[#1C1C1E] text-[12px] font-medium text-white border border-white/5 outline-none cursor-pointer appearance-none">
           <option value="newest" className="bg-[#111116] text-white">Newest first</option>
           <option value="oldest" className="bg-[#111116] text-white">Oldest first</option>
           <option value="name" className="bg-[#111116] text-white">Name A–Z</option>
         </select>
 
         {filtered.length > 0 && (
-          <button onClick={toggleAllVisible}
-            className="px-3 py-2 rounded text-[10px] font-mono tracking-[0.15em] uppercase transition-all"
-            style={{
-              background: allVisibleSelected ? 'rgba(184,149,42,0.10)' : 'rgba(255,255,255,0.02)',
-              border: allVisibleSelected ? '1px solid rgba(184,149,42,0.3)' : '1px solid rgba(255,255,255,0.08)',
-              color: allVisibleSelected ? '#D4AF37' : 'rgba(255,255,255,0.4)',
-            }}>
-            {allVisibleSelected ? 'Deselect all' : 'Select all'}
+          <button
+            onClick={() => {
+              if (allVisibleSelected) {
+                const next = new Set(selected);
+                filtered.forEach(a => next.delete(a.id));
+                setSelected(next);
+              } else {
+                const next = new Set(selected);
+                filtered.forEach(a => next.add(a.id));
+                setSelected(next);
+              }
+            }}
+            className="px-4 py-2.5 rounded-full border border-white/10 text-white hover:bg-white/10 text-[12px] font-medium transition-all ml-auto"
+          >
+            {allVisibleSelected ? 'Deselect All' : 'Select All'}
           </button>
         )}
       </div>
 
-      {/* Body */}
+      {/* Grid */}
       {vaultLoading ? (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-          {Array.from({ length: 10 }).map((_, i) => (
-            <div key={i} className="aspect-[4/5] rounded animate-pulse"
-              style={{ background: 'linear-gradient(145deg, #111116 0%, #0B0B0E 100%)', border: '1px solid rgba(255,255,255,0.04)' }} />
-          ))}
+        <div className="h-64 flex flex-col items-center justify-center gap-4 text-[#86868B]">
+          <Loader2 size={24} className="animate-spin text-white/40" />
+          <span className="text-[12px] font-medium tracking-wide">Loading Vault...</span>
         </div>
       ) : filtered.length === 0 ? (
-        <div className="py-24 flex flex-col items-center text-center gap-4">
-          <LayoutGrid size={26} className="text-white/10" />
-          <p className="font-serif italic text-2xl text-white/20">
-            {hasFilters ? 'No assets match your filters' : 'No assets in the vault yet'}
-          </p>
-          {hasFilters ? (
-            <button onClick={() => { setSearch(''); setAnchor('all'); setCategory('all'); }}
-              className="text-[8px] font-mono text-[#B8952A] hover:text-[#D4AF37] transition-colors uppercase tracking-[0.3em]">
-              Clear filters
-            </button>
-          ) : (
-            <button onClick={() => navigate('/portal/campaigns/new')}
-              className="flex items-center gap-1.5 text-[8px] font-mono text-[#B8952A] hover:text-[#D4AF37] transition-colors uppercase tracking-[0.3em]">
-              <Sparkles size={11} /> Forge your first campaign
-            </button>
-          )}
+        <div className="h-64 flex flex-col items-center justify-center gap-4 text-[#86868B] border border-white/5 rounded-3xl bg-[#1C1C1E]/30">
+          <LayoutGrid size={32} className="opacity-20" />
+          <p className="text-[14px] font-medium">{hasFilters ? 'No assets match your filters.' : 'Your vault is empty.'}</p>
         </div>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-          {filtered.map((item, i) => {
-            const isSel = selected.has(item.id);
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+          {filtered.map(item => {
+            const isSelected = selected.has(item.id);
             return (
-              <motion.div key={item.id}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: Math.min(i * 0.02, 0.4) }}
-                className="relative aspect-[4/5] rounded overflow-hidden group cursor-pointer"
-                onClick={() => toggle(item.id)}
-                style={{
-                  background: 'linear-gradient(145deg, #111116 0%, #0D0D10 100%)',
-                  border: isSel ? '1px solid rgba(184,149,42,0.6)' : '1px solid rgba(255,255,255,0.06)',
-                  boxShadow: isSel ? '0 0 14px rgba(184,149,42,0.18)' : 'none',
-                }}>
-                {item.image && <img src={item.image} alt={item.name} className="w-full h-full object-cover" />}
+              <motion.div
+                layout
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                key={item.id}
+                onClick={() => toggleSelect(item.id)}
+                className={`group relative aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer bg-[#1C1C1E] transition-all duration-300 ${
+                  isSelected ? 'ring-2 ring-white ring-offset-2 ring-offset-black' : 'hover:ring-1 hover:ring-white/30'
+                }`}
+              >
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  loading="lazy"
+                />
 
-                {/* Select check */}
-                <div className="absolute top-2 left-2 w-5 h-5 rounded-full flex items-center justify-center transition-all"
-                  style={{
-                    background: isSel ? '#B8952A' : 'rgba(0,0,0,0.5)',
-                    border: isSel ? 'none' : '1px solid rgba(255,255,255,0.3)',
-                  }}>
-                  {isSel && <Check size={11} className="text-black" />}
+                {/* Scrim Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                {/* Selection Checkmark */}
+                <div className="absolute top-4 left-4 z-10">
+                  <div className={`w-6 h-6 rounded-full border flex items-center justify-center transition-colors duration-200 ${
+                    isSelected ? 'bg-white border-white text-black' : 'border-white/40 bg-black/40 backdrop-blur-md opacity-0 group-hover:opacity-100 text-transparent'
+                  }`}>
+                    <Check size={14} strokeWidth={3} />
+                  </div>
                 </div>
 
-                {/* Hover overlay */}
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200
-                  bg-gradient-to-t from-black/85 via-transparent to-transparent flex flex-col justify-end p-3">
-                  <p className="text-[9px] font-medium text-white/90 truncate">{item.name || 'Untitled'}</p>
-                  <div className="flex items-center justify-between mt-1">
-                    <span className="text-[7px] font-mono text-white/40 truncate">
-                      {(item.anchors || [])[0] || item.category || '—'}
-                    </span>
+                {/* Hover Metadata */}
+                <div className="absolute bottom-0 left-0 w-full p-5 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                  <h3 className="text-white text-[13px] font-semibold truncate mb-1">{item.name || 'Untitled Asset'}</h3>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="text-[#86868B] text-[10px] uppercase tracking-wider">{item.category || 'Uncategorized'}</span>
+                      {item.dna && <Sparkles size={10} className="text-[#86868B]" />}
+                    </div>
                     <button
                       onClick={e => { e.stopPropagation(); downloadAsset(item); }}
-                      className="flex items-center gap-1 px-2 py-1 rounded bg-black/60 border border-white/15 text-white/80 text-[7px] font-mono tracking-[0.15em] uppercase hover:border-[#B8952A]/60 transition-all">
-                      <Download size={9} /> Save
+                      className="px-3 py-1.5 rounded-full bg-white/20 hover:bg-white/30 backdrop-blur-md text-white text-[10px] font-medium transition-colors"
+                    >
+                      Save
                     </button>
                   </div>
                 </div>
