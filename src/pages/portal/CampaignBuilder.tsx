@@ -11,6 +11,8 @@ import { PHOTOGRAPHY_PRESETS } from '../../lib/photographyPresets';
 import { LOCATION_PRESETS } from '../../lib/locationPresets';
 import { ANCHOR_TYPES } from '../../lib/skuConstants';
 import { MapPin, ChevronRight, Plus, X, Shirt, Wand2, Upload } from 'lucide-react';
+import { CreativePropsGallery } from '../../components/CreativePropsGallery';
+import type { CreativeProp } from '../../lib/creativeProps';
 
 const ANCHOR_LABEL: Record<string, string> = Object.fromEntries(
   ANCHOR_TYPES.map(a => [a.id, a.label]),
@@ -58,6 +60,69 @@ const SKIN_TONES = [
   { id: 'brown',     label: 'Brown',      hex: '#8D5524' },
   { id: 'chocolate', label: 'Chocolate',  hex: '#4A2912' },
   { id: 'ebony',     label: 'Deep Ebony', hex: '#2C1A0E' },
+];
+
+// ─── Editorial Direction (photo style classification) ─────────────────────────
+const PHOTO_STYLE_OPTIONS = [
+  { id: 'full-spread',             name: 'Full Spread',    pub: 'Auto-diversify' },
+  { id: 'HIGH_FASHION_EDITORIAL',  name: 'High Fashion',   pub: 'Vogue · i-D' },
+  { id: 'LUXURY_BRAND_CAMPAIGN',   name: 'Brand Campaign', pub: 'Chanel · Row' },
+  { id: 'STREET_STYLE_CANDID',     name: 'Street Fashion', pub: 'Sartorialist' },
+  { id: 'AVANT_GARDE_COUTURE',     name: 'Avant Garde',    pub: 'Tim Walker' },
+  { id: 'BEAUTY_EDITORIAL',        name: 'Beauty Focus',   pub: 'Allure' },
+  { id: 'LIFESTYLE_EDITORIAL',     name: 'Lifestyle',      pub: 'Kinfolk' },
+  { id: 'FINE_ART_PORTRAIT',       name: 'Fine Portrait',  pub: 'Leibovitz' },
+  { id: 'FASHION_MAGAZINE_SPREAD', name: 'Magazine',        pub: 'BAZAAR' },
+  { id: 'LUXURY_CATALOG',          name: 'Lux Catalog',    pub: 'Net-a-Porter' },
+];
+
+const CAMERA_FORMAT_OPTIONS = [
+  'Phase One 150MP · 80mm', 'Hasselblad H6D · 100mm', 'Leica M · 35mm Film',
+  'Canon 1DX · 85mm', 'Contax 645 · 80mm Film', '4x5 Large Format Film',
+  '35mm Disposable Film', 'Canon AE-1 · 50mm Film',
+];
+
+const MODEL_ARCHETYPE_OPTIONS = [
+  'High Fashion', 'Commercial', 'Androgynous', 'Beauty',
+  'Curve Editorial', 'Athletic', 'Petite', 'Distinguished',
+];
+
+const POSE_OPTIONS = [
+  'Auto', 'Power Stand', 'Editorial Lean', 'Walking Motion', 'Seated Drape',
+  'Over Shoulder', 'Hands Active', 'Full Extension', 'Candid Moment',
+  'Contraposto', 'Profile Silhouette',
+];
+
+const EXPRESSION_OPTIONS = [
+  'Auto', 'Fierce', 'Soft Romantic', 'Candid Joy', 'Cold Editorial',
+  'Introspective', 'Sensual', 'Confident Direct',
+];
+
+const AGE_RANGE_OPTIONS = [
+  'Emerging (18–24)', 'Prime Editorial (25–35)', 'Established (35–45)',
+  'Mature Luxury (45–55)', 'Distinguished (55+)',
+];
+
+const SHOT_TYPE_OPTIONS = [
+  'Full Body', '3/4 Body', 'Waist Up', 'Portrait', 'Beauty Close',
+  'Detail Shot', 'Environmental Scale',
+];
+
+const ATMOSPHERE_OPTIONS = [
+  'Auto', 'Golden Hour', 'Overcast Soft', 'Blue Hour', 'Harsh Midday',
+  'Misty Rain', 'Dramatic Storm', 'Snow Winter', 'Heat Haze',
+];
+
+const STYLING_OPTIONS = [
+  'Auto', 'Minimal Clean', 'Full Editorial', 'Street Cast',
+  'Luxury Campaign', 'Sport Luxe',
+];
+
+const GENDER_OPTIONS = ['Female', 'Male', 'Unisex (Androgynous)'];
+
+const STRATEGY_OPTIONS = [
+  { id: 'change', label: 'AI Reimagine', sub: 'Generate new model' },
+  { id: 'preserve', label: 'Preserve Identity', sub: 'Keep exact face' },
 ];
 
 // ─── Agent Pipeline Strip ─────────────────────────────────────────────────────
@@ -448,6 +513,21 @@ export default function CampaignBuilder() {
   const [outputMode,        setOutputMode]        = useState<'still' | 'video'>('still');
   const [campaignName, setCampaignName] = useState('');
 
+  // ── Consumer IP: full Director Console state ──────────────────────────────
+  const [photoDirection,  setPhotoDirection]  = useState('full-spread');
+  const [cameraFormat,    setCameraFormat]    = useState('Phase One 150MP · 80mm');
+  const [modelArchetype,  setModelArchetype]  = useState('High Fashion');
+  const [poseDirection,   setPoseDirection]   = useState('Auto');
+  const [expression,      setExpression]      = useState('Auto');
+  const [ageRange,        setAgeRange]        = useState('Prime Editorial (25–35)');
+  const [shotType,        setShotType]        = useState('Full Body');
+  const [atmosphere,      setAtmosphere]      = useState('Auto');
+  const [styling,         setStyling]         = useState('Auto');
+  const [gender,          setGender]          = useState('Female');
+  const [strategy,        setStrategy]        = useState<'change' | 'preserve'>('change');
+  const [showCreativeProps, setShowCreativeProps] = useState(false);
+  const [activePropId,      setActivePropId]      = useState<string | null>(null);
+
   // Generation state
   const [isForging,        setIsForging]        = useState(false);
   const [slots,            setSlots]            = useState<string[]>(Array(6).fill(''));
@@ -464,6 +544,21 @@ export default function CampaignBuilder() {
 
   const allComplete = slots.every(s => !!s);
   const anyComplete = slots.some(s => !!s);
+
+  // ── Creative Props handler — applies full prop config ─────────────────────
+  const handleCreativePropSelect = (prop: CreativeProp, sceneIndex = 0) => {
+    setPhotoDirection(prop.config.photoDirection);
+    if (!lockedParams.includes('lighting')) setLighting(prop.config.lighting);
+    if (!lockedParams.includes('camera'))   setCamera(prop.config.camera);
+    setCameraFormat(prop.config.cameraFormat);
+    setColorGrade(prop.config.colorGrade);
+    setPrompt(prop.config.userPrompts[sceneIndex] ?? prop.config.userPrompts[0]);
+    if (prop.config.locationPreset) {
+      setLocation(prop.config.locationPreset.id);
+      setCustomBg(null);
+    }
+    setActivePropId(prop.id);
+  };
 
   async function handleForge() {
     if (!canForge() || isForging || !activeSku) return;
@@ -490,7 +585,7 @@ export default function CampaignBuilder() {
         brandId:  brand?.brandId,
         config: {
           anchors:       isOutfit ? anchorUnion : [activeSku.anchorType],
-          strategy:      'change',
+          strategy,
           lighting,
           camera,
           colorGrade,
@@ -500,8 +595,18 @@ export default function CampaignBuilder() {
           background:     customBg ? 'custom-bg' : undefined,
           backgroundImage: customBg || undefined,
           userPrompt:    prompt || undefined,
-          gender:        'female',
+          gender:        gender.toLowerCase(),
           sourceImage:   activeSku.referenceImage || '',
+          // ── Consumer IP fields ──────────────────────────────────────────
+          photoDirection,
+          cameraFormat,
+          modelArchetype,
+          pose:       poseDirection !== 'Auto' ? poseDirection : undefined,
+          expression: expression !== 'Auto' ? expression : undefined,
+          ageRange,
+          shotType,
+          atmosphere: atmosphere !== 'Auto' ? atmosphere : undefined,
+          styling:    styling !== 'Auto' ? styling : undefined,
         },
       };
 
@@ -699,7 +804,7 @@ export default function CampaignBuilder() {
             )}
           </div>
 
-          {/* ── Photography Presets ──────────────────────────────────── */}
+          {/* ── Photography Presets ────────────────────────────────── */}
           <div>
             <div className="flex items-center justify-between mb-2">
               <p className="text-[7px] font-mono tracking-[0.4em] uppercase text-white/25">2. Photography Preset</p>
@@ -753,10 +858,33 @@ export default function CampaignBuilder() {
             })()}
           </div>
 
-          {/* ── Individual overrides ──────────────────────────────────── */}
+          {/* ── Editorial Direction ───────────────────────────────── */}
+          <div>
+            <p className="text-[7px] font-mono tracking-[0.4em] uppercase text-white/25 mb-2">3. Editorial Direction</p>
+            <div className="grid grid-cols-2 gap-1.5">
+              {PHOTO_STYLE_OPTIONS.map(style => {
+                const active = photoDirection === style.id;
+                return (
+                  <button key={style.id} onClick={() => setPhotoDirection(style.id)}
+                    className="flex flex-col gap-0.5 p-2 rounded text-left transition-all"
+                    style={{
+                      background: active ? 'rgba(184,149,42,0.10)' : 'rgba(255,255,255,0.02)',
+                      border: active ? '1px solid rgba(184,149,42,0.35)' : '1px solid rgba(255,255,255,0.06)',
+                    }}>
+                    <span className="text-[8px] font-mono leading-tight" style={{ color: active ? '#D4AF37' : 'rgba(255,255,255,0.50)' }}>
+                      {style.name}
+                    </span>
+                    <span className="text-[6px] font-mono text-white/20 leading-tight">{style.pub}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* ── Production ──────────────────────────────────────────── */}
           <div className="flex flex-col gap-3">
             <div className="flex items-center justify-between">
-              <p className="text-[7px] font-mono tracking-[0.4em] uppercase text-white/25">3. Fine Tune</p>
+              <p className="text-[7px] font-mono tracking-[0.4em] uppercase text-white/25">4. Production</p>
               {lockedParams.length > 0 && (
                 <span className="text-[6px] font-mono text-[#B8952A]/60 bg-[#B8952A]/10 border border-[#B8952A]/20 px-1.5 py-0.5 rounded tracking-[0.2em] uppercase">
                   Brand Kit Active
@@ -775,11 +903,54 @@ export default function CampaignBuilder() {
             <ConfigSelect label="Color Grade / Film Stock" value={colorGrade}
               locked={lockedParams.includes('colorGrade')}
               options={COLOR_GRADE_OPTIONS} onChange={setColorGrade} />
+
+            <ConfigSelect label="Camera Format / Optics" value={cameraFormat}
+              options={CAMERA_FORMAT_OPTIONS} onChange={setCameraFormat} />
+
+            <ConfigSelect label="Styling" value={styling}
+              options={STYLING_OPTIONS} onChange={setStyling} />
+          </div>
+
+          {/* ── Model Casting ─────────────────────────────────────────── */}
+          <div>
+            <p className="text-[7px] font-mono tracking-[0.4em] uppercase text-white/25 mb-2">5. Model Casting</p>
+            <div className="flex flex-col gap-3">
+              {/* Strategy Toggle */}
+              <div className="grid grid-cols-2 gap-1.5 mb-1">
+                {STRATEGY_OPTIONS.map(opt => {
+                  const active = strategy === opt.id;
+                  return (
+                    <button key={opt.id} onClick={() => setStrategy(opt.id as 'change'|'preserve')}
+                      className="flex flex-col gap-0.5 p-2 rounded text-left transition-all"
+                      style={{
+                        background: active ? 'rgba(184,149,42,0.10)' : 'rgba(255,255,255,0.02)',
+                        border: active ? '1px solid rgba(184,149,42,0.35)' : '1px solid rgba(255,255,255,0.06)',
+                      }}>
+                      <span className="text-[8px] font-mono leading-tight" style={{ color: active ? '#D4AF37' : 'rgba(255,255,255,0.50)' }}>
+                        {opt.label}
+                      </span>
+                      <span className="text-[6px] font-mono text-white/20 leading-tight">{opt.sub}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {strategy === 'change' && (
+                <>
+                  <ConfigSelect label="Gender" value={gender}
+                    options={GENDER_OPTIONS} onChange={setGender} />
+                  <ConfigSelect label="Model Archetype" value={modelArchetype}
+                    options={MODEL_ARCHETYPE_OPTIONS} onChange={setModelArchetype} />
+                  <ConfigSelect label="Age Range" value={ageRange}
+                    options={AGE_RANGE_OPTIONS} onChange={setAgeRange} />
+                </>
+              )}
+            </div>
           </div>
 
           {/* ── Skin Tone ─────────────────────────────────────────────── */}
           <div>
-            <p className="text-[7px] font-mono tracking-[0.4em] uppercase text-white/25 mb-2">4. Skin Tone</p>
+            <p className="text-[7px] font-mono tracking-[0.4em] uppercase text-white/25 mb-2">6. Skin Tone</p>
             <div className="grid grid-cols-4 gap-1.5">
               {SKIN_TONES.map(tone => {
                 const active = skinTone === tone.id;
@@ -805,9 +976,24 @@ export default function CampaignBuilder() {
             </div>
           </div>
 
+          {/* ── Shoot Direction ────────────────────────────────────────── */}
+          <div>
+            <p className="text-[7px] font-mono tracking-[0.4em] uppercase text-white/25 mb-2">7. Shoot Direction</p>
+            <div className="flex flex-col gap-3">
+              <ConfigSelect label="Expression" value={expression}
+                options={EXPRESSION_OPTIONS} onChange={setExpression} />
+              <ConfigSelect label="Pose Direction" value={poseDirection}
+                options={POSE_OPTIONS} onChange={setPoseDirection} />
+              <ConfigSelect label="Shot Type" value={shotType}
+                options={SHOT_TYPE_OPTIONS} onChange={setShotType} />
+              <ConfigSelect label="Atmosphere" value={atmosphere}
+                options={ATMOSPHERE_OPTIONS} onChange={setAtmosphere} />
+            </div>
+          </div>
+
           {/* ── Location / Background ─────────────────────────────────── */}
           <div>
-            <p className="text-[7px] font-mono tracking-[0.4em] uppercase text-white/25 mb-2">5. Location</p>
+            <p className="text-[7px] font-mono tracking-[0.4em] uppercase text-white/25 mb-2">8. Location</p>
             <button
               onClick={() => setLocationPickerOpen(true)}
               className="w-full flex items-center gap-2 px-3 py-2.5 rounded text-left transition-all"
@@ -917,9 +1103,31 @@ export default function CampaignBuilder() {
             </AnimatePresence>
           </div>
 
-          {/* ── Creative Direction ────────────────────────────────────── */}
+          {/* ── Scene Props ──────────────────────────────────── */}
           <div>
-            <p className="text-[7px] font-mono tracking-[0.4em] uppercase text-white/25 mb-2">6. Creative Direction</p>
+            <p className="text-[7px] font-mono tracking-[0.4em] uppercase text-white/25 mb-2">9. Scene Props</p>
+            <button
+              onClick={() => setShowCreativeProps(true)}
+              className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded text-[9px] font-mono tracking-[0.2em] uppercase transition-all"
+              style={{
+                background: activePropId ? 'rgba(184,149,42,0.10)' : 'rgba(255,255,255,0.02)',
+                border: activePropId ? '1px solid rgba(184,149,42,0.35)' : '1px solid rgba(255,255,255,0.08)',
+                color: activePropId ? '#D4AF37' : 'rgba(255,255,255,0.4)',
+              }}>
+              <Sparkles size={11} />
+              {activePropId ? activePropId.replace(/-/g, ' ') : 'Browse Scene Props'}
+            </button>
+            {activePropId && (
+              <button onClick={() => setActivePropId(null)}
+                className="w-full text-center text-[7px] font-mono text-white/20 hover:text-white/50 mt-1 transition-colors">
+                Clear Prop
+              </button>
+            )}
+          </div>
+
+          {/* ── Creative Direction ────────────────────────────── */}
+          <div>
+            <p className="text-[7px] font-mono tracking-[0.4em] uppercase text-white/25 mb-2">10. Creative Direction</p>
             <textarea
               value={prompt}
               onChange={e => setPrompt(e.target.value)}
@@ -932,7 +1140,7 @@ export default function CampaignBuilder() {
 
           {/* ── Output Mode ───────────────────────────────────────────── */}
           <div>
-            <p className="text-[7px] font-mono tracking-[0.4em] uppercase text-white/25 mb-2">7. Output</p>
+            <p className="text-[7px] font-mono tracking-[0.4em] uppercase text-white/25 mb-2">11. Output</p>
             <div className="grid grid-cols-2 gap-2">
               {([
                 { mode: 'still' as const, label: '6 Stills', sub: '3 credits' },
@@ -1093,9 +1301,14 @@ export default function CampaignBuilder() {
         {/* Config summary */}
         <div className="flex flex-col gap-2">
           {[
-            ['Lighting',    lighting],
-            ['Camera',      camera],
-            ['Color Grade', colorGrade],
+            ['Strategy',      strategy === 'change' ? 'AI Reimagine' : 'Preserve Face'],
+            ['Direction',     photoDirection === 'full-spread' ? 'Full Spread' : PHOTO_STYLE_OPTIONS.find(s => s.id === photoDirection)?.name || photoDirection],
+            ['Lighting',      lighting],
+            ['Camera',        camera],
+            ['Optics',        cameraFormat],
+            ['Color Grade',   colorGrade],
+            ['Archetype',     modelArchetype],
+            ['Shot Type',     shotType],
           ].map(([label, value]) => (
             <div key={label} className="flex flex-col gap-0.5">
               <span className="text-[6px] font-mono tracking-[0.3em] uppercase text-white/20">{label}</span>
@@ -1191,6 +1404,14 @@ export default function CampaignBuilder() {
           />
         )}
       </AnimatePresence>
+
+      {/* ── Creative Props Gallery modal ──────────────────────────────── */}
+      {showCreativeProps && (
+        <CreativePropsGallery
+          onSelect={handleCreativePropSelect}
+          onClose={() => setShowCreativeProps(false)}
+        />
+      )}
     </div>
   );
 }
