@@ -89,8 +89,18 @@ const USE_CASES = [
 const STEPS = ['Brand Identity', 'Use Cases', 'Visual DNA', 'Invite Team'];
 
 export default function BrandOnboarding() {
-  const { user, refreshBrand } = useAuth();
+  const { user, brand, refreshBrand } = useAuth();
   const navigate = useNavigate();
+
+  // If the user already has a brand (returned from a previous session), skip
+  // onboarding entirely. This prevents the step-4 skip loop where name is empty
+  // and BrandGate bounces the user back before refreshBrand completes.
+  React.useEffect(() => {
+    if (brand) {
+      sessionStorage.setItem('lux_onboarding_complete', '1');
+      navigate('/portal', { replace: true });
+    }
+  }, [brand, navigate]);
 
   const [step, setStep] = useState(0);
   const [name, setName] = useState('');
@@ -136,9 +146,9 @@ export default function BrandOnboarding() {
       });
       // 200 = created, 409 = already exists — both are valid to proceed
       if (res.ok || res.status === 409) {
-        // Set flag BEFORE navigating so BrandGate reads it on first render
         sessionStorage.setItem('lux_onboarding_complete', '1');
-        navigate('/portal');
+        await refreshBrand(); // hydrate AuthContext so BrandGate doesn't bounce back
+        navigate('/portal', { replace: true });
         return;
       }
       // Hard error — show it but don't loop
@@ -146,9 +156,9 @@ export default function BrandOnboarding() {
       console.error('[Onboarding] API error:', err);
     } catch (err) {
       console.error('[Onboarding] Submit error:', err);
-      // Still navigate — don't leave the user stuck
       sessionStorage.setItem('lux_onboarding_complete', '1');
-      navigate('/portal');
+      await refreshBrand().catch(() => {});
+      navigate('/portal', { replace: true });
     }
     setSubmitting(false);
   }
