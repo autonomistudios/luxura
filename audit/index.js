@@ -89,6 +89,7 @@ import {
 
 import {
   runVercelConfigTests,
+  runFirestoreIndexTests,
   runEnvPreflightTests,
   runApiSmokeTests,
 } from './tests/deployment.js';
@@ -149,6 +150,7 @@ async function main() {
   // ── SECTION 0: DEPLOYMENT CORRECTNESS (always runs) ──────────────────────
   console.log('\n\n▓▓▓ SECTION 0: DEPLOYMENT CORRECTNESS ▓▓▓');
   await runSuite('Vercel Config',                runVercelConfigTests);
+  await runSuite('Firestore Index Coverage',     runFirestoreIndexTests);
   await runSuite('Env Var Preflight',            runEnvPreflightTests);
 
   // ── SECTION 1: PROMPT ARCHITECTURE ────────────────────────────────────────

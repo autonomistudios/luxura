@@ -197,6 +197,84 @@ export async function runVercelConfigTests() {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// SUITE 1b: FIRESTORE INDEX COVERAGE (static)
+// Every collection-group query (allDescendants:true) with a WHERE filter or
+// orderBy needs a declared index. A missing one returns 400 at runtime and
+// silently breaks the feature — exactly the bug that broke brand membership
+// lookup (members.uid) and would have silently broken the campaign-agent cron
+// (jobs status+createdAt). This asserts firestore.indexes.json covers them.
+// ─────────────────────────────────────────────────────────────────────────────
+export async function runFirestoreIndexTests() {
+  const results = [];
+  console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  console.log('  DEPLOYMENT: FIRESTORE INDEX COVERAGE');
+  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+
+  let cfg;
+  try {
+    cfg = JSON.parse(readFileSync(join(ROOT, 'firestore.indexes.json'), 'utf8'));
+  } catch {
+    results.push(assert(false, 'firestore.indexes.json is present and valid JSON'));
+    return results;
+  }
+  results.push(assert(true, 'firestore.indexes.json is present and valid JSON'));
+
+  const fieldOverrides = cfg.fieldOverrides || [];
+  const composites     = cfg.indexes || [];
+
+  // Helper: is there a COLLECTION_GROUP single-field index for cg.field?
+  function hasFieldGroupIndex(cg, field) {
+    const fo = fieldOverrides.find(f => f.collectionGroup === cg && f.fieldPath === field);
+    return !!fo && (fo.indexes || []).some(i => i.queryScope === 'COLLECTION_GROUP');
+  }
+  // Helper: is there a composite collection-group index covering these fieldPaths (in order)?
+  function hasCompositeIndex(cg, fieldPaths) {
+    return composites.some(idx =>
+      idx.collectionGroup === cg &&
+      idx.queryScope === 'COLLECTION_GROUP' &&
+      JSON.stringify((idx.fields || []).map(f => f.fieldPath)) === JSON.stringify(fieldPaths)
+    );
+  }
+
+  // ── Known collection-group queries in the codebase ─────────────────────────
+  // members.uid — resolveBrandContext / getUserBrands (brand membership lookup)
+  results.push(assert(
+    hasFieldGroupIndex('members', 'uid'),
+    'Index declared: members.uid (COLLECTION_GROUP) — brand membership lookup',
+    'Missing → brands/auth returns 403 "not a member" → onboarding loop',
+  ));
+
+  // jobs (status, createdAt) — campaign-agent cron job queue
+  results.push(assert(
+    hasCompositeIndex('jobs', ['status', 'createdAt']),
+    'Index declared: jobs [status, createdAt] (COLLECTION_GROUP) — campaign-agent queue',
+    'Missing → cron query 400s → async batch jobs never process (silent)',
+  ));
+
+  // ── Drift guard: scan code for collection-group queries we might have missed ─
+  // Surfaces (as a warning) any allDescendants query so new ones get an index.
+  const sources = [
+    'lib/forge/services/brand-auth.js',
+    'lib/forge/services/brand-service.js',
+    'api/agents/campaign-agent.js',
+  ];
+  let cgQueryCount = 0;
+  for (const src of sources) {
+    try {
+      const txt = readFileSync(join(ROOT, src), 'utf8');
+      cgQueryCount += (txt.match(/allDescendants:\s*true/g) || []).length;
+    } catch {}
+  }
+  results.push(assert(
+    cgQueryCount >= 3,
+    `Found ${cgQueryCount} collection-group queries in audited sources (members ×2, jobs ×1)`,
+    'If this count grew, a new collection-group query was added — ensure it has an index',
+  ));
+
+  return results;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // SUITE 2: ENV VAR PREFLIGHT (static)
 // ─────────────────────────────────────────────────────────────────────────────
 export async function runEnvPreflightTests() {
