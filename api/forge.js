@@ -78,6 +78,37 @@ const ISOLATION_INSTRUCTIONS = {
 const defaultIsolation = (anc) =>
   `Re-photograph ONLY the ${ANCHOR_LABELS[anc] || anc} from this reference image, exactly as it appears — same color, texture, and detail — without showing the person's face or any identifying features. Background: clean studio.`;
 
+/**
+ * Normalize any image input into { data: <base64>, mimeType }.
+ * Accepts a data-URL, a raw base64 string, OR an http(s) URL (e.g. a Firebase
+ * Storage SKU reference). URLs are fetched and base64-encoded because Gemini's
+ * inlineData.data requires raw base64 bytes — passing a URL yields a 400
+ * "Base64 decoding failed", which silently degraded SKU generation to text-only
+ * (the root cause of garment drift). Returns { data: null } on absence/failure.
+ */
+async function resolveImageInput(input, fallbackMime = 'image/jpeg') {
+  if (!input || typeof input !== 'string') return { data: null, mimeType: fallbackMime };
+  const s = input.trim();
+  if (/^https?:\/\//i.test(s)) {
+    try {
+      const resp = await fetch(s);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      const buf = Buffer.from(await resp.arrayBuffer());
+      const mimeType = (resp.headers.get('content-type') || fallbackMime).split(';')[0].trim();
+      return { data: buf.toString('base64'), mimeType };
+    } catch (err) {
+      console.warn(`[FORGE] Image fetch failed for ${s.slice(0, 90)} — ${err.message}`);
+      return { data: null, mimeType: fallbackMime };
+    }
+  }
+  if (/^data:/i.test(s) && s.includes(',')) {
+    const [header, data] = s.split(',');
+    const mimeMatch = header.match(/^data:(image\/[\w+.-]+);/i);
+    return { data: data.trim().replace(/\s/g, ''), mimeType: mimeMatch ? mimeMatch[1] : fallbackMime };
+  }
+  return { data: s.replace(/\s/g, ''), mimeType: fallbackMime };
+}
+
 // ─── Handler ──────────────────────────────────────────────────────────────────
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -198,17 +229,12 @@ export default async function handler(req, res) {
     const sourceImage = config?.sourceImage;
 
     if (sourceImage) {
-      console.log(`[FORGE] DNA payload: ${(sourceImage.length / 1024 / 1024).toFixed(2)}MB`);
-      if (sourceImage.includes(',')) {
-        const [header, data] = sourceImage.split(',');
-        rawImageData = data.trim().replace(/\s/g, '');
-        const mimeMatch = header.match(/^data:(image\/\w+);/);
-        rawMimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
-      } else {
-        rawImageData = sourceImage.trim().replace(/\s/g, '');
-      }
+      const resolved = await resolveImageInput(sourceImage, rawMimeType);
+      rawImageData = resolved.data;
+      rawMimeType  = resolved.mimeType;
+      console.log(`[FORGE] Source image: ${rawImageData ? (rawImageData.length / 1024 / 1024).toFixed(2) + 'MB base64 (' + rawMimeType + ')' : 'UNRESOLVED'}`);
     }
-    if (!rawImageData) throw new Error('DNA_IMAGE_MISSING: No source image received by Forge.');
+    if (!rawImageData) throw new Error('DNA_IMAGE_MISSING: source image could not be resolved (URL fetch failed or empty).');
 
     // ── Garment image ──────────────────────────────────────────────────────
     let garmentImageData = null;
@@ -216,16 +242,11 @@ export default async function handler(req, res) {
     const garmentImageRaw = config?.garmentImage;
 
     if (garmentImageRaw) {
-      console.log(`[FORGE] GARMENT STUDIO MODE — garment image received (${(garmentImageRaw.length / 1024 / 1024).toFixed(2)}MB)`);
-      if (garmentImageRaw.includes(',')) {
-        const [header, data] = garmentImageRaw.split(',');
-        garmentImageData = data.trim().replace(/\s/g, '');
-        const mimeMatch = header.match(/^data:(image\/\w+);/);
-        garmentMimeType = mimeMatch ? mimeMatch[1] : 'image/jpeg';
-      } else {
-        garmentImageData = garmentImageRaw.trim().replace(/\s/g, '');
-      }
-      anchors = ['FULL_OUTFIT'];
+      const resolved  = await resolveImageInput(garmentImageRaw, garmentMimeType);
+      garmentImageData = resolved.data;
+      garmentMimeType  = resolved.mimeType;
+      console.log(`[FORGE] Garment Studio mode — garment image ${garmentImageData ? 'resolved (' + garmentMimeType + ')' : 'UNRESOLVED'}`);
+      if (garmentImageData) anchors = ['FULL_OUTFIT'];
     }
 
     // ── Custom background / environment reference image ────────────────────

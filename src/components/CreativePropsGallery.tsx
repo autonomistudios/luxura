@@ -21,6 +21,21 @@ const CATEGORY_LABELS: Record<string, string> = {
   cinematic:     'Cinematic',
 };
 
+// Category → fallback cover, using the AI-generated DNA imagery already shipped in
+// public/assets/dna. Guarantees every prop card shows fashion imagery even before a
+// bespoke per-prop cover is generated (previously cards rendered image-less, which
+// read as "just a list of scenes").
+const CATEGORY_COVER: Record<string, string> = {
+  editorial:     '/assets/dna/01-high-fashion.jpg',
+  campaign:      '/assets/dna/02-luxury-campaign.jpg',
+  street:        '/assets/dna/03-street-style.jpg',
+  'avant-garde': '/assets/dna/04-avant-garde.jpg',
+  beauty:        '/assets/dna/05-beauty.jpg',
+  lifestyle:     '/assets/dna/06-lifestyle.jpg',
+  'fine-art':    '/assets/dna/07-fine-art.jpg',
+  cinematic:     '/assets/dna/08-luxury-catalog.jpg',
+};
+
 export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSelect, onClose }) => {
   const [filter, setFilter]         = useState<PropCategory | 'all'>('all');
   const [covers, setCovers]         = useState<Record<string, string>>({});
@@ -133,7 +148,8 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {filtered.map(prop => {
-              const coverUrl   = covers[prop.id];
+              const generatedCover = covers[prop.id];
+              const coverUrl       = generatedCover || CATEGORY_COVER[prop.category] || '';
               const isSelected = selected === prop.id;
               const isGenerating = generating === prop.id;
               const activeIdx  = getSceneIdx(prop.id);
@@ -162,26 +178,23 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
                     className="relative w-full flex-shrink-0 overflow-hidden"
                     style={{ paddingBottom: '62%' }}
                   >
-                    {coverUrl ? (
-                      <img
-                        src={coverUrl}
-                        alt={prop.name}
-                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div
-                        className="absolute inset-0 flex flex-col items-center justify-center gap-2"
-                        style={{ background: 'rgba(15,15,15,1)' }}
+                    <img
+                      src={coverUrl}
+                      alt={prop.name}
+                      loading="lazy"
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      style={{ filter: generatedCover ? 'none' : 'saturate(0.9) brightness(0.8) contrast(1.05)' }}
+                    />
+                    {/* Bespoke cover generation — optional, surfaced on hover only when no custom cover exists yet */}
+                    {!generatedCover && (
+                      <button
+                        onClick={e => handleGenerateCover(e, prop)}
+                        disabled={!!generating}
+                        className="absolute bottom-2 right-2 z-10 px-2 py-1 text-[6px] font-mono uppercase tracking-[0.2em] border opacity-0 group-hover:opacity-100 transition-opacity duration-200 disabled:opacity-40"
+                        style={{ borderColor: 'rgba(197,162,83,0.4)', color: 'rgba(197,162,83,0.85)', background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(8px)' }}
                       >
-                        <button
-                          onClick={e => handleGenerateCover(e, prop)}
-                          disabled={!!generating}
-                          className="px-3 py-1.5 text-[7px] font-mono uppercase tracking-[0.2em] border transition-all duration-200 disabled:opacity-40"
-                          style={{ borderColor: 'rgba(197,162,83,0.3)', color: 'rgba(197,162,83,0.6)' }}
-                        >
-                          {isGenerating ? '· Generating ·' : '✦ Generate Preview'}
-                        </button>
-                      </div>
+                        {isGenerating ? '· Generating ·' : '✦ Custom Cover'}
+                      </button>
                     )}
                     <div
                       className="absolute inset-0 pointer-events-none"
