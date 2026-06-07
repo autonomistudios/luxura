@@ -21,7 +21,7 @@
 import PromptArchitect     from '../lib/forge/agents/agent03-prompt-architect.js';
 
 // ── Lib: services ──────────────────────────────────────────────────────────────
-import { verifyIdTokenREST, checkRateLimit, deductCreditsREST, setFirestoreREST, updateFirestoreREST } from '../lib/forge/services/gcp-raw.js';
+import { verifyIdTokenREST, checkRateLimit, deductCreditsREST, setFirestoreREST, updateFirestoreREST, uploadStorageREST } from '../lib/forge/services/gcp-raw.js';
 import { loadAuraProfile, updateAuraProfile }              from '../lib/forge/services/aura-profile.js';
 import { createGenAI, withGeminiBackoff }                  from '../lib/forge/services/gemini-client.js';
 
@@ -1047,9 +1047,34 @@ Rules: ONLY correct slots that actually violate an invariant above. Do not rewri
     }).catch((e) => console.error('[FORGE] Firestore write failed:', e.message));
 
     // ── SSE helper ─────────────────────────────────────────────────────────
+    // Generated images are 2K base64 (multi-MB each). Streaming six over SSE
+    // exceeds Vercel's serverless response cap — the stream is severed after
+    // ~2 images (the "only 2 of 6 rendered" bug). So upload each finished image
+    // to public Storage and stream its small URL instead. The internal
+    // masterGrid keeps the original data-URL so the vault/history contract is
+    // unchanged. Uploads are awaited (below) before the 'done' signal.
+    const liveBucket = process.env.FIREBASE_STORAGE_BUCKET || process.env.VITE_FIREBASE_STORAGE_BUCKET;
+    const streamPromises = [];
     const streamSlot = (slotIndex, image) => {
-      try { res.write(`data: ${JSON.stringify({ type: 'image', slot: slotIndex, image })}\n\n`); }
-      catch { /* client disconnected */ }
+      const p = (async () => {
+        let payload = image;
+        try {
+          const m = /^data:(image\/[\w+.-]+);base64,(.+)$/s.exec(image);
+          if (m && liveBucket) {
+            const mime = m[1];
+            const ext  = mime.includes('png') ? 'png' : mime.includes('webp') ? 'webp' : 'jpg';
+            const buf  = Buffer.from(m[2], 'base64');
+            const path = `forge-live/${forgeUid}/${entropy}/slot_${slotIndex}_${Date.now()}.${ext}`;
+            payload = await uploadStorageREST(liveBucket, path, buf, mime);
+          }
+        } catch (err) {
+          console.warn(`[FORGE] Slot ${slotIndex + 1} upload failed (${err.message}) — streaming inline base64`);
+          payload = image; // fall back to inline data-URL
+        }
+        try { res.write(`data: ${JSON.stringify({ type: 'image', slot: slotIndex, image: payload })}\n\n`); }
+        catch { /* client disconnected */ }
+      })();
+      streamPromises.push(p);
     };
 
     // ── Pass 1: 3 concurrent workers, stream each success immediately ──────
@@ -1138,6 +1163,9 @@ Rules: ONLY correct slots that actually violate an invariant above. Do not rewri
       lighting:      config?.lighting   || null,
       imagesProduced: masterGrid.length,
     }).catch(() => {});
+
+    // Ensure every per-slot image upload has flushed to the client before 'done'
+    await Promise.allSettled(streamPromises);
 
     clearInterval(heartbeat);
     try {
