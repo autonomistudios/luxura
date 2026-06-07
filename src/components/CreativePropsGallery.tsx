@@ -43,6 +43,8 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
   const [generating, setGenerating] = useState<string | null>(null);
   // Active scene index per prop card
   const [sceneIdx, setSceneIdx]     = useState<Record<string, number>>({});
+  // Prop opened in the full-text scene-variation detail view
+  const [detail, setDetail]         = useState<CreativeProp | null>(null);
 
   useEffect(() => {
     getDocs(collection(db, 'prop-covers')).then(snap => {
@@ -88,6 +90,76 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
       setGenerating(null);
     }
   };
+
+  // ── Scene-variation detail view — all 5–6 variations as full readable text ──
+  if (detail) {
+    return (
+      <div className="fixed inset-0 z-50 flex flex-col" style={{ background: 'rgba(0,0,0,0.97)' }}>
+        <div className="flex-shrink-0 px-6 pt-8 pb-4 border-b" style={{ borderColor: 'rgba(255,255,255,0.05)' }}>
+          <div className="max-w-4xl mx-auto flex items-start justify-between">
+            <div>
+              <button
+                onClick={() => setDetail(null)}
+                className="text-[8px] font-mono uppercase tracking-[0.4em] text-[#C5A253]/60 hover:text-[#C5A253] transition-colors mb-3"
+              >
+                ← All Scenes
+              </button>
+              <p className="text-[9px] font-mono uppercase tracking-[0.6em] text-[#C5A253]/50 mb-1">
+                {detail.category} · {detail.config.userPrompts.length} Scene Variation{detail.config.userPrompts.length === 1 ? '' : 's'}
+              </p>
+              <h2 className="text-xl font-light tracking-[0.12em] text-white/90">{detail.name}</h2>
+              <p className="text-[8px] font-mono uppercase tracking-[0.3em] text-white/25 mt-1">
+                Click any scene to inject it — fully editable afterward in Creative Direction
+              </p>
+            </div>
+            <button
+              onClick={onClose}
+              className="text-[8px] font-mono uppercase tracking-[0.4em] text-white/20 hover:text-white/60 transition-colors pt-1"
+            >
+              [ Close ]
+            </button>
+          </div>
+        </div>
+
+        <div className="flex-1 overflow-y-auto px-6 py-6">
+          <div className="max-w-4xl mx-auto flex flex-col gap-4">
+            {detail.config.userPrompts.map((scene, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => { onSelect(detail, idx); onClose(); }}
+                className="text-left border p-5 transition-all duration-200 group focus:outline-none focus:ring-1 focus:ring-[#C5A253]/50"
+                style={{ borderColor: 'rgba(255,255,255,0.08)', background: 'rgba(8,8,8,0.9)' }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(197,162,83,0.4)'; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.08)'; }}
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-[8px] font-mono uppercase tracking-[0.3em] text-[#C5A253]">
+                    Scene {String(idx + 1).padStart(2, '0')}
+                  </span>
+                  <span className="text-[7px] font-mono uppercase tracking-[0.25em] text-white/25 group-hover:text-[#C5A253]/70 transition-colors">
+                    ✦ Inject &amp; Edit →
+                  </span>
+                </div>
+                <p className="text-[12px] leading-[1.75] text-white/55" style={{ fontFamily: 'Georgia, serif' }}>
+                  {scene}
+                </p>
+              </button>
+            ))}
+          </div>
+
+          {/* Prop production settings — context for the scenes */}
+          <div className="max-w-4xl mx-auto mt-6 pt-5 border-t flex flex-wrap gap-x-4 gap-y-1 text-[7px] font-mono uppercase tracking-[0.2em] text-white/25"
+            style={{ borderColor: 'rgba(255,255,255,0.05)' }}>
+            <span>{detail.config.lighting}</span><span>·</span>
+            <span>{detail.config.colorGrade}</span><span>·</span>
+            <span>{detail.config.cameraFormat}</span>
+            {detail.config.locationPreset && (<><span>·</span><span>{detail.config.locationPreset.label}</span></>)}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -159,7 +231,7 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
                 <button
                   key={prop.id}
                   type="button"
-                  onClick={() => handleSelect(prop)}
+                  onClick={() => setDetail(prop)}
                   className="flex flex-col text-left w-full border cursor-pointer transition-all duration-300 group focus:outline-none focus:ring-1 focus:ring-[#C5A253]/50"
                   style={{
                     borderColor: isSelected ? 'rgba(197,162,83,0.8)' : 'rgba(255,255,255,0.06)',
@@ -288,9 +360,9 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
                         borderColor: 'rgba(197,162,83,0.3)',
                         color: 'rgba(197,162,83,0.65)',
                       }}
-                      onClick={e => { e.stopPropagation(); handleSelect(prop); }}
+                      onClick={e => { e.stopPropagation(); setDetail(prop); }}
                     >
-                      {hasVariants ? `✦ Use Scene ${activeIdx + 1}` : '✦ Use This Scene'}
+                      {`✦ View ${prop.config.userPrompts.length} Scene${prop.config.userPrompts.length === 1 ? '' : 's'} →`}
                     </button>
                   </div>
                 </button>
