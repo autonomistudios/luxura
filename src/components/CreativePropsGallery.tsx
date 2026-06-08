@@ -122,30 +122,49 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
         </div>
 
         <div className="flex-1 overflow-y-auto px-6 py-6">
-          <div className="max-w-4xl mx-auto flex flex-col gap-4">
-            {detail.config.userPrompts.map((scene, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => { onSelect(detail, idx); onClose(); }}
-                className="text-left border p-5 transition-all duration-200 group focus:outline-none focus:ring-1 focus:ring-[#C5A253]/50"
-                style={{ borderColor: 'rgba(255,255,255,0.08)', background: 'rgba(8,8,8,0.9)' }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(197,162,83,0.4)'; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.08)'; }}
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-[8px] font-mono uppercase tracking-[0.3em] text-[#C5A253]">
-                    Scene {String(idx + 1).padStart(2, '0')}
-                  </span>
-                  <span className="text-[7px] font-mono uppercase tracking-[0.25em] text-white/25 group-hover:text-[#C5A253]/70 transition-colors">
-                    ✦ Inject &amp; Edit →
-                  </span>
-                </div>
-                <p className="text-[12px] leading-[1.75] text-white/55" style={{ fontFamily: 'Georgia, serif' }}>
-                  {scene}
-                </p>
-              </button>
-            ))}
+          <div className="max-w-4xl mx-auto flex flex-col gap-6">
+            {/* Cover image — the prop's hero frame */}
+            <div className="relative w-full rounded-xl overflow-hidden" style={{ aspectRatio: '16 / 9', maxHeight: '46vh' }}>
+              <img
+                src={covers[detail.id] || `/assets/props/${detail.id}.jpg`}
+                alt={detail.name}
+                onError={e => { const t = e.currentTarget; t.onerror = null; const f = CATEGORY_COVER[detail.category]; if (f && !t.src.endsWith(f)) t.src = f; }}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+            </div>
+
+            {/* Scene selector — pick one; the full prompt builds into Creative Direction (with your model + skin tone) */}
+            <div>
+              <p className="text-[8px] font-mono uppercase tracking-[0.3em] text-white/30 mb-3">
+                Choose a scene — it builds into Creative Direction below, with your model &amp; skin tone
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {detail.config.userPrompts.map((scene, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => { onSelect(detail, idx); onClose(); }}
+                    className="text-left border p-4 rounded-lg transition-all duration-200 group focus:outline-none focus:ring-1 focus:ring-[#C5A253]/50"
+                    style={{ borderColor: 'rgba(255,255,255,0.08)', background: 'rgba(8,8,8,0.9)' }}
+                    onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(197,162,83,0.4)'; }}
+                    onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.08)'; }}
+                  >
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="text-[8px] font-mono uppercase tracking-[0.3em] text-[#C5A253]">
+                        Scene {String(idx + 1).padStart(2, '0')}
+                      </span>
+                      <span className="text-[7px] font-mono uppercase tracking-[0.25em] text-white/25 group-hover:text-[#C5A253]/70 transition-colors">
+                        Select →
+                      </span>
+                    </div>
+                    <p className="text-[11px] leading-[1.6] text-white/45 line-clamp-2" style={{ fontFamily: 'Georgia, serif' }}>
+                      {scene}
+                    </p>
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Prop production settings — context for the scenes */}
@@ -332,13 +351,8 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
                       </div>
                     )}
 
-                    {/* Active scene prose */}
-                    <p
-                      className="text-[7.5px] leading-[1.7] text-white/50 mb-4 flex-1"
-                      style={{ fontFamily: 'Georgia, serif', fontStyle: 'italic' }}
-                    >
-                      {prop.config.userPrompts[activeIdx]}
-                    </p>
+                    {/* Prompt intentionally NOT shown here — it builds into Creative Direction on select */}
+                    <div className="flex-1" />
 
                     {/* Settings strip */}
                     <div
