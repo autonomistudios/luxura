@@ -1,4 +1,4 @@
-import { setFirestoreREST }               from '../lib/forge/services/gcp-raw.js';
+import { setFirestoreREST, getGcpAccessToken } from '../lib/forge/services/gcp-raw.js';
 import { createGenAI, withGeminiBackoff } from '../lib/forge/services/gemini-client.js';
 import { PXL_MODEL }                      from '../lib/forge/constants.js';
 import sharp                              from 'sharp';
@@ -36,15 +36,33 @@ function buildCoverSystem({ clean, hasRef }) {
 }
 
 
+// Read a cached cover's data-URL from Firestore (server-side, SA auth). Null if absent.
+async function getFirestoreCoverUrl(collection, id) {
+  try {
+    const { token, projectId } = await getGcpAccessToken();
+    const r = await fetch(
+      `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/${collection}/${encodeURIComponent(id)}`,
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    if (!r.ok) return null;
+    const doc = await r.json();
+    return doc?.fields?.coverUrl?.stringValue || null;
+  } catch { return null; }
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { propId, userPrompt, model: requestedModel, clean, refImage, refMime } = req.body ?? {};
+  const { propId, userPrompt, model: requestedModel, clean, refImage, refMime, sceneIndex } = req.body ?? {};
   if (!propId || !userPrompt) {
     return res.status(400).json({ error: 'propId and userPrompt required' });
   }
+
+  // Lazy per-scene cache: scene images live in `prop-scene-covers/<propId>__<idx>`.
+  const isScene   = Number.isInteger(sceneIndex) && sceneIndex >= 0;
+  const sceneDocId = isScene ? `${propId}__${sceneIndex}` : null;
 
   // Optional model override for A/B quality comparison; default = production Pro.
   const ALLOWED_MODELS = new Set(['gemini-3-pro-image', 'gemini-2.5-flash-image', 'gemini-3.1-flash-image']);
@@ -54,6 +72,15 @@ export default async function handler(req, res) {
   const hasRef = typeof refImage === 'string' && refImage.length > 50;
 
   try {
+    // Scene cache hit → return immediately, zero generation cost.
+    if (isScene) {
+      const cached = await getFirestoreCoverUrl('prop-scene-covers', sceneDocId);
+      if (cached) {
+        console.log(`[PROP COVER] Scene cache hit: ${sceneDocId}`);
+        return res.status(200).json({ coverUrl: cached, model: chosenModel, cached: true });
+      }
+    }
+
     const genAI = createGenAI();
     const model  = genAI.getGenerativeModel({ model: chosenModel });
     console.log(`[PROP COVER] Generating ${propId} | model=${chosenModel} | clean=${clean === true} | ref=${hasRef}`);
@@ -88,7 +115,11 @@ export default async function handler(req, res) {
 
     const coverUrl = `data:image/jpeg;base64,${compressed.toString('base64')}`;
 
-    if (!fullRes) {
+    if (isScene) {
+      await setFirestoreREST('prop-scene-covers', sceneDocId, {
+        coverUrl, propId, sceneIndex, generatedAt: new Date().toISOString(),
+      });
+    } else if (!fullRes) {
       await setFirestoreREST('prop-covers', propId, {
         coverUrl,
         propId,

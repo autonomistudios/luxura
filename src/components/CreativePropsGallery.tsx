@@ -43,8 +43,11 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
   const [generating, setGenerating] = useState<string | null>(null);
   // Active scene index per prop card
   const [sceneIdx, setSceneIdx]     = useState<Record<string, number>>({});
-  // Prop opened in the full-text scene-variation detail view
+  // Prop opened in the scene-variation detail view
   const [detail, setDetail]         = useState<CreativeProp | null>(null);
+  // Lazily-generated per-scene cover images, keyed `${propId}__${idx}`
+  const [sceneCovers, setSceneCovers] = useState<Record<string, string>>({});
+  const [sceneBusy,   setSceneBusy]   = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     getDocs(collection(db, 'prop-covers')).then(snap => {
@@ -53,6 +56,38 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
       setCovers(map);
     }).catch(() => {});
   }, []);
+
+  // Lazy per-scene generation: when a prop's detail opens, render any missing scene
+  // images on demand (scene 0 reuses the committed cover) and cache them. The endpoint
+  // returns cached scenes for free, so each scene is generated at most once, ever.
+  useEffect(() => {
+    if (!detail) return;
+    const prop = detail;
+    const pending = prop.config.userPrompts
+      .map((scene, idx) => ({ scene, idx, key: `${prop.id}__${idx}` }))
+      .filter(({ idx, key }) => idx !== 0 && !sceneCovers[key]);
+    if (!pending.length) return;
+    let cancelled = false;
+    const queue = [...pending];
+    const worker = async () => {
+      while (queue.length && !cancelled) {
+        const { scene, idx, key } = queue.shift()!;
+        setSceneBusy(b => ({ ...b, [key]: true }));
+        try {
+          const res  = await fetch('/api/generate-prop-cover', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ propId: prop.id, userPrompt: scene, sceneIndex: idx, clean: true }),
+          });
+          const data = await res.json();
+          if (!cancelled && data?.coverUrl) setSceneCovers(c => ({ ...c, [key]: data.coverUrl }));
+        } catch { /* leave placeholder on failure */ }
+        finally { if (!cancelled) setSceneBusy(b => ({ ...b, [key]: false })); }
+      }
+    };
+    Promise.all([worker(), worker()]); // concurrency 2
+    return () => { cancelled = true; };
+  }, [detail]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const filtered = filter === 'all'
     ? CREATIVE_PROPS
@@ -122,48 +157,49 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
         </div>
 
         <div className="flex-1 overflow-y-auto px-6 py-6">
-          <div className="max-w-4xl mx-auto flex flex-col gap-6">
-            {/* Cover image — the prop's hero frame */}
-            <div className="relative w-full rounded-xl overflow-hidden" style={{ aspectRatio: '16 / 9', maxHeight: '46vh' }}>
-              <img
-                src={covers[detail.id] || `/assets/props/${detail.id}.jpg`}
-                alt={detail.name}
-                onError={e => { const t = e.currentTarget; t.onerror = null; const f = CATEGORY_COVER[detail.category]; if (f && !t.src.endsWith(f)) t.src = f; }}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-            </div>
-
-            {/* Scene selector — pick one; the full prompt builds into Creative Direction (with your model + skin tone) */}
-            <div>
-              <p className="text-[8px] font-mono uppercase tracking-[0.3em] text-white/30 mb-3">
-                Choose a scene — it builds into Creative Direction below, with your model &amp; skin tone
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {detail.config.userPrompts.map((scene, idx) => (
+          <div className="max-w-5xl mx-auto">
+            <p className="text-[8px] font-mono uppercase tracking-[0.3em] text-white/30 mb-4">
+              Each scene renders on demand · click one to build it into Creative Direction, with your model &amp; skin tone
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {detail.config.userPrompts.map((scene, idx) => {
+                const key = `${detail.id}__${idx}`;
+                const img = idx === 0 ? (covers[detail.id] || `/assets/props/${detail.id}.jpg`) : sceneCovers[key];
+                return (
                   <button
                     key={idx}
                     type="button"
                     onClick={() => { onSelect(detail, idx); onClose(); }}
-                    className="text-left border p-4 rounded-lg transition-all duration-200 group focus:outline-none focus:ring-1 focus:ring-[#C5A253]/50"
+                    className="group text-left rounded-lg overflow-hidden border transition-all duration-200 focus:outline-none"
                     style={{ borderColor: 'rgba(255,255,255,0.08)', background: 'rgba(8,8,8,0.9)' }}
                     onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(197,162,83,0.4)'; }}
                     onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.08)'; }}
                   >
-                    <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-[8px] font-mono uppercase tracking-[0.3em] text-[#C5A253]">
+                    <div className="relative w-full overflow-hidden" style={{ aspectRatio: '4 / 5' }}>
+                      {img ? (
+                        <img src={img} alt={`Scene ${idx + 1}`}
+                          onError={e => { const t = e.currentTarget; t.onerror = null; const f = CATEGORY_COVER[detail.category]; if (f && !t.src.endsWith(f)) t.src = f; }}
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                      ) : (
+                        <div className="w-full h-full flex flex-col items-center justify-center gap-2 bg-white/[0.02]">
+                          {sceneBusy[key]
+                            ? <div className="w-7 h-7 rounded-full border-t-2 border-r-2 border-transparent animate-spin" style={{ borderTopColor: '#C5A253', borderRightColor: 'rgba(197,162,83,0.3)' }} />
+                            : <span className="text-[7px] font-mono uppercase tracking-[0.3em] text-white/20">Rendering…</span>}
+                        </div>
+                      )}
+                      <div className="absolute top-2 left-2 text-[7px] font-mono uppercase tracking-[0.25em] text-white bg-black/60 px-1.5 py-0.5 rounded">
                         Scene {String(idx + 1).padStart(2, '0')}
-                      </span>
-                      <span className="text-[7px] font-mono uppercase tracking-[0.25em] text-white/25 group-hover:text-[#C5A253]/70 transition-colors">
-                        Select →
-                      </span>
+                      </div>
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-to-t from-black/80 to-transparent flex items-end p-3">
+                        <span className="text-[8px] font-mono uppercase tracking-[0.3em] text-[#C5A253]">Select →</span>
+                      </div>
                     </div>
-                    <p className="text-[11px] leading-[1.6] text-white/45 line-clamp-2" style={{ fontFamily: 'Georgia, serif' }}>
+                    <p className="text-[10px] leading-[1.5] text-white/45 line-clamp-2 p-3" style={{ fontFamily: 'Georgia, serif' }}>
                       {scene}
                     </p>
                   </button>
-                ))}
-              </div>
+                );
+              })}
             </div>
           </div>
 
