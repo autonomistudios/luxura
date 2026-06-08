@@ -3,25 +3,22 @@ import { createGenAI, withGeminiBackoff } from '../lib/forge/services/gemini-cli
 import { PXL_MODEL }                      from '../lib/forge/constants.js';
 import sharp                              from 'sharp';
 
-const COVER_SYSTEM = `You are a world-class fashion photographer shooting THE COVER for Vogue Italia, W Magazine, CR Fashion Book, and the world's biggest luxury houses — published alongside Steven Meisel, Peter Lindbergh, Craig McDean, Mert & Marcus, and Viviane Sassen. Create a single hyperrealistic, magazine-cover-grade fashion photograph from the brief below. This image must stop the scroll.
+const COVER_SYSTEM = `You are a world-class fashion photographer creating a single hero cover image for LUXAURA, a luxury fashion house. Shoot one hyperrealistic, couture-grade editorial fashion photograph from the brief below. It must stop the scroll.
 
 THE COVER STANDARD (most important):
-This is a hero image — it must be unforgettable, not merely pretty. The model commands the frame with magnetic presence, attitude, and intention — a face and stance you cannot look away from. Bring energy and life: movement in the fabric and hair, a decisive gesture, wind, stride, or a charged stillness that crackles. Styling is couture-level and bold — confident silhouettes, statement pieces, impeccable finish. Light is decisive and sculptural — it carves the figure, creates drama, and gives the frame depth. Color is intentional and rich — it pops off the page without ever looking processed. Compose like a cover: a powerful focal hierarchy, generous negative space, the subject owning the frame.
+Unforgettable, not merely pretty. The model commands the frame with magnetic presence, attitude, and intention — a face and stance you cannot look away from. Bring energy and life: movement in fabric and hair, a decisive gesture, wind, stride, or a charged stillness that crackles. Styling is couture-level and bold — confident silhouettes, statement pieces, impeccable finish. Light is decisive and sculptural. Color is rich and intentional — it pops without ever looking processed. Compose like a high-fashion magazine cover: powerful focal hierarchy, the subject owning the frame.
 
-TECHNICAL SPECIFICATIONS:
-Shot on Phase One IQ4 150MP medium format digital back, 85mm f/1.4 at f/2.0, ISO 200, 1/250s. Tack-sharp focus on subject. RAW-quality rendering. Zero digital noise. Natural optical bokeh. Light falls physically correctly on every surface.
+BRANDING — STRICT (NO third-party IP):
+The ONLY brand name or text permitted anywhere in the image is the wordmark "LUXAURA". You may render a single elegant "LUXAURA" masthead at the top in a refined high-fashion serif, spelled EXACTLY L-U-X-A-U-R-A. If it cannot be rendered with perfect spelling, render NO text at all. NEVER render any real magazine name (never "Vogue", "Elle", "Harper's", "Bazaar", "W", "CR", etc.), any photographer name or credit, any other brand, any logo, or any cover line. When in doubt, no text.
 
-SKIN & FACE REALISM (critical):
-Natural skin texture with visible pores and micro-surface detail. Subsurface scattering present. No airbrushing, no skin smoothing, no beauty-retouch filters. Genuine human imperfection — fine lines, natural tone variation, real lip texture. Catchlights in the eyes, visible iris detail and depth. No over-smoothed features. No plastic or waxy skin. Reproduce the specified skin tone exactly — rich, true, and luminous; never lightened or neutralized.
+ANATOMY & PROPORTION (critical — no distortion):
+Correct, natural human anatomy. A tall, elegant, long-limbed fashion-model figure — NEVER short, squat, or stubby; never unnaturally elongated. Exactly two arms and two hands, five fingers each, in natural, correctly-placed positions — no misplaced, duplicated, fused, floating, or malformed limbs or hands. Natural skin texture with visible pores and subsurface scattering; no airbrushed, waxy, or plastic skin. Reproduce the specified skin tone EXACTLY — rich, true, luminous; never lightened. Real catchlights and iris detail in the eyes.
 
-PHOTOGRAPHIC AUTHENTICITY:
-Indistinguishable from a real editorial photograph. Not CGI, not digital art, not an AI aesthetic. Genuine analog film grain at 3–5%. Natural lens characteristics. Fabric has real texture, weave, and drape. Hair has individual strands and movement.
+PHOTOGRAPHIC AUTHENTICITY (critical):
+Indistinguishable from a real photograph shot on a medium-format camera (Phase One, 85mm, f/2.0, ISO 200). Tack-sharp focus, natural optical bokeh, light physically correct on every surface. Genuine analog film grain at 3–5%. ABSOLUTELY NOT CGI, NOT a 3D render, NOT digital painting, NOT illustration, NOT cartoon or stylized, NOT an "AI look" — even for vintage or period palettes, the result must read as a genuine film photograph.
 
-COMPOSITION:
-Full-bleed composition, 4:5 portrait orientation. No borders, no text, no watermarks, no overlays, no HDR look, no cheap lens flare, no cartoon or illustration, no soft-focus glamour filter.
-
-STYLE REFERENCE:
-Couture editorial at the level of Steven Meisel for Vogue Italia, Peter Lindbergh's lighting, Mert & Marcus's gloss and power, Craig McDean's color. Expensive, alive, magnetic — quiet luxury with real heat.`;
+FRAMING & COMPOSITION:
+4:5 portrait, full-bleed. Frame the figure intentionally and completely — do not awkwardly crop the body or limbs at the frame edges. If a reflection (water, mirror, glass) appears, the subject's actual body above the reflection must remain whole and uncropped. No watermarks, no HDR look, no cheap lens flare.`;
 
 
 export default async function handler(req, res) {
