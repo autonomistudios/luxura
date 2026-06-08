@@ -550,6 +550,29 @@ export default function CampaignBuilder() {
   // Generation state
   const [isForging,        setIsForging]        = useState(false);
   const [slots,            setSlots]            = useState<string[]>(Array(6).fill(''));
+
+  // Persist the generated plates across a page refresh — they live only in memory
+  // otherwise, so a reload was wiping the whole campaign. Restore on mount, save on change.
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('luxaura:campaign');
+      if (!raw) return;
+      const saved = JSON.parse(raw);
+      if (Array.isArray(saved?.slots) && saved.slots.some(Boolean)) {
+        setSlots(saved.slots);
+        if (saved.campaignName) setCampaignName(saved.campaignName);
+        if (saved.skuId && !currentSkuId) setCurrentSkuId(saved.skuId);
+      }
+    } catch { /* ignore corrupt cache */ }
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    try {
+      if (slots.some(Boolean)) {
+        localStorage.setItem('luxaura:campaign', JSON.stringify({ skuId: currentSkuId, slots, campaignName }));
+      }
+    } catch { /* localStorage quota — skip persisting */ }
+  }, [slots, currentSkuId, campaignName]);
   const [activeAgent,      setActiveAgent]      = useState<string | null>(null);
   const [completedAgents,  setCompletedAgents]  = useState<string[]>([]);
   const [progress,         setProgress]         = useState(0);
