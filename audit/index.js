@@ -99,7 +99,7 @@ import {
   runLookbookPaginationTests,
 } from './tests/design-system.js';
 
-import { runPropCoverTests } from './tests/prop-covers.js';
+import { runPropCoverTests, runShowcaseTests, runDressSetTests } from './tests/prop-covers.js';
 
 import {
   runSkuEnrollmentSchemaTests,
@@ -165,6 +165,8 @@ async function main() {
   await runSuite('Design Tokens & Fonts',        runDesignTokenTests);
   await runSuite('Lookbook Pagination',          runLookbookPaginationTests);
   await runSuite('Prop Cover Completeness',       runPropCoverTests);
+  await runSuite('Showcase Completeness',          runShowcaseTests);
+  await runSuite('Dress Set Completeness',          runDressSetTests);
 
   // ── SECTION 1: PROMPT ARCHITECTURE ────────────────────────────────────────
   console.log('\n\n▓▓▓ SECTION 1: PROMPT ARCHITECTURE ▓▓▓');
