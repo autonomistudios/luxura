@@ -361,7 +361,7 @@ export default async function handler(req, res) {
 
         // Override anchor ref image with pre-rendered isolation from enrollment
         if (skuData.referenceImageBase64) {
-          anchorRefImage      = { data: skuData.referenceImageBase64, mimeType: 'image/png' };
+          anchorRefImage      = { data: skuData.referenceImageBase64, mimeType: skuData.referenceImageMimeType || 'image/png' };
           anchorRefAnchorType = skuData.anchorType;
         }
 

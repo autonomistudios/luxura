@@ -16,6 +16,7 @@ import { createGenAI, withGeminiBackoff }  from '../../../lib/forge/services/gem
 import { DNA_EXTRACTION_PROMPTS }         from '../../../lib/forge/config/anchors.js';
 import { TEXT_MODEL, PXL_MODEL }          from '../../../lib/forge/constants.js';
 import { SAFETY_SETTINGS }               from '../../../lib/forge/safety.js';
+import sharp                             from 'sharp';
 
 const ISOLATION_INSTRUCTIONS = {
   FULL_OUTFIT: `Extract ONLY the clothing from this image as a professional FLAT LAY on a clean white surface. ABSOLUTE PROHIBITION: Do NOT include any human body, skin, face, mannequins, or stands. Every repeating pattern, intricate print, and micro-texture must be preserved with 100% fidelity. Statement elements (3D appliqués, feathers, bows, crystals) MUST be reproduced exactly in their correct position at full scale.`,
@@ -173,10 +174,27 @@ export default async function handler(req, res) {
     }
     console.log(`[SKU ENROLL] Fidelity score: ${fidelityScore}/100`);
 
+    // ── Inline original-photo reference (compressed) for the forge garment lock ──
+    // Locks generation to the REAL uploaded photo, read straight from the doc — no
+    // Storage re-fetch (can't silently fail) and no AI-re-render drift. This is the
+    // single biggest lever for keeping the garment consistent across plates.
+    let referenceImageB64 = null;
+    try {
+      const compactBuf = await sharp(Buffer.from(sourceBase64, 'base64'))
+        .resize({ width: 768, withoutEnlargement: true })
+        .jpeg({ quality: 78, progressive: true })
+        .toBuffer();
+      referenceImageB64 = compactBuf.toString('base64');
+      console.log(`[SKU ENROLL] Inline reference stored (~${Math.round(referenceImageB64.length / 1024)}KB base64)`);
+    } catch (e) {
+      console.warn(`[SKU ENROLL] Reference compress failed (${e.message}) — recall will fall back to isolation render`);
+    }
+
     // ── Freeze DNA → SKU record ───────────────────────────────────────────
     await updateSkuEnrollment(brandId, skuId, {
       dna,
       referenceImage: referenceImageUrl,
+      referenceImageB64,
       fidelityScore,
       enrollmentStatus: 'ready',
     });
