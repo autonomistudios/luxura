@@ -6,7 +6,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useSovereignStore } from '../../store/useSovereignStore';
 import { ANCHOR_TYPES, SKU_CATEGORIES } from '../../lib/skuConstants';
 
-const STEPS = ['Garment Details', 'Upload Images', 'DNA Extraction', 'Review & Save'];
+const STEPS = ['Upload Images', 'Garment Details', 'DNA Extraction', 'Review & Save'];
 
 function StepConnector({ done }: { done: boolean }) {
   return (
@@ -172,11 +172,23 @@ export default function SKUEnrollmentFlow() {
         </div>
 
         <AnimatePresence mode="wait">
-          {/* Step 1 — Details */}
-          {step === 0 && (
+          {/* Step 2 — Details (photo already uploaded, shown as reference) */}
+          {step === 1 && (
             <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
               className="rounded p-8 flex flex-col gap-6"
               style={{ background: 'linear-gradient(145deg, #111116 0%, #0B0B0E 100%)', border: '1px solid rgba(255,255,255,0.06)' }}>
+              {previews.length > 0 && (
+                <div className="flex items-center gap-3 pb-1">
+                  {previews.slice(0, 3).map((src, i) => (
+                    <div key={i} className="w-14 rounded overflow-hidden border border-white/10" style={{ height: '4.5rem' }}>
+                      <img src={src} className="w-full h-full object-cover" />
+                    </div>
+                  ))}
+                  <p className="text-[8px] font-mono text-white/30 tracking-[0.25em] uppercase leading-relaxed">
+                    Your reference{previews.length > 1 ? 's' : ''} — now describe<br />the garment below.
+                  </p>
+                </div>
+              )}
               <div className="grid grid-cols-2 gap-5">
                 <div className="flex flex-col gap-1.5">
                   <label className="text-[7px] font-mono tracking-[0.4em] uppercase text-white/30">Garment Name *</label>
@@ -227,24 +239,28 @@ export default function SKUEnrollmentFlow() {
                 </div>
               </div>
 
-              <div className="flex justify-end">
+              <div className="flex justify-between">
+                <button onClick={() => setStep(0)}
+                  className="px-5 py-2.5 rounded border border-white/[0.08] text-white/40 text-[10px] font-mono tracking-[0.2em] uppercase hover:text-white transition-all">
+                  Back
+                </button>
                 <button onClick={next} disabled={!canProceedStep1}
                   className="flex items-center gap-2 px-6 py-3 rounded bg-[#C5A253] text-black text-[10px] font-mono tracking-[0.2em] uppercase font-semibold disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                   style={{ boxShadow: canProceedStep1 ? '0 0 20px rgba(197,162,83,0.25)' : 'none' }}>
-                  Continue <ChevronRight size={13} />
+                  Begin Enrollment <ChevronRight size={13} />
                 </button>
               </div>
             </motion.div>
           )}
 
-          {/* Step 2 — Upload */}
-          {step === 1 && (
+          {/* Step 1 — Upload (first: the photo becomes the reference) */}
+          {step === 0 && (
             <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}
               className="rounded p-8 flex flex-col gap-6"
               style={{ background: 'linear-gradient(145deg, #111116 0%, #0B0B0E 100%)', border: '1px solid rgba(255,255,255,0.06)' }}>
               <div>
                 <p className="text-sm font-medium text-white/60 mb-1">Upload garment reference images</p>
-                <p className="text-[9px] font-mono text-white/25">Primary flat lay + up to 2 additional angles · PNG, JPG · Max 50MB each</p>
+                <p className="text-[9px] font-mono text-white/25">Primary shot + up to 2 angles (e.g. <span className="text-white/40">back</span>, detail) for fuller coverage · PNG, JPG · Max 50MB each</p>
               </div>
 
               <div ref={dropRef} onDrop={handleDrop} onDragOver={e => e.preventDefault()}
@@ -280,15 +296,11 @@ export default function SKUEnrollmentFlow() {
                 </div>
               )}
 
-              <div className="flex justify-between">
-                <button onClick={() => setStep(0)}
-                  className="px-5 py-2.5 rounded border border-white/[0.08] text-white/40 text-[10px] font-mono tracking-[0.2em] uppercase hover:text-white transition-all">
-                  Back
-                </button>
+              <div className="flex justify-end">
                 <button onClick={next} disabled={!canProceedStep2}
                   className="flex items-center gap-2 px-6 py-3 rounded bg-[#C5A253] text-black text-[10px] font-mono tracking-[0.2em] uppercase font-semibold disabled:opacity-40 disabled:cursor-not-allowed transition-all"
                   style={{ boxShadow: canProceedStep2 ? '0 0 20px rgba(197,162,83,0.25)' : 'none' }}>
-                  Begin Enrollment <ChevronRight size={13} />
+                  Continue <ChevronRight size={13} />
                 </button>
               </div>
             </motion.div>

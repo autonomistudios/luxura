@@ -486,7 +486,7 @@ function RefineModal({ slotIndex, image, getToken, onApply, onClose }: {
 export default function CampaignBuilder() {
   const { brand, canForge, can, user } = useAuth();
   const canForgeRole = can('forge');
-  const { skus, currentSkuId, setCurrentSkuId, currentGrid, setGridSlot, setCurrentGrid, campaigns } = useSovereignStore();
+  const { skus, currentSkuId, setCurrentSkuId, currentGrid, setGridSlot, setCurrentGrid, campaigns, deployToVault } = useSovereignStore();
   const navigate = useNavigate();
 
   // ── Outfit composition — one or many SKUs combined into a single look ──────
@@ -522,6 +522,8 @@ export default function CampaignBuilder() {
   const [prompt,            setPrompt]            = useState('');
   const [outputMode,        setOutputMode]        = useState<'still' | 'video'>('still');
   const [campaignName, setCampaignName] = useState('');
+  const [isSaving,     setIsSaving]     = useState(false);
+  const [saveError,    setSaveError]    = useState<string | null>(null);
 
   // ── Consumer IP: full Director Console state ──────────────────────────────
   const [photoDirection,  setPhotoDirection]  = useState('full-spread');
@@ -628,6 +630,44 @@ export default function CampaignBuilder() {
       imgs.forEach((url, i) => downloadImage(url, `${safeName()}-plate-${i + 1}.jpg`)); // fallback: one-by-one
     } finally {
       setIsZipping(false);
+    }
+  }
+
+  // Persist the generated plates to the Asset Vault (real save — was a fake navigate).
+  async function handleSaveCampaign() {
+    const imgs = slots.filter(Boolean) as string[];
+    if (!imgs.length || isSaving) return;
+    setIsSaving(true);
+    setSaveError(null);
+    const base = campaignName.trim() || `${activeSku?.name || 'Campaign'} — ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+    const date = new Date().toISOString();
+    const sku = activeSku as { category?: string; anchorType?: string } | undefined;
+    try {
+      for (let i = 0; i < imgs.length; i++) {
+        await deployToVault({
+          id:          `${Date.now()}-${i}`,
+          image:       imgs[i],
+          storagePath: null,
+          name:        `${base} · Plate ${i + 1}`,
+          date,
+          createdAt:   Date.now() + i,
+          category:    sku?.category || 'campaign',
+          anchors:     sku?.anchorType ? [sku.anchorType] : [],
+          strategy,
+          skinTone,
+          lighting,
+          camera,
+          bg:          location || customBg || 'studio',
+          prompt:      prompt || '',
+          dna:         true,
+        });
+      }
+      setShowSaveModal(false);
+      navigate('/portal/vault');
+    } catch (err) {
+      setSaveError((err as Error)?.message || 'Save failed — please retry.');
+    } finally {
+      setIsSaving(false);
     }
   }
 
@@ -1563,12 +1603,14 @@ export default function CampaignBuilder() {
                 style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.10)' }}
                 autoFocus
               />
+              {saveError && <p className="text-[10px] font-mono text-rose-400">{saveError}</p>}
               <div className="flex gap-3">
                 <button
-                  onClick={() => { setShowSaveModal(false); navigate('/portal/campaigns'); }}
-                  className="flex-1 py-2.5 rounded bg-[#C5A253] text-black text-[10px] font-mono tracking-[0.2em] uppercase font-semibold hover:bg-[#C9A84C] transition-all"
+                  onClick={handleSaveCampaign}
+                  disabled={isSaving}
+                  className="flex-1 py-2.5 rounded bg-[#C5A253] text-black text-[10px] font-mono tracking-[0.2em] uppercase font-semibold hover:bg-[#C9A84C] transition-all disabled:opacity-50"
                 >
-                  Save to Vault
+                  {isSaving ? 'Saving…' : 'Save to Vault'}
                 </button>
                 <button
                   onClick={() => setShowSaveModal(false)}
