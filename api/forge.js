@@ -995,6 +995,7 @@ Rules: ONLY correct slots that actually violate an invariant above. Do not rewri
         stylingDesc, genderDesc, variationSeed,
         calculateSlotTemperature,
         userDirection: userPromptText || '',
+        verbatim:      promptMode === 'verbatim',
       });
 
       spec.log.forEach(line => console.log(line));

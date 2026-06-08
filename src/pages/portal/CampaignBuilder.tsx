@@ -534,6 +534,9 @@ export default function CampaignBuilder() {
   const [activePropId,      setActivePropId]      = useState<string | null>(null);
   // Creative-control mode: 'assisted' (Director composes briefs) | 'verbatim' (your text used as-is)
   const [promptMode,        setPromptMode]        = useState<'assisted' | 'verbatim'>('assisted');
+  // Review & Refine composer — per-layer editor + assembled pre-forge preview
+  const [showComposer,      setShowComposer]      = useState(false);
+  const [composerLayers,    setComposerLayers]    = useState({ subject: '', scene: '', photography: '', atmosphere: '' });
 
   // Generation state
   const [isForging,        setIsForging]        = useState(false);
@@ -567,8 +570,25 @@ export default function CampaignBuilder() {
     setActivePropId(prop.id);
   };
 
-  async function handleForge() {
+  // Seed the editable layer stack from current selections, then open the
+  // Review & Refine composer (per-layer editing + assembled pre-forge preview).
+  function openComposer() {
+    const subj = strategy === 'change'
+      ? [gender, modelArchetype, ageRange].filter(v => v && v !== 'Auto').join(', ')
+      : 'the same model — face preserved';
+    setComposerLayers({
+      subject: `${subj}${skinTone ? `${subj ? ', ' : ''}${skinTone} skin tone` : ''}`,
+      scene: prompt || (location ? (LOCATION_PRESETS.find(p => p.id === location)?.label || '') : ''),
+      photography: [lighting, camera, cameraFormat, colorGrade, shotType && shotType !== 'Auto' ? `${shotType} shot` : '']
+        .filter(v => v && v !== 'Auto').join(' · '),
+      atmosphere: atmosphere && atmosphere !== 'Auto' ? atmosphere : '',
+    });
+    setShowComposer(true);
+  }
+
+  async function handleForge(opts?: { prompt?: string }) {
     if (!canForge() || isForging || !activeSku) return;
+    const effectivePrompt = (opts && typeof opts.prompt === 'string') ? opts.prompt : prompt;
 
     setIsForging(true);
     setSlots(Array(6).fill(''));
@@ -601,7 +621,7 @@ export default function CampaignBuilder() {
           locationPreset: customBg ? undefined : (location || undefined),
           background:     customBg ? 'custom-bg' : undefined,
           backgroundImage: customBg || undefined,
-          userPrompt:    prompt || undefined,
+          userPrompt:    effectivePrompt || undefined,
           promptMode,
           gender:        gender.toLowerCase(),
           sourceImage:   activeSku.referenceImage || '',
@@ -1185,6 +1205,13 @@ export default function CampaignBuilder() {
               : <><Play size={16} fill="currentColor" /> Engage the Forge</>
             }
           </button>
+          <button
+            onClick={openComposer}
+            disabled={!activeSku || !canForge()}
+            className="w-full mt-3 py-2.5 rounded-xl border border-hairline text-secondary hover:text-primary hover:border-hairline-strong transition-all font-mono text-[10px] tracking-[0.2em] uppercase disabled:opacity-40 disabled:cursor-not-allowed"
+          >
+            Review &amp; Refine →
+          </button>
           {!canForgeRole ? (
             <p className="text-[10px] font-semibold text-amber-500/80 text-center mt-3 tracking-widest uppercase">
               Your role (Social) is export-only — forging is disabled
@@ -1369,6 +1396,95 @@ export default function CampaignBuilder() {
           </div>
         )}
       </aside>
+
+      {/* ── Review & Refine composer ─────────────────────────────────────── */}
+      <AnimatePresence>
+        {showComposer && (() => {
+          const L = composerLayers;
+          const composed = [
+            L.scene.trim(),
+            L.subject.trim()     ? `Subject: ${L.subject.trim()}.`         : '',
+            L.photography.trim() ? `Photography: ${L.photography.trim()}.` : '',
+            L.atmosphere.trim()  ? `Atmosphere: ${L.atmosphere.trim()}.`   : '',
+          ].filter(Boolean).join('\n\n');
+          const setLayer = (k: 'subject' | 'scene' | 'photography' | 'atmosphere', v: string) =>
+            setComposerLayers(prev => ({ ...prev, [k]: v }));
+          const field = (label: string, k: 'subject' | 'scene' | 'photography' | 'atmosphere', rows: number, hint?: string) => (
+            <div>
+              <label className="block font-mono text-[9px] tracking-[0.24em] uppercase text-tertiary mb-1.5">{label}{hint ? <span className="text-quaternary normal-case tracking-normal"> · {hint}</span> : null}</label>
+              <textarea value={L[k]} onChange={e => setLayer(k, e.target.value)} rows={rows}
+                className="w-full px-3.5 py-2.5 rounded-xl bg-inset border border-hairline text-primary font-sans font-light text-[12px] outline-none resize-none hover:border-hairline-strong focus:border-hairline-gold focus:ring-[3px] focus:ring-gold-wash transition-all ease-[cubic-bezier(.16,1,.3,1)]" />
+            </div>
+          );
+          return (
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/70 backdrop-blur-sm"
+              onClick={() => setShowComposer(false)}
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.97, y: 8 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.97 }}
+                transition={{ type: 'spring', stiffness: 240, damping: 28 }}
+                onClick={e => e.stopPropagation()}
+                className="w-full max-w-2xl max-h-[88vh] overflow-y-auto scrollbar-none rounded-2xl flex flex-col"
+                style={{ background: 'var(--surface-raised)', border: '1px solid var(--hairline)', boxShadow: 'var(--shadow-xl)' }}
+              >
+                <div className="flex items-start justify-between p-6 border-b border-hairline sticky top-0 z-10" style={{ background: 'var(--surface-raised)' }}>
+                  <div>
+                    <p className="font-mono text-[9px] tracking-[0.4em] uppercase text-gold mb-1">Review &amp; Refine</p>
+                    <h3 className="font-display italic text-2xl text-primary leading-none">Compose Your Plates</h3>
+                    <p className="font-mono text-[8px] tracking-[0.2em] uppercase text-tertiary mt-1.5">Edit any layer — the garment DNA stays locked</p>
+                  </div>
+                  <button onClick={() => setShowComposer(false)} className="text-tertiary hover:text-primary p-1.5 rounded-lg hover:bg-overlay transition-all"><X size={16} /></button>
+                </div>
+
+                <div className="p-6 flex flex-col gap-4">
+                  <div className="flex items-center gap-3 px-4 py-3 rounded-xl" style={{ background: 'var(--gold-wash)', border: '1px solid var(--hairline-gold)' }}>
+                    <Lock size={13} className="text-gold flex-shrink-0" />
+                    <div className="min-w-0">
+                      <p className="font-mono text-[8px] tracking-[0.3em] uppercase text-gold">Garment DNA · Locked</p>
+                      <p className="text-[12px] font-light text-secondary truncate">{isOutfit ? `${outfitSkus.length} garments — frozen` : (activeSku?.name || '—')}</p>
+                    </div>
+                  </div>
+
+                  {field('Subject', 'subject', 2)}
+                  {field('Scene', 'scene', 5, 'the main creative lever')}
+                  {field('Photography', 'photography', 2)}
+                  {field('Atmosphere', 'atmosphere', 1)}
+
+                  <div>
+                    <p className="font-mono text-[9px] tracking-[0.3em] uppercase text-quaternary mb-2">Assembled Prompt — what each plate receives</p>
+                    <pre className="whitespace-pre-wrap text-[11px] leading-relaxed text-secondary font-serif p-4 rounded-xl" style={{ background: 'var(--surface-sunken)', border: '1px solid var(--hairline)' }}>{composed || 'Add a scene to begin…'}</pre>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    {([{ id: 'assisted', label: 'Assisted', sub: 'AI refines into 6 briefs' }, { id: 'verbatim', label: 'Verbatim', sub: 'Sent exactly as above' }] as const).map(({ id, label, sub }) => {
+                      const active = promptMode === id;
+                      return (
+                        <button key={id} onClick={() => setPromptMode(id)} className={`flex flex-col gap-0.5 p-2.5 rounded-xl text-left transition-all border ${active ? 'bg-gold border-gold text-on-accent' : 'bg-overlay border-white/5 hover:border-white/20'}`}>
+                          <span className={`text-[11px] font-semibold leading-tight ${active ? 'text-on-accent' : 'text-white'}`}>{label}</span>
+                          <span className={`text-[9px] leading-tight ${active ? 'text-on-accent' : 'text-tertiary'}`}>{sub}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="p-6 border-t border-hairline sticky bottom-0" style={{ background: 'var(--surface-raised)' }}>
+                  <button
+                    onClick={() => { setShowComposer(false); setPrompt(L.scene); handleForge({ prompt: composed }); }}
+                    disabled={!activeSku || !canForge() || !composed}
+                    className="w-full py-3.5 rounded-xl font-display italic text-[15px] text-on-accent transition-all hover:-translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+                    style={{ background: 'linear-gradient(180deg,var(--gold-bright) 0%,var(--gold) 55%,var(--gold-deep) 100%)', boxShadow: '0 8px 28px var(--gold-glow)' }}
+                  >
+                    Forge 6 Plates · {promptMode === 'verbatim' ? 'Verbatim' : 'Assisted'}
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          );
+        })()}
+      </AnimatePresence>
 
       {/* ── Save modal ──────────────────────────────────────────────────── */}
       <AnimatePresence>
