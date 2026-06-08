@@ -173,9 +173,11 @@ function AgentStrip({ activeAgent, completedAgents }: { activeAgent: string | nu
 }
 
 // ─── Forge Slot ───────────────────────────────────────────────────────────────
-function ForgeSlot({ image, index, isGenerating, isComplete, onRefine }: {
+function ForgeSlot({ image, index, isGenerating, isComplete, onRefine, onEnlarge, onExport }: {
   image: string; index: number; isGenerating: boolean; isComplete: boolean;
   onRefine?: (index: number) => void;
+  onEnlarge?: (image: string) => void;
+  onExport?: (image: string, index: number) => void;
 }) {
   const isEmpty = !image && !isGenerating;
 
@@ -235,7 +237,8 @@ function ForgeSlot({ image, index, isGenerating, isComplete, onRefine }: {
       {image && (
         <>
           <img src={image} alt={`Slot ${index + 1}`}
-            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+            onClick={() => onEnlarge?.(image)}
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 cursor-zoom-in" />
           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300
             bg-gradient-to-t from-black/80 via-transparent to-black/30 flex flex-col justify-between p-4">
             <div className="flex justify-between items-start">
@@ -255,7 +258,9 @@ function ForgeSlot({ image, index, isGenerating, isComplete, onRefine }: {
                   <Wand2 size={12} /> Refine
                 </button>
               )}
-              <button className="flex-1 py-2.5 text-[10px] font-mono tracking-[0.2em] uppercase rounded-lg transition-all hover:-translate-y-px"
+              <button
+                onClick={() => onExport?.(image, index)}
+                className="flex-1 py-2.5 text-[10px] font-mono tracking-[0.2em] uppercase rounded-lg transition-all hover:-translate-y-px"
                 style={{ background: 'linear-gradient(180deg,var(--gold-bright),var(--gold) 60%,var(--gold-deep))', color: 'var(--text-on-accent)' }}>
                 Export
               </button>
@@ -537,6 +542,8 @@ export default function CampaignBuilder() {
   // Review & Refine composer — per-layer editor + assembled pre-forge preview
   const [showComposer,      setShowComposer]      = useState(false);
   const [composerLayers,    setComposerLayers]    = useState({ subject: '', scene: '', photography: '', atmosphere: '' });
+  const [lightboxImage,     setLightboxImage]     = useState<string | null>(null);
+  const [isZipping,         setIsZipping]         = useState(false);
 
   // Generation state
   const [isForging,        setIsForging]        = useState(false);
@@ -584,6 +591,44 @@ export default function CampaignBuilder() {
       atmosphere: atmosphere && atmosphere !== 'Auto' ? atmosphere : '',
     });
     setShowComposer(true);
+  }
+
+  const safeName = () => (activeSku?.name || 'campaign').replace(/[^a-z0-9]+/gi, '-').toLowerCase();
+
+  // Download one plate (handles data-URLs and remote Storage URLs).
+  async function downloadImage(url: string, filename: string) {
+    try {
+      const res = await fetch(url);
+      const blob = await res.blob();
+      const href = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = href; a.download = filename;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(href), 1000);
+    } catch {
+      window.open(url, '_blank'); // fallback if fetch/CORS blocks the blob
+    }
+  }
+
+  // Bundle every completed plate into one ZIP.
+  async function downloadAll() {
+    const imgs = slots.filter(Boolean) as string[];
+    if (!imgs.length || isZipping) return;
+    setIsZipping(true);
+    try {
+      const JSZip = (await import('jszip')).default;
+      const zip = new JSZip();
+      await Promise.all(imgs.map(async (url, i) => {
+        const res = await fetch(url);
+        zip.file(`${safeName()}-plate-${i + 1}.jpg`, await res.blob());
+      }));
+      const blob = await zip.generateAsync({ type: 'blob' });
+      await downloadImage(URL.createObjectURL(blob), `${safeName()}-campaign.zip`);
+    } catch {
+      imgs.forEach((url, i) => downloadImage(url, `${safeName()}-plate-${i + 1}.jpg`)); // fallback: one-by-one
+    } finally {
+      setIsZipping(false);
+    }
   }
 
   async function handleForge(opts?: { prompt?: string }) {
@@ -1279,6 +1324,8 @@ export default function CampaignBuilder() {
                   isGenerating={isForging}
                   isComplete={!!slots[i]}
                   onRefine={canForgeRole ? setRefineSlot : undefined}
+                  onEnlarge={setLightboxImage}
+                  onExport={(img, idx) => downloadImage(img, `${safeName()}-plate-${idx + 1}.jpg`)}
                 />
               ))}
             </div>
@@ -1298,8 +1345,11 @@ export default function CampaignBuilder() {
                   <span aria-hidden className="pointer-events-none absolute top-0 -left-1/3 h-full w-1/3 bg-gradient-to-r from-transparent via-white/40 to-transparent transition-[left] duration-700 ease-[cubic-bezier(.16,1,.3,1)] group-hover:left-[130%]" style={{ transform: 'skewX(-20deg)' }} />
                   <Save size={14} /> Save as Campaign
                 </button>
-                <button className="flex items-center gap-2 px-6 py-3 rounded-xl bg-overlay border border-white/5 text-white/70 hover:text-white text-[11px] font-semibold tracking-widest uppercase transition-all">
-                  <Download size={14} /> Download All
+                <button
+                  onClick={downloadAll}
+                  disabled={isZipping}
+                  className="flex items-center gap-2 px-6 py-3 rounded-xl bg-overlay border border-white/5 text-white/70 hover:text-white text-[11px] font-semibold tracking-widest uppercase transition-all disabled:opacity-50">
+                  <Download size={14} /> {isZipping ? 'Zipping…' : 'Download All'}
                 </button>
                 <button
                   onClick={handleForge}
@@ -1555,6 +1605,36 @@ export default function CampaignBuilder() {
           onClose={() => setShowCreativeProps(false)}
         />
       )}
+
+      {/* ── Lightbox — enlarge a plate ─────────────────────────────────── */}
+      <AnimatePresence>
+        {lightboxImage && (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[60] flex items-center justify-center p-6 bg-black/90 backdrop-blur-md"
+            onClick={() => setLightboxImage(null)}
+          >
+            <motion.img
+              key={lightboxImage}
+              initial={{ scale: 0.96, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.96, opacity: 0 }}
+              src={lightboxImage}
+              alt="Plate"
+              onClick={e => e.stopPropagation()}
+              className="max-h-[88vh] max-w-[90vw] object-contain rounded-lg"
+              style={{ boxShadow: '0 20px 80px rgba(0,0,0,0.6)' }}
+            />
+            <div className="absolute top-6 right-6 flex items-center gap-3" onClick={e => e.stopPropagation()}>
+              <button
+                onClick={() => downloadImage(lightboxImage, `${safeName()}-plate.jpg`)}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg text-on-accent text-[10px] font-mono tracking-[0.2em] uppercase"
+                style={{ background: 'linear-gradient(180deg,var(--gold-bright),var(--gold) 60%,var(--gold-deep))' }}>
+                <Download size={14} /> Download
+              </button>
+              <button onClick={() => setLightboxImage(null)} className="p-2 rounded-lg bg-white/10 text-white hover:bg-white/20 transition-all"><X size={18} /></button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
