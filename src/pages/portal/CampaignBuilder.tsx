@@ -1036,26 +1036,9 @@ export default function CampaignBuilder() {
               </button>
             )}
 
-            <p className="text-[9px] font-semibold tracking-[0.2em] uppercase text-white/20 text-center my-3">— or a plain backdrop —</p>
+            <p className="text-[9px] font-semibold tracking-[0.2em] uppercase text-white/20 text-center my-3">— or upload your own environment —</p>
 
-            {/* Secondary: a raw location preset (no full art direction) — clears any active scene */}
-            <button
-              onClick={() => setLocationPickerOpen(true)}
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all bg-overlay hover:bg-raised-2 border border-white/5 hover:border-white/20"
-            >
-              <MapPin size={14} className={location ? 'text-white' : 'text-tertiary'} />
-              <span className="text-[12px] font-medium flex-1 truncate" style={{ color: location ? 'white' : 'var(--text-tertiary)' }}>
-                {location
-                  ? LOCATION_PRESETS.find(p => p.id === location)?.label || location
-                  : 'Studio backdrop (default)'}
-              </span>
-              {location
-                ? <button onClick={e => { e.stopPropagation(); setLocation(''); }} className="text-tertiary hover:text-white text-[10px] font-semibold uppercase tracking-widest">Clear</button>
-                : <ChevronRight size={14} className="text-tertiary" />
-              }
-            </button>
-
-            {/* Custom environment upload — clears scene + preset when set */}
+            {/* Custom environment upload — your own location; clears any active scene when set */}
             <input
               ref={customBgInputRef}
               type="file"
@@ -1093,50 +1076,6 @@ export default function CampaignBuilder() {
               </button>
             )}
 
-            {/* Inline location browser */}
-            <AnimatePresence>
-              {locationPickerOpen && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 280 }}
-                  exit={{ opacity: 0, height: 0 }}
-                  className="overflow-hidden mt-3 rounded-xl bg-overlay border border-white/5"
-                >
-                  <div className="p-3 border-b border-white/5 flex items-center justify-between">
-                    <span className="text-[10px] font-semibold text-tertiary uppercase tracking-widest">
-                      {LOCATION_PRESETS.length} locations
-                    </span>
-                    <button onClick={() => setLocationPickerOpen(false)}
-                      className="text-[10px] font-semibold text-white hover:text-white/70 transition-colors">
-                      Done
-                    </button>
-                  </div>
-                  <div className="overflow-y-auto" style={{ height: 235 }}>
-                    {/* Group by category */}
-                    {['Urban', 'Nature', 'Interior', 'Industrial', 'Conceptual', 'Seasonal'].map(cat => {
-                      const catPresets = LOCATION_PRESETS.filter(p => p.category === cat);
-                      return (
-                        <div key={cat}>
-                          <div className="px-4 py-2 sticky top-0 bg-overlay backdrop-blur-sm z-10 border-b border-white/5">
-                            <span className="text-[9px] font-semibold tracking-widest uppercase text-tertiary">{cat}</span>
-                          </div>
-                          {catPresets.map(preset => (
-                            <button key={preset.id}
-                              onClick={() => { setLocation(preset.id); setActivePropId(null); setLocationPickerOpen(false); }}
-                              className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-white/5 transition-colors border-b border-white/5 last:border-0">
-                              <span className={`text-[12px] font-medium truncate flex-1 ${location === preset.id ? 'text-white' : 'text-tertiary'}`}>
-                                {preset.label}
-                              </span>
-                              {location === preset.id && <Check size={14} className="text-white flex-shrink-0" />}
-                            </button>
-                          ))}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
 
           {/* ── Photography Preset (optional) ──────────────────────────── */}
