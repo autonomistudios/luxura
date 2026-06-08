@@ -839,6 +839,7 @@ Be exhaustive. Every observable detail must be captured.`;
         lockedBgDesc,
         lockedCamera,
         lockedColorGrade,
+        atmosphereDesc,
         userPromptText,
         slots,
       });
