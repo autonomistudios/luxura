@@ -532,6 +532,8 @@ export default function CampaignBuilder() {
   const [strategy,        setStrategy]        = useState<'change' | 'keep'>('change');
   const [showCreativeProps, setShowCreativeProps] = useState(false);
   const [activePropId,      setActivePropId]      = useState<string | null>(null);
+  // Creative-control mode: 'assisted' (Director composes briefs) | 'verbatim' (your text used as-is)
+  const [promptMode,        setPromptMode]        = useState<'assisted' | 'verbatim'>('assisted');
 
   // Generation state
   const [isForging,        setIsForging]        = useState(false);
@@ -600,6 +602,7 @@ export default function CampaignBuilder() {
           background:     customBg ? 'custom-bg' : undefined,
           backgroundImage: customBg || undefined,
           userPrompt:    prompt || undefined,
+          promptMode,
           gender:        gender.toLowerCase(),
           sourceImage:   activeSku.referenceImage || '',
           // ── Consumer IP fields ──────────────────────────────────────────
@@ -1113,10 +1116,37 @@ export default function CampaignBuilder() {
             <textarea
               value={prompt}
               onChange={e => setPrompt(e.target.value)}
-              placeholder="Additional creative direction..."
-              rows={3}
+              placeholder={promptMode === 'verbatim' ? 'Your exact scene — sent to the model as written…' : 'Additional creative direction…'}
+              rows={4}
               className="w-full px-4 py-3 rounded-xl text-[12px] font-medium text-white placeholder-[#86868B] outline-none resize-none bg-overlay border border-white/5 focus:border-white/20 transition-colors"
             />
+
+            {/* Creative control mode — Assisted vs Verbatim */}
+            <div className="mt-3 grid grid-cols-2 gap-2">
+              {([
+                { id: 'assisted' as const, label: 'Assisted', sub: 'AI directs 6 briefs' },
+                { id: 'verbatim' as const, label: 'Verbatim', sub: 'Your text, as-is ×6' },
+              ]).map(({ id, label, sub }) => {
+                const active = promptMode === id;
+                return (
+                  <button key={id} onClick={() => setPromptMode(id)}
+                    className={`flex flex-col gap-0.5 p-2.5 rounded-xl text-left transition-all border ${active ? 'bg-gold border-gold text-on-accent' : 'bg-overlay border-white/5 hover:border-white/20 hover:bg-raised-2'}`}>
+                    <span className={`text-[11px] font-semibold leading-tight ${active ? 'text-on-accent' : 'text-white'}`}>{label}</span>
+                    <span className={`text-[9px] font-medium leading-tight ${active ? 'text-on-accent' : 'text-tertiary'}`}>{sub}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Locked-DNA assurance — consistency is never sacrificed for control */}
+            {activeSku && (
+              <div className="mt-2 flex items-center gap-2 px-3 py-2 rounded-lg" style={{ background: 'var(--gold-wash)', border: '1px solid var(--hairline-gold)' }}>
+                <Lock size={10} className="text-gold flex-shrink-0" />
+                <span className="text-[9px] font-mono tracking-[0.1em] uppercase text-gold">
+                  {isOutfit ? 'Outfit DNA locked' : 'Garment DNA locked'}{promptMode === 'verbatim' ? ' — only your scene text changes' : ''}
+                </span>
+              </div>
+            )}
           </div>
 
           {/* ── Output Mode ───────────────────────────────────────────── */}

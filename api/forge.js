@@ -215,7 +215,10 @@ export default async function handler(req, res) {
     const anchor         = anchors[0];
     const anchorDesc     = anchors.map(a => ANCHOR_LABELS[a] || a).join(' + ');
     const userPromptText = (config?.userPrompt || '').trim();
-    console.log(`[FORGE] userPromptText="${userPromptText}" | locationPreset="${config?.locationPreset || ''}" | anchors=${JSON.stringify(anchors)}`);
+    // Creative-control mode: 'verbatim' uses the client prompt as-is (DNA still
+    // locked); 'assisted' (default) lets the Director Agent compose the briefs.
+    const promptMode = config?.promptMode === 'verbatim' ? 'verbatim' : 'assisted';
+    console.log(`[FORGE] userPromptText="${userPromptText}" | mode=${promptMode} | locationPreset="${config?.locationPreset || ''}" | anchors=${JSON.stringify(anchors)}`);
 
     const hasClothingAnchor = anchors.some(a => CLOTHING_ANCHOR_TYPES.includes(a));
 
@@ -807,27 +810,39 @@ Be exhaustive. Every observable detail must be captured.`;
     // =========================================================
     // AGENT 02: CREATIVE DIRECTOR — 6 integrated scene briefs
     // =========================================================
-    console.log('[FORGE] AGENT 02: Director writing 6 integrated scene briefs...');
-    let directorBriefs = await runAgent02Director({
-      genAI,
-      TEXT_MODEL,
-      config,
-      anchors,
-      anchorDesc,
-      dnaMap,
-      modelIdentityDNA,
-      isAiGenerated,
-      hasClothingAnchor,
-      genderLabel,
-      skinToneDesc,
-      lockedLighting,
-      lockedBgRaw,
-      lockedBgDesc,
-      lockedCamera,
-      lockedColorGrade,
-      userPromptText,
-      slots,
-    });
+    let directorBriefs;
+    if (promptMode === 'verbatim' && userPromptText) {
+      // VERBATIM — full creative control. The client's composed prompt becomes the
+      // brief for all 6 plates, used exactly as written. The garment/DNA reference
+      // image is still attached and locked downstream; only the scene text is the
+      // user's. Director rewrite AND the consistency audit are skipped so nothing
+      // alters the text. Per-plate variety comes from the temperature ladder.
+      console.log('[FORGE] AGENT 02: VERBATIM mode — client prompt used as-is on all 6 slots (Director bypassed)');
+      directorBriefs = Array.from({ length: 6 }, () => userPromptText);
+      await anchorRefPromise;
+    } else {
+      console.log('[FORGE] AGENT 02: Director writing 6 integrated scene briefs...');
+      directorBriefs = await runAgent02Director({
+        genAI,
+        TEXT_MODEL,
+        config,
+        anchors,
+        anchorDesc,
+        dnaMap,
+        modelIdentityDNA,
+        isAiGenerated,
+        hasClothingAnchor,
+        genderLabel,
+        skinToneDesc,
+        lockedLighting,
+        lockedBgRaw,
+        lockedBgDesc,
+        lockedCamera,
+        lockedColorGrade,
+        userPromptText,
+        slots,
+      });
+    }
 
     // Wait for pre-pass to finish before proceeding
     await anchorRefPromise;
@@ -839,7 +854,7 @@ Be exhaustive. Every observable detail must be captured.`;
     // =========================================================
     // AGENT 02.5: CROSS-SLOT CONSISTENCY AUDIT
     // =========================================================
-    if (directorBriefs && directorBriefs.length >= 6) {
+    if (promptMode !== 'verbatim' && directorBriefs && directorBriefs.length >= 6) {
       try {
         console.log('[FORGE] AGENT 02.5: Cross-slot consistency audit...');
         const consistencyModel   = genAI.getGenerativeModel({ model: TEXT_MODEL });
