@@ -83,7 +83,20 @@ export const CREATIVE_PROPS: CreativeProp[] = [
       camera: 'Natural Eye (50mm)',
       cameraFormat: 'Phase One 150MP · 80mm',
       colorGrade: 'Kodak Ektar 100',
-      userPrompts: ['A single vivid lime-green tiled wall commands the entire frame, white grout lines forming a precise grid that curves softly at the edges like a smile. The subject stands square against it — posture deliberate, look precise, the styling anchoring the frame. Even studio lighting leaves no shadow hiding place — every detail rendered at full resolution, sharp and declarative. The subject and the wall exist in complete visual logic together. The image does not need to explain itself.'],
+      userPrompts: [
+        // Scene 1 — lime tile wall
+        'A single vivid lime-green tiled wall commands the entire frame, white grout lines forming a precise grid that curves softly at the edges like a smile. The subject stands square against it — posture deliberate, look precise, the styling anchoring the frame. Even studio lighting leaves no shadow hiding place — every detail rendered at full resolution, sharp and declarative. The subject and the wall exist in complete visual logic together. The image does not need to explain itself.',
+        // Scene 2 — cobalt seamless
+        'A saturated cobalt-blue seamless paper sweep fills the frame, floor curving into wall with no horizon line. The subject stands in profile, chin lifted, one hand resting at the hip — a single graphic gesture against the field of pure colour. Flat, even studio light renders the garment edge-sharp; the blue is so uniform it reads as a painted plane. No props, no shadow narrative — just colour, posture, and clothing as declarative form.',
+        // Scene 3 — split colour field
+        'A two-tone backdrop split exactly down the centre — lime on the left, hot magenta on the right — the seam falling along the spine. The subject straddles the divide, half lit in cool green, half in warm pink, gaze straight to lens. The composition is symmetrical to the millimetre. High-key lighting keeps both colour fields perfectly true. A graphic, art-directed image that treats the body as the axis of a colour study.',
+        // Scene 4 — yellow cyclorama
+        'A bright primrose-yellow cyclorama, infinite and shadowless, a single matching stool at centre. The subject sits, legs angled, one elbow on the knee, expression cool and unbothered. The yellow is relentless and joyful; the garment pops against it at full saturation. A clean beauty-dish wrap renders the figure evenly. The image is confident in its simplicity — one colour, one figure, one perfect pose.',
+        // Scene 5 — colour panel grid
+        'A wall of square acoustic panels in alternating lime, white, and charcoal forms a modular grid behind the subject. She stands slightly off-centre, the geometry framing her like a specimen. A second hard light throws a crisp, doubled shadow across the panels. The repetition of the grid against the single human figure is the entire tension of the frame. Sharp, modern, declarative.',
+        // Scene 6 — white cove, gel rim
+        'A pure white infinity cove, immaculate and seamless, lit so cleanly it reads as negative space. A single hard lime-gelled light rakes from camera-left, edging the subject in a thin electric-green rim and casting one long, precise shadow. The contrast of clinical white and one vivid accent is the whole image. The figure is rendered at full resolution, every fibre of the garment crisp.',
+      ],
     },
   },
 
@@ -101,7 +114,20 @@ export const CREATIVE_PROPS: CreativeProp[] = [
       camera: 'Street Style (35mm)',
       cameraFormat: 'Leica M · 35mm Film',
       colorGrade: 'Fuji Pro 400H',
-      userPrompts: ['Narrow Haussmann lane at 11pm, the cobblestones still holding the memory of rain — amber café light spills through an arched doorway and catches one edge of the subject mid-stride. She walks — does not pose — caught at the exact stride where one leg extends forward, heel striking stone. Her gaze passes over the right shoulder of the frame into some private distance. Available light only: the café warm, the deep blue of the sky above the buildings, nothing else. Grain. The full quiet of European midnight.'],
+      userPrompts: [
+        // Scene 1 — Haussmann lane
+        'Narrow Haussmann lane at 11pm, the cobblestones still holding the memory of rain — amber café light spills through an arched doorway and catches one edge of the subject mid-stride. She walks — does not pose — caught at the exact stride where one leg extends forward, heel striking stone. Her gaze passes over the right shoulder of the frame into some private distance. Available light only: the café warm, the deep blue of the sky above the buildings, nothing else. Grain. The full quiet of European midnight.',
+        // Scene 2 — Pont Alexandre III
+        'The Pont Alexandre III at midnight, its gilded Art Nouveau lamps glowing in a receding line, the Seine black and rippling below. She stands at the balustrade, coat collar up, one gloved hand on the cold stone, looking downriver toward the lit dome of Les Invalides. The lamplight gilds her in pools of warm gold against the deep navy night. Reflections smear long on the wet bridge deck. 35mm grain, Parisian and cinematic.',
+        // Scene 3 — Métro entrance
+        'A Hector Guimard Métropolitain entrance after rain — the green wrought-iron arch and amber globe lamp slick and shining, the steps descending into warm underground light behind her. She pauses at the top of the stair, one hand on the curling iron rail, half-turned to the lens. The contrast of the green iron, amber glow, and midnight blue sky is the whole palette. Available light, soft grain, unmistakably Paris.',
+        // Scene 4 — café terrace
+        'A shuttered café terrace at 1am, rattan chairs stacked, one striped awning still dripping. She sits alone at the last marble bistro table, a single espresso cup before her, the wet pavement mirroring the café neon in long ribbons of red and gold. Her gaze is elsewhere, unhurried. Warm tungsten from inside the café rakes across her; the street beyond falls to blue. The intimacy of an empty city at night.',
+        // Scene 5 — Haussmann courtyard
+        'A private Haussmann courtyard at night — symmetrical stone façade, tall shuttered windows, a single one lit gold on the third floor. She stands at the centre of the cobbled cour, looking up toward the light, her coat falling in a clean vertical line. The space is hushed and architectural, the lone warm window the only event in a field of cool stone. Grain, restraint, quiet grandeur.',
+        // Scene 6 — patisserie window
+        'Outside a patisserie window just past midnight, the interior still warm-lit, gilded display cases glowing behind glass. She stands close to the window, reflected faintly in it, breath barely visible in the cold. The warm amber light from inside washes one side of her face; the dark wet street holds the rest. A small, human, cinematic moment — couture against the everyday tenderness of a Paris night.',
+      ],
     },
   },
 
@@ -119,7 +145,20 @@ export const CREATIVE_PROPS: CreativeProp[] = [
       camera: 'Street Style (35mm)',
       cameraFormat: 'Contax 645 · 80mm Film',
       colorGrade: 'Vintage Warm',
-      userPrompts: ['Via Montenapoleone at the golden hour before close — luxury boutique windows glow amber behind her, the Italian stone pavement catching the last of the sunset in warm copper. She stands at a slight angle, one shoulder toward the lens, her look immaculate and intentional. Her gaze is sideways and downward — distracted, or pretending to be. The light from the boutique windows gilds her left side in warmth while the right falls into cool shadow. Vintage analog warmth through every tone; the image belongs to a different era and knows it.'],
+      userPrompts: [
+        // Scene 1 — Via Montenapoleone
+        'Via Montenapoleone at the golden hour before close — luxury boutique windows glow amber behind her, the Italian stone pavement catching the last of the sunset in warm copper. She stands at a slight angle, one shoulder toward the lens, her look immaculate and intentional. Her gaze is sideways and downward — distracted, or pretending to be. The light from the boutique windows gilds her left side in warmth while the right falls into cool shadow. Vintage analog warmth through every tone; the image belongs to a different era and knows it.',
+        // Scene 2 — Galleria Vittorio Emanuele
+        'Beneath the glass-and-iron dome of the Galleria Vittorio Emanuele II at dusk — the mosaic floor stretching out in concentric patterns, the great cupola catching the last grey-gold light above. She stands at the central octagon, the four arms of the arcade receding around her, perfectly composed within the symmetry. Warm boutique light spills from the colonnade; the scale is operatic. Vintage warm tones, the architecture a 19th-century cathedral of commerce.',
+        // Scene 3 — Brera cobblestones
+        'A quiet Brera district lane at dusk, narrow and cobbled, ivy spilling over a warm-ochre wall, a single vintage Vespa leaned against it. She walks the centre of the lane toward the lens, unhurried, the shuttered windows glowing softly above. The last sun rakes down the street in long warm bars. The neighbourhood feels lived-in and effortless — Italian elegance without performance. Contax warmth, fine grain.',
+        // Scene 4 — Duomo rooftop
+        'The marble rooftop terrace of the Duomo at sunset — a forest of gothic spires and flying buttresses around her, the pink-white marble glowing in the low gold light. She stands among the pinnacles, the city of Milan hazing out below, the sky behind a wash of apricot and lavender. The intricate stone lacework frames her on every side. Monumental, warm, and impossibly elegant.',
+        // Scene 5 — Via Manzoni tram
+        'Via Manzoni in the blue-gold minutes after sunset — a vintage orange Milanese tram crossing the frame in soft motion blur behind her, its warm interior lights streaking. She stands on the pavement, still and sharp against the moving city, hand in coat pocket. The wet tram rails catch the last light. The contrast of her stillness and the gliding tram is the image. Cinematic, warm, alive.',
+        // Scene 6 — boutique doorway
+        'The threshold of a Montenapoleone boutique at closing — she stands half in the warm gilded interior, half on the cool stone street, one hand on the brass door handle. Behind her, softly lit mannequins and glass vitrines glow gold; before her, the blue dusk of the avenue. The doorway frames her precisely. Vintage warmth, the quiet authority of a house that needs no signage.',
+      ],
     },
   },
 
@@ -137,7 +176,20 @@ export const CREATIVE_PROPS: CreativeProp[] = [
       camera: 'Editorial Wide (24mm)',
       cameraFormat: 'Hasselblad H6D · 100mm',
       colorGrade: 'Nordic Matte',
-      userPrompts: ['Seoul luxury arcade, floor-to-ceiling polished marble, a soaring glass atrium diffusing cool white light from above in broad even sheets. The subject stands dead-center in the widest section of the corridor, arms at her sides, perfectly still — her presence commanding the architecture around her. The reflection in the marble floor is as sharp as the figure above it. Other shoppers are soft ghosts in the distance. The light is institutional and beautiful: overhead, clean, unsparing. Every surface, every edge rendered with clinical precision. Quiet. Modern. Massive.'],
+      userPrompts: [
+        // Scene 1 — marble arcade
+        'Seoul luxury arcade, floor-to-ceiling polished marble, a soaring glass atrium diffusing cool white light from above in broad even sheets. The subject stands dead-center in the widest section of the corridor, arms at her sides, perfectly still — her presence commanding the architecture around her. The reflection in the marble floor is as sharp as the figure above it. Other shoppers are soft ghosts in the distance. The light is institutional and beautiful: overhead, clean, unsparing. Every surface, every edge rendered with clinical precision. Quiet. Modern. Massive.',
+        // Scene 2 — glass escalator bank
+        'A bank of glass escalators ascending through a white atrium, their steel undersides and clear balustrades catching cool diffused light. She stands on a descending step, hand on the moving rail, the criss-crossing diagonals of the escalators framing her in receding geometry. The palette is white, silver, and pale grey; the light is flat and architectural. A study in clean motion and modern Seoul scale.',
+        // Scene 3 — minimalist atrium
+        'A vast minimalist white atrium — seamless plaster walls, a single floating staircase, light pouring from a clerestory slot high above. She stands alone in the centre of the empty volume, dwarfed by negative space, her figure the only mark in a field of white. The Nordic-matte grade keeps everything cool and desaturated. Architectural emptiness as luxury; the garment the sole point of focus.',
+        // Scene 4 — Dongdaemun Design Plaza
+        'Inside the flowing white curves of Dongdaemun Design Plaza — Zaha Hadid\'s seamless parametric walls sweeping overhead, ribbon-like and futuristic, lit by recessed cove lighting. She stands where two curved planes converge, the architecture bending around her like liquid. The light is cool and even; the surfaces glow softly. Sci-fi elegance, every line of the building and the garment rendered razor-sharp.',
+        // Scene 5 — beauty hall
+        'A Seoul department-store beauty hall after hours — rows of backlit white counters glowing softly, mirrored columns multiplying the light, the floor a sheet of reflective pale stone. She stands in the central aisle, the symmetrical glow receding on both sides. The illumination is clean, clinical, and flattering; the whole space hums white and silver. Modern, polished, quietly opulent.',
+        // Scene 6 — rooftop reflection pool
+        'A rooftop infinity reflection pool at a Seoul tower at blue hour — a perfect sheet of still water mirroring the glass skyline and pale sky. She stands at the water\'s edge, the city towers doubled beneath her, the horizon a cool gradient of grey-blue. The light is soft and even; the reflection makes the composition symmetrical top to bottom. Calm, vast, architectural.',
+      ],
     },
   },
 
@@ -188,7 +240,20 @@ export const CREATIVE_PROPS: CreativeProp[] = [
       camera: 'Editorial Wide (24mm)',
       cameraFormat: 'Canon 1DX · 85mm',
       colorGrade: 'Vintage Warm',
-      userPrompts: ['Saharan dune crest at the last light before dark — the wind has sculpted the sand into a single arcing ridgeline that the subject stands at the apex of, as if she is the reason the line exists. The desert breeze moves through her, every gust visible in the way she holds herself against it. Her skin absorbs the amber raking light the same way the sand does; she and the landscape are one color system. Arms loose at her sides, head tilted slightly back — the posture of someone who owns the horizon. Long shadow trailing behind her into deep ochre. Shot from slight below-eye-level, the sky enormous above.'],
+      userPrompts: [
+        // Scene 1 — dune crest
+        'Saharan dune crest at the last light before dark — the wind has sculpted the sand into a single arcing ridgeline that the subject stands at the apex of, as if she is the reason the line exists. The desert breeze moves through her, every gust visible in the way she holds herself against it. Her skin absorbs the amber raking light the same way the sand does; she and the landscape are one color system. Arms loose at her sides, head tilted slightly back — the posture of someone who owns the horizon. Long shadow trailing behind her into deep ochre. Shot from slight below-eye-level, the sky enormous above.',
+        // Scene 2 — caravan path
+        'A lone caravan path across an endless dune field at golden hour, a single line of footprints trailing to the horizon behind her. She walks away from the lens into the vastness, scarf and garment lifting in the wind, the only vertical in a world of soft curves. The low sun rakes the ripples of the sand into gold and shadow. Monumental scale, warm vintage tones, the solitude of the deep desert.',
+        // Scene 3 — desert oasis
+        'The edge of a desert oasis at dusk — a still pool ringed by date palms, the dunes glowing copper beyond. She stands at the water\'s edge, her reflection perfect in the glassy surface, the palms silhouetted against an apricot sky. The contrast of life and emptiness, water and sand, is the whole image. Warm raking light, fine grain, an oasis like a held breath.',
+        // Scene 4 — mud-brick ksar
+        'Against the towering mud-brick wall of an ancient ksar at golden hour — the earthen architecture glowing terracotta, its geometric crenellations casting hard shadows. She stands at the base, dwarfed by the timeworn wall, one hand resting on the warm clay. The ochre of the building and the amber of her skin are one palette. Vintage warmth; the image could be from any century.',
+        // Scene 5 — sandstorm veil
+        'The leading edge of a sandstorm at the horizon, a veil of amber dust diffusing the low sun into a soft burning disc. She stands her ground as the wind sweeps fine sand past her in luminous streaks, garment whipping, eyes calm. The atmosphere turns everything monochrome gold and hazy. Dramatic, elemental, the figure unbothered at the centre of the storm.',
+        // Scene 6 — dune at blue hour
+        'Atop a great dune at the blue hour after sunset — the western sky still bruised orange, the first stars appearing in the deepening indigo above. She sits at the crest, knees drawn up, looking out at the cooling desert. The sand holds the last warmth as a faint glow; the sky dominates. Quiet, vast, the day surrendering to night across an ocean of sand.',
+      ],
     },
   },
 
@@ -206,7 +271,20 @@ export const CREATIVE_PROPS: CreativeProp[] = [
       camera: 'Editorial Wide (24mm)',
       cameraFormat: 'Canon 1DX · 85mm',
       colorGrade: 'Bleach Bypass',
-      userPrompts: ['Scottish highland moorland at dusk, infinite purple heather under a brooding pewter sky — storm light breaking through in one shaft that catches the subject and nothing else. Her stance is wide and grounded, both hands at her sides, gaze level and direct into the lens. The wind is actively bending the heather around her. The sky is theatrical: anvil clouds, a single break in the grey, the entire distance compressed into silver and violet. Bleach bypass processing desaturates everything except her skin, which reads warm and alive against the cold landscape. The image is adversarial and triumphant.'],
+      userPrompts: [
+        // Scene 1 — moorland shaft
+        'Scottish highland moorland at dusk, infinite purple heather under a brooding pewter sky — storm light breaking through in one shaft that catches the subject and nothing else. Her stance is wide and grounded, both hands at her sides, gaze level and direct into the lens. The wind is actively bending the heather around her. The sky is theatrical: anvil clouds, a single break in the grey, the entire distance compressed into silver and violet. Bleach bypass processing desaturates everything except her skin, which reads warm and alive against the cold landscape. The image is adversarial and triumphant.',
+        // Scene 2 — sea cliff
+        'A black basalt sea cliff on the Scottish coast, the North Atlantic hurling white spray up the rock face behind her. She stands near the edge, coat snapping in the gale, utterly composed against the violence of the water. The sky and sea are gunmetal and slate; the spray hangs in suspended sheets. Bleach-bypass desaturation leaves only her skin warm. Raw, elemental, triumphant.',
+        // Scene 3 — standing stone
+        'A lone neolithic standing stone on a windswept moor under storm light — the monolith ancient and lichen-streaked, taller than the figure beside it. She rests one hand on the cold stone, gaze to the horizon, the heather rolling away in every direction. A single break in the anvil clouds throws a shaft across the scene. The pairing of human and millennia-old stone is the image. Desaturated, raw, mythic.',
+        // Scene 4 — loch mirror
+        'A highland loch at first light, the water a perfect pewter mirror, mist clinging to the far hills. She stands ankle-deep at the shore, the reflection doubling her against the still surface, mountains hazing behind. The palette is silver, slate, and muted violet; only her skin holds warmth. The stillness after the storm — vast, cold, and serene.',
+        // Scene 5 — castle crag
+        'A ruined Scottish castle silhouetted on a rocky crag against a turbulent dusk sky, the last storm light raking its broken walls. She stands on the heather slope below, the fortress looming behind, both rendered in high-contrast bleach-bypass grey. The wind drives cloud across the sky in streaks. Dramatic, historic, the figure small but unbowed against the ruin and the weather.',
+        // Scene 6 — rain sweep
+        'A heather hillside as a wall of rain sweeps across the glen, a single shaft of sun punching through behind her to light the falling water silver. She faces into the weather, hair and garment streaming, fully present in the storm. The distant hills dissolve into the downpour. Bleach-bypass strips the colour to slate and silver, her skin the only warmth. Cinematic, defiant, alive.',
+      ],
     },
   },
 
@@ -224,7 +302,20 @@ export const CREATIVE_PROPS: CreativeProp[] = [
       camera: 'Editorial Wide (24mm)',
       cameraFormat: 'Phase One 150MP · 80mm',
       colorGrade: 'Fuji Pro 400H',
-      userPrompts: ['Swiss alpine meadow above the cloud line — wildflowers at her feet, the cloud sea below glowing white and formless, jagged snow peaks emerging into pure blue above. She faces away from the lens, arms open slightly at her sides — one small warm shape in an infinite cold blue-and-white world. The scale of the environment dwarfs the figure entirely; the wind moves through her. Shot wide at 24mm, the whole landscape visible, the cloud sea filling the lower third. The light is the diffused brilliance of high altitude: clean, cool, and shadowless. Silence made visible.'],
+      userPrompts: [
+        // Scene 1 — meadow above clouds
+        'Swiss alpine meadow above the cloud line — wildflowers at her feet, the cloud sea below glowing white and formless, jagged snow peaks emerging into pure blue above. She faces away from the lens, arms open slightly at her sides — one small warm shape in an infinite cold blue-and-white world. The scale of the environment dwarfs the figure entirely; the wind moves through her. Shot wide at 24mm, the whole landscape visible, the cloud sea filling the lower third. The light is the diffused brilliance of high altitude: clean, cool, and shadowless. Silence made visible.',
+        // Scene 2 — glacier ridge
+        'A glacier ridge at altitude, the ice glowing faint cerulean in the crevasses, snow peaks marching to the horizon under a flawless blue sky. She stands on a wind-scoured saddle of snow, garment crisp against the white, breath faintly visible. The light is blinding and shadowless, the air visibly thin and clean. Vast, cold, and serene — the human a single warm note in a world of ice.',
+        // Scene 3 — chalet balcony
+        'The timber balcony of an alpine chalet floating above a sea of cloud at dawn, the railing dusted with frost, snow peaks pink with first light beyond. She leans on the wooden rail in a soft layer, a cup of something warm in hand, looking out at the cloud ocean. The contrast of warm rustic wood and the infinite cold view is the image. Soft natural light, Fuji tones, quiet luxury.',
+        // Scene 4 — snow saddle
+        'A high snow saddle between two granite peaks, the wind lifting a fine veil of spindrift off the ridge behind her. She walks the crest toward the lens, small against the towering rock, the sky a deep high-altitude blue. The snow is sculpted into hard wind-ribs. Clean, shadowless brilliance; the scale monumental. A figure crossing the roof of the world.',
+        // Scene 5 — alpine lake
+        'A still alpine tarn at dawn mirroring the surrounding snow peaks and pale sky, the water glassy and ice-cold. She stands at the stony shore, the reflection perfect beneath her, the amphitheatre of mountains hazing in the cool morning light. The palette is white, granite-grey, and soft blue. The silence is total; the image splits cleanly between real and reflected worlds.',
+        // Scene 6 — cable-car platform
+        'A cable-car arrival platform perched on a peak above the clouds, steel cables sweeping down into the white below, the valley invisible beneath the cloud sea. She stands at the open edge of the platform, wind in her hair, the engineering and the void framing her. The light is high, cool, and clean. Modern alpine grandeur — human ingenuity at the threshold of the sky.',
+      ],
     },
   },
 
@@ -244,7 +335,20 @@ export const CREATIVE_PROPS: CreativeProp[] = [
       camera: 'Street Style (35mm)',
       cameraFormat: 'Leica M · 35mm Film',
       colorGrade: 'Nordic Matte',
-      userPrompts: ['A Tokyo subway platform just as the train blurs past — the subject stands completely still, planted on the yellow safety line. The train becomes a streak of green-gold light behind her, motion blur erasing everything except her stillness. She looks slightly off-camera — not quite a pose, not quite candid — the kind of expression that exists for no audience. Cool fluorescent overhead light cuts down hard; the tiled floor throws a faint reflection of her silhouette. 35mm grain, real shadow, the specific fluorescent color cast of underground infrastructure.'],
+      userPrompts: [
+        // Scene 1 — platform, train blur
+        'A Tokyo subway platform just as the train blurs past — the subject stands completely still, planted on the yellow safety line. The train becomes a streak of green-gold light behind her, motion blur erasing everything except her stillness. She looks slightly off-camera — not quite a pose, not quite candid — the kind of expression that exists for no audience. Cool fluorescent overhead light cuts down hard; the tiled floor throws a faint reflection of her silhouette. 35mm grain, real shadow, the specific fluorescent color cast of underground infrastructure.',
+        // Scene 2 — inside the car
+        'Inside a near-empty Tokyo train car at night — rows of empty seats, chrome handrails and ceiling straps receding, the black windows reflecting the cool interior light. She stands holding a strap, swaying slightly with the motion, gaze level and inward. The city lights streak past the windows in soft blur. Nordic-matte cool tones, fluorescent and precise. The specific solitude of late-night transit.',
+        // Scene 3 — ticket concourse
+        'A vast Tokyo station ticket concourse, ranks of automated gates glowing pale green, the polished floor stretching out under hard fluorescent banks. She stands amid the gates, the only still figure as soft-blurred commuters stream past on either side. The architecture is clean, grey, and infinite. Cool colour cast, sharp on her, motion everywhere else — order and flow rendered at scale.',
+        // Scene 4 — escalator tube
+        'A long tiled escalator tunnel descending into the Tokyo underground, banks of fluorescent strips running the ceiling to a vanishing point. She stands on a step mid-descent, hand on the rubber rail, framed by the converging lines of the tube. The light is clinical and even; the tile gleams faintly. Cool, geometric, the infrastructure itself the set. Nordic-matte restraint.',
+        // Scene 5 — platform bench
+        'A quiet Tokyo platform at midnight, a single illuminated vending machine glowing red-and-white against the tiled wall, a lone bench beside it. She sits at the end of the bench, the vending-machine light washing one side of her, the rest of the platform in cool shadow. The tracks are dark and empty. An image about waiting — still, cinematic, the city paused.',
+        // Scene 6 — doors opening
+        'The exact moment the train doors slide open — she stands framed dead-centre in the doorway, the car\'s cool interior light behind her, the platform\'s fluorescent glow ahead, caught between the two. A faint motion blur edges the doors. Her stance is poised, mid-step, neither in nor out. The threshold as composition — precise, modern, the geometry of the doorway holding her.',
+      ],
     },
   },
 
@@ -262,7 +366,20 @@ export const CREATIVE_PROPS: CreativeProp[] = [
       camera: 'Street Style (35mm)',
       cameraFormat: 'Canon AE-1 · 50mm Film',
       colorGrade: 'Kodak Portra 400',
-      userPrompts: ['DUMBO Brooklyn at golden hour — the Manhattan Bridge stone arch perfectly framing a shaft of amber light on cobblestone. The subject is mid-stride through the arch, one foot slightly raised, the motion caught between steps. The light from behind the arch creates a warm halo around her; her shadow stretches long on the cobblestones ahead. She is not performing for the camera. Film grain, warm Portra tones, the specific amber of late summer New York. The city is proof she belongs in it.'],
+      userPrompts: [
+        // Scene 1 — Manhattan Bridge arch
+        'DUMBO Brooklyn at golden hour — the Manhattan Bridge stone arch perfectly framing a shaft of amber light on cobblestone. The subject is mid-stride through the arch, one foot slightly raised, the motion caught between steps. The light from behind the arch creates a warm halo around her; her shadow stretches long on the cobblestones ahead. She is not performing for the camera. Film grain, warm Portra tones, the specific amber of late summer New York. The city is proof she belongs in it.',
+        // Scene 2 — Brooklyn Heights promenade
+        'The Brooklyn Heights Promenade at golden hour, the full Lower Manhattan skyline glowing across the East River behind her, the water catching the low sun in copper. She leans on the railing in profile, looking at the towers, the warm light gilding her. Joggers and strollers blur softly past. Portra warmth, fine grain — the classic New York vista, effortless and unposed.',
+        // Scene 3 — brownstone stoop
+        'A tree-lined Brooklyn brownstone block in late-afternoon light — warm sandstone steps, wrought-iron rails, golden light filtering through the canopy. She sits on the stoop, elbows on knees, relaxed and at home, dappled light across her. A bicycle leans against the rail. The image is intimate and lived-in; warm Portra tones, the specific gold of a New York September.',
+        // Scene 4 — Williamsburg waterfront
+        'The Williamsburg waterfront at golden hour, the Manhattan skyline across the river, an East River ferry pulling in behind her. She stands on the boardwalk, wind off the water, the warm light flaring slightly off the river. The industrial-chic edge of Brooklyn frames the scene. Portra warmth, candid posture — she belongs to the city and barely notices it.',
+        // Scene 5 — elevated platform
+        'An elevated outdoor subway platform in Brooklyn at golden hour — the J train\'s steel structure and the borough rooftops spread below, warm light raking down the tracks. She stands at the platform edge, the city sprawling behind her, caught in an unguarded moment. The amber light and the rust-and-steel infrastructure are the palette. Film grain, real New York texture.',
+        // Scene 6 — rooftop water towers
+        'A Brooklyn rooftop at sunset, the iconic wooden water towers silhouetted against a burning orange sky, tar-paper and brick underfoot, the skyline beyond. She stands among the rooftop clutter, jacket open, the whole borough glowing below. The light is pure late-summer amber. Portra tones, grain, the romance of the New York rooftop at the day\'s end.',
+      ],
     },
   },
 
@@ -344,7 +461,20 @@ export const CREATIVE_PROPS: CreativeProp[] = [
       camera: 'Soft Background (85mm)',
       cameraFormat: 'Contax 645 · 80mm Film',
       colorGrade: 'Kodak Portra 400',
-      userPrompts: ['She leans forward, arms resting along her legs, gaze cutting directly into the lens — no performance, just presence. The moisture on her skin catches directional late-afternoon sun and turns it into something between bronze and fire. The light bleaches and sculpts every edge, the movement of the scene captured mid-breath. Warm natural sun, low and raking, models every shadow across her body. Subtle analog film grain and warm amber undertones — the whole image feels like a memory of heat.'],
+      userPrompts: [
+        // Scene 1 — bronze lean
+        'She leans forward, arms resting along her legs, gaze cutting directly into the lens — no performance, just presence. The moisture on her skin catches directional late-afternoon sun and turns it into something between bronze and fire. The light bleaches and sculpts every edge, the movement of the scene captured mid-breath. Warm natural sun, low and raking, models every shadow across her body. Subtle analog film grain and warm amber undertones — the whole image feels like a memory of heat.',
+        // Scene 2 — Santorini terrace
+        'A whitewashed Santorini terrace at golden hour — blue domes and the caldera sea beyond, the lime-washed walls glowing warm in the low sun. She stands against a curved white wall, the directional light carving a hard shadow beside her, skin luminous and bronze. The contrast of brilliant white architecture and warm skin is the image. Contax warmth, fine grain, the heat of the Aegean.',
+        // Scene 3 — infinity pool edge
+        'The vanishing edge of an infinity pool at sunset, the water spilling toward a sea horizon that matches it exactly. She stands waist-deep at the edge, arms resting on the stone lip, looking out, the low sun gilding the water and her wet skin. The whole frame is gradients of gold and blue. Cinematic, warm, the boundary between pool and sea erased.',
+        // Scene 4 — sun-drenched wall
+        'A bare sun-bleached plaster wall in raking late-afternoon light, a single hard-edged shadow falling across it. She stands close to the wall, half in the blazing light and half in shadow, the directional sun sculpting her cheekbone and collarbone in bronze and deep umber. Minimal, graphic, the play of hard light and warm skin the entire study. Portra warmth, grain.',
+        // Scene 5 — water and droplets
+        'An extreme warm-toned study — wet hair swept back, water droplets beading and catching the low sun like sparks across the skin. She tilts her face up into the light, eyes half-closed, mid-breath. The directional sun turns every droplet into a point of fire and every plane of skin to bronze. Shallow focus, Contax rendering, the sensual heat of late sun on water.',
+        // Scene 6 — volcanic rock
+        'Golden hour on dark volcanic rock at the sea\'s edge, the surf throwing fine spray that hangs glowing in the low sun. She stands on the black stone, the warm light and cool spray meeting on her skin, the sea blazing behind. The contrast of black rock, white spray, and bronze skin is elemental. Warm film tones, grain, the raw beauty of a volcanic coast.',
+      ],
     },
   },
 
@@ -364,7 +494,20 @@ export const CREATIVE_PROPS: CreativeProp[] = [
       camera: 'Editorial Wide (24mm)',
       cameraFormat: 'Leica SL2 · 24mm Wide',
       colorGrade: 'High Contrast B&W',
-      userPrompts: ['East Berlin brutalist concrete courtyard at noon — raw poured concrete casting hard geometric shadows, the subject positioned exactly where two shadow planes intersect. Her silhouette rhymes with the angular architecture surrounding her. One arm extends sharply away from the body, creating a third geometric line in the composition. Head turned in sharp profile. The concrete is the co-star: its raw texture, its aggressive geometry, its refusal to be beautiful. High-contrast black and white removes every concession to warmth. The image is a diagram of power, rendered in shadow.'],
+      userPrompts: [
+        // Scene 1 — concrete courtyard
+        'East Berlin brutalist concrete courtyard at noon — raw poured concrete casting hard geometric shadows, the subject positioned exactly where two shadow planes intersect. Her silhouette rhymes with the angular architecture surrounding her. One arm extends sharply away from the body, creating a third geometric line in the composition. Head turned in sharp profile. The concrete is the co-star: its raw texture, its aggressive geometry, its refusal to be beautiful. High-contrast black and white removes every concession to warmth. The image is a diagram of power, rendered in shadow.',
+        // Scene 2 — concrete stairwell
+        'A brutalist concrete stairwell shot from below — raw board-marked flights zig-zagging upward, a hard slot of daylight slicing diagonally across the treads. She stands on a mid-landing, one hand on the blunt concrete rail, body aligned to the architecture\'s diagonals. The composition is all intersecting planes and shadow. High-contrast monochrome; brutal, geometric, severe.',
+        // Scene 3 — pilotis colonnade
+        'A long colonnade of raw concrete pilotis casting a rhythm of hard shadows across a bare plaza at noon. She stands between two columns, the repeating verticals and their shadows striping the frame. Her single still figure breaks the relentless rhythm of the architecture. Stark high-contrast black and white, every aggregate texture of the concrete visible. Monumental, cold, exact.',
+        // Scene 4 — parking ramp
+        'The spiralling ramp of a brutalist concrete parking structure, the curved walls and circular void rendered in hard noon light and deep shadow. She stands on the ramp\'s curve, the sweeping concrete band leading the eye around and past her. The geometry is dizzying and severe. High-contrast monochrome, the raw structure as pure abstract form.',
+        // Scene 5 — light slot
+        'A vast blank concrete wall pierced by a single narrow slot of light, a hard blade of sun cutting across the grey expanse. She stands within the slot of light against the immense dark wall, tiny and exact, her shadow thrown long. The composition is brutal minimalism — one figure, one wall, one shard of light. Severe black and white, the concrete monolithic.',
+        // Scene 6 — brutalist rooftop
+        'The rooftop of a brutalist housing block against a flat white sky — raw concrete parapets, ventilation stacks, hard geometric forms. She stands among the rooftop structures, the city haze beyond, the architecture\'s blunt geometry framing her. The light is hard and directionless. High-contrast monochrome strips it to pure form and shadow — austere, powerful, uncompromising.',
+      ],
     },
   },
 
@@ -382,7 +525,20 @@ export const CREATIVE_PROPS: CreativeProp[] = [
       camera: 'Natural Eye (50mm)',
       cameraFormat: 'Canon AE-1 · 50mm Film',
       colorGrade: 'Vintage Warm',
-      userPrompts: ['Marrakech riad central courtyard at the amber hour — intricate zellige tile floor, a lone orange tree at center, afternoon light filtering through a carved stucco oculus overhead and landing in a single warm pool on the tile. She stands at the center of the light pool, arms slightly open at the sides in a gesture between welcome and command. Her gaze is cast slightly upward toward the oculus. The carved stucco walls frame her like an illuminated manuscript. Vintage warm film tones; the image feels genuinely ancient.'],
+      userPrompts: [
+        // Scene 1 — riad courtyard
+        'Marrakech riad central courtyard at the amber hour — intricate zellige tile floor, a lone orange tree at center, afternoon light filtering through a carved stucco oculus overhead and landing in a single warm pool on the tile. She stands at the center of the light pool, arms slightly open at the sides in a gesture between welcome and command. Her gaze is cast slightly upward toward the oculus. The carved stucco walls frame her like an illuminated manuscript. Vintage warm film tones; the image feels genuinely ancient.',
+        // Scene 2 — tiled hammam
+        'A Marrakech hammam interior — zellige walls in deep teal and amber, a domed ceiling pierced with star-shaped skylights that scatter coins of light through faint steam. She stands in the warm haze, the patterned light falling across her, the air thick and golden. The geometry of the tilework and the soft drift of steam are the image. Vintage warmth, grain, an atmosphere centuries deep.',
+        // Scene 3 — carved cedar door
+        'A monumental carved-cedar Moroccan door studded with brass, set into an ochre tadelakt wall at golden hour. She stands in the half-open doorway, one hand on the ancient wood, warm interior light glowing behind her, the amber street before. The intricate carving frames her like a portal between worlds. Vintage warm tones; the craftsmanship and age are palpable.',
+        // Scene 4 — medina rooftop
+        'A riad rooftop over the Marrakech medina at dusk — a sea of flat ochre rooftops, a single minaret rising against a violet-and-amber sky, the call to prayer about to sound. She stands at the low parapet, the ancient city sprawling below, the warm light fading. Potted palms and lanterns flank her. Vintage warmth, the romance of the old city at the day\'s close.',
+        // Scene 5 — souk passage
+        'A covered souk passage, slats of dusty light falling through the reed roof onto stacked rugs, brass lamps, and pyramids of spice. She moves through the narrow passage, the filtered light striping across her, the colour and texture of the market pressing close on both sides. Warm film tones; the air is thick with light and goods. Ancient, layered, alive.',
+        // Scene 6 — courtyard fountain
+        'A riad courtyard fountain at amber hour — a star-shaped basin of still water set in zellige tile, the carved arches reflected in its surface. She kneels at the fountain\'s edge, fingertips just touching the water, the reflection doubling her among the arches. The light is warm and low, the tilework glowing. Vintage tones, serene and timeless.',
+      ],
     },
   },
 
@@ -402,7 +558,20 @@ export const CREATIVE_PROPS: CreativeProp[] = [
       camera: 'Natural Eye (50mm)',
       cameraFormat: '4x5 Large Format Film',
       colorGrade: 'Matte Fade Editorial',
-      userPrompts: ['Venetian palazzo entrance hall, mid-afternoon: light shafts cut down through frescoed ceilings and land in specific pools on the marble floor, each one an accident of geometry that took 400 years to arrange. She stands in one such pool — entirely still, chin down, eyes closed. One hand is raised to touch the carved stone doorframe; the gesture is exploratory rather than staged. The marble floor throws a faint mirror image below her. Quiet. Monumental. The image feels archival.'],
+      userPrompts: [
+        // Scene 1 — entrance hall
+        'Venetian palazzo entrance hall, mid-afternoon: light shafts cut down through frescoed ceilings and land in specific pools on the marble floor, each one an accident of geometry that took 400 years to arrange. She stands in one such pool — entirely still, chin down, eyes closed. One hand is raised to touch the carved stone doorframe; the gesture is exploratory rather than staged. The marble floor throws a faint mirror image below her. Quiet. Monumental. The image feels archival.',
+        // Scene 2 — frescoed ballroom
+        'A grand Venetian ballroom, frescoed ceiling soaring overhead, Murano-glass chandeliers hanging dark and unlit, tall windows draping the worn marble floor in soft afternoon light. She stands alone in the centre of the immense empty room, dwarfed by the gilt and fresco, perfectly still. Dust hangs in the light shafts. Large-format clarity, matte-fade tones — faded grandeur, archival and silent.',
+        // Scene 3 — grand staircase
+        'The grand marble staircase of a Venetian palazzo, worn smooth by four centuries, curving up beneath a frescoed vault. She stands on the lower flight, one hand on the cold stone balustrade, looking up into the soft light from a high window. The composition is all sweeping curve and aged marble. Quiet, monumental, the patina of age in every surface. Matte-fade, large-format detail.',
+        // Scene 4 — canal window
+        'A tall arched palazzo window thrown open onto the Grand Canal, the rippling water throwing shifting light across the marble sill and the faded silk walls. She stands at the window in profile, the canal and a passing gondola soft beyond, the water-light playing over her. The interior is dim and aged; the window a rectangle of luminous Venice. Archival stillness, matte tones.',
+        // Scene 5 — palazzo study
+        'A palazzo study lined with leather-bound volumes and gilt frames, a single shaft of afternoon light falling across a worn writing desk, dust motes suspended. She stands among the shelves, fingertips on a spine, the warm dim room enclosing her. The light is soft and directional; the air feels undisturbed for decades. Large-format detail, matte-fade — scholarly, archival, hushed.',
+        // Scene 6 — canal loggia
+        'A columned loggia of a Venetian palazzo opening onto the canal, stone arches framing the water and the façades opposite, soft reflected light bouncing up onto the vaulted ceiling. She stands between two columns at the loggia\'s edge, the canal glittering beyond, poised and still. The geometry of the arches and the shimmer of reflected water are the image. Monumental, matte, timeless.',
+      ],
     },
   },
 
@@ -453,7 +622,20 @@ export const CREATIVE_PROPS: CreativeProp[] = [
       camera: 'Soft Background (85mm)',
       cameraFormat: 'Sony A1 · 50mm',
       colorGrade: 'True Life Accurate',
-      userPrompts: ['Maldivian overwater bungalow deck, late morning — the lagoon beneath translucent turquoise, coral visible on the sand floor below, the horizon an unbroken blue line where sea meets sky. She sits on the edge of the deck, legs hanging over the water, the ocean breeze moving through her. Her posture is open and relaxed — leaning back on her palms, face turned toward the horizon. The water below is so clear it reads like a window to another world. Accurate color science: the lagoon exactly the color it is in real life, which is almost unbelievable.'],
+      userPrompts: [
+        // Scene 1 — overwater deck
+        'Maldivian overwater bungalow deck, late morning — the lagoon beneath translucent turquoise, coral visible on the sand floor below, the horizon an unbroken blue line where sea meets sky. She sits on the edge of the deck, legs hanging over the water, the ocean breeze moving through her. Her posture is open and relaxed — leaning back on her palms, face turned toward the horizon. The water below is so clear it reads like a window to another world. Accurate color science: the lagoon exactly the color it is in real life, which is almost unbelievable.',
+        // Scene 2 — sandbank
+        'A pristine sandbank in the middle of the Maldivian lagoon at midday — a curl of white sand barely above the surface, surrounded by infinite gradients of turquoise and aquamarine. She stands ankle-deep at the sand\'s edge, the only figure in a vast field of blue, the water so clear it casts no boundary. Bright, true colour; the scale of empty sea and tiny sandbank is the luxury of nothing at all.',
+        // Scene 3 — overwater hammock
+        'A rope hammock strung over the Maldivian lagoon, the turquoise water visible through the netting beneath, a thatched villa behind. She reclines in the hammock above the water, one hand trailing toward the surface, completely at ease. The light is soft and bright; the water glows beneath her. True-to-life colour, the ultimate image of weightless rest above a clear sea.',
+        // Scene 4 — villa interior
+        'A Maldivian villa interior open entirely to the sea — polished teak, white linen, sliding walls folded back so the turquoise lagoon fills the far end of the room. She stands at the threshold between the cool shaded interior and the bright deck, sea breeze moving the curtains. The contrast of warm timber, white textile, and electric blue water is the palette. Accurate, serene, effortless luxury.',
+        // Scene 5 — clear shallows
+        'Standing in the glass-clear shallows of the lagoon, the white sand floor and ripples of light visible beneath the surface, a faint coral garden nearby. She stands thigh-deep, looking down at the impossibly clear water around her legs, the turquoise stretching to the horizon. The light dances on the sand bottom. True colour science — the water exactly as unbelievable as it is in life.',
+        // Scene 6 — deck at sunset
+        'The overwater deck at sunset — the lagoon turned molten gold and rose, the sky a soft gradient, the water mirror-still. She sits at the deck\'s edge once more, silhouetted against the warm horizon, the day cooling to gold. The earlier turquoise has gone amber and pink. Warm, accurate light; the same paradise at the opposite end of the day — calm, glowing, complete.',
+      ],
     },
   },
 
@@ -471,7 +653,20 @@ export const CREATIVE_PROPS: CreativeProp[] = [
       camera: 'Soft Background (85mm)',
       cameraFormat: 'Sony A1 · 50mm',
       colorGrade: 'Kodak Portra 400',
-      userPrompts: ['Beverly Hills pool house, late afternoon — white linen curtains drifting in the warm breeze off the pool, brilliant blue water outside casting shifting light patterns on the ceiling above. She reclines on a daybed in the open pool house, one arm overhead, the aqueous light playing across her. Her expression is unguarded — genuinely at ease. The pool beyond glows electric blue through the gauze curtains. Warm Portra tones make the whole image feel like a California memory: sun-saturated, slightly golden, the kind of afternoon that lasts forever.'],
+      userPrompts: [
+        // Scene 1 — pool house daybed
+        'Beverly Hills pool house, late afternoon — white linen curtains drifting in the warm breeze off the pool, brilliant blue water outside casting shifting light patterns on the ceiling above. She reclines on a daybed in the open pool house, one arm overhead, the aqueous light playing across her. Her expression is unguarded — genuinely at ease. The pool beyond glows electric blue through the gauze curtains. Warm Portra tones make the whole image feel like a California memory: sun-saturated, slightly golden, the kind of afternoon that lasts forever.',
+        // Scene 2 — poolside lounger
+        'Poolside at a Beverly Hills estate, late afternoon — a single teak lounger at the edge of brilliant blue water, tall palms throwing soft shadows, the pool surface scattering coins of light. She sits on the lounger\'s edge, sunglasses in hand, golden light across her shoulders. The blue water and warm light are the whole mood. Portra warmth, sun-saturated California ease.',
+        // Scene 3 — mid-century living room
+        'A mid-century modern living room with floor-to-ceiling glass walls open to the pool and canyon beyond, walnut and travertine, low leather seating. She stands by the glass, the blue pool and golden hills framed behind her, warm afternoon light pooling on the stone floor. The architecture is clean and iconic. Portra tones; the relaxed opulence of the Hollywood Hills.',
+        // Scene 4 — vintage car drive
+        'A Beverly Hills driveway at golden hour — a vintage convertible parked under tall palms, a Spanish-revival façade behind, the light turning everything warm amber. She leans against the car, one arm along the door, unhurried and cool. The palms cast long shadows across the drive. Warm Portra grain, the timeless glamour of old Los Angeles.',
+        // Scene 5 — canyon terrace
+        'A hillside terrace overlooking the Los Angeles basin at golden hour, the city haze going gold below, bougainvillea spilling over a low wall. She stands at the terrace edge, the sprawling view behind her, warm light flaring softly. The scale of the city and the intimacy of the terrace meet in the frame. Portra warmth — the golden, hazy romance of an LA afternoon.',
+        // Scene 6 — garden golden hour
+        'A lush Beverly Hills garden at golden hour — bougainvillea and birds-of-paradise, a stone path, dappled light through the canopy. She walks the path toward the lens, the low sun flaring warm through the leaves, completely relaxed. The colour is rich and sun-soaked. Warm Portra tones, fine grain, the endless golden afternoon of Southern California.',
+      ],
     },
   },
 
