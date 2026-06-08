@@ -938,110 +938,9 @@ export default function CampaignBuilder() {
             )}
           </div>
 
-          {/* ── Photography Presets ────────────────────────────────── */}
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary">2. Photography Preset</p>
-              {selectedPreset && (
-                <button onClick={() => { setSelectedPreset(null); }}
-                  className="text-[10px] font-semibold text-tertiary hover:text-white transition-colors uppercase tracking-widest">
-                  Clear
-                </button>
-              )}
-            </div>
-            <div className="flex gap-3 overflow-x-auto pb-3 -mx-2 px-2 scrollbar-none snap-x">
-              {PHOTOGRAPHY_PRESETS.map(preset => {
-                const active = selectedPreset === preset.id;
-                return (
-                  <button
-                    key={preset.id}
-                    onClick={() => {
-                      setSelectedPreset(preset.id);
-                      if (!lockedParams.includes('lighting')) setLighting(preset.lighting);
-                      if (!lockedParams.includes('camera'))   setCamera(preset.camera);
-                    }}
-                    className={`flex-shrink-0 flex flex-col gap-2 p-3 rounded-xl text-left transition-all snap-start border ${
-                      active ? 'bg-gold border-gold text-on-accent' : 'bg-overlay border-white/5 hover:border-white/20 hover:bg-raised-2'
-                    }`}
-                    style={{ width: 130 }}
-                  >
-                    <div className="flex justify-between items-start w-full">
-                      <span className={`text-[12px] font-semibold leading-tight ${active ? 'text-black' : 'text-white'}`}>
-                        {preset.name}
-                      </span>
-                      {active && <Check size={14} className="text-black" />}
-                    </div>
-                    <span className={`text-[9px] font-semibold tracking-wider uppercase px-2 py-1 rounded-full leading-none ${
-                      active ? 'bg-black/10 text-black' : 'bg-black/40 text-tertiary'
-                    }`}>
-                      {preset.tag}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-            {selectedPreset && (() => {
-              const p = PHOTOGRAPHY_PRESETS.find(x => x.id === selectedPreset);
-              return p ? (
-                <p className="text-[12px] text-tertiary mt-2 font-medium">{p.vibe}</p>
-              ) : null;
-            })()}
-          </div>
-
-          {/* ── Editorial Direction ───────────────────────────────── */}
-          <div>
-            <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary mb-3">3. Editorial Direction</p>
-            <div className="grid grid-cols-2 gap-2">
-              {PHOTO_STYLE_OPTIONS.map(style => {
-                const active = photoDirection === style.id;
-                return (
-                  <button key={style.id} onClick={() => setPhotoDirection(style.id)}
-                    className={`flex flex-col gap-1 p-3 rounded-xl text-left transition-all border ${
-                      active ? 'bg-gold border-gold text-on-accent' : 'bg-overlay border-white/5 hover:border-white/20 hover:bg-raised-2'
-                    }`}>
-                    <span className={`text-[11px] font-semibold leading-tight ${active ? 'text-black' : 'text-white'}`}>
-                      {style.name}
-                    </span>
-                    <span className={`text-[9px] font-medium leading-tight ${active ? 'text-black/60' : 'text-tertiary'}`}>{style.pub}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* ── Production ──────────────────────────────────────────── */}
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center justify-between">
-              <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary">4. Production</p>
-              {lockedParams.length > 0 && (
-                <span className="text-[9px] font-semibold text-white bg-white/10 px-2 py-1 rounded-full tracking-widest uppercase">
-                  Brand Kit Active
-                </span>
-              )}
-            </div>
-
-            <ConfigSelect label="Lighting" value={lighting}
-              locked={lockedParams.includes('lighting')}
-              options={LIGHTING_OPTIONS} onChange={setLighting} />
-
-            <ConfigSelect label="Camera / Focal Length" value={camera}
-              locked={lockedParams.includes('camera')}
-              options={CAMERA_OPTIONS} onChange={setCamera} />
-
-            <ConfigSelect label="Color Grade / Film Stock" value={colorGrade}
-              locked={lockedParams.includes('colorGrade')}
-              options={COLOR_GRADE_OPTIONS} onChange={setColorGrade} />
-
-            <ConfigSelect label="Camera Format / Optics" value={cameraFormat}
-              options={CAMERA_FORMAT_OPTIONS} onChange={setCameraFormat} />
-
-            <ConfigSelect label="Styling" value={styling}
-              options={STYLING_OPTIONS} onChange={setStyling} />
-          </div>
-
           {/* ── Model Casting ─────────────────────────────────────────── */}
           <div>
-            <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary mb-3">5. Model Casting</p>
+            <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary mb-3">2. Model Casting</p>
             <div className="flex flex-col gap-4">
               {/* Strategy Toggle */}
               <div className="grid grid-cols-2 gap-2 mb-2">
@@ -1076,7 +975,7 @@ export default function CampaignBuilder() {
 
           {/* ── Skin Tone ─────────────────────────────────────────────── */}
           <div>
-            <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary mb-3">6. Skin Tone</p>
+            <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary mb-3">3. Skin Tone</p>
             <div className="grid grid-cols-4 gap-2">
               {SKIN_TONES.map(tone => {
                 const active = skinTone === tone.id;
@@ -1102,7 +1001,7 @@ export default function CampaignBuilder() {
 
           {/* ── Shoot Direction ────────────────────────────────────────── */}
           <div>
-            <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary mb-3">7. Shoot Direction</p>
+            <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary mb-3">4. Shoot Direction</p>
             <div className="flex flex-col gap-4">
               <ConfigSelect label="Expression" value={expression}
                 options={EXPRESSION_OPTIONS} onChange={setExpression} />
@@ -1115,9 +1014,31 @@ export default function CampaignBuilder() {
             </div>
           </div>
 
-          {/* ── Location / Background ─────────────────────────────────── */}
+          {/* ── Scene (curated props + location, consolidated) ─────────── */}
           <div>
-            <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary mb-3">8. Location</p>
+            <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary mb-3">5. Scene</p>
+
+            {/* Primary: a curated scene — sets the location, look, and its variations */}
+            <button
+              onClick={() => setShowCreativeProps(true)}
+              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-[11px] font-semibold tracking-widest uppercase transition-all"
+              style={{
+                background: activePropId ? 'white' : 'var(--surface-overlay)',
+                color: activePropId ? 'black' : 'white',
+              }}>
+              <Sparkles size={14} />
+              {activePropId ? activePropId.replace(/-/g, ' ') : 'Browse Scenes'}
+            </button>
+            {activePropId && (
+              <button onClick={() => setActivePropId(null)}
+                className="w-full text-center text-[10px] font-semibold text-tertiary hover:text-white mt-3 uppercase tracking-widest transition-colors">
+                Clear Scene
+              </button>
+            )}
+
+            <p className="text-[9px] font-semibold tracking-[0.2em] uppercase text-white/20 text-center my-3">— or a plain backdrop —</p>
+
+            {/* Secondary: a raw location preset (no full art direction) — clears any active scene */}
             <button
               onClick={() => setLocationPickerOpen(true)}
               className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all bg-overlay hover:bg-raised-2 border border-white/5 hover:border-white/20"
@@ -1134,7 +1055,7 @@ export default function CampaignBuilder() {
               }
             </button>
 
-            {/* Custom environment upload — overrides preset when set */}
+            {/* Custom environment upload — clears scene + preset when set */}
             <input
               ref={customBgInputRef}
               type="file"
@@ -1148,6 +1069,7 @@ export default function CampaignBuilder() {
                   const compressed = await compressImage(file);
                   setCustomBg(compressed);
                   setLocation('');           // mutually exclusive with a preset
+                  setActivePropId(null);     // and with a curated scene
                 } catch { /* ignore unreadable image */ }
               }}
             />
@@ -1200,7 +1122,7 @@ export default function CampaignBuilder() {
                           </div>
                           {catPresets.map(preset => (
                             <button key={preset.id}
-                              onClick={() => { setLocation(preset.id); setLocationPickerOpen(false); }}
+                              onClick={() => { setLocation(preset.id); setActivePropId(null); setLocationPickerOpen(false); }}
                               className="w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-white/5 transition-colors border-b border-white/5 last:border-0">
                               <span className={`text-[12px] font-medium truncate flex-1 ${location === preset.id ? 'text-white' : 'text-tertiary'}`}>
                                 {preset.label}
@@ -1217,30 +1139,110 @@ export default function CampaignBuilder() {
             </AnimatePresence>
           </div>
 
-          {/* ── Scene Props ──────────────────────────────────── */}
+          {/* ── Photography Preset (optional) ──────────────────────────── */}
           <div>
-            <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary mb-3">9. Scene Props</p>
-            <button
-              onClick={() => setShowCreativeProps(true)}
-              className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-[11px] font-semibold tracking-widest uppercase transition-all"
-              style={{
-                background: activePropId ? 'white' : 'var(--surface-overlay)',
-                color: activePropId ? 'black' : 'white',
-              }}>
-              <Sparkles size={14} />
-              {activePropId ? activePropId.replace(/-/g, ' ') : 'Browse Scene Props'}
-            </button>
-            {activePropId && (
-              <button onClick={() => setActivePropId(null)}
-                className="w-full text-center text-[10px] font-semibold text-tertiary hover:text-white mt-3 uppercase tracking-widest transition-colors">
-                Clear Prop
-              </button>
-            )}
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary">6. Photography Preset</p>
+              {selectedPreset && (
+                <button onClick={() => { setSelectedPreset(null); }}
+                  className="text-[10px] font-semibold text-tertiary hover:text-white transition-colors uppercase tracking-widest">
+                  Clear
+                </button>
+              )}
+            </div>
+            <div className="flex gap-3 overflow-x-auto pb-3 -mx-2 px-2 scrollbar-none snap-x">
+              {PHOTOGRAPHY_PRESETS.map(preset => {
+                const active = selectedPreset === preset.id;
+                return (
+                  <button
+                    key={preset.id}
+                    onClick={() => {
+                      setSelectedPreset(preset.id);
+                      if (!lockedParams.includes('lighting')) setLighting(preset.lighting);
+                      if (!lockedParams.includes('camera'))   setCamera(preset.camera);
+                    }}
+                    className={`flex-shrink-0 flex flex-col gap-2 p-3 rounded-xl text-left transition-all snap-start border ${
+                      active ? 'bg-gold border-gold text-on-accent' : 'bg-overlay border-white/5 hover:border-white/20 hover:bg-raised-2'
+                    }`}
+                    style={{ width: 130 }}
+                  >
+                    <div className="flex justify-between items-start w-full">
+                      <span className={`text-[12px] font-semibold leading-tight ${active ? 'text-black' : 'text-white'}`}>
+                        {preset.name}
+                      </span>
+                      {active && <Check size={14} className="text-black" />}
+                    </div>
+                    <span className={`text-[9px] font-semibold tracking-wider uppercase px-2 py-1 rounded-full leading-none ${
+                      active ? 'bg-black/10 text-black' : 'bg-black/40 text-tertiary'
+                    }`}>
+                      {preset.tag}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+            {selectedPreset && (() => {
+              const p = PHOTOGRAPHY_PRESETS.find(x => x.id === selectedPreset);
+              return p ? (
+                <p className="text-[12px] text-tertiary mt-2 font-medium">{p.vibe}</p>
+              ) : null;
+            })()}
+          </div>
+
+          {/* ── Editorial Direction (optional) ─────────────────────────── */}
+          <div>
+            <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary mb-3">7. Editorial Direction</p>
+            <div className="grid grid-cols-2 gap-2">
+              {PHOTO_STYLE_OPTIONS.map(style => {
+                const active = photoDirection === style.id;
+                return (
+                  <button key={style.id} onClick={() => setPhotoDirection(style.id)}
+                    className={`flex flex-col gap-1 p-3 rounded-xl text-left transition-all border ${
+                      active ? 'bg-gold border-gold text-on-accent' : 'bg-overlay border-white/5 hover:border-white/20 hover:bg-raised-2'
+                    }`}>
+                    <span className={`text-[11px] font-semibold leading-tight ${active ? 'text-black' : 'text-white'}`}>
+                      {style.name}
+                    </span>
+                    <span className={`text-[9px] font-medium leading-tight ${active ? 'text-black/60' : 'text-tertiary'}`}>{style.pub}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* ── Lighting & Camera (optional) ───────────────────────────── */}
+          <div className="flex flex-col gap-4">
+            <div className="flex items-center justify-between">
+              <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary">8. Lighting &amp; Camera</p>
+              {lockedParams.length > 0 && (
+                <span className="text-[9px] font-semibold text-white bg-white/10 px-2 py-1 rounded-full tracking-widest uppercase">
+                  Brand Kit Active
+                </span>
+              )}
+            </div>
+
+            <ConfigSelect label="Lighting" value={lighting}
+              locked={lockedParams.includes('lighting')}
+              options={LIGHTING_OPTIONS} onChange={setLighting} />
+
+            <ConfigSelect label="Camera / Focal Length" value={camera}
+              locked={lockedParams.includes('camera')}
+              options={CAMERA_OPTIONS} onChange={setCamera} />
+
+            <ConfigSelect label="Color Grade / Film Stock" value={colorGrade}
+              locked={lockedParams.includes('colorGrade')}
+              options={COLOR_GRADE_OPTIONS} onChange={setColorGrade} />
+
+            <ConfigSelect label="Camera Format / Optics" value={cameraFormat}
+              options={CAMERA_FORMAT_OPTIONS} onChange={setCameraFormat} />
+
+            <ConfigSelect label="Styling" value={styling}
+              options={STYLING_OPTIONS} onChange={setStyling} />
           </div>
 
           {/* ── Creative Direction ────────────────────────────── */}
           <div>
-            <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary mb-3">10. Creative Direction</p>
+            <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary mb-3">9. Creative Direction</p>
             <textarea
               value={prompt}
               onChange={e => setPrompt(e.target.value)}
@@ -1279,7 +1281,7 @@ export default function CampaignBuilder() {
 
           {/* ── Output Mode ───────────────────────────────────────────── */}
           <div>
-            <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary mb-3">11. Output</p>
+            <p className="text-[10px] font-semibold tracking-widest uppercase text-tertiary mb-3">10. Output</p>
             <div className="grid grid-cols-2 gap-3">
               {([
                 { mode: 'still' as const, label: '6 Stills', sub: '3 credits' },
