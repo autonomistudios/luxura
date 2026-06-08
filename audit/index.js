@@ -99,6 +99,8 @@ import {
   runLookbookPaginationTests,
 } from './tests/design-system.js';
 
+import { runPropCoverTests } from './tests/prop-covers.js';
+
 import {
   runSkuEnrollmentSchemaTests,
   runSkuRecallTests,
@@ -162,6 +164,7 @@ async function main() {
   console.log('\n\n▓▓▓ SECTION 0b: DESIGN SYSTEM (Atelier OS) ▓▓▓');
   await runSuite('Design Tokens & Fonts',        runDesignTokenTests);
   await runSuite('Lookbook Pagination',          runLookbookPaginationTests);
+  await runSuite('Prop Cover Completeness',       runPropCoverTests);
 
   // ── SECTION 1: PROMPT ARCHITECTURE ────────────────────────────────────────
   console.log('\n\n▓▓▓ SECTION 1: PROMPT ARCHITECTURE ▓▓▓');

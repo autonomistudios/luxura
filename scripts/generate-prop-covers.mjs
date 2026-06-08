@@ -1,58 +1,45 @@
 /**
  * scripts/generate-prop-covers.mjs
- * Generates one cover image per Creative Prop using gemini-3.1-flash-image-preview.
- * Each cover features a unique, diverse high-fashion model with original wardrobe.
- * Saves base64 data URL to Firestore prop-covers/{propId}.
+ * ───────────────────────────────────────────────────────────────────────────
+ * Generates the hero cover image for every Creative Prop at PRO grade
+ * (Nano Banana Pro / gemini-3-pro-image) and writes each as a committed file to
+ * public/assets/props/<propId>.jpg — the permanent, CDN-served, in-repo source
+ * of truth for prop covers (see public/assets/props/README.md).
  *
- * Run: node scripts/generate-prop-covers.mjs
+ * Creative direction lives in PROP_SHOOTS below — bespoke, diversely-cast model +
+ * wardrobe + scene per prop (the studio's original IP). Props without a bespoke
+ * shoot fall back to their primary scene text + rotated diverse casting.
+ *
+ * Generation runs through the DEPLOYED endpoint (/api/generate-prop-cover, fullRes),
+ * so NO local credentials are needed — the server holds GOOGLE_API_KEY. This
+ * deliberately avoids the legacy Firebase-Admin path (the local service-account
+ * key is corrupt) and the Firestore 1MB limit; fullRes returns 1280px q88.
+ *
+ * USAGE:
+ *   node scripts/generate-prop-covers.mjs              # only missing covers
+ *   node scripts/generate-prop-covers.mjs --force      # regenerate all
+ *   node scripts/generate-prop-covers.mjs --only=glass-tower,paris-night
+ *   ENDPOINT=https://<deployment>/api/generate-prop-cover node scripts/generate-prop-covers.mjs
  */
+import esbuild from 'esbuild';
+import { writeFileSync, existsSync, mkdirSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'node:path';
 
-import { GoogleGenerativeAI } from '@google/generative-ai';
-import admin from 'firebase-admin';
-import { readFileSync } from 'fs';
-import { execSync } from 'child_process';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
-import sharp from 'sharp';
 const __dirname = dirname(fileURLToPath(import.meta.url));
+const ROOT = resolve(__dirname, '..');
+const OUT_DIR = resolve(ROOT, 'public/assets/props');
+const ENDPOINT = process.env.ENDPOINT || 'https://luxaurastudio.vercel.app/api/generate-prop-cover';
+const MODEL = 'gemini-3-pro-image';          // Nano Banana Pro — the best image model
+const CONCURRENCY = 3;
+const MAX_ATTEMPTS = 4;
 
-// Load .env manually (no dotenv dependency needed)
-function loadEnv(filePath) {
-  try {
-    const content = readFileSync(filePath, 'utf8');
-    for (const line of content.split('\n')) {
-      const trimmed = line.trim();
-      if (!trimmed || trimmed.startsWith('#')) continue;
-      const eqIdx = trimmed.indexOf('=');
-      if (eqIdx < 0) continue;
-      const key = trimmed.slice(0, eqIdx).trim();
-      let val = trimmed.slice(eqIdx + 1).trim();
-      if ((val.startsWith('"') && val.endsWith('"')) || (val.startsWith("'") && val.endsWith("'"))) {
-        val = val.slice(1, -1);
-      }
-      if (!process.env[key]) process.env[key] = val;
-    }
-  } catch { /* file may not exist */ }
-}
-loadEnv(join(__dirname, '..', '.env'));
-loadEnv(join(__dirname, '..', '.env.local'));
+const args = process.argv.slice(2);
+const FORCE = args.includes('--force');
+const ONLY = (args.find(a => a.startsWith('--only=')) || '').replace('--only=', '').split(',').filter(Boolean);
 
-// ── Firebase Admin init ────────────────────────────────────────────────────────
-const serviceAccountB64 = process.env.FIREBASE_SERVICE_ACCOUNT;
-if (!serviceAccountB64) throw new Error('FIREBASE_SERVICE_ACCOUNT env var missing');
-const serviceAccount = JSON.parse(Buffer.from(serviceAccountB64, 'base64').toString('utf8'));
-
-if (!admin.apps.length) {
-  admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
-}
-const db = admin.firestore();
-
-// ── Gemini init ────────────────────────────────────────────────────────────────
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || process.env.VITE_GEMINI_API_KEY);
-const model = genAI.getGenerativeModel({ model: 'gemini-3.1-flash-image-preview' });
-
-// ── Unique model + wardrobe descriptions for each prop ─────────────────────────
-// Each entry: [propId, modelDesc, scenePrompt]
+// ── Bespoke per-prop creative direction (studio IP) ──────────────────────────
+// Each entry: { id, model (casting + wardrobe), scene (location + light + direction) }.
 const PROP_SHOOTS = [
   {
     id: 'glass-tower',
@@ -156,140 +143,117 @@ const PROP_SHOOTS = [
   },
 ];
 
-const SYSTEM_PROMPT = `You are a world-class fashion photographer whose work appears in Vogue, W, Harper's BAZAAR, CR Fashion Book, and major luxury campaigns. You are shooting a single image for a specific creative brief.
+const SHOOT_BY_ID = new Map(PROP_SHOOTS.map(s => [s.id, s]));
 
-Requirements:
-- Magazine-quality, cinematic, editorial fashion photograph
-- Ultra-high resolution, professional studio or location photography
-- The model described must look like a REAL high-fashion model — not generic or AI-looking
-- Clothing and accessories described must be rendered with full material and texture detail
-- Lighting exactly as specified in the scene brief
-- Full-bleed photographic composition
-- No text, no watermarks, no borders, no compositing artifacts
-- The image should look like it was shot by a $50,000/day fashion photographer`;
+// Diverse casting rotated across props lacking a bespoke shoot — real range.
+const CASTING = [
+  'a deep-ebony East African model with a sculptural short afro and a regal neck',
+  'a Black American model with voluminous natural curls and striking bone structure',
+  'an East Asian model with a sleek jet-black blunt bob',
+  'a South Asian model with long glossy black hair and deep brown skin',
+  'a Latina model with warm bronze skin and tousled dark waves',
+  'a Scandinavian model with platinum hair and pale luminous skin',
+  'a Mediterranean model with olive skin and thick dark waves',
+  'a Middle Eastern model with kohl-deep eyes and long dark hair',
+  'a mixed-race model with freckled tan skin and copper curls',
+  'a Southeast Asian model with golden skin and a sharp chic crop',
+  'a fair-skinned redhead model with porcelain skin',
+  'a rich-mahogany West African model with braided hair and fierce presence',
+];
 
-async function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
+// Per-category couture styling so engine-built covers still pop with intent.
+const CATEGORY_STYLING = {
+  editorial:     'a bold architectural couture look — razor tailoring or a dramatic statement piece, confident color, impeccable finish',
+  campaign:      'a monumental flowing gown or powerful tailored look that moves with the wind and the landscape',
+  street:        'directional street-luxe — statement outerwear, bold accessories, real attitude',
+  beauty:        'minimal but striking styling — the face, the skin, and one bold accessory are the entire story',
+  'avant-garde': 'experimental sculptural couture — an unconventional, daring silhouette',
+  'fine-art':    'a sculptural couture gown or flawless tailoring with the gravity of a masterpiece',
+  lifestyle:     'elevated resort luxe — effortless, expensive, sun-warmed, enviable',
+};
 
-async function generateWithBackoff(fn, retries = 3) {
-  for (let i = 0; i < retries; i++) {
-    try {
-      return await fn();
-    } catch (err) {
-      if (err?.status === 429 || err?.message?.includes('quota')) {
-        console.log(`  Rate limited — waiting ${(i + 1) * 15}s...`);
-        await sleep((i + 1) * 15000);
-      } else if (i === retries - 1) {
-        throw err;
-      } else {
-        console.log(`  Error, retrying (${i + 1}/${retries}): ${err.message}`);
-        await sleep(3000);
-      }
-    }
-  }
-}
-
-async function generateCover(shoot) {
-  const prompt = `${SYSTEM_PROMPT}
-
-MODEL & WARDROBE:
-${shoot.model}
-
-SCENE & DIRECTION:
-${shoot.scene}
-
-Produce one definitive fashion photograph. The model must be beautiful, unique, and look like a top international runway model. The wardrobe must be rendered with complete material accuracy and texture. This is a hero image — make it extraordinary.`;
-
-  const result = await generateWithBackoff(() =>
-    model.generateContent({
-      contents: [{ role: 'user', parts: [{ text: prompt }] }],
-      generationConfig: { responseModalities: ['IMAGE'], temperature: 1.0 },
-    })
-  );
-
-  const part = result.response?.candidates?.[0]?.content?.parts?.find(p => p.inlineData?.data);
-  if (!part) throw new Error('No image in response');
-
-  // Compress to JPEG ≤900KB to fit Firestore's 1MB document limit
-  const rawBuffer = Buffer.from(part.inlineData.data, 'base64');
-  const compressed = await sharp(rawBuffer)
-    .resize(1200, 1200, { fit: 'inside', withoutEnlargement: true })
-    .jpeg({ quality: 82, progressive: true })
-    .toBuffer();
-  return `data:image/jpeg;base64,${compressed.toString('base64')}`;
-}
-
-async function saveCover(propId, coverUrl) {
-  await db.collection('prop-covers').doc(propId).set({
-    coverUrl,
-    propId,
-    generatedAt: admin.firestore.FieldValue.serverTimestamp(),
+async function loadProps() {
+  const built = await esbuild.build({
+    entryPoints: [resolve(ROOT, 'src/lib/creativeProps.ts')],
+    bundle: true, format: 'esm', platform: 'node', write: false, logLevel: 'silent',
   });
+  const mod = await import('data:text/javascript;base64,' + Buffer.from(built.outputFiles[0].text).toString('base64'));
+  return mod.CREATIVE_PROPS;
 }
 
-function deploy() {
-  console.log('\n🚀 Deploying to Vercel...');
-  try {
-    execSync('npx vercel --prod --yes', {
-      cwd: join(__dirname, '..'),
-      stdio: 'inherit',
-      timeout: 120000,
-    });
-    console.log('✓ Deployed\n');
-  } catch (err) {
-    console.error('Deploy failed:', err.message);
-  }
+function buildPrompt(prop, index) {
+  const c = prop.config;
+  const photo = [c.cameraFormat || c.camera, c.lighting, c.colorGrade].filter(Boolean).join(' · ');
+  const shoot = SHOOT_BY_ID.get(prop.id);
+
+  // Bespoke shoots carry their own couture wardrobe; engine props get diverse
+  // casting + a per-category bold styling direction.
+  const casting = shoot
+    ? shoot.model
+    : `${CASTING[index % CASTING.length]}, styled in ${CATEGORY_STYLING[prop.category] || 'a bold, confident couture look'}`;
+  const scene = shoot ? shoot.scene : c.userPrompts[0];
+
+  return [
+    `CASTING & STYLING:\n${casting}`,
+    `\n\nSCENE & DIRECTION:\n${scene}`,
+    photo ? `\n\nPHOTOGRAPHY: ${photo}.` : '',
+    `\n\nThis is the HERO COVER for "${prop.name}". Make it hot — magnetic energy and attitude, couture drama, ` +
+    `movement in fabric and hair, decisive sculptural light, and color that pops off the page. Render every garment's ` +
+    `material and texture at full fidelity; reproduce the model's skin tone exactly — rich, true, luminous. ` +
+    `The single most striking frame this scene could ever produce.`,
+  ].join('');
 }
 
-// Already successfully saved to Firestore — skip these
-const ALREADY_DONE = new Set([
-  'glass-tower', 'lime-wall', 'seoul-arcade', 'dust-and-gold',
-  'close-study', 'marble-palazzo', 'beverly-gold',
-]);
-
-async function main() {
-  const pending = PROP_SHOOTS.filter(s => !ALREADY_DONE.has(s.id));
-  console.log(`\n${'═'.repeat(60)}`);
-  console.log('  LuxAura — Generate Prop Covers (retry pass)');
-  console.log(`  ${pending.length} props remaining`);
-  console.log(`${'═'.repeat(60)}\n`);
-
-  let successCount = 0;
-
-  for (let i = 0; i < pending.length; i++) {
-    const shoot = pending[i];
-    console.log(`[${i + 1}/${pending.length}] ${shoot.id}`);
-
+async function generateOne(prop, index) {
+  const userPrompt = buildPrompt(prop, index);
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
     try {
-      console.log('  Generating image...');
-      const coverUrl = await generateCover(shoot);
-      console.log('  Saving to Firestore...');
-      await saveCover(shoot.id, coverUrl);
-      console.log(`  ✓ Done`);
-      successCount++;
+      const res = await fetch(ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ propId: prop.id, userPrompt, model: MODEL, fullRes: true }),
+      });
+      let data;
+      try { data = await res.json(); } catch { throw new Error(`non-JSON (HTTP ${res.status} — likely timeout)`); }
+      if (!res.ok || !data.coverUrl) throw new Error(data.error || `HTTP ${res.status}`);
+      const buf = Buffer.from(data.coverUrl.split(',')[1], 'base64');
+      writeFileSync(resolve(OUT_DIR, `${prop.id}.jpg`), buf);
+      return { id: prop.id, kb: Math.round(buf.length / 1024), attempt, bespoke: SHOOT_BY_ID.has(prop.id) };
     } catch (err) {
-      console.error(`  ✗ Failed: ${err.message}`);
+      if (attempt === MAX_ATTEMPTS) return { id: prop.id, error: err.message };
+      await new Promise(r => setTimeout(r, attempt * 2500)); // 2.5s, 5s, 7.5s
     }
-
-    // Deploy every 10 images
-    if ((i + 1) % 10 === 0 && i + 1 < pending.length) {
-      deploy();
-    }
-
-    // Small pause between generations
-    if (i < pending.length - 1) await sleep(2000);
   }
-
-  console.log(`\n${'═'.repeat(60)}`);
-  console.log(`  Completed: ${successCount}/${pending.length} covers generated`);
-  console.log(`${'═'.repeat(60)}\n`);
-
-  // Final deploy
-  deploy();
 }
 
-main().catch(err => {
-  console.error('Fatal error:', err);
-  process.exit(1);
-});
+async function run() {
+  mkdirSync(OUT_DIR, { recursive: true });
+  const all = await loadProps();
+  let targets = all.map((p, i) => ({ p, i }));
+  if (ONLY.length) targets = targets.filter(({ p }) => ONLY.includes(p.id));
+  if (!FORCE) targets = targets.filter(({ p }) => !existsSync(resolve(OUT_DIR, `${p.id}.jpg`)));
+
+  const noShoot = all.filter(p => !SHOOT_BY_ID.has(p.id)).map(p => p.id);
+  console.log(`Props: ${all.length} | bespoke shoots: ${PROP_SHOOTS.length} | fallback (scene-based): ${noShoot.length}${noShoot.length ? ` [${noShoot.join(', ')}]` : ''}`);
+  console.log(`To generate: ${targets.length} | model: ${MODEL} | endpoint: ${ENDPOINT}\n`);
+  if (!targets.length) { console.log('All covers present. Use --force to regenerate.'); return; }
+
+  const results = [];
+  let cursor = 0;
+  async function worker() {
+    while (cursor < targets.length) {
+      const { p, i } = targets[cursor++];
+      process.stdout.write(`  → ${p.id} … `);
+      const r = await generateOne(p, i);
+      results.push(r);
+      console.log(r.error ? `FAIL: ${r.error}` : `ok (${r.kb}KB, try ${r.attempt}${r.bespoke ? '' : ', scene-fallback'})`);
+    }
+  }
+  await Promise.all(Array.from({ length: Math.min(CONCURRENCY, targets.length) }, worker));
+
+  const failed = results.filter(r => r.error);
+  console.log(`\nDone. ${results.length - failed.length} ok, ${failed.length} failed.`);
+  if (failed.length) { failed.forEach(f => console.log(`  FAILED ${f.id}: ${f.error}`)); process.exit(1); }
+}
+
+run().catch(e => { console.error(e); process.exit(1); });

@@ -221,7 +221,9 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {filtered.map(prop => {
               const generatedCover = covers[prop.id];
-              const coverUrl       = generatedCover || CATEGORY_COVER[prop.category] || '';
+              // Cover priority: runtime custom (Firestore) → committed Pro cover file → category fallback (onError)
+              const coverUrl       = generatedCover || `/assets/props/${prop.id}.jpg`;
+              const fallbackCover  = CATEGORY_COVER[prop.category] || '';
               const isSelected = selected === prop.id;
               const isGenerating = generating === prop.id;
               const activeIdx  = getSceneIdx(prop.id);
@@ -254,8 +256,8 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
                       src={coverUrl}
                       alt={prop.name}
                       loading="lazy"
+                      onError={e => { const t = e.currentTarget; t.onerror = null; if (fallbackCover && !t.src.endsWith(fallbackCover)) t.src = fallbackCover; }}
                       className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                      style={{ filter: generatedCover ? 'none' : 'saturate(0.9) brightness(0.8) contrast(1.05)' }}
                     />
                     {/* Bespoke cover generation — optional, surfaced on hover only when no custom cover exists yet */}
                     {!generatedCover && (
