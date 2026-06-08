@@ -26,14 +26,19 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { propId, userPrompt } = req.body ?? {};
+  const { propId, userPrompt, model: requestedModel } = req.body ?? {};
   if (!propId || !userPrompt) {
     return res.status(400).json({ error: 'propId and userPrompt required' });
   }
 
+  // Optional model override for A/B quality comparison; default = production Pro.
+  const ALLOWED_MODELS = new Set(['gemini-3-pro-image', 'gemini-2.5-flash-image', 'gemini-3.1-flash-image']);
+  const chosenModel = ALLOWED_MODELS.has(requestedModel) ? requestedModel : PXL_MODEL;
+
   try {
     const genAI = createGenAI();
-    const model  = genAI.getGenerativeModel({ model: PXL_MODEL });
+    const model  = genAI.getGenerativeModel({ model: chosenModel });
+    console.log(`[PROP COVER] Generating ${propId} with model=${chosenModel}`);
     const prompt = `${COVER_SYSTEM}\n\n${userPrompt}`;
 
     const result = await withGeminiBackoff(() =>
@@ -62,8 +67,8 @@ export default async function handler(req, res) {
       generatedAt: new Date().toISOString(),
     });
 
-    console.log(`[PROP COVER] Generated and stored: ${propId} (${compressed.length} bytes)`);
-    return res.status(200).json({ coverUrl });
+    console.log(`[PROP COVER] Generated and stored: ${propId} via ${chosenModel} (${compressed.length} bytes)`);
+    return res.status(200).json({ coverUrl, model: chosenModel });
 
   } catch (err) {
     console.error('[PROP COVER] Error:', err);
