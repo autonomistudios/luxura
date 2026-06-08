@@ -48,6 +48,7 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
   // Lazily-generated per-scene cover images, keyed `${propId}__${idx}`
   const [sceneCovers, setSceneCovers] = useState<Record<string, string>>({});
   const [sceneBusy,   setSceneBusy]   = useState<Record<string, boolean>>({});
+  const [lightbox,    setLightbox]    = useState<string | null>(null);
 
   useEffect(() => {
     getDocs(collection(db, 'prop-covers')).then(snap => {
@@ -127,6 +128,25 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
   };
 
   // ── Scene-variation detail view — all 5–6 variations as full readable text ──
+  // Full-screen lightbox — click any cover or scene image to view it large (no download needed).
+  const lightboxNode = lightbox ? (
+    <div className="fixed inset-0 z-[70] flex items-center justify-center p-4 bg-black/95 backdrop-blur-md" onClick={() => setLightbox(null)}>
+      <img
+        src={lightbox}
+        alt=""
+        onClick={e => e.stopPropagation()}
+        className="max-h-[94vh] max-w-[96vw] object-contain rounded-lg"
+        style={{ boxShadow: '0 20px 80px rgba(0,0,0,0.7)' }}
+      />
+      <button
+        onClick={() => setLightbox(null)}
+        className="absolute top-5 right-5 w-9 h-9 rounded-full bg-white/10 text-white hover:bg-white/20 transition-all flex items-center justify-center text-xl leading-none"
+      >
+        ×
+      </button>
+    </div>
+  ) : null;
+
   if (detail) {
     return (
       <div className="fixed inset-0 z-50 flex flex-col" style={{ background: 'rgba(0,0,0,0.97)' }}>
@@ -178,8 +198,9 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
                     <div className="relative w-full overflow-hidden" style={{ aspectRatio: '4 / 5' }}>
                       {img ? (
                         <img src={img} alt={`Scene ${idx + 1}`}
+                          onClick={e => { e.stopPropagation(); setLightbox(img); }}
                           onError={e => { const t = e.currentTarget; t.onerror = null; const f = CATEGORY_COVER[detail.category]; if (f && !t.src.endsWith(f)) t.src = f; }}
-                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 cursor-zoom-in" />
                       ) : (
                         <div className="w-full h-full flex flex-col items-center justify-center gap-2 bg-white/[0.02]">
                           {sceneBusy[key]
@@ -212,6 +233,7 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
             {detail.config.locationPreset && (<><span>·</span><span>{detail.config.locationPreset.label}</span></>)}
           </div>
         </div>
+        {lightboxNode}
       </div>
     );
   }
@@ -311,8 +333,9 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
                       src={coverUrl}
                       alt={prop.name}
                       loading="lazy"
+                      onClick={e => { e.stopPropagation(); setLightbox(coverUrl); }}
                       onError={e => { const t = e.currentTarget; t.onerror = null; if (fallbackCover && !t.src.endsWith(fallbackCover)) t.src = fallbackCover; }}
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 cursor-zoom-in"
                     />
                     {/* Bespoke cover generation — optional, surfaced on hover only when no custom cover exists yet */}
                     {!generatedCover && (
@@ -423,6 +446,7 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
           </div>
         </div>
       </div>
+      {lightboxNode}
     </div>
   );
 };
