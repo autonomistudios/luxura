@@ -537,6 +537,8 @@ export default function CampaignBuilder() {
   const [styling,         setStyling]         = useState('Auto');
   const [gender,          setGender]          = useState('Female');
   const [strategy,        setStrategy]        = useState<'change' | 'keep'>('change');
+  const [modelImage,      setModelImage]      = useState<string | null>(null);
+  const modelImageInputRef = useRef<HTMLInputElement | null>(null);
   const [showCreativeProps, setShowCreativeProps] = useState(false);
   const [activePropId,      setActivePropId]      = useState<string | null>(null);
   // Creative-control mode: 'assisted' (Director composes briefs) | 'verbatim' (your text used as-is)
@@ -739,6 +741,8 @@ export default function CampaignBuilder() {
           userPrompt:    effectivePrompt || undefined,
           promptMode,
           gender:        gender.toLowerCase(),
+          // Path C — inject a separate model: their photo becomes the identity anchor.
+          modelImage:    modelImage || undefined,
           sourceImage:   activeSku.referenceImage || '',
           // ── Consumer IP fields ──────────────────────────────────────────
           photoDirection,
@@ -969,12 +973,48 @@ export default function CampaignBuilder() {
 
               {strategy === 'change' && (
                 <>
-                  <ConfigSelect label="Gender" value={gender}
-                    options={GENDER_OPTIONS} onChange={setGender} />
-                  <ConfigSelect label="Model Archetype" value={modelArchetype}
-                    options={MODEL_ARCHETYPE_OPTIONS} onChange={setModelArchetype} />
-                  <ConfigSelect label="Age Range" value={ageRange}
-                    options={AGE_RANGE_OPTIONS} onChange={setAgeRange} />
+                  {/* Inject a specific model (Path C) — identity locked to your uploaded photo,
+                      composited with the wardrobe SKU. When set, casting selects don't apply. */}
+                  <input
+                    ref={modelImageInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={async e => {
+                      const file = e.target.files?.[0];
+                      e.target.value = '';
+                      if (!file) return;
+                      try { setModelImage(await compressImage(file)); }
+                      catch { /* ignore unreadable image */ }
+                    }}
+                  />
+                  {modelImage ? (
+                    <div className="flex items-center gap-3 p-3 rounded-xl bg-overlay border border-white/5">
+                      <img src={modelImage} className="w-12 h-12 object-cover rounded-lg flex-shrink-0 border border-white/10" />
+                      <div className="min-w-0 flex-1">
+                        <p className="text-[12px] font-medium text-white truncate">Your model — identity locked</p>
+                        <p className="text-[9px] font-medium text-tertiary tracking-wider uppercase mt-1">This exact person wears the wardrobe in all 6</p>
+                      </div>
+                      <button onClick={() => setModelImage(null)}
+                        className="text-tertiary hover:text-red-400 transition-colors p-2 flex-shrink-0 hover:bg-white/5 rounded-full">
+                        <X size={14} />
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <ConfigSelect label="Gender" value={gender}
+                        options={GENDER_OPTIONS} onChange={setGender} />
+                      <ConfigSelect label="Model Archetype" value={modelArchetype}
+                        options={MODEL_ARCHETYPE_OPTIONS} onChange={setModelArchetype} />
+                      <ConfigSelect label="Age Range" value={ageRange}
+                        options={AGE_RANGE_OPTIONS} onChange={setAgeRange} />
+                      <button
+                        onClick={() => modelImageInputRef.current?.click()}
+                        className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-[10px] font-semibold tracking-widest uppercase text-tertiary hover:text-white transition-all bg-overlay hover:bg-raised-2 border border-dashed border-white/10 hover:border-white/20">
+                        <Upload size={14} /> Inject a specific model
+                      </button>
+                    </>
+                  )}
                 </>
               )}
             </div>

@@ -423,6 +423,41 @@ export default async function handler(req, res) {
     }
 
     // =========================================================
+    // MODEL SOURCE — inject a SEPARATE model (Path C)
+    // =========================================================
+    // The garment SKU defines WHAT is worn; an injected model defines WHO wears it. The
+    // model's photo becomes a visual identity anchor (Image 1) — the strongest possible lock
+    // (a photo, never text DNA — K3). Source: an enrolled Model SKU (modelSkuId) or an uploaded
+    // photo (config.modelImage). When present, identity comes from the photo, not the casting.
+    let modelIdentityImage = null;
+    const modelSkuId    = req.body?.modelSkuId || null;
+    const modelImageRaw = config?.modelImage || null;
+    if (modelSkuId && bodyBrand) {
+      try {
+        const { loadSkuForForge } = await import('../lib/forge/services/sku-service.js');
+        const m = await loadSkuForForge(bodyBrand, modelSkuId);
+        if (m.referenceImageBase64) {
+          modelIdentityImage = { data: m.referenceImageBase64, mimeType: m.referenceImageMimeType || 'image/jpeg' };
+          modelIdentityDNA   = m.dna?.identity || modelIdentityDNA;
+          modelHairDNA       = m.dna?.hair     || modelHairDNA;
+        }
+        console.log(`[FORGE] MODEL INJECT: modelSkuId=${modelSkuId} | identityImage=${!!modelIdentityImage}`);
+      } catch (err) {
+        console.warn(`[FORGE] Model SKU ${modelSkuId} load failed (${err.message}) — falling back to casting`);
+      }
+    } else if (typeof modelImageRaw === 'string' && modelImageRaw.length > 100) {
+      const data = modelImageRaw.includes(',') ? modelImageRaw.split(',')[1] : modelImageRaw;
+      const mime = modelImageRaw.match(/^data:(image\/[\w+.-]+);/)?.[1] || 'image/jpeg';
+      modelIdentityImage = { data: data.replace(/\s/g, ''), mimeType: mime };
+      console.log('[FORGE] MODEL INJECT: identity locked from uploaded model photo.');
+    }
+    if (modelIdentityImage) {
+      // Identity is now defined by the photo — drop text identity DNA so it cannot fight the
+      // image (K3: text descriptions cause regeneration, not faithful copying).
+      modelIdentityDNA = null;
+    }
+
+    // =========================================================
     // AGENT 01: FORENSIC SCANNER — DNA EXTRACTION
     // Skipped when skuDnaInjected === true (SKU recall path)
     // Runs in parallel for all anchors + identity + hair.
@@ -1012,6 +1047,7 @@ Rules: ONLY correct slots that actually violate an invariant above. Do not rewri
         rawImageData, rawMimeType,
         garmentImageData, garmentMimeType,
         anchorRefImage, anchorRefAnchorType, anchorRefImages,
+        modelIdentityImage,
         backgroundRefImage,
         cleanGarmentRender, garmentCleanRef,
         dnaMap, allDnaBlock: anchors.map(anc =>
