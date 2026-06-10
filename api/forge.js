@@ -527,6 +527,10 @@ Be exhaustive. Every observable detail must be captured.`;
     const isAiGenerated  = config?.strategy !== 'keep';
     const lockedSkinTone = config?.skinTone  || 'neutral';
     const skinToneDesc   = SKIN_TONE_MAP[lockedSkinTone] || lockedSkinTone;
+    // True when the client EXPLICITLY chose a skin tone (not the neutral default). When set,
+    // the selection is authoritative and overrides any tone implied by a SKU's identity DNA —
+    // otherwise a recalled garment's original model tone silently wins and the picker is dead.
+    const skinToneExplicit = !!config?.skinTone && config.skinTone !== 'neutral';
     const lockedLighting = LIGHTING_MAP[config?.lighting] || LIGHTING_MAP['Clean & Even'];
     const lockedBgRaw    = config?.background || 'studio-grey';
     const lockedBgDesc   = {
@@ -862,9 +866,11 @@ Be exhaustive. Every observable detail must be captured.`;
         const bgLockForAudit     = config?.locationPreset
           ? config.locationPreset
           : (lockedBgRaw === 'custom-bg' && userPromptText) ? userPromptText : lockedBgDesc;
-        const skinLockForAudit   = modelIdentityDNA
-          ? 'match the extracted model identity skin tone — no lightening, darkening, or override'
-          : skinToneDesc;
+        const skinLockForAudit   = skinToneExplicit
+          ? `render this exact client-selected skin tone in every slot — ${skinToneDesc} — overriding any tone implied by the identity profile; no lightening, darkening, or substitution`
+          : (modelIdentityDNA
+              ? 'match the extracted model identity skin tone — no lightening, darkening, or override'
+              : skinToneDesc);
         const briefsBlock        = directorBriefs.map((b, i) => `SLOT ${i + 1}:\n${b}`).join('\n\n---\n\n');
         const clientDirectionLine = userPromptText
           ? `5. CLIENT SCENE DIRECTION: Every corrected brief MUST include this client directive verbatim or as a direct visual description: "${userPromptText}". Do NOT remove or omit it when correcting any slot.`
@@ -990,7 +996,7 @@ Rules: ONLY correct slots that actually violate an invariant above. Do not rewri
         slotFraming: shotTypeDesc || slots.framings[seed] || '',
         brief:       directorBriefs[seed],
         anchorRefNote,
-        skinToneDesc, lockedLighting,
+        skinToneDesc, skinToneExplicit, lockedLighting,
         modelArchetypeDesc, poseDesc, expressionDesc,
         ageRangeDesc, shotTypeDesc, atmosphereDesc,
         stylingDesc, genderDesc, variationSeed,
