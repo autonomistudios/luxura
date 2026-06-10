@@ -551,6 +551,9 @@ Be exhaustive. Every observable detail must be captured.`;
     let   poseDesc           = POSE_MAP[config?.pose] || null;
     const expressionDesc     = EXPRESSION_MAP[config?.expression] || null;
     const ageRangeDesc       = AGE_RANGE_MAP[config?.ageRange] || AGE_RANGE_MAP['Prime Editorial (25–35)'];
+    // True when the client explicitly picked an age band (not the default). When set it is
+    // authoritative and overrides any age implied by a recalled SKU's identity DNA.
+    const ageRangeExplicit   = !!config?.ageRange && config.ageRange !== 'Prime Editorial (25–35)';
     let shotTypeDesc         = SHOT_TYPE_MAP[config?.shotType] || SHOT_TYPE_MAP['Full Body'];
     let atmosphereDesc       = ATMOSPHERE_MAP[config?.atmosphere] || null;
     let stylingDesc          = STYLING_MAP[config?.styling] || null;
@@ -595,6 +598,19 @@ Be exhaustive. Every observable detail must be captured.`;
       ages:        uniqueShuffle(AGES,        makeRng(entropyNum + 6)).slice(0, 6),
       bodyTypes:   uniqueShuffle(BODY_TYPES,  makeRng(entropyNum + 7)).slice(0, 6),
     };
+
+    // ── CAMPAIGN CONSISTENCY: ONE model across all 6 plates ────────────────────
+    // The shuffled pools above gave every plate a DIFFERENT ethnicity, face, eyes, body, and
+    // age — i.e. a different *person* per plate. For a brand campaign the model must be the
+    // same human in all six; per-slot variety is strictly pose / framing / outfit-cut. Pin
+    // every identity attribute to a single value across all slots. Age follows the client's
+    // explicit casting selection so "older woman" stays an older woman in every plate.
+    const lockAcrossSlots = (arr) => Array(6).fill(arr[0]);
+    slots.ethnicities = lockAcrossSlots(slots.ethnicities);
+    slots.faces       = lockAcrossSlots(slots.faces);
+    slots.eyes        = lockAcrossSlots(slots.eyes);
+    slots.bodyTypes   = lockAcrossSlots(slots.bodyTypes);
+    slots.ages        = Array(6).fill(ageRangeDesc);
 
     // =========================================================
     // AGENTS 01b–01g: PRE-PASS (VTO, anchor refs, pre-renders)
@@ -871,6 +887,11 @@ Be exhaustive. Every observable detail must be captured.`;
           : (modelIdentityDNA
               ? 'match the extracted model identity skin tone — no lightening, darkening, or override'
               : skinToneDesc);
+        const ageLockForAudit    = ageRangeExplicit
+          ? `present the model as ${ageRangeDesc} in EVERY slot — identical apparent age across all six, overriding any age implied by the identity profile`
+          : (modelIdentityDNA
+              ? 'show the same apparent age in all six slots, matching the identity profile'
+              : `present the model as ${ageRangeDesc} — identical apparent age across all six`);
         const briefsBlock        = directorBriefs.map((b, i) => `SLOT ${i + 1}:\n${b}`).join('\n\n---\n\n');
         const clientDirectionLine = userPromptText
           ? `5. CLIENT SCENE DIRECTION: Every corrected brief MUST include this client directive verbatim or as a direct visual description: "${userPromptText}". Do NOT remove or omit it when correcting any slot.`
@@ -887,6 +908,7 @@ ${clientDirectionLine}
 5. GARMENT ARCHITECTURE: Every slot must feature the EXACT same garment structure. No ribbons, lace, or accessories added to one slot that aren't in all others.
 6. PATTERN CONTINUITY: Repeating patterns and prints must match across all slots.
 7. IDENTITY: All slots must describe the SAME physical identity and bone structure. Distinct poses, but same person.
+8. AGE: ${ageLockForAudit}. A noticeably younger or older face in any slot = violation.
 
 POSE PRESERVATION: Each slot intentionally has a DIFFERENT pose, crop, and composition. Do NOT standardize poses. Preserve the unique framing of each slot exactly as written.
 
@@ -998,7 +1020,7 @@ Rules: ONLY correct slots that actually violate an invariant above. Do not rewri
         anchorRefNote,
         skinToneDesc, skinToneExplicit, lockedLighting,
         modelArchetypeDesc, poseDesc, expressionDesc,
-        ageRangeDesc, shotTypeDesc, atmosphereDesc,
+        ageRangeDesc, ageRangeExplicit, shotTypeDesc, atmosphereDesc,
         stylingDesc, genderDesc, variationSeed,
         calculateSlotTemperature,
         userDirection: userPromptText || '',
