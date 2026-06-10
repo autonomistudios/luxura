@@ -486,14 +486,15 @@ function RefineModal({ slotIndex, image, getToken, onApply, onClose }: {
 export default function CampaignBuilder() {
   const { brand, canForge, can, user } = useAuth();
   const canForgeRole = can('forge');
-  const { skus, currentSkuId, setCurrentSkuId, currentGrid, setGridSlot, setCurrentGrid, campaigns, deployToVault } = useSovereignStore();
+  const { skus, currentSkuId, setCurrentSkuId, currentGrid, setGridSlot, setCurrentGrid, campaigns, deployToVault, enrollModel } = useSovereignStore();
   const navigate = useNavigate();
 
   // ── Outfit composition — one or many SKUs combined into a single look ──────
   const [outfitSkuIds, setOutfitSkuIds] = useState<string[]>(() => currentSkuId ? [currentSkuId] : []);
   const [skuPickerOpen, setSkuPickerOpen] = useState(false);
 
-  const readySkus  = skus.filter(s => s.enrollmentStatus === 'ready');
+  const readySkus  = skus.filter(s => s.enrollmentStatus === 'ready' && s.assetType !== 'model');
+  const modelSkus  = skus.filter(s => s.enrollmentStatus === 'ready' && s.assetType === 'model');
   const outfitSkus = outfitSkuIds
     .map(id => skus.find(s => s.skuId === id))
     .filter((s): s is SkuDocument => !!s);
@@ -538,6 +539,9 @@ export default function CampaignBuilder() {
   const [gender,          setGender]          = useState('Female');
   const [strategy,        setStrategy]        = useState<'change' | 'keep'>('change');
   const [modelImage,      setModelImage]      = useState<string | null>(null);
+  const [modelSkuId,      setModelSkuId]      = useState<string | null>(null);
+  const [modelName,       setModelName]       = useState('');
+  const [savingModel,     setSavingModel]     = useState(false);
   const modelImageInputRef = useRef<HTMLInputElement | null>(null);
   const [showCreativeProps, setShowCreativeProps] = useState(false);
   const [activePropId,      setActivePropId]      = useState<string | null>(null);
@@ -703,6 +707,19 @@ export default function CampaignBuilder() {
     }
   }
 
+  // Persist the uploaded inject-model as a reusable Model SKU, then select it.
+  async function saveModel() {
+    if (!modelImage || savingModel) return;
+    setSavingModel(true);
+    try {
+      const m = await enrollModel(modelName.trim() || `Model ${modelSkus.length + 1}`, modelImage);
+      setModelSkuId(m.skuId);
+      setModelImage(null);
+      setModelName('');
+    } catch { /* keep the uploaded image so they can retry */ }
+    finally { setSavingModel(false); }
+  }
+
   async function handleForge(opts?: { prompt?: string }) {
     if (!canForge() || isForging || !activeSku) return;
     const effectivePrompt = (opts && typeof opts.prompt === 'string') ? opts.prompt : prompt;
@@ -727,6 +744,8 @@ export default function CampaignBuilder() {
         skuId:    isOutfit ? undefined : activeSku.skuId,
         skuIds:   isOutfit ? outfitSkuIds : undefined,
         brandId:  brand?.brandId,
+        // Path C — inject a saved Model SKU (its enrolled photo becomes the identity anchor).
+        modelSkuId: modelSkuId || undefined,
         config: {
           anchors:       isOutfit ? anchorUnion : [activeSku.anchorType],
           strategy,
@@ -988,17 +1007,41 @@ export default function CampaignBuilder() {
                       catch { /* ignore unreadable image */ }
                     }}
                   />
-                  {modelImage ? (
+                  {modelSkuId ? (
                     <div className="flex items-center gap-3 p-3 rounded-xl bg-overlay border border-white/5">
-                      <img src={modelImage} className="w-12 h-12 object-cover rounded-lg flex-shrink-0 border border-white/10" />
-                      <div className="min-w-0 flex-1">
-                        <p className="text-[12px] font-medium text-white truncate">Your model — identity locked</p>
-                        <p className="text-[9px] font-medium text-tertiary tracking-wider uppercase mt-1">This exact person wears the wardrobe in all 6</p>
+                      <div className="w-12 h-12 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0 text-[15px] font-semibold text-white/80">
+                        {(modelSkus.find(m => m.skuId === modelSkuId)?.name || 'M').charAt(0).toUpperCase()}
                       </div>
-                      <button onClick={() => setModelImage(null)}
+                      <div className="min-w-0 flex-1">
+                        <p className="text-[12px] font-medium text-white truncate">{modelSkus.find(m => m.skuId === modelSkuId)?.name || 'Saved model'}</p>
+                        <p className="text-[9px] font-medium text-tertiary tracking-wider uppercase mt-1">Saved model — wears the wardrobe in all 6</p>
+                      </div>
+                      <button onClick={() => setModelSkuId(null)}
                         className="text-tertiary hover:text-red-400 transition-colors p-2 flex-shrink-0 hover:bg-white/5 rounded-full">
                         <X size={14} />
                       </button>
+                    </div>
+                  ) : modelImage ? (
+                    <div className="flex flex-col gap-3 p-3 rounded-xl bg-overlay border border-white/5">
+                      <div className="flex items-center gap-3">
+                        <img src={modelImage} className="w-12 h-12 object-cover rounded-lg flex-shrink-0 border border-white/10" />
+                        <div className="min-w-0 flex-1">
+                          <p className="text-[12px] font-medium text-white truncate">Your model — identity locked</p>
+                          <p className="text-[9px] font-medium text-tertiary tracking-wider uppercase mt-1">This exact person wears the wardrobe in all 6</p>
+                        </div>
+                        <button onClick={() => setModelImage(null)}
+                          className="text-tertiary hover:text-red-400 transition-colors p-2 flex-shrink-0 hover:bg-white/5 rounded-full">
+                          <X size={14} />
+                        </button>
+                      </div>
+                      <div className="flex gap-2">
+                        <input value={modelName} onChange={e => setModelName(e.target.value)} placeholder="Name to reuse this model…"
+                          className="flex-1 bg-black/30 border border-white/10 rounded-lg px-3 py-2 text-[12px] text-white placeholder:text-tertiary focus:outline-none focus:border-white/30" />
+                        <button onClick={saveModel} disabled={savingModel}
+                          className="px-3 py-2 rounded-lg bg-white text-black text-[10px] font-semibold uppercase tracking-widest hover:bg-white/90 transition-all disabled:opacity-50">
+                          {savingModel ? 'Saving…' : 'Save'}
+                        </button>
+                      </div>
                     </div>
                   ) : (
                     <>
@@ -1008,6 +1051,19 @@ export default function CampaignBuilder() {
                         options={MODEL_ARCHETYPE_OPTIONS} onChange={setModelArchetype} />
                       <ConfigSelect label="Age Range" value={ageRange}
                         options={AGE_RANGE_OPTIONS} onChange={setAgeRange} />
+                      {modelSkus.length > 0 && (
+                        <div>
+                          <p className="text-[9px] font-semibold tracking-widest uppercase text-tertiary mb-2">Or use a saved model</p>
+                          <div className="flex flex-wrap gap-2">
+                            {modelSkus.map(m => (
+                              <button key={m.skuId} onClick={() => { setModelSkuId(m.skuId); setModelImage(null); }}
+                                className="px-3 py-2 rounded-lg bg-overlay border border-white/10 hover:border-white/30 hover:bg-raised-2 text-[11px] font-medium text-white transition-all">
+                                {m.name}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                       <button
                         onClick={() => modelImageInputRef.current?.click()}
                         className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-[10px] font-semibold tracking-widest uppercase text-tertiary hover:text-white transition-all bg-overlay hover:bg-raised-2 border border-dashed border-white/10 hover:border-white/20">

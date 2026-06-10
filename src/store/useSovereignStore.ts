@@ -44,6 +44,7 @@ export interface SkuDocument {
   category:         string;
   season:           string;
   anchorType:       string;
+  assetType?:       'garment' | 'model';   // 'model' = a reusable injectable identity
   sourceImages:     string[];
   dna:              Record<string, string> | null;
   referenceImage:   string | null;
@@ -92,6 +93,7 @@ interface SovereignStore {
   skusLoading:     boolean;
   loadSkus:        (brandId: string) => Promise<void>;
   addSku:          (sku: SkuDocument) => void;
+  enrollModel:     (name: string, image: string) => Promise<SkuDocument>;
   updateSkuStatus: (skuId: string, status: SkuDocument['enrollmentStatus'], updates?: Partial<SkuDocument>) => void;
 
   // ── Campaign history ───────────────────────────────────────────────────────
@@ -212,6 +214,26 @@ export const useSovereignStore = create<SovereignStore>((set, get) => ({
   },
 
   addSku: (sku) => set(state => ({ skus: [sku, ...state.skus] })),
+
+  // Enroll a reusable model identity (stored as a model-tagged SKU). Returns the catalogue
+  // record (without the heavy base64) and prepends it to the in-memory skus list.
+  enrollModel: async (name, image) => {
+    const currentUser = auth.currentUser;
+    if (!currentUser) throw new Error('Not signed in.');
+    const idToken = await currentUser.getIdToken();
+    const res = await fetch('/api/v1/models/enroll', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${idToken}` },
+      body:    JSON.stringify({ name, image }),
+    });
+    if (!res.ok) {
+      const e = await res.json().catch(() => null);
+      throw new Error(e?.error || `Model enrollment failed: ${res.status}`);
+    }
+    const { model } = await res.json();
+    set(state => ({ skus: [model as SkuDocument, ...state.skus] }));
+    return model as SkuDocument;
+  },
 
   updateSkuStatus: (skuId, status, updates = {}) =>
     set(state => ({

@@ -193,14 +193,17 @@ export default function SKUCatalog() {
   const [filter, setFilter] = useState<'all' | 'ready' | 'processing' | 'failed'>('all');
   const [search, setSearch] = useState('');
 
+  // Model SKUs share the collection but are managed in the campaign builder's Model Source —
+  // keep them out of the garment catalogue.
+  const garmentSkus = skus.filter(s => s.assetType !== 'model');
   const counts = {
-    all:        skus.length,
-    ready:      skus.filter(s => s.enrollmentStatus === 'ready').length,
-    processing: skus.filter(s => s.enrollmentStatus === 'processing').length,
-    failed:     skus.filter(s => s.enrollmentStatus === 'failed').length,
+    all:        garmentSkus.length,
+    ready:      garmentSkus.filter(s => s.enrollmentStatus === 'ready').length,
+    processing: garmentSkus.filter(s => s.enrollmentStatus === 'processing').length,
+    failed:     garmentSkus.filter(s => s.enrollmentStatus === 'failed').length,
   };
 
-  const filtered = skus.filter(s => {
+  const filtered = garmentSkus.filter(s => {
     const matchStatus = filter === 'all' || s.enrollmentStatus === filter;
     const matchSearch = !search ||
       s.name.toLowerCase().includes(search.toLowerCase()) ||

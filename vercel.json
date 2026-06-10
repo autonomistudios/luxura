@@ -76,6 +76,9 @@
     "api/v1/skus/enroll.js": {
       "maxDuration": 120
     },
+    "api/v1/models/enroll.js": {
+      "maxDuration": 30
+    },
     "api/v1/skus/index.js": {
       "maxDuration": 15
     },

@@ -119,7 +119,7 @@ export default function BrandPortalHome() {
 
   const pct       = quotaPercent();
   const remaining = isAdmin ? Infinity : quotaRemaining();
-  const readySKUs = skus.filter(s => s.enrollmentStatus === 'ready').length;
+  const readySKUs = skus.filter(s => s.enrollmentStatus === 'ready' && s.assetType !== 'model').length;
 
   return (
     <div className="relative min-h-screen overflow-hidden">
