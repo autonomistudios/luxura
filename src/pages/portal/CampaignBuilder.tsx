@@ -620,19 +620,21 @@ export default function CampaignBuilder() {
 
   const safeName = () => (activeSku?.name || 'campaign').replace(/[^a-z0-9]+/gi, '-').toLowerCase();
 
-  // Download one plate (handles data-URLs and remote Storage URLs).
-  async function downloadImage(url: string, filename: string) {
-    try {
-      const res = await fetch(url);
-      const blob = await res.blob();
-      const href = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = href; a.download = filename;
-      document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(() => URL.revokeObjectURL(href), 1000);
-    } catch {
-      window.open(url, '_blank'); // fallback if fetch/CORS blocks the blob
-    }
+  // Remote Cloud Storage URLs have no CORS, so a direct blob-fetch is blocked. Route them
+  // through the same-origin proxy, which streams them back with Content-Disposition so the
+  // browser saves a real file. data-URLs download directly (no fetch, no CORS).
+  const proxyUrl = (url: string, filename?: string) =>
+    url.startsWith('data:')
+      ? url
+      : `/api/download?u=${encodeURIComponent(url)}${filename ? `&n=${encodeURIComponent(filename)}` : ''}`;
+
+  // Download one plate.
+  function downloadImage(url: string, filename: string) {
+    const a = document.createElement('a');
+    a.href = proxyUrl(url, filename);
+    a.download = filename;
+    a.rel = 'noopener';
+    document.body.appendChild(a); a.click(); a.remove();
   }
 
   // Bundle every completed plate into one ZIP.
@@ -644,11 +646,16 @@ export default function CampaignBuilder() {
       const JSZip = (await import('jszip')).default;
       const zip = new JSZip();
       await Promise.all(imgs.map(async (url, i) => {
-        const res = await fetch(url);
+        const res = await fetch(proxyUrl(url));   // same-origin proxy → readable blob, no CORS
+        if (!res.ok) throw new Error(`plate ${i + 1} fetch ${res.status}`);
         zip.file(`${safeName()}-plate-${i + 1}.jpg`, await res.blob());
       }));
       const blob = await zip.generateAsync({ type: 'blob' });
-      await downloadImage(URL.createObjectURL(blob), `${safeName()}-campaign.zip`);
+      const href = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = href; a.download = `${safeName()}-campaign.zip`;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(href), 2000);
     } catch {
       imgs.forEach((url, i) => downloadImage(url, `${safeName()}-plate-${i + 1}.jpg`)); // fallback: one-by-one
     } finally {

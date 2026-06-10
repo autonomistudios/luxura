@@ -58,6 +58,9 @@
     "api/generate-prop-cover.js": {
       "maxDuration": 30
     },
+    "api/download.js": {
+      "maxDuration": 30
+    },
     "api/aura-profile.js": {
       "maxDuration": 15
     },
