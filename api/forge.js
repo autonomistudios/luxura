@@ -356,8 +356,13 @@ export default async function handler(req, res) {
 
         // Inject frozen DNA map — mirrors in-memory dnaMap structure exactly
         Object.assign(dnaMap, skuData.dna || {});
-        if (skuData.dna?.identity)  modelIdentityDNA = skuData.dna.identity;
-        if (skuData.dna?.hair)      modelHairDNA     = skuData.dna.hair;
+        // MODEL IDENTITY SOURCE — only carry the SKU's enrolled model when PRESERVING it
+        // ('keep'). In AI Reimagine ('change') we cast a fresh model from the casting picks,
+        // so the SKU's original person must NOT bleed in (that bleed broke "AI-cast").
+        if (config?.strategy === 'keep') {
+          if (skuData.dna?.identity)  modelIdentityDNA = skuData.dna.identity;
+          if (skuData.dna?.hair)      modelHairDNA     = skuData.dna.hair;
+        }
 
         // Override anchor ref image with pre-rendered isolation from enrollment
         if (skuData.referenceImageBase64) {
@@ -381,8 +386,11 @@ export default async function handler(req, res) {
         const merged = await loadSkusForForge(bodyBrand, skuIds);
 
         Object.assign(dnaMap, merged.dnaMap || {});
-        if (merged.identity) modelIdentityDNA = merged.identity;
-        if (merged.hair)     modelHairDNA     = merged.hair;
+        // Only preserve the SKUs' enrolled model in 'keep'; AI Reimagine casts fresh.
+        if (config?.strategy === 'keep') {
+          if (merged.identity) modelIdentityDNA = merged.identity;
+          if (merged.hair)     modelHairDNA     = merged.hair;
+        }
 
         // Union the SKU anchor types into the active anchors list, then re-apply
         // FULL_OUTFIT subsumption so a full-look SKU absorbs redundant sub-anchors.
