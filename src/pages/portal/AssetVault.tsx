@@ -11,31 +11,24 @@ function safeName(item: VaultItem): string {
   return `${base}_${item.id.slice(-6)}`;
 }
 
-// Fetch→blob for a forced same-name download; falls back to a direct link if the
-// asset host blocks cross-origin fetch (public storage URLs normally allow it).
-async function downloadAsset(item: VaultItem): Promise<void> {
-  try {
-    const res = await fetch(item.image, { mode: 'cors' });
-    if (!res.ok) throw new Error(String(res.status));
-    const blob = await res.blob();
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${safeName(item)}.png`;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(url);
-  } catch {
-    const a = document.createElement('a');
-    a.href = item.image;
-    a.download = `${safeName(item)}.png`;
-    a.target = '_blank';
-    a.rel = 'noopener';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-  }
+// Cloud Storage sends no CORS headers, so a direct blob-fetch is blocked. Route remote
+// images through the same-origin proxy, which streams them with Content-Disposition so the
+// browser always saves a real file. data-URLs download directly.
+function proxyUrl(url: string, filename?: string): string {
+  return url.startsWith('data:')
+    ? url
+    : `/api/download?u=${encodeURIComponent(url)}${filename ? `&n=${encodeURIComponent(filename)}` : ''}`;
+}
+
+function downloadAsset(item: VaultItem): void {
+  const name = `${safeName(item)}.png`;
+  const a = document.createElement('a');
+  a.href = proxyUrl(item.image, name);
+  a.download = name;
+  a.rel = 'noopener';
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
 }
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
@@ -108,7 +101,7 @@ export default function AssetVault() {
     try {
       if (items.length === 1) {
         // Single file: download directly
-        await downloadAsset(items[0]);
+        downloadAsset(items[0]);
         setProgress(100);
       } else {
         // Multiple files: package into a ZIP
@@ -118,14 +111,14 @@ export default function AssetVault() {
         for (let i = 0; i < items.length; i++) {
           const item = items[i];
           try {
-            const res = await fetch(item.image, { mode: 'cors' });
+            const res = await fetch(proxyUrl(item.image));   // same-origin proxy → readable blob, no CORS
             if (!res.ok) throw new Error(String(res.status));
             const blob = await res.blob();
             // Add file to zip
             zip.file(`${safeName(item)}.png`, blob);
             successCount++;
           } catch (err) {
-            console.warn(`Failed to fetch ${item.name} for zip (likely CORS):`, err);
+            console.warn(`Failed to fetch ${item.name} for zip:`, err);
           }
           setProgress(Math.round(((i + 1) / items.length) * 50)); // 50% for fetching
         }
@@ -134,7 +127,7 @@ export default function AssetVault() {
         if (successCount === 0) {
           console.warn('All files failed to zip (CORS issue). Falling back to sequential downloads.');
           for (let i = 0; i < items.length; i++) {
-            await downloadAsset(items[i]);
+            downloadAsset(items[i]);
             setProgress(50 + Math.round(((i + 1) / items.length) * 50));
             await new Promise(r => setTimeout(r, 250));
           }
