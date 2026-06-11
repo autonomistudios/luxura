@@ -1,8 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../lib/firebase';
+import { db, auth } from '../lib/firebase';
 import { CREATIVE_PROPS } from "../lib/creativeProps";
 import type { CreativeProp, PropCategory } from "../lib/creativeProps";
+
+// The prop-cover endpoint requires auth (it spends on the Pro image model). Attach the
+// signed-in user's token — this gallery is portal-only, so a user is always present.
+async function authHeaders(): Promise<Record<string, string>> {
+  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  try {
+    const token = await auth.currentUser?.getIdToken();
+    if (token) headers.Authorization = `Bearer ${token}`;
+  } catch { /* not signed in — request will 401 */ }
+  return headers;
+}
 
 interface CreativePropsGalleryProps {
   onSelect: (prop: CreativeProp, sceneIndex: number) => void;
@@ -77,7 +88,7 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
         try {
           const res  = await fetch('/api/generate-prop-cover', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: await authHeaders(),
             body: JSON.stringify({ propId: prop.id, userPrompt: scene, sceneIndex: idx, clean: true }),
           });
           const data = await res.json();
@@ -115,7 +126,7 @@ export const CreativePropsGallery: React.FC<CreativePropsGalleryProps> = ({ onSe
     try {
       const res = await fetch('/api/generate-prop-cover', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: await authHeaders(),
         body: JSON.stringify({ propId: prop.id, userPrompt: prop.config.userPrompts[0] }),
       });
       const data = await res.json();

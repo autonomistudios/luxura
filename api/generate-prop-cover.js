@@ -1,4 +1,4 @@
-import { setFirestoreREST, getGcpAccessToken } from '../lib/forge/services/gcp-raw.js';
+import { setFirestoreREST, getGcpAccessToken, verifyIdTokenREST } from '../lib/forge/services/gcp-raw.js';
 import { createGenAI, withGeminiBackoff } from '../lib/forge/services/gemini-client.js';
 import { PXL_MODEL }                      from '../lib/forge/constants.js';
 import sharp                              from 'sharp';
@@ -53,6 +53,18 @@ async function getFirestoreCoverUrl(collection, id) {
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  // AUTH — this endpoint spends real money on the Pro image model. Require an authenticated
+  // portal user; cover-generation scripts may pass CRON_SECRET instead. Prevents anonymous
+  // cost-abuse / DoS of the generator.
+  const cronOk = !!process.env.CRON_SECRET && req.headers['x-cron-secret'] === process.env.CRON_SECRET;
+  if (!cronOk) {
+    const authHeader = req.headers['authorization'] || '';
+    const idToken = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
+    if (!idToken) return res.status(401).json({ error: 'Unauthorized' });
+    try { await verifyIdTokenREST(idToken); }
+    catch { return res.status(401).json({ error: 'Unauthorized' }); }
   }
 
   const { propId, userPrompt, model: requestedModel, clean, refImage, refMime, sceneIndex } = req.body ?? {};

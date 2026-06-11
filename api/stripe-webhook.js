@@ -8,6 +8,17 @@ import crypto from 'crypto';
 
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET;
 
+// Stripe signs the EXACT raw request bytes. Vercel's JSON body-parser re-orders/re-encodes the
+// payload, so a re-stringified body never matches the HMAC — every real event would be rejected.
+// Disable the parser and read the raw stream so verification (and billing) actually work.
+export const config = { api: { bodyParser: false } };
+
+async function readRawBody(req) {
+  const chunks = [];
+  for await (const chunk of req) chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
+  return Buffer.concat(chunks).toString('utf8');
+}
+
 const TIER_QUOTAS = {
   studio:     { imagesPerMonth: 500,   apiCallsPerMonth: 2000  },
   agency:     { imagesPerMonth: 2000,  apiCallsPerMonth: 10000 },
@@ -78,10 +89,10 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing Stripe signature' });
   }
 
-  // Read raw body
+  // Read the RAW body bytes — required for valid Stripe signature verification.
   let rawBody;
   try {
-    rawBody = JSON.stringify(req.body);
+    rawBody = await readRawBody(req);
   } catch { return res.status(400).json({ error: 'Invalid body' }); }
 
   if (!verifyStripeSignature(rawBody, signature, STRIPE_WEBHOOK_SECRET)) {
@@ -89,8 +100,10 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: 'Invalid signature' });
   }
 
-  const event = req.body;
-  const obj   = event?.data?.object;
+  let event;
+  try { event = JSON.parse(rawBody); }
+  catch { return res.status(400).json({ error: 'Invalid JSON' }); }
+  const obj = event?.data?.object;
 
   console.log(`[STRIPE] Event: ${event.type}`);
 
