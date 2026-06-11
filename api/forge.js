@@ -21,7 +21,7 @@
 import PromptArchitect     from '../lib/forge/agents/agent03-prompt-architect.js';
 
 // ── Lib: services ──────────────────────────────────────────────────────────────
-import { verifyIdTokenREST, checkRateLimit, deductCreditsREST, setFirestoreREST, updateFirestoreREST, uploadStorageREST } from '../lib/forge/services/gcp-raw.js';
+import { verifyIdTokenREST, checkRateLimit, deductCreditsREST, setFirestoreREST, updateFirestoreREST, uploadStorageREST, signedUrlFromRef } from '../lib/forge/services/gcp-raw.js';
 import { loadAuraProfile, updateAuraProfile }              from '../lib/forge/services/aura-profile.js';
 import { createGenAI, withGeminiBackoff }                  from '../lib/forge/services/gemini-client.js';
 
@@ -1154,7 +1154,9 @@ Rules: ONLY correct slots that actually violate an invariant above. Do not rewri
             const ext  = mime.includes('png') ? 'png' : mime.includes('webp') ? 'webp' : 'jpg';
             const buf  = Buffer.from(m[2], 'base64');
             const path = `forge-live/${forgeUid}/${entropy}/slot_${slotIndex}_${Date.now()}.${ext}`;
-            payload = await uploadStorageREST(liveBucket, path, buf, mime);
+            await uploadStorageREST(liveBucket, path, buf, mime);
+            payload = signedUrlFromRef(liveBucket, path, 3600); // private object → short-lived signed URL
+
           }
         } catch (err) {
           console.warn(`[FORGE] Slot ${slotIndex + 1} upload failed (${err.message}) — streaming inline base64`);

@@ -1,5 +1,5 @@
 import { resolveBrandContext } from '../lib/forge/services/brand-auth.js';
-import { getSignedReadUrl, signedUrlFromRef, uploadStorageREST, deleteStorageREST } from '../lib/forge/services/gcp-raw.js';
+import { getSignedReadUrl, signedUrlFromRef, extractObjectPath, uploadStorageREST, deleteStorageREST } from '../lib/forge/services/gcp-raw.js';
 
 const BUCKET =
   process.env.FIREBASE_STORAGE_BUCKET ||
@@ -45,8 +45,10 @@ export default async function handler(req, res) {
     const signed = {};
     for (const p of paths) {
       if (typeof p !== 'string' || !p) continue;
-      // Strictly brand-scoped — only sign objects under this brand's namespace.
-      signed[p] = p.includes(`brands/${brandId}/`) ? signedUrlFromRef(BUCKET, p, 3600) : null;
+      if (p.startsWith('data:') || p.startsWith('blob:')) { signed[p] = p; continue; }
+      // Strictly brand-scoped — decode the object path, then only sign this brand's objects.
+      const objPath = extractObjectPath(p);
+      signed[p] = (objPath && objPath.startsWith(`brands/${brandId}/`)) ? signedUrlFromRef(BUCKET, p, 3600) : null;
     }
     return res.status(200).json({ signed });
   }
