@@ -60,7 +60,7 @@ const SKIN_TONES = [
   { id: 'cinnamon',  label: 'Cinnamon',   hex: '#C68642' },
   { id: 'brown',     label: 'Brown',      hex: '#8D5524' },
   { id: 'chocolate', label: 'Chocolate',  hex: '#4A2912' },
-  { id: 'ebony',     label: 'Deep Ebony', hex: '#2C1A0E' },
+  { id: 'ebony',     label: 'Deep Ebony', hex: '#120600' },
 ];
 
 // ─── Editorial Direction (photo style classification) ─────────────────────────

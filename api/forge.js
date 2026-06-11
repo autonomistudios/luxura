@@ -42,7 +42,7 @@ import {
 
 import {
   LIGHTING_MAP, CAMERA_MAP, COLOR_GRADE_MAP,
-  CAMERA_FORMAT_MAP, SKIN_TONE_MAP, MASTER_PHOTOGRAPHY_DIRECTIONS,
+  CAMERA_FORMAT_MAP, SKIN_TONE_MAP, SKIN_TONE_HERITAGE, MASTER_PHOTOGRAPHY_DIRECTIONS,
   MODEL_ARCHETYPE_MAP, POSE_MAP, EXPRESSION_MAP, AGE_RANGE_MAP,
   SHOT_TYPE_MAP, ATMOSPHERE_MAP, STYLING_MAP, VARIATION_SEEDS, GENDER_MAP,
 } from '../lib/forge/config/photography.js';
@@ -654,6 +654,11 @@ Be exhaustive. Every observable detail must be captured.`;
     slots.eyes        = lockAcrossSlots(slots.eyes);
     slots.bodyTypes   = lockAcrossSlots(slots.bodyTypes);
     slots.ages        = Array(6).fill(ageRangeDesc);
+    // Align heritage with an explicitly-chosen skin tone so it can't collide with a random
+    // ethnicity (e.g. "Deep Ebony" must yield a dark-skinned Black model, never East Asian).
+    if (skinToneExplicit && SKIN_TONE_HERITAGE[lockedSkinTone]) {
+      slots.ethnicities = Array(6).fill(SKIN_TONE_HERITAGE[lockedSkinTone]);
+    }
 
     // =========================================================
     // AGENTS 01b–01g: PRE-PASS (VTO, anchor refs, pre-renders)
